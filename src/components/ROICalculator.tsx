@@ -589,6 +589,85 @@ export const ROICalculator = () => {
                          </Button>
                        </div>
                      </div>
+                    </div>
+
+                   {/* Detailed Results Section under Total Impact */}
+                   <div className="mt-8 bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                     <div className="flex items-center gap-3 mb-6">
+                       <FileText className="h-5 w-5 text-orange-400" />
+                       <h3 className="text-xl font-bold text-white">Detailed Results Breakdown</h3>
+                     </div>
+                     
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       {/* Financial Impact */}
+                       <div className="space-y-4">
+                         <h4 className="text-lg font-semibold text-orange-300">Financial Impact</h4>
+                         <div className="space-y-3">
+                           <div className="flex justify-between">
+                             <span className="text-white/70">Reduced Coding Costs:</span>
+                             <span className="text-green-400 font-semibold">${reducedCost.toLocaleString()}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-white/70">Increased Revenue:</span>
+                             <span className="text-purple-400 font-semibold">${increaseRevenue.toLocaleString()}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-white/70">Risk Mitigation:</span>
+                             <span className="text-purple-400 font-semibold">${reducedRisk.toLocaleString()}</span>
+                           </div>
+                           <div className="border-t border-white/20 pt-3">
+                             <div className="flex justify-between text-lg">
+                               <span className="text-white font-semibold">Total Impact:</span>
+                               <span className="text-orange-400 font-bold">${totalImpact.toLocaleString()}</span>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+
+                       {/* ROI Metrics */}
+                       <div className="space-y-4">
+                         <h4 className="text-lg font-semibold text-orange-300">ROI Metrics</h4>
+                         <div className="space-y-3">
+                           <div className="flex justify-between">
+                             <span className="text-white/70">Return on Investment:</span>
+                             <span className="text-yellow-400 font-semibold">{roi.toFixed(1)}%</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-white/70">Payback Period:</span>
+                             <span className="text-blue-400 font-semibold">{(12/roi*100).toFixed(1)} months</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-white/70">Monthly Savings:</span>
+                             <span className="text-green-400 font-semibold">${(totalImpact/12).toLocaleString()}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-white/70">Annual Benefit:</span>
+                             <span className="text-orange-400 font-semibold">${totalImpact.toLocaleString()}</span>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                     
+                     {/* Action Buttons */}
+                     <div className="mt-6 pt-6 border-t border-white/20">
+                       <div className="flex gap-4 justify-center">
+                         <Button 
+                           className="bg-orange-500 hover:bg-orange-600 text-white"
+                           onClick={exportData}
+                         >
+                           <Download className="h-4 w-4 mr-2" />
+                           Download Full Report
+                         </Button>
+                         <Button 
+                           variant="outline" 
+                           className="text-white border-white/30 hover:bg-white/10"
+                           onClick={() => setShowResults(true)}
+                         >
+                           <Share2 className="h-4 w-4 mr-2" />
+                           View Summary Modal
+                         </Button>
+                       </div>
+                     </div>
                    </div>
 
                   {/* Key Performance Indicators */}
