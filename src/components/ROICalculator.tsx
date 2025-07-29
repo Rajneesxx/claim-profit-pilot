@@ -219,7 +219,120 @@ export const ROICalculator = () => {
           </CardContent>
         </Card>
 
-        {/* Metric Input Cards */}
+        {/* Value Calculator */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-primary">
+              <Calculator className="h-6 w-6" />
+              Value Calculator
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-3 bg-muted font-semibold">Sub-metric</th>
+                    <th className="text-left p-3 bg-muted font-semibold">Impact Metric</th>
+                    <th className="text-left p-3 bg-muted font-semibold">Description</th>
+                    <th className="text-left p-3 bg-muted font-semibold">Baseline</th>
+                    <th className="text-left p-3 bg-muted font-semibold">Expected Impact Level</th>
+                    <th className="text-left p-3 bg-muted font-semibold">Delta in Value</th>
+                    <th className="text-left p-3 bg-muted font-semibold">New Level</th>
+                    <th className="text-left p-3 bg-muted font-semibold">Calculation for Financial Impact</th>
+                    <th className="text-left p-3 bg-muted font-semibold">Financial Impact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* Cost Reduction Section */}
+                  <tr className="border-b bg-primary/5">
+                    <td colSpan={9} className="p-3 font-semibold text-primary">Cost Reduction</td>
+                  </tr>
+                  <tr className="border-b hover:bg-muted/50">
+                    <td className="p-3">Coder productivity</td>
+                    <td className="p-3">Cost</td>
+                    <td className="p-3 text-sm">Coder productivity is increased through high percentage of autonomous coding and very low work for other charts which require audit</td>
+                    <td className="p-3">17 charts/day</td>
+                    <td className="p-3"><Badge className="bg-success text-white">High</Badge></td>
+                    <td className="p-3">100%</td>
+                    <td className="p-3">34 charts/day</td>
+                    <td className="p-3 text-sm">Number of charts processed per annum x (Incremental productivity/(1+Incremental productivity)) x Time to code a chart x cost per coder per hour</td>
+                    <td className="p-3 font-semibold text-success">$414,000</td>
+                  </tr>
+                  <tr className="border-b hover:bg-muted/50">
+                    <td className="p-3">Claim denial percentage</td>
+                    <td className="p-3">Cost</td>
+                    <td className="p-3 text-sm">Claim denials are reduced by customizing the coding by the payer and by the physician through our proprietary AI coding workflows</td>
+                    <td className="p-3">25%</td>
+                    <td className="p-3"><Badge className="bg-success text-white">High</Badge></td>
+                    <td className="p-3">50%</td>
+                    <td className="p-3">13%</td>
+                    <td className="p-3 text-sm">Number of claims x % claims denied x % reduction in denied claims x cost per denied claim</td>
+                    <td className="p-3 font-semibold text-success">$225,000</td>
+                  </tr>
+                  <tr className="border-b hover:bg-muted/50">
+                    <td className="p-3">A/R days</td>
+                    <td className="p-3">Cost</td>
+                    <td className="p-3 text-sm">Time from visit to bill can be reduced to 6 days with high autonomous coding</td>
+                    <td className="p-3">5%</td>
+                    <td className="p-3"><Badge className="bg-success text-white">High</Badge></td>
+                    <td className="p-3">100%</td>
+                    <td className="p-3">0%</td>
+                    <td className="p-3 text-sm">Number of charts processed per annum x Average value per chart x % coding backlog x Average number of backlog days x Reduction % x Cost of capital/360</td>
+                    <td className="p-3 font-semibold text-success">$3,194</td>
+                  </tr>
+                  
+                  {/* Revenue Increase Section */}
+                  <tr className="border-b bg-primary/5">
+                    <td colSpan={9} className="p-3 font-semibold text-primary">Revenue Increase</td>
+                  </tr>
+                  <tr className="border-b hover:bg-muted/50">
+                    <td className="p-3">RVUs</td>
+                    <td className="p-3">Revenue</td>
+                    <td className="p-3 text-sm">E&M scores can be improved with our proprietary E&M coding AI to scan through all the data seamlessly to optimize the E&M code</td>
+                    <td className="p-3">718,750.00</td>
+                    <td className="p-3"><Badge className="bg-warning text-white">Medium</Badge></td>
+                    <td className="p-3">1.0%</td>
+                    <td className="p-3">725,937.50</td>
+                    <td className="p-3 text-sm">Number of RVUs billed x % increment in RVUs x Wt. Avg GPCI x Conversion</td>
+                    <td className="p-3 font-semibold text-primary">$241,939</td>
+                  </tr>
+                  
+                  {/* Risk Reduction Section */}
+                  <tr className="border-b bg-primary/5">
+                    <td colSpan={9} className="p-3 font-semibold text-primary">Risk Reduction</td>
+                  </tr>
+                  <tr className="border-b hover:bg-muted/50">
+                    <td className="p-3">% charts with overcoding</td>
+                    <td className="p-3">Risk</td>
+                    <td className="p-3 text-sm">Reduce over coding by applying NCCI edits on the coded charts</td>
+                    <td className="p-3">1,388</td>
+                    <td className="p-3"><Badge className="bg-success text-white">High</Badge></td>
+                    <td className="p-3">100%</td>
+                    <td className="p-3">0</td>
+                    <td className="p-3 text-sm">Number of charts per annum x % over coded charts x % reduction in overcoded charts x Compliance cost per code</td>
+                    <td className="p-3 font-semibold text-info">$70,775</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr className="border-t-2 bg-gradient-to-r from-primary/10 to-secondary/10">
+                    <td colSpan={8} className="p-4 font-bold text-lg">Total Cost Impact</td>
+                    <td className="p-4 font-bold text-lg text-primary">$642,194</td>
+                  </tr>
+                  <tr className="bg-gradient-to-r from-primary/10 to-secondary/10">
+                    <td colSpan={8} className="p-4 font-bold text-lg">Total Revenue Impact</td>
+                    <td className="p-4 font-bold text-lg text-primary">$241,939</td>
+                  </tr>
+                  <tr className="bg-gradient-to-r from-primary/10 to-secondary/10">
+                    <td colSpan={8} className="p-4 font-bold text-lg">Total Risk Impact</td>
+                    <td className="p-4 font-bold text-lg text-primary">$70,775</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           <MetricCard
             title="Aggregate Claim Data"
