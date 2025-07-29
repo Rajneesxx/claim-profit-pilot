@@ -46,23 +46,23 @@ interface ROIMetrics {
 
 export const ROICalculator = () => {
   const [metrics, setMetrics] = useState<ROIMetrics>({
-    revenueClaimed: 1000000,
-    claimsPerAnnum: 10000,
-    chartsProcessedPerAnnum: 15000,
-    numberOfCoders: 5,
-    salaryPerCoder: 65000,
-    overheadCostPercent: 25,
-    chartsPerCoderPerDay: 30,
-    claimDeniedPercent: 8,
-    costPerDeniedClaim: 150,
-    codingBacklogPercent: 15,
-    daysPerChartInBacklog: 5,
-    costOfCapital: 8,
-    rvusCodedPerAnnum: 50000,
-    weightedAverageGPCI: 1.2,
-    overCodingPercent: 3,
-    underCodingPercent: 5,
-    avgBillableCodesPerChart: 4.5
+    revenueClaimed: 23000000,
+    claimsPerAnnum: 42700,
+    chartsProcessedPerAnnum: 42700,
+    numberOfCoders: 10,
+    salaryPerCoder: 60000,
+    overheadCostPercent: 38,
+    chartsPerCoderPerDay: 17,
+    claimDeniedPercent: 25,
+    costPerDeniedClaim: 42,
+    codingBacklogPercent: 5,
+    daysPerChartInBacklog: 20,
+    costOfCapital: 5,
+    rvusCodedPerAnnum: 718750,
+    weightedAverageGPCI: 1.03,
+    overCodingPercent: 13,
+    underCodingPercent: 10,
+    avgBillableCodesPerChart: 4
   });
 
   const updateMetric = (key: keyof ROIMetrics, value: number) => {
@@ -77,11 +77,23 @@ export const ROICalculator = () => {
   const roi = ((metrics.revenueClaimed - totalOperationalCosts) / totalOperationalCosts) * 100;
   const efficiencyRatio = metrics.chartsProcessedPerAnnum / (metrics.numberOfCoders * 250 * metrics.chartsPerCoderPerDay);
 
-  // Executive Summary Calculations
-  const reducedCost = deniedClaimsCost + backlogCost; // Cost savings from process optimization
-  const increaseRevenue = metrics.revenueClaimed * (metrics.underCodingPercent / 100) * 0.1; // Revenue recovery from better coding
-  const reducedRisk = (metrics.claimsPerAnnum * metrics.claimDeniedPercent / 100) * 0.3; // Risk reduction value
-  const totalImpact = reducedCost + increaseRevenue + (reducedRisk * metrics.costPerDeniedClaim);
+  // Executive Summary Calculations based on provided formulas
+  
+  // Reduced Cost calculations
+  const coderProductivitySaving = metrics.chartsProcessedPerAnnum * 0.5 * (8 / metrics.chartsPerCoderPerDay) * (metrics.salaryPerCoder / (250 * 8)); // Assuming 50% productivity improvement
+  const claimDenialReduction = metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100) * 0.5 * metrics.costPerDeniedClaim; // 50% reduction in denials
+  const backlogReduction = metrics.chartsProcessedPerAnnum * (metrics.codingBacklogPercent / 100) * 0.8 * metrics.daysPerChartInBacklog * (metrics.costOfCapital / 100) / 365; // 80% reduction in backlog
+  const reducedCost = coderProductivitySaving + claimDenialReduction + backlogReduction;
+  
+  // Increased Revenue calculations
+  const rvuImprovement = metrics.rvusCodedPerAnnum * 0.01 * metrics.weightedAverageGPCI * 36; // 1% improvement with $36 conversion factor
+  const increaseRevenue = rvuImprovement;
+  
+  // Reduced Risk calculations
+  const overcodingRiskReduction = metrics.chartsProcessedPerAnnum * (metrics.overCodingPercent / 100) * 1.0 * 100; // $100 compliance cost per overcoded chart
+  const reducedRisk = overcodingRiskReduction;
+  
+  const totalImpact = reducedCost + increaseRevenue + reducedRisk;
 
   return (
     <div className="min-h-screen bg-background">
