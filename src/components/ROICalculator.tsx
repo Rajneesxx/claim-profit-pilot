@@ -199,11 +199,11 @@ Generated on ${new Date().toLocaleDateString()}`;
   const totalImpact = reducedCost + increaseRevenue + reducedRisk;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-purple-900 to-background">`
-      <div className="container mx-auto px-6 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-purple-900 to-background">
+      <div className="container mx-auto px-4 py-6">
         {/* Header */}
-        <div className="text-center text-white mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
+        <div className="text-center text-white mb-6">
+          <div className="flex items-center justify-center gap-3 mb-3">
             <Calculator className="h-8 w-8" />
             <h1 className="text-3xl font-bold">Calculator</h1>
           </div>
@@ -212,7 +212,7 @@ Generated on ${new Date().toLocaleDateString()}`;
         {/* Main Calculator Interface */}
         <div className="max-w-6xl mx-auto">
           <Tabs defaultValue="calculator" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8 bg-card/90 backdrop-blur-sm border border-border">`
+            <TabsList className="grid w-full grid-cols-4 mb-6 bg-card/90 backdrop-blur-sm border border-border">
               <TabsTrigger value="calculator" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Calculator className="h-4 w-4 mr-2" />
                 1. Calculator
