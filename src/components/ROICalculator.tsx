@@ -184,9 +184,6 @@ export const ROICalculator = () => {
               <img src="/lovable-uploads/4fdc463b-67d9-4490-b3fe-75d8280201ba.png" alt="RapidClaims" className="h-8 w-auto" />
               <h1 className="text-2xl font-semibold text-gray-900">ROI Calculator</h1>
             </div>
-            <div className="text-sm text-gray-500">
-              Comprehensive insights about your organizational performance
-            </div>
           </div>
         </div>
       </div>
