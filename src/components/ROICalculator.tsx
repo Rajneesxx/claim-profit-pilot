@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import confetti from 'canvas-confetti';
-import rapidClaimsLogo from '@/assets/rapidclaims-logo.png';
 import { 
   DollarSign, 
   Users, 
@@ -654,7 +653,7 @@ export const ROICalculator = () => {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <img src={rapidClaimsLogo} alt="RapidClaims.ai" className="h-8 w-auto" />
+              <img src="/lovable-uploads/4fdc463b-67d9-4490-b3fe-75d8280201ba.png" alt="RapidClaims" className="h-8 w-auto" />
               <div className="text-white">
                 <span className="font-medium text-sm">Book a call with RapidClaims.ai</span>
               </div>
