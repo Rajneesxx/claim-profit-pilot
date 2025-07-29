@@ -232,9 +232,9 @@ export const ROICalculator = () => {
       <div className="fixed top-0 left-0 right-0 z-50 bg-purple-800/95 backdrop-blur-md border-b border-purple-400/20">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 text-white">
-              <div className="text-2xl font-bold text-orange-400">RC</div>
-              <h1 className="text-2xl font-bold">Rapid ROI Calculator</h1>
+            <div className="flex items-center gap-3">
+              <img src="/lovable-uploads/4fdc463b-67d9-4490-b3fe-75d8280201ba.png" alt="RapidClaims" className="h-10 w-auto" />
+              <h1 className="text-2xl font-bold text-white">ROI Calculator</h1>
             </div>
             <div className="text-white text-sm">
               {/* Removed AI-based RCM automation solution text */}
