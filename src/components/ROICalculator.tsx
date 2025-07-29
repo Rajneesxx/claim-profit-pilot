@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MetricCard } from './MetricCard';
+import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { 
   DollarSign, 
@@ -355,176 +356,337 @@ Generated on ${new Date().toLocaleDateString()}`;
         </Card>
 
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          <MetricCard
-            title="Aggregate Claim Data"
-            icon={<BarChart3 className="h-5 w-5" />}
-            fields={[
-              {
-                id: 'revenueClaimed',
-                label: 'Revenue Claimed',
-                type: 'number',
-                value: metrics.revenueClaimed,
-                onChange: (value) => updateMetric('revenueClaimed', value),
-                prefix: '$'
-              },
-              {
-                id: 'claimsPerAnnum',
-                label: 'Claims per Annum',
-                type: 'number',
-                value: metrics.claimsPerAnnum,
-                onChange: (value) => updateMetric('claimsPerAnnum', value)
-              },
-              {
-                id: 'chartsProcessedPerAnnum',
-                label: 'Charts Processed per Annum',
-                type: 'number',
-                value: metrics.chartsProcessedPerAnnum,
-                onChange: (value) => updateMetric('chartsProcessedPerAnnum', value)
-              }
-            ]}
-          />
+        {/* Input Controls with Sliders */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Revenue & Claims */}
+          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-primary">
+                <BarChart3 className="h-5 w-5" />
+                Revenue & Claims Data
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Revenue Claimed</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.revenueClaimed]}
+                    onValueChange={([value]) => updateMetric('revenueClaimed', value)}
+                    max={50000000}
+                    min={1000000}
+                    step={100000}
+                    className="w-full"
+                  />
+                  <div className="text-2xl font-bold text-primary">
+                    ${metrics.revenueClaimed.toLocaleString()}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Claims per Annum</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.claimsPerAnnum]}
+                    onValueChange={([value]) => updateMetric('claimsPerAnnum', value)}
+                    max={100000}
+                    min={1000}
+                    step={100}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-primary">
+                    {metrics.claimsPerAnnum.toLocaleString()}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Charts Processed per Annum</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.chartsProcessedPerAnnum]}
+                    onValueChange={([value]) => updateMetric('chartsProcessedPerAnnum', value)}
+                    max={100000}
+                    min={1000}
+                    step={100}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-primary">
+                    {metrics.chartsProcessedPerAnnum.toLocaleString()}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          <MetricCard
-            title="Coding Costs"
-            icon={<Users className="h-5 w-5" />}
-            fields={[
-              {
-                id: 'numberOfCoders',
-                label: 'Number of Coders',
-                type: 'number',
-                value: metrics.numberOfCoders,
-                onChange: (value) => updateMetric('numberOfCoders', value)
-              },
-              {
-                id: 'salaryPerCoder',
-                label: 'Salary per Coder (Annual)',
-                type: 'number',
-                value: metrics.salaryPerCoder,
-                onChange: (value) => updateMetric('salaryPerCoder', value),
-                prefix: '$'
-              },
-              {
-                id: 'overheadCostPercent',
-                label: 'Overhead Cost per Coder',
-                type: 'percentage',
-                value: metrics.overheadCostPercent,
-                onChange: (value) => updateMetric('overheadCostPercent', value),
-                suffix: '%'
-              },
-              {
-                id: 'chartsPerCoderPerDay',
-                label: 'Charts Processed per Coder per Day',
-                type: 'number',
-                value: metrics.chartsPerCoderPerDay,
-                onChange: (value) => updateMetric('chartsPerCoderPerDay', value)
-              }
-            ]}
-          />
+          {/* Coding Team */}
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-success">
+                <Users className="h-5 w-5" />
+                Coding Team
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Number of Coders</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.numberOfCoders]}
+                    onValueChange={([value]) => updateMetric('numberOfCoders', value)}
+                    max={50}
+                    min={1}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="text-2xl font-bold text-success">
+                    {metrics.numberOfCoders}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Annual Salary per Coder</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.salaryPerCoder]}
+                    onValueChange={([value]) => updateMetric('salaryPerCoder', value)}
+                    max={150000}
+                    min={30000}
+                    step={1000}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-success">
+                    ${metrics.salaryPerCoder.toLocaleString()}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Overhead Cost %</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.overheadCostPercent]}
+                    onValueChange={([value]) => updateMetric('overheadCostPercent', value)}
+                    max={100}
+                    min={0}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-success">
+                    {metrics.overheadCostPercent}%
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Charts per Coder per Day</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.chartsPerCoderPerDay]}
+                    onValueChange={([value]) => updateMetric('chartsPerCoderPerDay', value)}
+                    max={50}
+                    min={5}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-success">
+                    {metrics.chartsPerCoderPerDay}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-          <MetricCard
-            title="Collection Costs"
-            icon={<AlertTriangle className="h-5 w-5" />}
-            fields={[
-              {
-                id: 'claimDeniedPercent',
-                label: 'Claims Denied',
-                type: 'percentage',
-                value: metrics.claimDeniedPercent,
-                onChange: (value) => updateMetric('claimDeniedPercent', value),
-                suffix: '%'
-              },
-              {
-                id: 'costPerDeniedClaim',
-                label: 'Cost per Denied Claim',
-                type: 'number',
-                value: metrics.costPerDeniedClaim,
-                onChange: (value) => updateMetric('costPerDeniedClaim', value),
-                prefix: '$'
-              }
-            ]}
-          />
+        {/* Additional Metrics */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Collection Costs */}
+          <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-warning">
+                <AlertTriangle className="h-5 w-5" />
+                Collection Costs
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Claims Denied %</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.claimDeniedPercent]}
+                    onValueChange={([value]) => updateMetric('claimDeniedPercent', value)}
+                    max={50}
+                    min={0}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-warning">
+                    {metrics.claimDeniedPercent}%
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Cost per Denied Claim</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.costPerDeniedClaim]}
+                    onValueChange={([value]) => updateMetric('costPerDeniedClaim', value)}
+                    max={200}
+                    min={10}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-warning">
+                    ${metrics.costPerDeniedClaim}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          <MetricCard
-            title="Capital Costs"
-            icon={<TrendingUp className="h-5 w-5" />}
-            fields={[
-              {
-                id: 'codingBacklogPercent',
-                label: 'Coding Backlog',
-                type: 'percentage',
-                value: metrics.codingBacklogPercent,
-                onChange: (value) => updateMetric('codingBacklogPercent', value),
-                suffix: '%'
-              },
-              {
-                id: 'daysPerChartInBacklog',
-                label: 'Days per Chart in Backlog',
-                type: 'number',
-                value: metrics.daysPerChartInBacklog,
-                onChange: (value) => updateMetric('daysPerChartInBacklog', value)
-              },
-              {
-                id: 'costOfCapital',
-                label: 'Cost of Capital',
-                type: 'percentage',
-                value: metrics.costOfCapital,
-                onChange: (value) => updateMetric('costOfCapital', value),
-                suffix: '%'
-              }
-            ]}
-          />
+          {/* Capital Costs */}
+          <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-info">
+                <TrendingUp className="h-5 w-5" />
+                Capital Costs
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Coding Backlog %</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.codingBacklogPercent]}
+                    onValueChange={([value]) => updateMetric('codingBacklogPercent', value)}
+                    max={30}
+                    min={0}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-info">
+                    {metrics.codingBacklogPercent}%
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Days per Chart in Backlog</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.daysPerChartInBacklog]}
+                    onValueChange={([value]) => updateMetric('daysPerChartInBacklog', value)}
+                    max={60}
+                    min={1}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-info">
+                    {metrics.daysPerChartInBacklog}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Cost of Capital %</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.costOfCapital]}
+                    onValueChange={([value]) => updateMetric('costOfCapital', value)}
+                    max={15}
+                    min={1}
+                    step={0.5}
+                    className="w-full"
+                  />
+                  <div className="text-xl font-bold text-info">
+                    {metrics.costOfCapital}%
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-          <MetricCard
-            title="RVU Data"
-            icon={<DollarSign className="h-5 w-5" />}
-            fields={[
-              {
-                id: 'rvusCodedPerAnnum',
-                label: 'RVUs Coded per Annum',
-                type: 'number',
-                value: metrics.rvusCodedPerAnnum,
-                onChange: (value) => updateMetric('rvusCodedPerAnnum', value)
-              },
-              {
-                id: 'weightedAverageGPCI',
-                label: 'Weighted Average GPCI',
-                type: 'number',
-                value: metrics.weightedAverageGPCI,
-                onChange: (value) => updateMetric('weightedAverageGPCI', value)
-              }
-            ]}
-          />
-
-          <MetricCard
-            title="Audit Data"
-            icon={<FileText className="h-5 w-5" />}
-            fields={[
-              {
-                id: 'overCodingPercent',
-                label: 'Charts with Over-coding',
-                type: 'percentage',
-                value: metrics.overCodingPercent,
-                onChange: (value) => updateMetric('overCodingPercent', value),
-                suffix: '%'
-              },
-              {
-                id: 'underCodingPercent',
-                label: 'Charts with Under-coding',
-                type: 'percentage',
-                value: metrics.underCodingPercent,
-                onChange: (value) => updateMetric('underCodingPercent', value),
-                suffix: '%'
-              },
-              {
-                id: 'avgBillableCodesPerChart',
-                label: 'Avg Billable Codes per Chart',
-                type: 'number',
-                value: metrics.avgBillableCodesPerChart,
-                onChange: (value) => updateMetric('avgBillableCodesPerChart', value)
-              }
-            ]}
-          />
+          {/* RVU & Audit Data */}
+          <Card className="bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-secondary-foreground">
+                <FileText className="h-5 w-5" />
+                RVU & Audit Data
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">RVUs Coded per Annum</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.rvusCodedPerAnnum]}
+                    onValueChange={([value]) => updateMetric('rvusCodedPerAnnum', value)}
+                    max={2000000}
+                    min={100000}
+                    step={10000}
+                    className="w-full"
+                  />
+                  <div className="text-lg font-bold text-secondary-foreground">
+                    {metrics.rvusCodedPerAnnum.toLocaleString()}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Weighted Average GPCI</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.weightedAverageGPCI]}
+                    onValueChange={([value]) => updateMetric('weightedAverageGPCI', value)}
+                    max={2}
+                    min={0.5}
+                    step={0.01}
+                    className="w-full"
+                  />
+                  <div className="text-lg font-bold text-secondary-foreground">
+                    {metrics.weightedAverageGPCI}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Over-coding %</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.overCodingPercent]}
+                    onValueChange={([value]) => updateMetric('overCodingPercent', value)}
+                    max={30}
+                    min={0}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="text-lg font-bold text-secondary-foreground">
+                    {metrics.overCodingPercent}%
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Under-coding %</label>
+                <div className="mt-2 space-y-2">
+                  <Slider
+                    value={[metrics.underCodingPercent]}
+                    onValueChange={([value]) => updateMetric('underCodingPercent', value)}
+                    max={30}
+                    min={0}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="text-lg font-bold text-secondary-foreground">
+                    {metrics.underCodingPercent}%
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Cost Breakdown */}
