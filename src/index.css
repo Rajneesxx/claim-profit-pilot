@@ -17,8 +17,11 @@ All colors MUST be HSL.
     --popover: 260 25% 18%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 270 80% 60%;
+    --primary: 225 39% 22%; /* RapidClaims dark navy */
     --primary-foreground: 0 0% 100%;
+    
+    --coral: 14 100% 57%; /* RapidClaims coral accent */
+    --coral-foreground: 0 0% 100%;
 
     --secondary: 260 25% 22%;
     --secondary-foreground: 0 0% 90%;
