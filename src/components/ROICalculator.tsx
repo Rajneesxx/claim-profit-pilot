@@ -523,35 +523,71 @@ export const ROICalculator = () => {
                     </div>
                   </div>
 
-                   {/* Single Main Impact Card */}
-                   <div className="flex justify-center mb-12">
-                     <div className="bg-gradient-to-br from-purple-600/40 to-purple-800/40 backdrop-blur-sm rounded-xl p-8 border border-purple-400/30 max-w-sm w-full text-center">
-                       {/* Icon */}
-                       <div className="flex items-center justify-center w-16 h-16 bg-orange-500/30 rounded-xl mb-6 mx-auto">
-                         <Target className="h-8 w-8 text-orange-400" />
+                   {/* Impact Cards Grid */}
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                     {/* Reduced Cost Card */}
+                     <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                       <div className="flex items-center justify-center w-12 h-12 bg-green-500/20 rounded-lg mb-4 mx-auto">
+                         <Shield className="h-6 w-6 text-green-400" />
                        </div>
-                       
-                       {/* Title */}
-                       <h3 className="text-white text-lg font-medium mb-4">Total Impact</h3>
-                       
-                       {/* Main Value */}
-                       <div className="text-4xl font-bold text-yellow-400 mb-2">
-                         ${totalImpact.toLocaleString()}
+                       <div className="text-center">
+                         <h3 className="text-white/80 text-sm font-medium mb-2">Reduced Cost</h3>
+                         <div className="text-2xl font-bold text-green-400 mb-4">${reducedCost.toLocaleString()}</div>
+                         <Button size="sm" variant="outline" className="text-white border-white/30 hover:bg-white/10">
+                           <Info className="h-3 w-3 mr-1" />
+                           Details
+                         </Button>
                        </div>
-                       
-                       {/* ROI Subtitle */}
-                       <div className="text-white/80 text-lg mb-6">
-                         ROI: {roi.toFixed(1)}%
+                     </div>
+
+                     {/* Increased Revenue Card */}
+                     <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                       <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4 mx-auto">
+                         <TrendingUp className="h-6 w-6 text-purple-400" />
                        </div>
-                       
-                       {/* Details Button */}
-                       <Button 
-                         className="bg-orange-500 hover:bg-orange-600 text-white border-0 w-full py-3 text-base font-medium"
-                         onClick={handleShowResults}
-                       >
-                         <Award className="h-4 w-4 mr-2" />
-                         Get Detailed Results
-                       </Button>
+                       <div className="text-center">
+                         <h3 className="text-white/80 text-sm font-medium mb-2">Increased Revenue</h3>
+                         <div className="text-2xl font-bold text-purple-400 mb-4">${increaseRevenue.toLocaleString()}</div>
+                         <Button size="sm" variant="outline" className="text-white border-white/30 hover:bg-white/10">
+                           <Info className="h-3 w-3 mr-1" />
+                           Details
+                         </Button>
+                       </div>
+                     </div>
+
+                     {/* Reduced Risk Card */}
+                     <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                       <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4 mx-auto">
+                         <AlertTriangle className="h-6 w-6 text-purple-400" />
+                       </div>
+                       <div className="text-center">
+                         <h3 className="text-white/80 text-sm font-medium mb-2">Reduced Risk</h3>
+                         <div className="text-2xl font-bold text-purple-400 mb-4">${reducedRisk.toLocaleString()}</div>
+                         <Button size="sm" variant="outline" className="text-white border-white/30 hover:bg-white/10">
+                           <Info className="h-3 w-3 mr-1" />
+                           Details
+                         </Button>
+                       </div>
+                     </div>
+
+                     {/* Total Impact Card */}
+                     <div className="bg-gradient-to-br from-orange-500/20 to-yellow-500/20 backdrop-blur-sm rounded-lg p-6 border border-orange-400/30">
+                       <div className="flex items-center justify-center w-12 h-12 bg-orange-500/30 rounded-lg mb-4 mx-auto">
+                         <Target className="h-6 w-6 text-orange-400" />
+                       </div>
+                       <div className="text-center">
+                         <h3 className="text-white/80 text-sm font-medium mb-2">Total Impact</h3>
+                         <div className="text-2xl font-bold text-orange-400 mb-2">${totalImpact.toLocaleString()}</div>
+                         <div className="text-sm text-orange-300 mb-4">ROI: {roi.toFixed(1)}%</div>
+                         <Button 
+                           size="sm" 
+                           className="bg-orange-500 hover:bg-orange-600 text-white border-0 w-full"
+                           onClick={handleShowResults}
+                         >
+                           <Award className="h-3 w-3 mr-1" />
+                           Get Detailed Results
+                         </Button>
+                       </div>
                      </div>
                    </div>
 
