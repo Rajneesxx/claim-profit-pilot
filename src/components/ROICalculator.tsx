@@ -175,9 +175,21 @@ export const ROICalculator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
+      {/* Floating Background Icons */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <DollarSign className="absolute top-20 left-10 text-blue-200 w-8 h-8 animate-bounce" style={{ animationDelay: '0s' }} />
+        <TrendingUp className="absolute top-40 right-20 text-green-200 w-6 h-6 animate-bounce" style={{ animationDelay: '1s' }} />
+        <Calculator className="absolute bottom-40 left-20 text-purple-200 w-7 h-7 animate-bounce" style={{ animationDelay: '2s' }} />
+        <FileText className="absolute top-60 left-1/3 text-orange-200 w-5 h-5 animate-bounce" style={{ animationDelay: '3s' }} />
+        <Users className="absolute bottom-20 right-1/4 text-indigo-200 w-6 h-6 animate-bounce" style={{ animationDelay: '4s' }} />
+        <Award className="absolute top-32 right-1/3 text-pink-200 w-8 h-8 animate-bounce" style={{ animationDelay: '5s' }} />
+        <Activity className="absolute bottom-60 left-1/2 text-cyan-200 w-6 h-6 animate-bounce" style={{ animationDelay: '6s' }} />
+        <CheckCircle className="absolute top-96 right-10 text-emerald-200 w-7 h-7 animate-bounce" style={{ animationDelay: '7s' }} />
+      </div>
+
       {/* Clean Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-white/90 backdrop-blur-sm shadow-sm border-b border-gray-200 relative z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -189,7 +201,7 @@ export const ROICalculator = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 py-6 relative z-10">
         {/* Overview Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="bg-white border border-gray-200">
@@ -371,16 +383,51 @@ export const ROICalculator = () => {
                 </div>
                 
                 <div className="mt-8 pt-6 border-t border-gray-200">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div className="text-center p-4 rounded-lg bg-blue-50 border border-blue-200">
-                      <div className="text-2xl font-bold text-blue-600">{roi.toFixed(1)}%</div>
-                      <div className="text-sm text-gray-600">ROI</div>
+                  {/* Semi-circular ROI Meter */}
+                  <div className="flex justify-center mb-8">
+                    <div className="relative w-64 h-32">
+                      <svg viewBox="0 0 200 100" className="w-full h-full">
+                        {/* Background Arc */}
+                        <path
+                          d="M 20 80 A 80 80 0 0 1 180 80"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="8"
+                        />
+                        {/* Progress Arc */}
+                        <path
+                          d="M 20 80 A 80 80 0 0 1 180 80"
+                          fill="none"
+                          stroke="url(#roiGradient)"
+                          strokeWidth="8"
+                          strokeDasharray={`${Math.min(roi * 2.51, 251.2)} 251.2`}
+                          strokeLinecap="round"
+                          className="transition-all duration-1000 ease-out"
+                        />
+                        <defs>
+                          <linearGradient id="roiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#3b82f6" />
+                            <stop offset="50%" stopColor="#8b5cf6" />
+                            <stop offset="100%" stopColor="#06b6d4" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                      {/* Center Text */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                          {roi.toFixed(1)}%
+                        </div>
+                        <div className="text-sm text-gray-500">ROI</div>
+                      </div>
                     </div>
-                    <div className="text-center p-4 rounded-lg bg-green-50 border border-green-200">
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="text-center p-4 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
                       <div className="text-2xl font-bold text-green-600">${totalImpact.toLocaleString()}</div>
                       <div className="text-sm text-gray-600">Total Impact</div>
                     </div>
-                    <div className="text-center p-4 rounded-lg bg-orange-50 border border-orange-200">
+                    <div className="text-center p-4 rounded-lg bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200">
                       <div className="text-2xl font-bold text-orange-600">${totalOperationalCosts.toLocaleString()}</div>
                       <div className="text-sm text-gray-600">Operational Costs</div>
                     </div>
