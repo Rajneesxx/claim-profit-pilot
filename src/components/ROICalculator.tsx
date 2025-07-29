@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import confetti from 'canvas-confetti';
 import { 
   DollarSign, 
   Users, 
@@ -25,7 +29,13 @@ import {
   Activity,
   Award,
   Clock,
-  Shield
+  Shield,
+  Star,
+  Calendar,
+  Mail,
+  Phone,
+  Info,
+  CheckCircle
 } from 'lucide-react';
 
 interface ROIMetrics {
@@ -83,6 +93,10 @@ export const ROICalculator = () => {
   };
 
   const [metrics, setMetrics] = useState<ROIMetrics>(defaultMetrics);
+  const [userEmail, setUserEmail] = useState('');
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [rating, setRating] = useState(0);
 
   const updateMetric = (key: keyof ROIMetrics, value: number) => {
     setMetrics(prev => ({ ...prev, [key]: value }));
@@ -96,9 +110,51 @@ export const ROICalculator = () => {
     });
   };
 
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  };
+
+  const handleShowResults = () => {
+    if (!userEmail) {
+      setShowEmailDialog(true);
+    } else {
+      setShowResults(true);
+      triggerConfetti();
+      toast({
+        title: "🎉 Results Ready!",
+        description: `Total Impact: $${totalImpact.toLocaleString()} | ROI: ${roi.toFixed(1)}%`
+      });
+    }
+  };
+
+  const handleEmailSubmit = () => {
+    if (userEmail) {
+      setShowEmailDialog(false);
+      setShowResults(true);
+      triggerConfetti();
+      toast({
+        title: "🎉 Results Ready!",
+        description: `Total Impact: $${totalImpact.toLocaleString()} | ROI: ${roi.toFixed(1)}%`
+      });
+    }
+  };
+
+  const handleRating = (stars: number) => {
+    setRating(stars);
+    toast({
+      title: "Thank you for your feedback!",
+      description: `You rated us ${stars} star${stars !== 1 ? 's' : ''}.`
+    });
+  };
+
   const exportData = () => {
     const reportData = {
       timestamp: new Date().toISOString(),
+      userEmail,
       metrics,
       calculations: {
         totalCodingCosts,
@@ -134,7 +190,7 @@ export const ROICalculator = () => {
   };
 
   const shareResults = async () => {
-    const shareText = `Healthcare Coding ROI Calculator Results:
+    const shareText = `Rapid ROI Calculator Results:
     
 📊 Total ROI: ${roi.toFixed(1)}%
 💰 Revenue Claimed: $${metrics.revenueClaimed.toLocaleString()}
@@ -152,7 +208,7 @@ Generated on ${new Date().toLocaleDateString()}`;
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Healthcare Coding ROI Calculator Results',
+          title: 'Rapid ROI Calculator Results',
           text: shareText,
         });
         toast({
@@ -211,29 +267,278 @@ Generated on ${new Date().toLocaleDateString()}`;
 
         {/* Main Calculator Interface */}
         <div className="max-w-6xl mx-auto">
-          <Tabs defaultValue="calculator" className="w-full">
+          <Tabs defaultValue="summary" className="w-full">
             <TabsList className="grid w-full grid-cols-4 mb-6 bg-card/90 backdrop-blur-sm border border-border">
+              <TabsTrigger value="summary" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <Award className="h-4 w-4 mr-2" />
+                1. Summary
+              </TabsTrigger>
               <TabsTrigger value="calculator" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Calculator className="h-4 w-4 mr-2" />
-                1. Calculator
+                2. Inputs
               </TabsTrigger>
               <TabsTrigger value="advanced" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Settings className="h-4 w-4 mr-2" />
-                2. Advanced
+                3. Advanced
               </TabsTrigger>
               <TabsTrigger value="analytics" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <BarChart3 className="h-4 w-4 mr-2" />
-                3. Analytics
-              </TabsTrigger>
-              <TabsTrigger value="summary" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <Award className="h-4 w-4 mr-2" />
-                4. Summary
+                4. Analytics
               </TabsTrigger>
             </TabsList>
 
-            {/* Calculator Tab */}
+            {/* Executive Summary Tab - Now First */}
+            <TabsContent value="summary">
+              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-primary text-xl">
+                    <Award className="h-6 w-6" />
+                    Executive Summary - 12 Month Impact Projection
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                    {/* Reduced Cost */}
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
+                      <div className="flex items-center justify-center mb-3">
+                        <Shield className="h-8 w-8 text-success" />
+                      </div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Cost</h4>
+                      <div className="text-3xl font-bold text-success mb-3">
+                        ${reducedCost.toLocaleString()}
+                      </div>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm" className="mb-3">
+                            <Info className="h-4 w-4 mr-1" />
+                            Details
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Reduced Cost Calculation</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-3">
+                            <div className="p-3 rounded bg-muted">
+                              <h5 className="font-semibold">Coder Productivity Saving</h5>
+                              <p className="text-sm">${coderProductivitySaving.toLocaleString()}</p>
+                              <p className="text-xs text-muted-foreground">50% productivity improvement</p>
+                            </div>
+                            <div className="p-3 rounded bg-muted">
+                              <h5 className="font-semibold">Claim Denial Reduction</h5>
+                              <p className="text-sm">${claimDenialReduction.toLocaleString()}</p>
+                              <p className="text-xs text-muted-foreground">50% reduction in claim denials</p>
+                            </div>
+                            <div className="p-3 rounded bg-muted">
+                              <h5 className="font-semibold">Backlog Reduction</h5>
+                              <p className="text-sm">${backlogReduction.toLocaleString()}</p>
+                              <p className="text-xs text-muted-foreground">80% backlog reduction</p>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                    
+                    {/* Increased Revenue */}
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
+                      <div className="flex items-center justify-center mb-3">
+                        <TrendingUp className="h-8 w-8 text-primary" />
+                      </div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-2">Increased Revenue</h4>
+                      <div className="text-3xl font-bold text-primary mb-3">
+                        ${increaseRevenue.toLocaleString()}
+                      </div>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm" className="mb-3">
+                            <Info className="h-4 w-4 mr-1" />
+                            Details
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Increased Revenue Calculation</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-3">
+                            <div className="p-3 rounded bg-muted">
+                              <h5 className="font-semibold">RVU Improvement</h5>
+                              <p className="text-sm">${rvuImprovement.toLocaleString()}</p>
+                              <p className="text-xs text-muted-foreground">1% RVU improvement through better coding accuracy</p>
+                            </div>
+                            <div className="p-3 rounded bg-muted">
+                              <h5 className="font-semibold">Base RVUs</h5>
+                              <p className="text-sm">{metrics.rvusCodedPerAnnum.toLocaleString()}</p>
+                              <p className="text-xs text-muted-foreground">Annual RVUs coded</p>
+                            </div>
+                            <div className="p-3 rounded bg-muted">
+                              <h5 className="font-semibold">GPCI Factor</h5>
+                              <p className="text-sm">{metrics.weightedAverageGPCI}</p>
+                              <p className="text-xs text-muted-foreground">Geographic Practice Cost Index</p>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                    
+                    {/* Reduced Risk */}
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
+                      <div className="flex items-center justify-center mb-3">
+                        <AlertTriangle className="h-8 w-8 text-info" />
+                      </div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Risk</h4>
+                      <div className="text-3xl font-bold text-info mb-3">
+                        ${reducedRisk.toLocaleString()}
+                      </div>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm" className="mb-3">
+                            <Info className="h-4 w-4 mr-1" />
+                            Details
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Reduced Risk Calculation</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-3">
+                            <div className="p-3 rounded bg-muted">
+                              <h5 className="font-semibold">Over-coding Risk Reduction</h5>
+                              <p className="text-sm">${overcodingRiskReduction.toLocaleString()}</p>
+                              <p className="text-xs text-muted-foreground">Eliminates {metrics.overCodingPercent}% over-coding risk</p>
+                            </div>
+                            <div className="p-3 rounded bg-muted">
+                              <h5 className="font-semibold">Charts at Risk</h5>
+                              <p className="text-sm">{(metrics.chartsProcessedPerAnnum * metrics.overCodingPercent / 100).toLocaleString()}</p>
+                              <p className="text-xs text-muted-foreground">Charts with over-coding risk</p>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                    
+                    {/* Total Impact */}
+                    <div className="text-center p-6 rounded-lg bg-gradient-to-br from-yellow-400/20 to-orange-500/20 border border-yellow-500/30">
+                      <div className="flex items-center justify-center mb-3">
+                        <Target className="h-8 w-8 text-yellow-600" />
+                      </div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-2">Total Impact</h4>
+                      <div className="text-3xl font-bold text-yellow-600 mb-3">
+                        ${totalImpact.toLocaleString()}
+                      </div>
+                      <div className="text-sm font-semibold text-yellow-700 mb-3">
+                        ROI: {roi.toFixed(1)}%
+                      </div>
+                      {!showResults ? (
+                        <Button 
+                          onClick={handleShowResults}
+                          className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold"
+                        >
+                          🎯 Get Detailed Results
+                        </Button>
+                      ) : (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-center text-green-600">
+                            <CheckCircle className="h-5 w-5 mr-2" />
+                            Results Available!
+                          </div>
+                          
+                          {/* Rating System */}
+                          <div className="text-center">
+                            <p className="text-sm mb-2">Rate this calculator:</p>
+                            <div className="flex justify-center gap-1">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                  key={star}
+                                  onClick={() => handleRating(star)}
+                                  className="text-yellow-400 hover:text-yellow-500 transition-colors"
+                                >
+                                  <Star 
+                                    className={`h-5 w-5 ${star <= rating ? 'fill-current' : ''}`} 
+                                  />
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="space-y-2">
+                            <Button 
+                              onClick={() => window.open('https://calendly.com/rapidclaims', '_blank')}
+                              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                            >
+                              <Calendar className="h-4 w-4 mr-2" />
+                              Book a Call
+                            </Button>
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="outline"
+                                onClick={shareResults}
+                                className="flex-1"
+                              >
+                                <Share2 className="h-4 w-4 mr-1" />
+                                Share
+                              </Button>
+                              <Button 
+                                variant="outline"
+                                onClick={exportData}
+                                className="flex-1"
+                              >
+                                <Download className="h-4 w-4 mr-1" />
+                                Export
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Key Performance Indicators */}
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                      <Clock className="h-5 w-5" />
+                      Key Performance Indicators
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="text-center p-4 rounded-lg bg-muted/50">
+                        <div className="text-2xl font-bold text-primary">
+                          {(metrics.chartsProcessedPerAnnum / 1000).toFixed(0)}k
+                        </div>
+                        <div className="text-sm text-muted-foreground">Charts/Year</div>
+                      </div>
+                      <div className="text-center p-4 rounded-lg bg-muted/50">
+                        <div className="text-2xl font-bold text-success">
+                          {metrics.chartsPerCoderPerDay}
+                        </div>
+                        <div className="text-sm text-muted-foreground">Charts/Coder/Day</div>
+                      </div>
+                      <div className="text-center p-4 rounded-lg bg-muted/50">
+                        <div className="text-2xl font-bold text-warning">
+                          {metrics.claimDeniedPercent}%
+                        </div>
+                        <div className="text-sm text-muted-foreground">Denial Rate</div>
+                      </div>
+                      <div className="text-center p-4 rounded-lg bg-muted/50">
+                        <div className="text-2xl font-bold text-info">
+                          {metrics.codingBacklogPercent}%
+                        </div>
+                        <div className="text-sm text-muted-foreground">Backlog Rate</div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Calculator Tab - Now Inputs */}
             <TabsContent value="calculator">
-              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl">`
+              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calculator className="h-6 w-6" />
+                    Must Have Inputs
+                  </CardTitle>
+                </CardHeader>
                 <CardContent className="p-8">
                   {/* Main Revenue Slider */}
                   <div className="text-center mb-8">
@@ -285,8 +590,10 @@ Generated on ${new Date().toLocaleDateString()}`;
                     </div>
                   </div>
 
-                  {/* Key Metrics with +/- Controls */}
+                  {/* Must Have Inputs */}
                   <div className="space-y-6 mb-8">
+                    <h3 className="text-lg font-semibold mb-4 border-b pb-2">Must Have Inputs</h3>
+                    
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">Number of Coders</span>
                       <div className="flex items-center gap-3">
@@ -334,16 +641,34 @@ Generated on ${new Date().toLocaleDateString()}`;
                     </div>
                   </div>
 
+                  {/* Derived Values */}
+                  <div className="space-y-4 mb-8 p-4 rounded-lg bg-muted/30 border border-muted">
+                    <h3 className="text-lg font-semibold border-b pb-2">Derived Values</h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <div className="text-muted-foreground">Total Coding Costs</div>
+                        <div className="font-bold text-lg">${totalCodingCosts.toLocaleString()}</div>
+                      </div>
+                      <div>
+                        <div className="text-muted-foreground">Denied Claims Cost</div>
+                        <div className="font-bold text-lg">${deniedClaimsCost.toLocaleString()}</div>
+                      </div>
+                      <div>
+                        <div className="text-muted-foreground">Backlog Cost</div>
+                        <div className="font-bold text-lg">${backlogCost.toLocaleString()}</div>
+                      </div>
+                      <div>
+                        <div className="text-muted-foreground">Efficiency Ratio</div>
+                        <div className="font-bold text-lg">{(efficiencyRatio * 100).toFixed(1)}%</div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Action Buttons */}
                   <div className="flex flex-col gap-3">
                     <Button 
                       className="w-full bg-accent hover:bg-accent/80 text-accent-foreground py-3 text-lg font-semibold"
-                      onClick={() => {
-                        toast({
-                          title: "Results Ready!",
-                          description: `Total Impact: $${totalImpact.toLocaleString()} | ROI: ${roi.toFixed(1)}%`
-                        });
-                      }}
+                      onClick={handleShowResults}
                     >
                       SEE RESULTS
                     </Button>
@@ -373,28 +698,6 @@ Generated on ${new Date().toLocaleDateString()}`;
                         <Download className="h-4 w-4 mr-2" />
                         Export
                       </Button>
-                    </div>
-                  </div>
-
-                  {/* Summary Stats */}
-                  <div className="mt-8 pt-6 border-t">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <div className="text-muted-foreground">Revenue Growth</div>
-                        <div className="font-bold text-lg">${(increaseRevenue / 1000).toFixed(0)}k</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground">Cost Savings</div>
-                        <div className="font-bold text-lg">${(reducedCost / 1000).toFixed(0)}k</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground">Risk Reduction</div>
-                        <div className="font-bold text-lg">${(reducedRisk / 1000).toFixed(0)}k</div>
-                      </div>
-                      <div>
-                        <div className="text-muted-foreground">Claims Processed</div>
-                        <div className="font-bold text-lg">{(metrics.claimsPerAnnum / 1000).toFixed(0)}k</div>
-                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -767,145 +1070,50 @@ Generated on ${new Date().toLocaleDateString()}`;
               </div>
             </TabsContent>
 
-            {/* Executive Summary Tab */}
-            <TabsContent value="summary">
-              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl">`
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-primary text-xl">
-                    <Award className="h-6 w-6" />
-                    Executive Summary - 12 Month Impact Projection
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-                    {/* Reduced Cost */}
-                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
-                      <div className="flex items-center justify-center mb-3">
-                        <Shield className="h-8 w-8 text-success" />
-                      </div>
-                      <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Cost</h4>
-                      <div className="text-3xl font-bold text-success mb-3">
-                        ${reducedCost.toLocaleString()}
-                      </div>
-                      <div className="text-xs text-muted-foreground text-left space-y-2">
-                        <p>✓ 50% productivity improvement saves ${coderProductivitySaving.toLocaleString()}</p>
-                        <p>✓ 50% reduction in claim denials saves ${claimDenialReduction.toLocaleString()}</p>
-                        <p>✓ 80% backlog reduction saves ${backlogReduction.toLocaleString()}</p>
-                      </div>
-                    </div>
-                    
-                    {/* Increased Revenue */}
-                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
-                      <div className="flex items-center justify-center mb-3">
-                        <TrendingUp className="h-8 w-8 text-primary" />
-                      </div>
-                      <h4 className="text-sm font-medium text-muted-foreground mb-2">Increased Revenue</h4>
-                      <div className="text-3xl font-bold text-primary mb-3">
-                        ${increaseRevenue.toLocaleString()}
-                      </div>
-                      <div className="text-xs text-muted-foreground text-left space-y-2">
-                        <p>✓ CDI identifies missed HCC coding opportunities</p>
-                        <p>✓ AI-based E&M coding improves accuracy</p>
-                        <p>✓ 1% RVU improvement: ${rvuImprovement.toLocaleString()}</p>
-                      </div>
-                    </div>
-                    
-                    {/* Reduced Risk */}
-                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
-                      <div className="flex items-center justify-center mb-3">
-                        <AlertTriangle className="h-8 w-8 text-info" />
-                      </div>
-                      <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Risk</h4>
-                      <div className="text-3xl font-bold text-info mb-3">
-                        ${reducedRisk.toLocaleString()}
-                      </div>
-                      <div className="text-xs text-muted-foreground text-left space-y-2">
-                        <p>✓ Automated compliance guideline checking</p>
-                        <p>✓ Reduces audit risk and associated costs</p>
-                        <p>✓ Eliminates over-coding penalties</p>
-                      </div>
-                    </div>
-                    
-                    {/* Total Impact */}
-                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
-                      <div className="flex items-center justify-center mb-3">
-                        <Target className="h-8 w-8 text-yellow-600" />
-                      </div>
-                      <h4 className="text-sm font-medium text-muted-foreground mb-2">Total Impact</h4>
-                      <div className="text-3xl font-bold text-yellow-600 mb-3">
-                        ${totalImpact.toLocaleString()}
-                      </div>
-                      <div className="text-xs text-muted-foreground text-left">
-                        <p>Expected total impact for 12 months after 100% adoption. ROI: <span className="font-bold">{roi.toFixed(1)}%</span></p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Key Performance Indicators */}
-                  <div className="border-t pt-6">
-                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                      <Clock className="h-5 w-5" />
-                      Key Performance Indicators
-                    </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="text-center p-4 rounded-lg bg-muted/50">
-                        <div className="text-2xl font-bold text-primary">
-                          {(metrics.chartsProcessedPerAnnum / 1000).toFixed(0)}k
-                        </div>
-                        <div className="text-sm text-muted-foreground">Charts/Year</div>
-                      </div>
-                      <div className="text-center p-4 rounded-lg bg-muted/50">
-                        <div className="text-2xl font-bold text-success">
-                          {metrics.chartsPerCoderPerDay}
-                        </div>
-                        <div className="text-sm text-muted-foreground">Charts/Coder/Day</div>
-                      </div>
-                      <div className="text-center p-4 rounded-lg bg-muted/50">
-                        <div className="text-2xl font-bold text-warning">
-                          {metrics.claimDeniedPercent}%
-                        </div>
-                        <div className="text-sm text-muted-foreground">Denial Rate</div>
-                      </div>
-                      <div className="text-center p-4 rounded-lg bg-muted/50">
-                        <div className="text-2xl font-bold text-info">
-                          {metrics.codingBacklogPercent}%
-                        </div>
-                        <div className="text-sm text-muted-foreground">Backlog Rate</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Action Items */}
-                  <div className="border-t pt-6 mt-6">
-                    <h3 className="text-lg font-semibold mb-4">Recommended Actions</h3>
-                    <div className="space-y-3 text-sm">
-                      <div className="flex items-start gap-3 p-3 rounded-lg bg-primary/10">
-                        <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
-                        <div>
-                          <p className="font-medium">Immediate Implementation</p>
-                          <p className="text-muted-foreground">Deploy RapidClaims.ai to achieve {roi.toFixed(1)}% ROI and ${totalImpact.toLocaleString()} annual impact</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3 p-3 rounded-lg bg-success/10">
-                        <div className="w-2 h-2 rounded-full bg-success mt-2"></div>
-                        <div>
-                          <p className="font-medium">Monitor Key Metrics</p>
-                          <p className="text-muted-foreground">Track denial rates, backlog percentage, and coder productivity for continuous improvement</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3 p-3 rounded-lg bg-info/10">
-                        <div className="w-2 h-2 rounded-full bg-info mt-2"></div>
-                        <div>
-                          <p className="font-medium">Scale Gradually</p>
-                          <p className="text-muted-foreground">Implement in phases to ensure smooth transition and maximize adoption benefits</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
           </Tabs>
+
+          {/* Email Collection Dialog */}
+          <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Mail className="h-5 w-5" />
+                  Get Your Detailed ROI Report
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Enter your email to receive detailed ROI calculations and personalized recommendations.
+                </p>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="your.email@company.com"
+                    value={userEmail}
+                    onChange={(e) => setUserEmail(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={handleEmailSubmit}
+                    disabled={!userEmail || !userEmail.includes('@')}
+                    className="flex-1"
+                  >
+                    Get Results
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => setShowEmailDialog(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Footer */}
