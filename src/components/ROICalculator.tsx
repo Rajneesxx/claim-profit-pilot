@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import confetti from 'canvas-confetti';
+import rapidClaimsLogo from '@/assets/rapidclaims-logo.png';
 import { 
   DollarSign, 
   Users, 
@@ -649,18 +650,21 @@ export const ROICalculator = () => {
       </div>
 
       {/* Minimized Sticky Bottom CTA Panel */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-purple-800/95 backdrop-blur-md border-t border-purple-400/20 px-2 py-1">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-blue-900/95 to-purple-900/95 backdrop-blur-md border-t border-blue-400/20 px-4 py-3">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-white text-xs">
-              <span className="font-medium">Book a call with RapidClaims</span>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <img src={rapidClaimsLogo} alt="RapidClaims.ai" className="h-8 w-auto" />
+              <div className="text-white">
+                <span className="font-medium text-sm">Book a call with RapidClaims.ai</span>
+              </div>
             </div>
-            <div className="flex gap-1">
-              <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white text-xs px-2 py-1 h-6">
-                <Phone className="h-2 w-2 mr-1" />
+            <div className="flex gap-3">
+              <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2">
+                <Phone className="h-4 w-4 mr-2" />
                 Book Call
               </Button>
-              <Button size="sm" variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white text-xs px-2 py-1 h-6">
+              <Button size="sm" variant="outline" className="text-white border-white/40 hover:bg-white/20 hover:text-white font-medium px-4 py-2">
                 Free Audit
               </Button>
             </div>
