@@ -237,7 +237,7 @@ export const ROICalculator = () => {
               <h1 className="text-2xl font-bold">Rapid ROI Calculator</h1>
             </div>
             <div className="text-white text-sm">
-              AI-based RCM automation solution
+              {/* Removed AI-based RCM automation solution text */}
             </div>
           </div>
         </div>
