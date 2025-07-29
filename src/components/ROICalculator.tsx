@@ -303,15 +303,20 @@ Generated on ${new Date().toLocaleDateString()}`;
           <Target className="h-5 w-5" />
         </div>
       </div>
-      <div className="container mx-auto px-4 py-6">
-        {/* Header */}
-        <div className="text-center text-white mb-6">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <Calculator className="h-8 w-8" />
-            <h1 className="text-3xl font-bold">Rapid ROI Calculator</h1>
+      {/* Fixed Header */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-primary/95 via-purple-900/95 to-primary/95 backdrop-blur-md border-b border-white/10">
+        <div className="container mx-auto px-4 py-4">
+          <div className="text-center text-white">
+            <div className="flex items-center justify-center gap-3">
+              <Calculator className="h-8 w-8" />
+              <h1 className="text-3xl font-bold">Rapid ROI Calculator</h1>
+            </div>
           </div>
         </div>
+      </div>
 
+      {/* Main Content with top padding to account for fixed header */}
+      <div className="container mx-auto px-4 py-6 pt-24">
         {/* Main Calculator Interface */}
         <div className="max-w-6xl mx-auto">
           <Tabs defaultValue="calculator" className="w-full">
