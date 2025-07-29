@@ -190,6 +190,14 @@ Generated on ${new Date().toLocaleDateString()}`;
   const overcodingRiskReduction = metrics.chartsProcessedPerAnnum * (metrics.overCodingPercent / 100) * 1.0 * 100; // $100 compliance cost per overcoded chart
   const reducedRisk = overcodingRiskReduction;
   
+  // Debug logging
+  console.log('RVUs per annum:', metrics.rvusCodedPerAnnum);
+  console.log('Weighted Average GPCI:', metrics.weightedAverageGPCI);
+  console.log('Increased Revenue:', increaseRevenue);
+  console.log('Charts processed per annum:', metrics.chartsProcessedPerAnnum);
+  console.log('Over coding percent:', metrics.overCodingPercent);
+  console.log('Reduced Risk:', reducedRisk);
+  
   const totalImpact = reducedCost + increaseRevenue + reducedRisk;
 
   return (
