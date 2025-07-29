@@ -574,16 +574,17 @@ Generated on ${new Date().toLocaleDateString()}`;
         <footer className="mt-12 py-8 border-t bg-muted/20">
           <div className="text-center space-y-4">
             <p className="text-muted-foreground">
-              Healthcare Coding ROI Calculator - Professional Edition
+              Rapid Claims ROI Calculator - Powered by RapidClaims.ai
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-              <span>📊 Real-time Calculations</span>
+              <span>🚀 AI-Powered Coding</span>
+              <span>📊 Real-time ROI Analysis</span>
               <span>💾 Data Export Capabilities</span>
               <span>🔒 Secure & Private</span>
               <span>📱 Mobile Responsive</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Generated on {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
+              © 2024 RapidClaims.ai - Generated on {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
             </p>
           </div>
         </footer>
