@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import confetti from 'canvas-confetti';
 import { 
@@ -683,61 +683,66 @@ export const ROICalculator = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Results Display */}
+      {/* Results Display - ROI Summary Report Modal */}
       {showResults && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <Card className="max-w-2xl w-full max-h-[80vh] overflow-auto">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-primary">
-                <CheckCircle className="h-6 w-6" />
-                Your ROI Analysis Results
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">{roi.toFixed(1)}%</div>
-                <div className="text-lg text-muted-foreground">Total Return on Investment</div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 rounded-lg bg-primary/10">
-                  <div className="text-xl font-bold text-primary">${totalImpact.toLocaleString()}</div>
-                  <div className="text-sm text-muted-foreground">Total Impact</div>
-                </div>
-                <div className="text-center p-4 rounded-lg bg-success/10">
-                  <div className="text-xl font-bold text-success">${reducedCost.toLocaleString()}</div>
-                  <div className="text-sm text-muted-foreground">Cost Savings</div>
-                </div>
-              </div>
+          <div className="bg-gray-800 rounded-lg p-8 max-w-lg w-full text-white">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h2 className="text-xl font-bold text-gray-300 mb-2">ROI Summary Report</h2>
+              <h3 className="text-lg text-gray-400">Total Return on Investment</h3>
+            </div>
 
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Rating:</span>
-                  <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`h-5 w-5 cursor-pointer ${
-                          star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-                        }`}
-                        onClick={() => handleRating(star)}
-                      />
-                    ))}
+            {/* Main Impact Display */}
+            <div className="mb-8">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-left">
+                  <div className="text-gray-400 text-sm mb-2">Total Impact</div>
+                </div>
+                <div className="text-right">
+                  <div className="bg-green-600 rounded px-4 py-2">
+                    <div className="text-green-100 text-lg font-bold">${totalImpact.toLocaleString()}</div>
+                    <div className="text-green-200 text-sm">Cost Savings</div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="flex gap-3">
-                <Button onClick={() => setShowResults(false)} variant="outline" className="flex-1">
-                  Close
-                </Button>
-                <Button onClick={exportData} className="flex-1 bg-orange-500 hover:bg-orange-600 text-white">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download Report
-                </Button>
+            {/* Rating Section */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400">Rating:</span>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`h-5 w-5 cursor-pointer ${
+                        star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-500'
+                      }`}
+                      onClick={() => handleRating(star)}
+                    />
+                  ))}
+                </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="grid grid-cols-2 gap-4">
+              <Button 
+                onClick={() => setShowResults(false)} 
+                className="bg-gray-700 hover:bg-gray-600 text-white border-0"
+              >
+                Close
+              </Button>
+              <Button 
+                onClick={exportData} 
+                className="bg-orange-500 hover:bg-orange-600 text-white border-0"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download Report
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>
