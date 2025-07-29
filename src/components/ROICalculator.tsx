@@ -209,7 +209,7 @@ Generated on ${new Date().toLocaleDateString()}`;
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <Calculator className="h-8 w-8" />
-                <h1 className="text-3xl font-bold">Healthcare Coding ROI Calculator</h1>
+                <h1 className="text-3xl font-bold">Rapid Claims ROI Calculator</h1>
               </div>
               <p className="text-lg opacity-90">
                 Analyze and optimize your medical coding operations with comprehensive metrics
