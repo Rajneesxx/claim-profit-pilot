@@ -215,19 +215,19 @@ Generated on ${new Date().toLocaleDateString()}`;
             <TabsList className="grid w-full grid-cols-4 mb-8 bg-card/90 backdrop-blur-sm border border-border">`
               <TabsTrigger value="calculator" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Calculator className="h-4 w-4 mr-2" />
-                Calculator
+                1. Calculator
               </TabsTrigger>
               <TabsTrigger value="advanced" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Settings className="h-4 w-4 mr-2" />
-                Advanced
+                2. Advanced
               </TabsTrigger>
               <TabsTrigger value="analytics" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <BarChart3 className="h-4 w-4 mr-2" />
-                Analytics
+                3. Analytics
               </TabsTrigger>
               <TabsTrigger value="summary" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Award className="h-4 w-4 mr-2" />
-                Executive Summary
+                4. Summary
               </TabsTrigger>
             </TabsList>
 
