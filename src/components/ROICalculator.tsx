@@ -255,7 +255,54 @@ Generated on ${new Date().toLocaleDateString()}`;
   const totalImpact = reducedCost + increaseRevenue + reducedRisk;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-purple-900 to-background">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-purple-900 to-background relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Floating Circles */}
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-purple-500/10 rounded-full animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-24 h-24 bg-blue-500/15 rounded-full animate-bounce"></div>
+        <div className="absolute top-1/2 left-1/2 w-40 h-40 bg-pink-500/8 rounded-full animate-ping"></div>
+        
+        {/* Animated Gradients */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-purple-500/5 to-transparent animate-pulse"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-500/3 via-transparent to-purple-500/3 animate-pulse delay-1000"></div>
+        
+        {/* Geometric Shapes */}
+        <div className="absolute top-20 right-20 w-16 h-16 border border-white/10 rotate-45 animate-spin animate-duration-[20s]"></div>
+        <div className="absolute bottom-20 left-20 w-12 h-12 border border-purple-300/15 rotate-12 animate-spin animate-duration-[15s] animate-reverse"></div>
+        <div className="absolute top-1/3 right-1/3 w-20 h-20 border-2 border-blue-400/10 rounded-lg rotate-45 animate-pulse"></div>
+        
+        {/* Moving Dots */}
+        <div className="absolute top-1/4 right-1/6 w-2 h-2 bg-white/20 rounded-full animate-bounce animate-delay-500"></div>
+        <div className="absolute bottom-1/3 left-1/6 w-3 h-3 bg-purple-300/25 rounded-full animate-bounce animate-delay-1000"></div>
+        <div className="absolute top-2/3 right-1/2 w-1 h-1 bg-blue-300/30 rounded-full animate-ping animate-delay-700"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="w-full h-full" style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px',
+            backgroundPosition: '0 0, 0 0'
+          }}></div>
+        </div>
+        
+        {/* Floating Icons */}
+        <div className="absolute top-16 left-16 text-white/10 animate-float">
+          <DollarSign className="h-8 w-8" />
+        </div>
+        <div className="absolute bottom-32 right-32 text-purple-300/15 animate-float animate-delay-1000">
+          <BarChart3 className="h-6 w-6" />
+        </div>
+        <div className="absolute top-1/2 left-16 text-blue-300/20 animate-float animate-delay-500">
+          <TrendingUp className="h-7 w-7" />
+        </div>
+        <div className="absolute bottom-16 left-1/3 text-white/8 animate-float animate-delay-1500">
+          <Target className="h-5 w-5" />
+        </div>
+      </div>
       <div className="container mx-auto px-4 py-6">
         {/* Header */}
         <div className="text-center text-white mb-6">
@@ -268,7 +315,7 @@ Generated on ${new Date().toLocaleDateString()}`;
         {/* Main Calculator Interface */}
         <div className="max-w-6xl mx-auto">
           <Tabs defaultValue="calculator" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-6 bg-card/90 backdrop-blur-sm border border-border">
+            <TabsList className="grid w-full grid-cols-4 mb-6 bg-card/90 backdrop-blur-sm border border-border hover-interactive">
               <TabsTrigger value="calculator" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Calculator className="h-4 w-4 mr-2" />
                 1. Calculator
@@ -289,7 +336,7 @@ Generated on ${new Date().toLocaleDateString()}`;
 
             {/* Executive Summary Tab - Now First */}
             <TabsContent value="summary">
-              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl">
+              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl hover-interactive card-glow">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-primary text-xl">
                     <Award className="h-6 w-6" />
@@ -299,7 +346,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
                     {/* Reduced Cost */}
-                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border hover-interactive">
                       <div className="flex items-center justify-center mb-3">
                         <Shield className="h-8 w-8 text-success" />
                       </div>
@@ -340,7 +387,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                     </div>
                     
                     {/* Increased Revenue */}
-                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border hover-interactive">
                       <div className="flex items-center justify-center mb-3">
                         <TrendingUp className="h-8 w-8 text-primary" />
                       </div>
@@ -381,7 +428,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                     </div>
                     
                     {/* Reduced Risk */}
-                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border hover-interactive">
                       <div className="flex items-center justify-center mb-3">
                         <AlertTriangle className="h-8 w-8 text-info" />
                       </div>
@@ -417,7 +464,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                     </div>
                     
                     {/* Total Impact */}
-                    <div className="text-center p-6 rounded-lg bg-gradient-to-br from-yellow-400/20 to-orange-500/20 border border-yellow-500/30">
+                    <div className="text-center p-6 rounded-lg bg-gradient-to-br from-yellow-400/20 to-orange-500/20 border border-yellow-500/30 hover-interactive animate-glow">
                       <div className="flex items-center justify-center mb-3">
                         <Target className="h-8 w-8 text-yellow-600" />
                       </div>
@@ -532,7 +579,7 @@ Generated on ${new Date().toLocaleDateString()}`;
 
             {/* Calculator Tab - Now First */}
             <TabsContent value="calculator">
-              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl">
+              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl hover-interactive card-glow">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Calculator className="h-6 w-6" />
