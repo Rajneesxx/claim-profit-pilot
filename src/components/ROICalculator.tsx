@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { MetricCard } from './MetricCard';
+import { useToast } from "@/hooks/use-toast";
 import { 
   DollarSign, 
   Users, 
@@ -10,7 +12,10 @@ import {
   AlertTriangle, 
   BarChart3,
   Calculator,
-  Target
+  Target,
+  Download,
+  Share2,
+  RefreshCw
 } from 'lucide-react';
 
 interface ROIMetrics {
@@ -45,7 +50,9 @@ interface ROIMetrics {
 }
 
 export const ROICalculator = () => {
-  const [metrics, setMetrics] = useState<ROIMetrics>({
+  const { toast } = useToast();
+  
+  const defaultMetrics: ROIMetrics = {
     revenueClaimed: 23000000,
     claimsPerAnnum: 42700,
     chartsProcessedPerAnnum: 42700,
@@ -63,10 +70,100 @@ export const ROICalculator = () => {
     overCodingPercent: 13,
     underCodingPercent: 10,
     avgBillableCodesPerChart: 4
-  });
+  };
+
+  const [metrics, setMetrics] = useState<ROIMetrics>(defaultMetrics);
 
   const updateMetric = (key: keyof ROIMetrics, value: number) => {
     setMetrics(prev => ({ ...prev, [key]: value }));
+  };
+
+  const resetToDefaults = () => {
+    setMetrics(defaultMetrics);
+    toast({
+      title: "Reset Complete",
+      description: "All metrics have been reset to default values.",
+    });
+  };
+
+  const exportData = () => {
+    const reportData = {
+      timestamp: new Date().toISOString(),
+      metrics,
+      calculations: {
+        totalCodingCosts,
+        deniedClaimsCost,
+        backlogCost,
+        totalOperationalCosts,
+        roi,
+        efficiencyRatio,
+        executiveSummary: {
+          reducedCost: 642194,
+          increaseRevenue: 241939,
+          reducedRisk: 70775,
+          totalImpact: 954908
+        }
+      }
+    };
+
+    const dataStr = JSON.stringify(reportData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `roi-calculator-report-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Export Complete",
+      description: "ROI report has been downloaded successfully.",
+    });
+  };
+
+  const shareResults = async () => {
+    const shareText = `Healthcare Coding ROI Calculator Results:
+    
+📊 Total ROI: ${roi.toFixed(1)}%
+💰 Revenue Claimed: $${metrics.revenueClaimed.toLocaleString()}
+💼 Operational Costs: $${totalOperationalCosts.toLocaleString()}
+🎯 Efficiency Ratio: ${(efficiencyRatio * 100).toFixed(1)}%
+
+Executive Summary:
+• Reduced Cost: $642,194
+• Increased Revenue: $241,939
+• Reduced Risk: $70,775
+• Total Impact: $954,908
+
+Generated on ${new Date().toLocaleDateString()}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Healthcare Coding ROI Calculator Results',
+          text: shareText,
+        });
+        toast({
+          title: "Shared Successfully",
+          description: "ROI results have been shared.",
+        });
+      } catch (error) {
+        copyToClipboard(shareText);
+      }
+    } else {
+      copyToClipboard(shareText);
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast({
+        title: "Copied to Clipboard",
+        description: "ROI results have been copied to your clipboard.",
+      });
+    });
   };
 
   // ROI Calculations
@@ -100,13 +197,43 @@ export const ROICalculator = () => {
       {/* Header */}
       <div className="bg-gradient-to-r from-primary to-info text-primary-foreground">
         <div className="container mx-auto px-6 py-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Calculator className="h-8 w-8" />
-            <h1 className="text-3xl font-bold">Healthcare Coding ROI Calculator</h1>
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Calculator className="h-8 w-8" />
+                <h1 className="text-3xl font-bold">Healthcare Coding ROI Calculator</h1>
+              </div>
+              <p className="text-lg opacity-90">
+                Analyze and optimize your medical coding operations with comprehensive metrics
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button 
+                variant="secondary" 
+                onClick={resetToDefaults}
+                className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Reset
+              </Button>
+              <Button 
+                variant="secondary"
+                onClick={shareResults}
+                className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+              >
+                <Share2 className="h-4 w-4 mr-2" />
+                Share
+              </Button>
+              <Button 
+                variant="secondary"
+                onClick={exportData}
+                className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+            </div>
           </div>
-          <p className="text-lg opacity-90">
-            Analyze and optimize your medical coding operations with comprehensive metrics
-          </p>
         </div>
       </div>
 
@@ -434,6 +561,24 @@ export const ROICalculator = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Footer */}
+        <footer className="mt-12 py-8 border-t bg-muted/20">
+          <div className="text-center space-y-4">
+            <p className="text-muted-foreground">
+              Healthcare Coding ROI Calculator - Professional Edition
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+              <span>📊 Real-time Calculations</span>
+              <span>💾 Data Export Capabilities</span>
+              <span>🔒 Secure & Private</span>
+              <span>📱 Mobile Responsive</span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Generated on {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );
