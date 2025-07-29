@@ -302,7 +302,7 @@ Generated on ${new Date().toLocaleDateString()}`;
               <div className="text-center p-4 rounded-lg bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Cost</h4>
                 <div className="text-2xl font-bold text-success">
-                  $642,194
+                  ${reducedCost.toLocaleString()}
                 </div>
                 <div className="text-xs text-muted-foreground mt-2 text-left space-y-1">
                   <p>1. Reduced cost of coding a chart because of the improved coder productivity</p>
@@ -314,7 +314,7 @@ Generated on ${new Date().toLocaleDateString()}`;
               <div className="text-center p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Increased Revenue</h4>
                 <div className="text-2xl font-bold text-primary">
-                  $241,939
+                  ${increaseRevenue.toLocaleString()}
                 </div>
                 <div className="text-xs text-muted-foreground mt-2 text-left space-y-1">
                   <p>1. CDI solution helps identify opportunities missed by manual coders/physicians in HCC coding and hence improving the overall RAF score</p>
@@ -325,7 +325,7 @@ Generated on ${new Date().toLocaleDateString()}`;
               <div className="text-center p-4 rounded-lg bg-gradient-to-br from-info/10 to-info/5 border border-info/20">
                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Risk</h4>
                 <div className="text-2xl font-bold text-info">
-                  $70,775
+                  ${reducedRisk.toLocaleString()}
                 </div>
                 <div className="text-xs text-muted-foreground mt-2 text-left space-y-1">
                   <p>1. RapidCode follows all the coding guidelines and flags any place where the guidelines are not followed</p>
@@ -336,7 +336,7 @@ Generated on ${new Date().toLocaleDateString()}`;
               <div className="text-center p-4 rounded-lg bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Total Impact</h4>
                 <div className="text-2xl font-bold text-warning">
-                  $954,908
+                  ${totalImpact.toLocaleString()}
                 </div>
                 <div className="text-xs text-muted-foreground mt-2 text-left">
                   <p>Total expected impact for 12 months after 100% adoption. Gains from pilot stage to pre full-adoption time is not included in the impact estimation</p>
