@@ -199,7 +199,7 @@ Generated on ${new Date().toLocaleDateString()}`;
   const totalImpact = reducedCost + increaseRevenue + reducedRisk;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-purple-900 to-background">`
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center text-white mb-8">
@@ -212,20 +212,20 @@ Generated on ${new Date().toLocaleDateString()}`;
         {/* Main Calculator Interface */}
         <div className="max-w-6xl mx-auto">
           <Tabs defaultValue="calculator" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8 bg-white/20 backdrop-blur-sm">
-              <TabsTrigger value="calculator" className="data-[state=active]:bg-white data-[state=active]:text-blue-700">
+            <TabsList className="grid w-full grid-cols-4 mb-8 bg-card/90 backdrop-blur-sm border border-border">`
+              <TabsTrigger value="calculator" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Calculator className="h-4 w-4 mr-2" />
                 Calculator
               </TabsTrigger>
-              <TabsTrigger value="advanced" className="data-[state=active]:bg-white data-[state=active]:text-blue-700">
+              <TabsTrigger value="advanced" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Settings className="h-4 w-4 mr-2" />
                 Advanced
               </TabsTrigger>
-              <TabsTrigger value="analytics" className="data-[state=active]:bg-white data-[state=active]:text-blue-700">
+              <TabsTrigger value="analytics" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Analytics
               </TabsTrigger>
-              <TabsTrigger value="summary" className="data-[state=active]:bg-white data-[state=active]:text-blue-700">
+              <TabsTrigger value="summary" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <Award className="h-4 w-4 mr-2" />
                 Executive Summary
               </TabsTrigger>
@@ -233,7 +233,7 @@ Generated on ${new Date().toLocaleDateString()}`;
 
             {/* Calculator Tab */}
             <TabsContent value="calculator">
-              <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
+              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl">`
                 <CardContent className="p-8">
                   {/* Main Revenue Slider */}
                   <div className="text-center mb-8">
@@ -348,7 +348,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                   {/* Action Buttons */}
                   <div className="flex flex-col gap-3">
                     <Button 
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold"
+                      className="w-full bg-accent hover:bg-accent/80 text-accent-foreground py-3 text-lg font-semibold"
                       onClick={() => {
                         toast({
                           title: "Results Ready!",
@@ -414,7 +414,7 @@ Generated on ${new Date().toLocaleDateString()}`;
 
             {/* Advanced Settings Tab */}
             <TabsContent value="advanced">
-              <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
+              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl">`
                 <CardContent className="p-8">
                   <Accordion type="multiple" className="w-full space-y-4">
                     {/* Claims & Revenue Data */}
@@ -690,9 +690,9 @@ Generated on ${new Date().toLocaleDateString()}`;
             <TabsContent value="analytics">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* ROI Summary Cards */}
-                <Card className="bg-gradient-to-br from-success/20 to-success/10 border-success/30">
+                <Card className="bg-card/95 backdrop-blur-sm border border-border">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-success-foreground flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-foreground flex items-center gap-2">
                       <TrendingUp className="h-5 w-5" />
                       Total ROI Performance
                     </CardTitle>
@@ -707,9 +707,9 @@ Generated on ${new Date().toLocaleDateString()}`;
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-primary/20 to-primary/10 border-primary/30">
+                <Card className="bg-card/95 backdrop-blur-sm border border-border">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-primary-foreground flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-foreground flex items-center gap-2">
                       <DollarSign className="h-5 w-5" />
                       Operational Efficiency
                     </CardTitle>
@@ -725,7 +725,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                 </Card>
 
                 {/* Cost Breakdown */}
-                <Card className="lg:col-span-2 bg-white/95 backdrop-blur-sm">
+                <Card className="lg:col-span-2 bg-card/95 backdrop-blur-sm border border-border">`
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <PieChart className="h-5 w-5" />
@@ -780,7 +780,7 @@ Generated on ${new Date().toLocaleDateString()}`;
 
             {/* Executive Summary Tab */}
             <TabsContent value="summary">
-              <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
+              <Card className="bg-card/95 backdrop-blur-sm border border-border shadow-2xl">`
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-primary text-xl">
                     <Award className="h-6 w-6" />
@@ -790,7 +790,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
                     {/* Reduced Cost */}
-                    <div className="text-center p-6 rounded-lg bg-gradient-to-br from-success/20 to-success/10 border border-success/30">
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
                       <div className="flex items-center justify-center mb-3">
                         <Shield className="h-8 w-8 text-success" />
                       </div>
@@ -806,7 +806,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                     </div>
                     
                     {/* Increased Revenue */}
-                    <div className="text-center p-6 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/30">
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
                       <div className="flex items-center justify-center mb-3">
                         <TrendingUp className="h-8 w-8 text-primary" />
                       </div>
@@ -822,7 +822,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                     </div>
                     
                     {/* Reduced Risk */}
-                    <div className="text-center p-6 rounded-lg bg-gradient-to-br from-info/20 to-info/10 border border-info/30">
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
                       <div className="flex items-center justify-center mb-3">
                         <AlertTriangle className="h-8 w-8 text-info" />
                       </div>
@@ -838,7 +838,7 @@ Generated on ${new Date().toLocaleDateString()}`;
                     </div>
                     
                     {/* Total Impact */}
-                    <div className="text-center p-6 rounded-lg bg-gradient-to-br from-yellow-500/20 to-yellow-500/10 border border-yellow-500/30">
+                    <div className="text-center p-6 rounded-lg bg-card/90 backdrop-blur-sm border border-border">
                       <div className="flex items-center justify-center mb-3">
                         <Target className="h-8 w-8 text-yellow-600" />
                       </div>
