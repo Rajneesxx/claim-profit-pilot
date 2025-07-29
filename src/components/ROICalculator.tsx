@@ -175,33 +175,45 @@ export const ROICalculator = () => {
               <div className="text-center p-4 rounded-lg bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Cost</h4>
                 <div className="text-2xl font-bold text-success">
-                  ${reducedCost.toLocaleString()}
+                  $642,194
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">Annual savings potential</p>
+                <div className="text-xs text-muted-foreground mt-2 text-left space-y-1">
+                  <p>1. Reduced cost of coding a chart because of the improved coder productivity</p>
+                  <p>2. 0 coding errors with AI coding to reduce cost to collect</p>
+                  <p>3. Reduced cost of capital with lower A/R days</p>
+                </div>
               </div>
               
               <div className="text-center p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
-                <h4 className="text-sm font-medium text-muted-foreground mb-2">Increase Revenue</h4>
+                <h4 className="text-sm font-medium text-muted-foreground mb-2">Increased Revenue</h4>
                 <div className="text-2xl font-bold text-primary">
-                  ${increaseRevenue.toLocaleString()}
+                  $241,939
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">Revenue recovery opportunity</p>
+                <div className="text-xs text-muted-foreground mt-2 text-left space-y-1">
+                  <p>1. CDI solution helps identify opportunities missed by manual coders/physicians in HCC coding and hence improving the overall RAF score</p>
+                  <p>2. AI based E&M coding proven to improve E&M score</p>
+                </div>
               </div>
               
               <div className="text-center p-4 rounded-lg bg-gradient-to-br from-info/10 to-info/5 border border-info/20">
                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Risk</h4>
                 <div className="text-2xl font-bold text-info">
-                  {reducedRisk.toLocaleString()}
+                  $70,775
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">Claims at risk reduction</p>
+                <div className="text-xs text-muted-foreground mt-2 text-left space-y-1">
+                  <p>1. RapidCode follows all the coding guidelines and flags any place where the guidelines are not followed</p>
+                  <p>2. This ensures lower probability of audits and costs</p>
+                </div>
               </div>
               
               <div className="text-center p-4 rounded-lg bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Total Impact</h4>
                 <div className="text-2xl font-bold text-warning">
-                  ${totalImpact.toLocaleString()}
+                  $954,908
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">Combined financial benefit</p>
+                <div className="text-xs text-muted-foreground mt-2 text-left">
+                  <p>Total expected impact for 12 months after 100% adoption. Gains from pilot stage to pre full-adoption time is not included in the impact estimation</p>
+                </div>
               </div>
             </div>
           </CardContent>
