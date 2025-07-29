@@ -1,25 +1,23 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import confetti from 'canvas-confetti';
 import { 
-  DollarSign, 
-  Users, 
-  FileText, 
-  TrendingUp, 
   Calculator,
   Download,
   Settings,
-  Activity,
+  BarChart3,
   Award,
   Star,
   Phone,
-  CheckCircle
+  CheckCircle,
+  Plus,
+  Minus
 } from 'lucide-react';
 
 interface ROIMetrics {
@@ -49,7 +47,7 @@ export const ROICalculator = () => {
     revenueClaimed: 23000000,
     claimsPerAnnum: 42700,
     chartsProcessedPerAnnum: 42700,
-    numberOfCoders: 2,
+    numberOfCoders: 10,
     salaryPerCoder: 60000,
     overheadCostPercent: 38,
     chartsPerCoderPerDay: 17,
@@ -175,445 +173,234 @@ export const ROICalculator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
-      {/* Floating Background Icons */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <DollarSign className="absolute top-20 left-10 text-blue-200 w-8 h-8 animate-bounce" style={{ animationDelay: '0s' }} />
-        <TrendingUp className="absolute top-40 right-20 text-green-200 w-6 h-6 animate-bounce" style={{ animationDelay: '1s' }} />
-        <Calculator className="absolute bottom-40 left-20 text-purple-200 w-7 h-7 animate-bounce" style={{ animationDelay: '2s' }} />
-        <FileText className="absolute top-60 left-1/3 text-orange-200 w-5 h-5 animate-bounce" style={{ animationDelay: '3s' }} />
-        <Users className="absolute bottom-20 right-1/4 text-indigo-200 w-6 h-6 animate-bounce" style={{ animationDelay: '4s' }} />
-        <Award className="absolute top-32 right-1/3 text-pink-200 w-8 h-8 animate-bounce" style={{ animationDelay: '5s' }} />
-        <Activity className="absolute bottom-60 left-1/2 text-cyan-200 w-6 h-6 animate-bounce" style={{ animationDelay: '6s' }} />
-        <CheckCircle className="absolute top-96 right-10 text-emerald-200 w-7 h-7 animate-bounce" style={{ animationDelay: '7s' }} />
-      </div>
-
-      {/* Clean Header */}
-      <div className="bg-white/90 backdrop-blur-sm shadow-sm border-b border-gray-200 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src="/lovable-uploads/4fdc463b-67d9-4490-b3fe-75d8280201ba.png" alt="RapidClaims" className="h-8 w-auto" />
-              <h1 className="text-2xl font-semibold text-gray-900">ROI Calculator</h1>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-700 relative overflow-hidden">
+      {/* Header */}
+      <div className="bg-purple-800/50 backdrop-blur-sm border-b border-purple-600/30 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-center gap-3">
+            <Calculator className="h-8 w-8 text-white" />
+            <h1 className="text-2xl font-semibold text-white">Rapid ROI Calculator</h1>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-6 relative z-10">
-        {/* Overview Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-white border border-gray-200">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <FileText className="h-5 w-5 text-blue-600" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">{metrics.chartsProcessedPerAnnum.toLocaleString()}</div>
-                  <div className="text-sm text-gray-500">Total Charts</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white border border-gray-200">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Users className="h-5 w-5 text-green-600" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">{metrics.numberOfCoders}</div>
-                  <div className="text-sm text-gray-500">Total Coders</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white border border-gray-200">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Activity className="h-5 w-5 text-purple-600" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">{(metrics.claimsPerAnnum / 1000).toFixed(0)}K</div>
-                  <div className="text-sm text-gray-500">Total Claims</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-white border border-gray-200">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-orange-100 rounded-lg">
-                  <TrendingUp className="h-5 w-5 text-orange-600" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">{metrics.chartsPerCoderPerDay}</div>
-                  <div className="text-sm text-gray-500">Charts per Coder per Day</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Main Calculator Content */}
-        <Tabs defaultValue="calculator" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6 bg-white border border-gray-200 rounded-lg p-1">
-            <TabsTrigger value="calculator" className="text-gray-600 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
-              <Calculator className="h-4 w-4 mr-2" />
-              Calculator
-            </TabsTrigger>
-            <TabsTrigger value="assumptions" className="text-gray-600 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
-              <FileText className="h-4 w-4 mr-2" />
-              Assumptions
-            </TabsTrigger>
-            <TabsTrigger value="summary" className="text-gray-600 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-600">
-              <Award className="h-4 w-4 mr-2" />
-              Summary
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Calculator Tab */}
-          <TabsContent value="calculator">
-            <Card className="bg-white border border-gray-200">
-              <CardHeader className="border-b border-gray-100">
-                <CardTitle className="flex items-center gap-2 text-gray-900">
-                  <Calculator className="h-5 w-5" />
-                  Organization Metrics
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  <div className="space-y-6">
-                    <div>
-                      <Label htmlFor="revenue" className="text-sm font-medium text-gray-700">Annual Revenue ($)</Label>
-                      <Input
-                        id="revenue"
-                        type="number"
-                        value={metrics.revenueClaimed}
-                        onChange={(e) => updateMetric('revenueClaimed', Number(e.target.value))}
-                        className="mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="claims" className="text-sm font-medium text-gray-700">Claims Per Year</Label>
-                      <Input
-                        id="claims"
-                        type="number"
-                        value={metrics.claimsPerAnnum}
-                        onChange={(e) => updateMetric('claimsPerAnnum', Number(e.target.value))}
-                        className="mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="coders" className="text-sm font-medium text-gray-700">Number of Coders</Label>
-                      <Input
-                        id="coders"
-                        type="number"
-                        value={metrics.numberOfCoders}
-                        onChange={(e) => updateMetric('numberOfCoders', Number(e.target.value))}
-                        className="mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="charts" className="text-sm font-medium text-gray-700">Charts Processed/Year</Label>
-                      <Input
-                        id="charts"
-                        type="number"
-                        value={metrics.chartsProcessedPerAnnum}
-                        onChange={(e) => updateMetric('chartsProcessedPerAnnum', Number(e.target.value))}
-                        className="mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <Label htmlFor="salary" className="text-sm font-medium text-gray-700">Salary per Coder ($)</Label>
-                      <Input
-                        id="salary"
-                        type="number"
-                        value={metrics.salaryPerCoder}
-                        onChange={(e) => updateMetric('salaryPerCoder', Number(e.target.value))}
-                        className="mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="overhead" className="text-sm font-medium text-gray-700">Overhead Cost (%)</Label>
-                      <Input
-                        id="overhead"
-                        type="number"
-                        value={metrics.overheadCostPercent}
-                        onChange={(e) => updateMetric('overheadCostPercent', Number(e.target.value))}
-                        className="mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="chartsPerDay" className="text-sm font-medium text-gray-700">Charts per Coder per Day</Label>
-                      <Input
-                        id="chartsPerDay"
-                        type="number"
-                        value={metrics.chartsPerCoderPerDay}
-                        onChange={(e) => updateMetric('chartsPerCoderPerDay', Number(e.target.value))}
-                        className="mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="denialRate" className="text-sm font-medium text-gray-700">Claim Denial Rate (%)</Label>
-                      <Input
-                        id="denialRate"
-                        type="number"
-                        value={metrics.claimDeniedPercent}
-                        onChange={(e) => updateMetric('claimDeniedPercent', Number(e.target.value))}
-                        className="mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  {/* Semi-circular ROI Meter */}
-                  <div className="flex justify-center mb-8">
-                    <div className="relative w-64 h-32">
-                      <svg viewBox="0 0 200 100" className="w-full h-full">
-                        {/* Background Arc */}
-                        <path
-                          d="M 20 80 A 80 80 0 0 1 180 80"
-                          fill="none"
-                          stroke="#e5e7eb"
-                          strokeWidth="8"
-                        />
-                        {/* Progress Arc */}
-                        <path
-                          d="M 20 80 A 80 80 0 0 1 180 80"
-                          fill="none"
-                          stroke="url(#roiGradient)"
-                          strokeWidth="8"
-                          strokeDasharray={`${Math.min(roi * 2.51, 251.2)} 251.2`}
-                          strokeLinecap="round"
-                          className="transition-all duration-1000 ease-out"
-                        />
-                        <defs>
-                          <linearGradient id="roiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stopColor="#3b82f6" />
-                            <stop offset="50%" stopColor="#8b5cf6" />
-                            <stop offset="100%" stopColor="#06b6d4" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                      {/* Center Text */}
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                          {roi.toFixed(1)}%
-                        </div>
-                        <div className="text-sm text-gray-500">ROI</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div className="text-center p-4 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
-                      <div className="text-2xl font-bold text-green-600">${totalImpact.toLocaleString()}</div>
-                      <div className="text-sm text-gray-600">Total Impact</div>
-                    </div>
-                    <div className="text-center p-4 rounded-lg bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200">
-                      <div className="text-2xl font-bold text-orange-600">${totalOperationalCosts.toLocaleString()}</div>
-                      <div className="text-sm text-gray-600">Operational Costs</div>
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    onClick={handleCalculateROI} 
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12 text-lg font-medium"
-                  >
-                    Calculate ROI
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Assumptions Tab */}
-          <TabsContent value="assumptions">
-            <Card className="bg-white border border-gray-200">
-              <CardHeader className="border-b border-gray-100">
-                <CardTitle className="flex items-center gap-2 text-gray-900">
-                  <FileText className="h-5 w-5" />
-                  Assumptions & References
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="space-y-8">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 text-gray-900">Key Assumptions</h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      <li>• 50% productivity improvement with AI automation</li>
-                      <li>• 50% reduction in claim denials through improved accuracy</li>
-                      <li>• 80% reduction in coding backlog</li>
-                      <li>• 1% RVU improvement through better coding precision</li>
-                      <li>• Standard working days: 250 per year</li>
-                      <li>• Standard working hours: 8 hours per day</li>
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 text-gray-900">Industry References</h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      <li>• Medicare physician fee schedule (CMS)</li>
-                      <li>• AHIMA coding productivity standards</li>
-                      <li>• Healthcare Financial Management Association (HFMA) benchmarks</li>
-                      <li>• Medical Group Management Association (MGMA) data</li>
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 text-gray-900">Calculation Methodology</h3>
-                    <div className="text-sm space-y-2 text-gray-600">
-                      <p><strong className="text-gray-900">Total Coding Costs:</strong> (Number of Coders × Salary) × (1 + Overhead %)</p>
-                      <p><strong className="text-gray-900">Denied Claims Cost:</strong> (Claims × Denial %) × Cost per Denial</p>
-                      <p><strong className="text-gray-900">Backlog Cost:</strong> (Charts × Backlog %) × Days × (Cost of Capital % / 365)</p>
-                      <p><strong className="text-gray-900">ROI:</strong> ((Revenue - Operational Costs) / Operational Costs) × 100</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Summary Tab */}
-          <TabsContent value="summary">
-            <Card className="bg-white border border-gray-200">
-              <CardHeader className="border-b border-gray-100">
-                <CardTitle className="flex items-center gap-2 text-gray-900">
-                  <Award className="h-5 w-5" />
-                  Executive Summary - 12 Month Impact Projection
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Financial Impact */}
-                  <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-gray-900">Financial Impact</h4>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Reduced Coding Costs:</span>
-                        <span className="text-green-600 font-semibold">${reducedCost.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Increased Revenue:</span>
-                        <span className="text-blue-600 font-semibold">${increaseRevenue.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Risk Mitigation:</span>
-                        <span className="text-purple-600 font-semibold">${reducedRisk.toLocaleString()}</span>
-                      </div>
-                      <div className="border-t border-gray-200 pt-3">
-                        <div className="flex justify-between text-lg">
-                          <span className="text-gray-900 font-semibold">Total Impact:</span>
-                          <span className="text-orange-600 font-bold">${totalImpact.toLocaleString()}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* ROI Metrics */}
-                  <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-gray-900">ROI Metrics</h4>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Return on Investment:</span>
-                        <span className="text-yellow-600 font-semibold">{roi.toFixed(1)}%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Payback Period:</span>
-                        <span className="text-blue-600 font-semibold">{(12/roi*100).toFixed(1)} months</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Monthly Savings:</span>
-                        <span className="text-green-600 font-semibold">${(totalImpact/12).toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Annual Benefit:</span>
-                        <span className="text-orange-600 font-semibold">${totalImpact.toLocaleString()}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <div className="flex gap-4 justify-center">
-                    <Button 
-                      className="bg-orange-500 hover:bg-orange-600 text-white"
-                      onClick={exportData}
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Download Report
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
-
-      {/* Clean Footer CTA */}
-      <div className="bg-white border-t border-gray-200 py-4">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src="/lovable-uploads/4fdc463b-67d9-4490-b3fe-75d8280201ba.png" alt="RapidClaims" className="h-6 w-auto" />
-              <span className="text-gray-700 font-medium">Book a call with RapidClaims</span>
+      <div className="max-w-6xl mx-auto px-6 py-8 relative z-10">
+        {/* Navigation Steps */}
+        <div className="grid grid-cols-4 gap-2 mb-8">
+          <div className="bg-purple-600 rounded-lg p-4 border border-purple-500">
+            <div className="flex items-center gap-2 text-white">
+              <Calculator className="h-5 w-5" />
+              <span className="text-sm font-medium">1. Calculator</span>
             </div>
-            <div className="flex gap-3">
-              <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
-                <Phone className="h-4 w-4 mr-2" />
-                Book Call
-              </Button>
-              <Button size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50">
-                Free Audit
-              </Button>
+          </div>
+          <div className="bg-purple-700/50 rounded-lg p-4 border border-purple-600/30">
+            <div className="flex items-center gap-2 text-purple-200">
+              <Settings className="h-5 w-5" />
+              <span className="text-sm font-medium">2. Advanced</span>
+            </div>
+          </div>
+          <div className="bg-purple-700/50 rounded-lg p-4 border border-purple-600/30">
+            <div className="flex items-center gap-2 text-purple-200">
+              <BarChart3 className="h-5 w-5" />
+              <span className="text-sm font-medium">3. Analytics</span>
+            </div>
+          </div>
+          <div className="bg-purple-700/50 rounded-lg p-4 border border-purple-600/30">
+            <div className="flex items-center gap-2 text-purple-200">
+              <Award className="h-5 w-5" />
+              <span className="text-sm font-medium">4. Summary</span>
             </div>
           </div>
         </div>
+
+        {/* Calculator Content */}
+        <Card className="bg-gray-900/90 backdrop-blur-sm border border-gray-700">
+          <CardHeader className="border-b border-gray-700">
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Calculator className="h-5 w-5" />
+              Calculator - Must Have Inputs
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-8">
+            {/* Annual Revenue Slider */}
+            <div className="mb-12">
+              <div className="text-center mb-6">
+                <h3 className="text-lg font-medium text-gray-300 mb-4">Annual Revenue Claimed</h3>
+                <Slider
+                  value={[metrics.revenueClaimed]}
+                  onValueChange={(value) => updateMetric('revenueClaimed', value[0])}
+                  max={50000000}
+                  min={1000000}
+                  step={100000}
+                  className="w-full mb-4"
+                />
+                <div className="text-4xl font-bold text-purple-400">
+                  ${(metrics.revenueClaimed / 1000000).toFixed(0)}M
+                </div>
+              </div>
+            </div>
+
+            {/* ROI Meter */}
+            <div className="flex justify-center mb-12">
+              <div className="relative w-80 h-40">
+                <svg viewBox="0 0 320 160" className="w-full h-full">
+                  {/* Background Arc */}
+                  <path
+                    d="M 40 140 A 120 120 0 0 1 280 140"
+                    fill="none"
+                    stroke="#374151"
+                    strokeWidth="12"
+                  />
+                  {/* Progress Arc */}
+                  <path
+                    d="M 40 140 A 120 120 0 0 1 280 140"
+                    fill="none"
+                    stroke="url(#roiGradient)"
+                    strokeWidth="12"
+                    strokeDasharray={`${Math.min(roi * 3.77, 377)} 377`}
+                    strokeLinecap="round"
+                    className="transition-all duration-1000 ease-out"
+                  />
+                  <defs>
+                    <linearGradient id="roiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#06b6d4" />
+                      <stop offset="50%" stopColor="#8b5cf6" />
+                      <stop offset="100%" stopColor="#3b82f6" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                {/* ROI Text */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="text-5xl font-bold text-purple-400 mb-2">
+                    {roi.toFixed(2)}%
+                  </div>
+                  <div className="text-lg text-gray-400">ROI</div>
+                </div>
+                {/* Min/Max Labels */}
+                <div className="absolute bottom-0 left-0 text-sm text-gray-400">$0M</div>
+                <div className="absolute bottom-0 right-0 text-sm text-gray-400">$12M</div>
+              </div>
+            </div>
+
+            {/* Must Have Inputs */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-white mb-6">Must Have Inputs</h3>
+              
+              <div className="space-y-6">
+                {/* Number of Coders */}
+                <div className="flex items-center justify-between bg-gray-800/50 rounded-lg p-4">
+                  <span className="text-gray-300 font-medium">Number of Coders</span>
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updateMetric('numberOfCoders', Math.max(1, metrics.numberOfCoders - 1))}
+                      className="w-8 h-8 p-0 border-gray-600 hover:bg-gray-700 text-gray-300"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <span className="text-white text-xl font-semibold min-w-[3rem] text-center">
+                      {metrics.numberOfCoders}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updateMetric('numberOfCoders', metrics.numberOfCoders + 1)}
+                      className="w-8 h-8 p-0 border-gray-600 hover:bg-gray-700 text-gray-300"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Claims Denied % */}
+                <div className="flex items-center justify-between bg-gray-800/50 rounded-lg p-4">
+                  <span className="text-gray-300 font-medium">Claims Denied %</span>
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updateMetric('claimDeniedPercent', Math.max(0, metrics.claimDeniedPercent - 1))}
+                      className="w-8 h-8 p-0 border-gray-600 hover:bg-gray-700 text-gray-300"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <span className="text-white text-xl font-semibold min-w-[4rem] text-center">
+                      {metrics.claimDeniedPercent}%
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updateMetric('claimDeniedPercent', Math.min(100, metrics.claimDeniedPercent + 1))}
+                      className="w-8 h-8 p-0 border-gray-600 hover:bg-gray-700 text-gray-300"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Derived Values */}
+            <div className="bg-gray-800/30 rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-white mb-4">Derived Values</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div className="text-gray-400 text-sm mb-1">Total Coding Costs</div>
+                  <div className="text-white text-lg font-semibold">${totalCodingCosts.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div className="text-gray-400 text-sm mb-1">Denied Claims Cost</div>
+                  <div className="text-white text-lg font-semibold">${deniedClaimsCost.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div className="text-gray-400 text-sm mb-1">Total Impact</div>
+                  <div className="text-green-400 text-lg font-semibold">${totalImpact.toLocaleString()}</div>
+                </div>
+                <div>
+                  <div className="text-gray-400 text-sm mb-1">Operational Costs</div>
+                  <div className="text-orange-400 text-lg font-semibold">${totalOperationalCosts.toLocaleString()}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Calculate Button */}
+            <div className="mt-8">
+              <Button 
+                onClick={handleCalculateROI} 
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white h-14 text-lg font-semibold rounded-lg"
+              >
+                Calculate Full ROI Analysis
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Email Dialog */}
       <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
-        <DialogContent>
+        <DialogContent className="bg-gray-900 border border-gray-700 text-white">
           <DialogHeader>
-            <DialogTitle>Get Your ROI Report</DialogTitle>
+            <DialogTitle className="text-white">Get Your ROI Report</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-sm text-gray-600">
-              Enter your email to receive a comprehensive ROI analysis.
-            </p>
-            <div>
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                type="email"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
-                placeholder="your@email.com"
-                className="mt-1"
-              />
-            </div>
+            <Label htmlFor="email" className="text-gray-300">Email Address</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              className="bg-gray-800 border-gray-600 text-white"
+            />
           </div>
           <DialogFooter>
-            <Button onClick={handleEmailSubmit} className="bg-blue-600 hover:bg-blue-700 text-white">
-              Get My ROI Report
+            <Button 
+              onClick={handleEmailSubmit}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              Get Results
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -621,56 +408,81 @@ export const ROICalculator = () => {
 
       {/* Results Modal */}
       {showResults && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-8 max-w-lg w-full">
-            <div className="text-center mb-8">
-              <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">ROI Summary Report</h2>
-              <h3 className="text-lg text-gray-600">Total Return on Investment</h3>
-            </div>
-
-            <div className="mb-8">
-              <div className="text-center p-6 bg-green-50 rounded-lg">
-                <div className="text-3xl font-bold text-green-600 mb-2">${totalImpact.toLocaleString()}</div>
-                <div className="text-green-700">Total Annual Impact</div>
+        <Dialog open={showResults} onOpenChange={setShowResults}>
+          <DialogContent className="max-w-4xl bg-gray-900 border border-gray-700 text-white">
+            <DialogHeader>
+              <DialogTitle className="text-2xl text-center text-white">🎉 Your ROI Analysis Results</DialogTitle>
+            </DialogHeader>
+            
+            <div className="space-y-6">
+              {/* Key Metrics */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center p-4 rounded-lg bg-purple-800/50 border border-purple-600">
+                  <div className="text-3xl font-bold text-purple-400">{roi.toFixed(1)}%</div>
+                  <div className="text-sm text-gray-300">ROI</div>
+                </div>
+                <div className="text-center p-4 rounded-lg bg-green-800/50 border border-green-600">
+                  <div className="text-3xl font-bold text-green-400">${totalImpact.toLocaleString()}</div>
+                  <div className="text-sm text-gray-300">Total Impact</div>
+                </div>
+                <div className="text-center p-4 rounded-lg bg-blue-800/50 border border-blue-600">
+                  <div className="text-3xl font-bold text-blue-400">${(totalImpact / 12).toLocaleString()}</div>
+                  <div className="text-sm text-gray-300">Monthly Savings</div>
+                </div>
               </div>
-            </div>
 
-            <div className="mb-8">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Rate this calculator:</span>
-                <div className="flex gap-1">
+              {/* Executive Summary */}
+              <div className="bg-gray-800/50 rounded-lg p-6">
+                <h3 className="text-xl font-semibold mb-4 text-white">Executive Summary</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <div className="text-green-400 text-2xl font-bold">${reducedCost.toLocaleString()}</div>
+                    <div className="text-gray-300 text-sm">Reduced Cost</div>
+                  </div>
+                  <div>
+                    <div className="text-blue-400 text-2xl font-bold">${increaseRevenue.toLocaleString()}</div>
+                    <div className="text-gray-300 text-sm">Increased Revenue</div>
+                  </div>
+                  <div>
+                    <div className="text-purple-400 text-2xl font-bold">${reducedRisk.toLocaleString()}</div>
+                    <div className="text-gray-300 text-sm">Reduced Risk</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rating Section */}
+              <div className="text-center space-y-4">
+                <h3 className="text-lg font-semibold text-white">How would you rate this calculator?</h3>
+                <div className="flex justify-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
+                    <button
                       key={star}
-                      className={`h-5 w-5 cursor-pointer ${
-                        star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-                      }`}
                       onClick={() => handleRating(star)}
-                    />
+                      className="text-2xl hover:scale-110 transition-transform"
+                    >
+                      <Star 
+                        className={`w-8 h-8 ${rating >= star ? 'text-yellow-400 fill-current' : 'text-gray-600'}`} 
+                      />
+                    </button>
                   ))}
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <DialogFooter className="flex gap-2">
+              <Button onClick={exportData} variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+                <Download className="w-4 h-4 mr-2" />
+                Export Report
+              </Button>
               <Button 
-                onClick={() => setShowResults(false)} 
-                variant="outline"
-                className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                onClick={() => setShowResults(false)}
+                className="bg-purple-600 hover:bg-purple-700 text-white"
               >
                 Close
               </Button>
-              <Button 
-                onClick={exportData} 
-                className="bg-orange-500 hover:bg-orange-600 text-white"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Download
-              </Button>
-            </div>
-          </div>
-        </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
     </div>
   );
