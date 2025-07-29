@@ -250,17 +250,6 @@ Generated on ${new Date().toLocaleDateString()}`;
                       <div className="text-5xl font-bold text-primary mb-4">
                         ${(metrics.revenueClaimed / 1000000).toFixed(0)}M
                       </div>
-                      <div className="flex justify-center gap-2 text-sm">
-                        <Badge variant="outline" className="px-3 py-1">
-                          ${(metrics.revenueClaimed / 1000000 * 0.5).toFixed(0)}M-${(metrics.revenueClaimed / 1000000 * 0.7).toFixed(0)}M
-                        </Badge>
-                        <Badge variant="outline" className="px-3 py-1">
-                          ${(metrics.revenueClaimed / 1000000 * 0.8).toFixed(0)}M-${(metrics.revenueClaimed / 1000000 * 1.2).toFixed(0)}M
-                        </Badge>
-                        <Badge variant="outline" className="px-3 py-1">
-                          ${(metrics.revenueClaimed / 1000000 * 1.3).toFixed(0)}M-${(metrics.revenueClaimed / 1000000 * 1.8).toFixed(0)}M
-                        </Badge>
-                      </div>
                     </div>
                   </div>
 
