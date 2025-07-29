@@ -513,90 +513,121 @@ export const ROICalculator = () => {
 
               {/* Summary Tab */}
               <TabsContent value="summary">
-                <Card className="bg-card/95 backdrop-blur-sm border border-border">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-primary">
-                      <Award className="h-6 w-6" />
-                      Executive Summary - Old vs New
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                      {/* Current State */}
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-destructive">Current State</h3>
-                        <div className="space-y-3">
-                          <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20">
-                            <div className="text-lg font-bold text-destructive">{metrics.numberOfCoders} Coders</div>
-                            <div className="text-sm text-muted-foreground">Manual coding process</div>
-                          </div>
-                          <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20">
-                            <div className="text-lg font-bold text-destructive">{metrics.claimDeniedPercent}% Denials</div>
-                            <div className="text-sm text-muted-foreground">High error rate</div>
-                          </div>
-                          <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20">
-                            <div className="text-lg font-bold text-destructive">{metrics.codingBacklogPercent}% Backlog</div>
-                            <div className="text-sm text-muted-foreground">Processing delays</div>
-                          </div>
+                <div className="bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 rounded-lg p-8 text-white">
+                  {/* Header */}
+                  <div className="mb-8">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Award className="h-6 w-6 text-purple-300" />
+                      <h2 className="text-2xl font-bold">Executive Summary - 12 Month Impact Projection</h2>
+                    </div>
+                  </div>
+
+                  {/* Impact Cards Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    {/* Reduced Cost Card */}
+                    <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                      <div className="flex items-center justify-center w-12 h-12 bg-green-500/20 rounded-lg mb-4 mx-auto">
+                        <Shield className="h-6 w-6 text-green-400" />
+                      </div>
+                      <div className="text-center">
+                        <h3 className="text-white/80 text-sm font-medium mb-2">Reduced Cost</h3>
+                        <div className="text-2xl font-bold text-green-400 mb-4">${reducedCost.toLocaleString()}</div>
+                        <Button size="sm" variant="outline" className="text-white border-white/30 hover:bg-white/10">
+                          <Info className="h-3 w-3 mr-1" />
+                          Details
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Increased Revenue Card */}
+                    <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                      <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4 mx-auto">
+                        <TrendingUp className="h-6 w-6 text-purple-400" />
+                      </div>
+                      <div className="text-center">
+                        <h3 className="text-white/80 text-sm font-medium mb-2">Increased Revenue</h3>
+                        <div className="text-2xl font-bold text-purple-400 mb-4">${increaseRevenue.toLocaleString()}</div>
+                        <Button size="sm" variant="outline" className="text-white border-white/30 hover:bg-white/10">
+                          <Info className="h-3 w-3 mr-1" />
+                          Details
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Reduced Risk Card */}
+                    <div className="bg-black/20 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+                      <div className="flex items-center justify-center w-12 h-12 bg-purple-500/20 rounded-lg mb-4 mx-auto">
+                        <AlertTriangle className="h-6 w-6 text-purple-400" />
+                      </div>
+                      <div className="text-center">
+                        <h3 className="text-white/80 text-sm font-medium mb-2">Reduced Risk</h3>
+                        <div className="text-2xl font-bold text-purple-400 mb-4">${reducedRisk.toLocaleString()}</div>
+                        <Button size="sm" variant="outline" className="text-white border-white/30 hover:bg-white/10">
+                          <Info className="h-3 w-3 mr-1" />
+                          Details
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Total Impact Card */}
+                    <div className="bg-gradient-to-br from-orange-500/20 to-yellow-500/20 backdrop-blur-sm rounded-lg p-6 border border-orange-400/30">
+                      <div className="flex items-center justify-center w-12 h-12 bg-orange-500/30 rounded-lg mb-4 mx-auto">
+                        <Target className="h-6 w-6 text-orange-400" />
+                      </div>
+                      <div className="text-center">
+                        <h3 className="text-white/80 text-sm font-medium mb-2">Total Impact</h3>
+                        <div className="text-2xl font-bold text-orange-400 mb-2">${totalImpact.toLocaleString()}</div>
+                        <div className="text-sm text-orange-300 mb-4">ROI: {roi.toFixed(1)}%</div>
+                        <Button 
+                          size="sm" 
+                          className="bg-orange-500 hover:bg-orange-600 text-white border-0 w-full"
+                          onClick={handleShowResults}
+                        >
+                          <Award className="h-3 w-3 mr-1" />
+                          Get Detailed Results
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Key Performance Indicators */}
+                  <div className="mt-12">
+                    <div className="flex items-center gap-3 mb-6">
+                      <Clock className="h-5 w-5 text-purple-300" />
+                      <h3 className="text-xl font-bold">Key Performance Indicators</h3>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-purple-300 mb-1">
+                          {(metrics.chartsProcessedPerAnnum / 1000).toFixed(0)}k
                         </div>
+                        <div className="text-white/70 text-sm">Charts/Year</div>
                       </div>
                       
-                      {/* Future State */}
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-success">Future State (AI-Powered)</h3>
-                        <div className="space-y-3">
-                          <div className="p-4 rounded-lg bg-success/10 border border-success/20">
-                            <div className="text-lg font-bold text-success">{Math.ceil(metrics.numberOfCoders * 0.5)} Coders</div>
-                            <div className="text-sm text-muted-foreground">50% productivity increase</div>
-                          </div>
-                          <div className="p-4 rounded-lg bg-success/10 border border-success/20">
-                            <div className="text-lg font-bold text-success">{(metrics.claimDeniedPercent * 0.5).toFixed(1)}% Denials</div>
-                            <div className="text-sm text-muted-foreground">50% reduction in errors</div>
-                          </div>
-                          <div className="p-4 rounded-lg bg-success/10 border border-success/20">
-                            <div className="text-lg font-bold text-success">{(metrics.codingBacklogPercent * 0.2).toFixed(1)}% Backlog</div>
-                            <div className="text-sm text-muted-foreground">80% backlog reduction</div>
-                          </div>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-green-400 mb-1">
+                          {metrics.chartsPerCoderPerDay}
                         </div>
+                        <div className="text-white/70 text-sm">Charts/Coder/Day</div>
+                      </div>
+                      
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-orange-400 mb-1">
+                          {metrics.claimDeniedPercent}%
+                        </div>
+                        <div className="text-white/70 text-sm">Denial Rate</div>
+                      </div>
+                      
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-purple-300 mb-1">
+                          {metrics.codingBacklogPercent}%
+                        </div>
+                        <div className="text-white/70 text-sm">Backlog Rate</div>
                       </div>
                     </div>
-
-                    {/* Impact Summary */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="text-center p-6 rounded-lg bg-success/10 border border-success/20">
-                        <Shield className="h-8 w-8 text-success mx-auto mb-3" />
-                        <div className="text-2xl font-bold text-success">${reducedCost.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">Reduced Costs</div>
-                      </div>
-                      <div className="text-center p-6 rounded-lg bg-primary/10 border border-primary/20">
-                        <TrendingUp className="h-8 w-8 text-primary mx-auto mb-3" />
-                        <div className="text-2xl font-bold text-primary">${increaseRevenue.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">Increased Revenue</div>
-                      </div>
-                      <div className="text-center p-6 rounded-lg bg-orange-500/10 border border-orange-500/20">
-                        <Shield className="h-8 w-8 text-orange-400 mx-auto mb-3" />
-                        <div className="text-2xl font-bold text-orange-400">${reducedRisk.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">Reduced Risk</div>
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex flex-wrap gap-4 mt-8">
-                      <Button onClick={handleShowResults} className="bg-orange-500 hover:bg-orange-600 text-white">
-                        <Download className="h-4 w-4 mr-2" />
-                        Get Detailed Report
-                      </Button>
-                      <Button variant="outline" onClick={exportData}>
-                        <Share2 className="h-4 w-4 mr-2" />
-                        Export Data
-                      </Button>
-                      <Button variant="outline" onClick={resetToDefaults}>
-                        <RefreshCw className="h-4 w-4 mr-2" />
-                        Reset
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
           </div>
