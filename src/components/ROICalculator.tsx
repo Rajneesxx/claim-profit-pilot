@@ -603,22 +603,20 @@ export const ROICalculator = () => {
         </div>
       </div>
 
-      {/* Sticky Bottom CTA Panel */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-primary/95 backdrop-blur-md border-t border-white/10 p-4">
-        <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-white text-center md:text-left">
-              <div className="text-lg font-semibold">Ready to Transform Your RCM?</div>
-              <div className="text-sm opacity-90">Book a call with RapidClaims - AI based RCM automation solution</div>
+      {/* Minimized Sticky Bottom CTA Panel */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-primary/95 backdrop-blur-md border-t border-white/10 px-4 py-2">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-between gap-3">
+            <div className="text-white text-sm">
+              <span className="font-medium">Book a call with RapidClaims</span>
             </div>
-            <div className="flex gap-3">
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-                <Phone className="h-4 w-4 mr-2" />
-                Book a Call
+            <div className="flex gap-2">
+              <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
+                <Phone className="h-3 w-3 mr-1" />
+                Book Call
               </Button>
-              <Button variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
-                <FileText className="h-4 w-4 mr-2" />
-                Get Free Audit
+              <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
+                Free Audit
               </Button>
             </div>
           </div>
