@@ -205,7 +205,7 @@ Generated on ${new Date().toLocaleDateString()}`;
         <div className="text-center text-white mb-6">
           <div className="flex items-center justify-center gap-3 mb-3">
             <Calculator className="h-8 w-8" />
-            <h1 className="text-3xl font-bold">Calculator</h1>
+            <h1 className="text-3xl font-bold">Rapid ROI Calculator</h1>
           </div>
         </div>
 
