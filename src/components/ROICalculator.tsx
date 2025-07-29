@@ -77,6 +77,12 @@ export const ROICalculator = () => {
   const roi = ((metrics.revenueClaimed - totalOperationalCosts) / totalOperationalCosts) * 100;
   const efficiencyRatio = metrics.chartsProcessedPerAnnum / (metrics.numberOfCoders * 250 * metrics.chartsPerCoderPerDay);
 
+  // Executive Summary Calculations
+  const reducedCost = deniedClaimsCost + backlogCost; // Cost savings from process optimization
+  const increaseRevenue = metrics.revenueClaimed * (metrics.underCodingPercent / 100) * 0.1; // Revenue recovery from better coding
+  const reducedRisk = (metrics.claimsPerAnnum * metrics.claimDeniedPercent / 100) * 0.3; // Risk reduction value
+  const totalImpact = reducedCost + increaseRevenue + (reducedRisk * metrics.costPerDeniedClaim);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -143,6 +149,51 @@ export const ROICalculator = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Executive Summary */}
+        <Card className="mb-8 bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-primary">
+              <BarChart3 className="h-6 w-6" />
+              Executive Summary
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              <div className="text-center p-4 rounded-lg bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
+                <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Cost</h4>
+                <div className="text-2xl font-bold text-success">
+                  ${reducedCost.toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">Annual savings potential</p>
+              </div>
+              
+              <div className="text-center p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+                <h4 className="text-sm font-medium text-muted-foreground mb-2">Increase Revenue</h4>
+                <div className="text-2xl font-bold text-primary">
+                  ${increaseRevenue.toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">Revenue recovery opportunity</p>
+              </div>
+              
+              <div className="text-center p-4 rounded-lg bg-gradient-to-br from-info/10 to-info/5 border border-info/20">
+                <h4 className="text-sm font-medium text-muted-foreground mb-2">Reduced Risk</h4>
+                <div className="text-2xl font-bold text-info">
+                  {reducedRisk.toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">Claims at risk reduction</p>
+              </div>
+              
+              <div className="text-center p-4 rounded-lg bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
+                <h4 className="text-sm font-medium text-muted-foreground mb-2">Total Impact</h4>
+                <div className="text-2xl font-bold text-warning">
+                  ${totalImpact.toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">Combined financial benefit</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Metric Input Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
