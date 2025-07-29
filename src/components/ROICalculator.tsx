@@ -220,16 +220,16 @@ export const ROICalculator = () => {
   const totalImpact = reducedCost + increaseRevenue + reducedRisk;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-slate-800 to-background relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 relative overflow-hidden">
       {/* Subtle animated background - toned down */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/5 rounded-full animate-pulse"></div>
-        <div className="absolute top-3/4 right-1/4 w-24 h-24 bg-slate-500/8 rounded-full animate-bounce"></div>
-        <div className="absolute top-1/2 left-1/2 w-40 h-40 bg-gray-500/3 rounded-full animate-ping"></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-purple-400/10 rounded-full animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-24 h-24 bg-purple-300/15 rounded-full animate-bounce"></div>
+        <div className="absolute top-1/2 left-1/2 w-40 h-40 bg-purple-500/8 rounded-full animate-ping"></div>
       </div>
 
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-md border-b border-white/10">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-purple-800/95 backdrop-blur-md border-b border-purple-400/20">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 text-white">
@@ -246,33 +246,33 @@ export const ROICalculator = () => {
       {/* Two Panel Layout */}
       <div className="flex pt-20 min-h-screen">
         {/* Left Panel - Aggregate Metrics (Sticky) */}
-        <div className="w-80 bg-card/90 backdrop-blur-sm border-r border-border p-6 sticky top-20 h-fit">
+        <div className="w-80 bg-black/20 backdrop-blur-sm border-r border-white/10 p-6 sticky top-20 h-fit text-white">
           <div className="space-y-6">
             <div className="text-center">
-              <h2 className="text-xl font-bold text-primary mb-4">Platform Impact</h2>
+              <h2 className="text-xl font-bold text-white mb-4">Platform Impact</h2>
               <div className="space-y-4">
-                <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
-                  <div className="text-2xl font-bold text-primary">{aggregateStats.totalFinanceLeaders.toLocaleString()}</div>
-                  <div className="text-sm text-muted-foreground">Finance Leaders</div>
-                  <div className="text-xs text-muted-foreground">have calculated ROI</div>
+                <div className="p-4 rounded-lg bg-purple-500/20 border border-purple-400/30">
+                  <div className="text-2xl font-bold text-purple-300">{aggregateStats.totalFinanceLeaders.toLocaleString()}</div>
+                  <div className="text-sm text-white/70">Finance Leaders</div>
+                  <div className="text-xs text-white/60">have calculated ROI</div>
                 </div>
                 
-                <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
+                <div className="p-4 rounded-lg bg-green-500/20 border border-green-400/30">
                   <div className="text-2xl font-bold text-green-400">${(aggregateStats.totalROICalculated / 1000000).toFixed(1)}M</div>
-                  <div className="text-sm text-muted-foreground">Total ROI</div>
-                  <div className="text-xs text-muted-foreground">calculated to date</div>
+                  <div className="text-sm text-white/70">Total ROI</div>
+                  <div className="text-xs text-white/60">calculated to date</div>
                 </div>
                 
-                <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                <div className="p-4 rounded-lg bg-blue-500/20 border border-blue-400/30">
                   <div className="text-2xl font-bold text-blue-400">${(aggregateStats.totalDollarsSaved / 1000000).toFixed(1)}M</div>
-                  <div className="text-sm text-muted-foreground">Dollars Saved</div>
-                  <div className="text-xs text-muted-foreground">by our clients</div>
+                  <div className="text-sm text-white/70">Dollars Saved</div>
+                  <div className="text-xs text-white/60">by our clients</div>
                 </div>
                 
-                <div className="p-4 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                <div className="p-4 rounded-lg bg-orange-500/20 border border-orange-400/30">
                   <div className="text-2xl font-bold text-orange-400">{aggregateStats.avgROI}%</div>
-                  <div className="text-sm text-muted-foreground">Average ROI</div>
-                  <div className="text-xs text-muted-foreground">across all clients</div>
+                  <div className="text-sm text-white/70">Average ROI</div>
+                  <div className="text-xs text-white/60">across all clients</div>
                 </div>
               </div>
             </div>
@@ -283,20 +283,20 @@ export const ROICalculator = () => {
         <div className="flex-1 p-6">
           <div className="max-w-4xl mx-auto">
             <Tabs defaultValue="calculator" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-6 bg-card/90 backdrop-blur-sm border border-border">
-                <TabsTrigger value="calculator" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsList className="grid w-full grid-cols-4 mb-6 bg-black/20 backdrop-blur-sm border border-white/10">
+                <TabsTrigger value="calculator" className="text-white data-[state=active]:bg-purple-600 data-[state=active]:text-white">
                   <Calculator className="h-4 w-4 mr-2" />
                   Calculator
                 </TabsTrigger>
-                <TabsTrigger value="advanced" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <TabsTrigger value="advanced" className="text-white data-[state=active]:bg-purple-600 data-[state=active]:text-white">
                   <Settings className="h-4 w-4 mr-2" />
                   Advanced
                 </TabsTrigger>
-                <TabsTrigger value="assumptions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <TabsTrigger value="assumptions" className="text-white data-[state=active]:bg-purple-600 data-[state=active]:text-white">
                   <FileText className="h-4 w-4 mr-2" />
                   Assumptions
                 </TabsTrigger>
-                <TabsTrigger value="summary" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <TabsTrigger value="summary" className="text-white data-[state=active]:bg-purple-600 data-[state=active]:text-white">
                   <Award className="h-4 w-4 mr-2" />
                   Summary
                 </TabsTrigger>
@@ -304,41 +304,42 @@ export const ROICalculator = () => {
 
               {/* Calculator Tab */}
               <TabsContent value="calculator">
-                <Card className="bg-card/95 backdrop-blur-sm border border-border">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-primary">
+                <div className="bg-black/20 backdrop-blur-sm border border-white/10 rounded-lg p-6 text-white">
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 text-white mb-2">
                       <Calculator className="h-6 w-6" />
-                      ROI Calculator
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
+                      <h2 className="text-xl font-bold">ROI Calculator</h2>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-6">
                     {/* Basic Input Section */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-4">
                         <div>
-                          <Label htmlFor="revenue">Annual Revenue ($)</Label>
+                          <Label htmlFor="revenue" className="text-white">Annual Revenue ($)</Label>
                           <Input
                             id="revenue"
                             type="number"
                             value={metrics.revenueClaimed}
                             onChange={(e) => updateMetric('revenueClaimed', Number(e.target.value))}
-                            className="mt-1"
+                            className="mt-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
                           />
                         </div>
                         
                         <div>
-                          <Label htmlFor="claims">Claims Per Year</Label>
+                          <Label htmlFor="claims" className="text-white">Claims Per Year</Label>
                           <Input
                             id="claims"
                             type="number"
                             value={metrics.claimsPerAnnum}
                             onChange={(e) => updateMetric('claimsPerAnnum', Number(e.target.value))}
-                            className="mt-1"
+                            className="mt-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
                           />
                         </div>
                         
                         <div>
-                          <Label htmlFor="coders">Number of Coders: {metrics.numberOfCoders}</Label>
+                          <Label htmlFor="coders" className="text-white">Number of Coders: {metrics.numberOfCoders}</Label>
                           <Slider
                             value={[metrics.numberOfCoders]}
                             onValueChange={(value) => updateMetric('numberOfCoders', value[0])}
@@ -352,18 +353,18 @@ export const ROICalculator = () => {
                       
                       <div className="space-y-4">
                         <div>
-                          <Label htmlFor="salary">Salary Per Coder ($)</Label>
+                          <Label htmlFor="salary" className="text-white">Salary Per Coder ($)</Label>
                           <Input
                             id="salary"
                             type="number"
                             value={metrics.salaryPerCoder}
                             onChange={(e) => updateMetric('salaryPerCoder', Number(e.target.value))}
-                            className="mt-1"
+                            className="mt-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
                           />
                         </div>
                         
                         <div>
-                          <Label htmlFor="denial">Claim Denial Rate (%): {metrics.claimDeniedPercent}%</Label>
+                          <Label htmlFor="denial" className="text-white">Claim Denial Rate (%): {metrics.claimDeniedPercent}%</Label>
                           <Slider
                             value={[metrics.claimDeniedPercent]}
                             onValueChange={(value) => updateMetric('claimDeniedPercent', value[0])}
@@ -375,7 +376,7 @@ export const ROICalculator = () => {
                         </div>
                         
                         <div>
-                          <Label htmlFor="backlog">Coding Backlog (%): {metrics.codingBacklogPercent}%</Label>
+                          <Label htmlFor="backlog" className="text-white">Coding Backlog (%): {metrics.codingBacklogPercent}%</Label>
                           <Slider
                             value={[metrics.codingBacklogPercent]}
                             onValueChange={(value) => updateMetric('codingBacklogPercent', value[0])}
@@ -389,100 +390,100 @@ export const ROICalculator = () => {
                     </div>
 
                     {/* Results Preview */}
-                    <div className="border-t pt-6">
+                    <div className="border-t border-white/10 pt-6">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="text-center p-4 rounded-lg bg-primary/10 border border-primary/20">
-                          <div className="text-2xl font-bold text-primary">{roi.toFixed(1)}%</div>
-                          <div className="text-sm text-muted-foreground">ROI</div>
+                        <div className="text-center p-4 rounded-lg bg-purple-500/20 border border-purple-400/30">
+                          <div className="text-2xl font-bold text-purple-300">{roi.toFixed(1)}%</div>
+                          <div className="text-sm text-white/70">ROI</div>
                         </div>
-                        <div className="text-center p-4 rounded-lg bg-green-500/10 border border-green-500/20">
+                        <div className="text-center p-4 rounded-lg bg-green-500/20 border border-green-400/30">
                           <div className="text-2xl font-bold text-green-400">${totalImpact.toLocaleString()}</div>
-                          <div className="text-sm text-muted-foreground">Total Impact</div>
+                          <div className="text-sm text-white/70">Total Impact</div>
                         </div>
-                        <div className="text-center p-4 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                        <div className="text-center p-4 rounded-lg bg-orange-500/20 border border-orange-400/30">
                           <div className="text-2xl font-bold text-orange-400">${totalOperationalCosts.toLocaleString()}</div>
-                          <div className="text-sm text-muted-foreground">Operational Costs</div>
+                          <div className="text-sm text-white/70">Operational Costs</div>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </TabsContent>
 
               {/* Advanced Tab */}
               <TabsContent value="advanced">
-                <Card className="bg-card/95 backdrop-blur-sm border border-border">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-primary">
+                <div className="bg-black/20 backdrop-blur-sm border border-white/10 rounded-lg p-6 text-white">
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 text-white mb-2">
                       <Settings className="h-6 w-6" />
-                      Advanced Settings
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Accordion type="single" collapsible className="space-y-4">
-                      <AccordionItem value="coding">
-                        <AccordionTrigger>Coding Parameters</AccordionTrigger>
-                        <AccordionContent className="space-y-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                              <Label>Charts Per Coder Per Day: {metrics.chartsPerCoderPerDay}</Label>
-                              <Slider
-                                value={[metrics.chartsPerCoderPerDay]}
-                                onValueChange={(value) => updateMetric('chartsPerCoderPerDay', value[0])}
-                                max={30}
-                                min={5}
-                                step={1}
-                                className="mt-2"
-                              />
-                            </div>
-                            <div>
-                              <Label>Overhead Cost (%): {metrics.overheadCostPercent}%</Label>
-                              <Slider
-                                value={[metrics.overheadCostPercent]}
-                                onValueChange={(value) => updateMetric('overheadCostPercent', value[0])}
-                                max={100}
-                                min={0}
-                                step={1}
-                                className="mt-2"
-                              />
-                            </div>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                      
-                      <AccordionItem value="denials">
-                        <AccordionTrigger>Denial Management</AccordionTrigger>
-                        <AccordionContent className="space-y-4">
+                      <h2 className="text-xl font-bold">Advanced Settings</h2>
+                    </div>
+                  </div>
+                  
+                  <Accordion type="single" collapsible className="space-y-4">
+                    <AccordionItem value="coding" className="border-white/10">
+                      <AccordionTrigger className="text-white hover:text-white/80">Coding Parameters</AccordionTrigger>
+                      <AccordionContent className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="denialCost">Cost Per Denied Claim ($)</Label>
-                            <Input
-                              id="denialCost"
-                              type="number"
-                              value={metrics.costPerDeniedClaim}
-                              onChange={(e) => updateMetric('costPerDeniedClaim', Number(e.target.value))}
-                              className="mt-1"
+                            <Label className="text-white">Charts Per Coder Per Day: {metrics.chartsPerCoderPerDay}</Label>
+                            <Slider
+                              value={[metrics.chartsPerCoderPerDay]}
+                              onValueChange={(value) => updateMetric('chartsPerCoderPerDay', value[0])}
+                              max={30}
+                              min={5}
+                              step={1}
+                              className="mt-2"
                             />
                           </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </CardContent>
-                </Card>
+                          <div>
+                            <Label className="text-white">Overhead Cost (%): {metrics.overheadCostPercent}%</Label>
+                            <Slider
+                              value={[metrics.overheadCostPercent]}
+                              onValueChange={(value) => updateMetric('overheadCostPercent', value[0])}
+                              max={100}
+                              min={0}
+                              step={1}
+                              className="mt-2"
+                            />
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    
+                    <AccordionItem value="denials" className="border-white/10">
+                      <AccordionTrigger className="text-white hover:text-white/80">Denial Management</AccordionTrigger>
+                      <AccordionContent className="space-y-4">
+                        <div>
+                          <Label htmlFor="denialCost" className="text-white">Cost Per Denied Claim ($)</Label>
+                          <Input
+                            id="denialCost"
+                            type="number"
+                            value={metrics.costPerDeniedClaim}
+                            onChange={(e) => updateMetric('costPerDeniedClaim', Number(e.target.value))}
+                            className="mt-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                          />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
               </TabsContent>
 
               {/* Assumptions & References Tab */}
               <TabsContent value="assumptions">
-                <Card className="bg-card/95 backdrop-blur-sm border border-border">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-primary">
+                <div className="bg-black/20 backdrop-blur-sm border border-white/10 rounded-lg p-6 text-white">
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 text-white mb-2">
                       <FileText className="h-6 w-6" />
-                      Assumptions & References
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="prose prose-sm max-w-none text-foreground">
-                      <h3 className="text-lg font-semibold mb-4">Key Assumptions</h3>
-                      <ul className="space-y-2 text-sm">
+                      <h2 className="text-xl font-bold">Assumptions & References</h2>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <div className="prose prose-sm max-w-none text-white">
+                      <h3 className="text-lg font-semibold mb-4 text-white">Key Assumptions</h3>
+                      <ul className="space-y-2 text-sm text-white/80">
                         <li>• 50% productivity improvement with AI automation</li>
                         <li>• 50% reduction in claim denials through improved accuracy</li>
                         <li>• 80% reduction in coding backlog</li>
@@ -491,24 +492,24 @@ export const ROICalculator = () => {
                         <li>• Standard working hours: 8 hours per day</li>
                       </ul>
                       
-                      <h3 className="text-lg font-semibold mb-4 mt-6">Industry References</h3>
-                      <ul className="space-y-2 text-sm">
+                      <h3 className="text-lg font-semibold mb-4 mt-6 text-white">Industry References</h3>
+                      <ul className="space-y-2 text-sm text-white/80">
                         <li>• Medicare physician fee schedule (CMS)</li>
                         <li>• AHIMA coding productivity standards</li>
                         <li>• Healthcare Financial Management Association (HFMA) benchmarks</li>
                         <li>• Medical Group Management Association (MGMA) data</li>
                       </ul>
                       
-                      <h3 className="text-lg font-semibold mb-4 mt-6">Calculation Methodology</h3>
-                      <div className="text-sm space-y-2">
-                        <p><strong>Total Coding Costs:</strong> (Number of Coders × Salary) × (1 + Overhead %)</p>
-                        <p><strong>Denied Claims Cost:</strong> (Claims × Denial %) × Cost per Denial</p>
-                        <p><strong>Backlog Cost:</strong> (Charts × Backlog %) × Days × (Cost of Capital % / 365)</p>
-                        <p><strong>ROI:</strong> ((Revenue - Operational Costs) / Operational Costs) × 100</p>
+                      <h3 className="text-lg font-semibold mb-4 mt-6 text-white">Calculation Methodology</h3>
+                      <div className="text-sm space-y-2 text-white/80">
+                        <p><strong className="text-white">Total Coding Costs:</strong> (Number of Coders × Salary) × (1 + Overhead %)</p>
+                        <p><strong className="text-white">Denied Claims Cost:</strong> (Claims × Denial %) × Cost per Denial</p>
+                        <p><strong className="text-white">Backlog Cost:</strong> (Charts × Backlog %) × Days × (Cost of Capital % / 365)</p>
+                        <p><strong className="text-white">ROI:</strong> ((Revenue - Operational Costs) / Operational Costs) × 100</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </TabsContent>
 
               {/* Summary Tab */}
@@ -635,7 +636,7 @@ export const ROICalculator = () => {
       </div>
 
       {/* Minimized Sticky Bottom CTA Panel */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-primary/95 backdrop-blur-md border-t border-white/10 px-4 py-2">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-purple-800/95 backdrop-blur-md border-t border-purple-400/20 px-4 py-2">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between gap-3">
             <div className="text-white text-sm">
@@ -646,7 +647,7 @@ export const ROICalculator = () => {
                 <Phone className="h-3 w-3 mr-1" />
                 Book Call
               </Button>
-              <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
+              <Button size="sm" variant="outline" className="text-white border-white/30 hover:bg-white/10 hover:text-white">
                 Free Audit
               </Button>
             </div>
