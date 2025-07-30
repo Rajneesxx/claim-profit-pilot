@@ -65,14 +65,14 @@ export const BasicCalculator = ({
                 d="M 40 160 A 120 120 0 0 1 280 160"
                 fill="none"
                 stroke="#374151"
-                strokeWidth="12"
+                strokeWidth="8"
               />
               {/* Progress Arc */}
               <path
                 d="M 40 160 A 120 120 0 0 1 280 160"
                 fill="none"
                 stroke="url(#roiGradient)"
-                strokeWidth="12"
+                strokeWidth="8"
                 strokeDasharray={`${Math.min(calculations.roi * 3.77, 377)} 377`}
                 strokeLinecap="round"
                 className="transition-all duration-1000 ease-out"
@@ -85,16 +85,16 @@ export const BasicCalculator = ({
                 </linearGradient>
               </defs>
             </svg>
-            {/* ROI Text - Positioned under the curve */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pt-8">
-              <div className="text-6xl font-bold text-purple-400 mb-1">
+            {/* ROI Text - Smaller and positioned under the curve */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pt-12">
+              <div className="text-3xl font-bold text-purple-400 mb-1">
                 {calculations.roi.toFixed(1)}%
               </div>
-              <div className="text-lg text-gray-400 tracking-wider">ROI</div>
+              <div className="text-sm text-gray-400 tracking-wider uppercase">ROI</div>
             </div>
             {/* Min/Max Labels */}
-            <div className="absolute bottom-4 left-2 text-sm text-gray-400">$0M</div>
-            <div className="absolute bottom-4 right-2 text-sm text-gray-400">$12M</div>
+            <div className="absolute bottom-4 left-2 text-xs text-gray-500">$0M</div>
+            <div className="absolute bottom-4 right-2 text-xs text-gray-500">$12M</div>
           </div>
         </div>
 
