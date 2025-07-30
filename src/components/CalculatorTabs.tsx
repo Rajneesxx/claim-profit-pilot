@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calculator, Settings, BarChart3, Award } from 'lucide-react';
+import { Calculator, Settings, BookOpen, Award } from 'lucide-react';
 import { BasicCalculator } from './tabs/BasicCalculator';
 import { AdvancedSettings } from './tabs/AdvancedSettings';
-import { Analytics } from './tabs/Analytics';
+import { Assumptions } from './tabs/Assumptions';
 import { Summary } from './tabs/Summary';
 import { ROIMetrics } from '../types/roi';
 
@@ -38,7 +38,7 @@ export const CalculatorTabs = ({
   const tabs = [
     { id: "calculator", label: "Calculator", icon: Calculator },
     { id: "advanced", label: "Advanced", icon: Settings },
-    { id: "analytics", label: "Analytics", icon: BarChart3 },
+    { id: "assumptions", label: "Assumptions", icon: BookOpen },
     { id: "summary", label: "Summary", icon: Award },
   ];
 
@@ -76,8 +76,10 @@ export const CalculatorTabs = ({
           />
         </TabsContent>
 
-        <TabsContent value="analytics" className="mt-0">
-          <Analytics calculations={calculations} />
+        <TabsContent value="assumptions" className="mt-0">
+          <Assumptions 
+            metrics={metrics}
+          />
         </TabsContent>
 
         <TabsContent value="summary" className="mt-0">
