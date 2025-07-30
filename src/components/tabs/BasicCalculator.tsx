@@ -58,18 +58,18 @@ export const BasicCalculator = ({
 
         {/* ROI Meter */}
         <div className="flex justify-center mb-12">
-          <div className="relative w-80 h-40">
-            <svg viewBox="0 0 320 160" className="w-full h-full">
+          <div className="relative w-80 h-48">
+            <svg viewBox="0 0 320 200" className="w-full h-full">
               {/* Background Arc */}
               <path
-                d="M 40 140 A 120 120 0 0 1 280 140"
+                d="M 40 160 A 120 120 0 0 1 280 160"
                 fill="none"
                 stroke="#374151"
                 strokeWidth="12"
               />
               {/* Progress Arc */}
               <path
-                d="M 40 140 A 120 120 0 0 1 280 140"
+                d="M 40 160 A 120 120 0 0 1 280 160"
                 fill="none"
                 stroke="url(#roiGradient)"
                 strokeWidth="12"
@@ -85,16 +85,16 @@ export const BasicCalculator = ({
                 </linearGradient>
               </defs>
             </svg>
-            {/* ROI Text */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className="text-5xl font-bold text-purple-400 mb-2">
-                {calculations.roi.toFixed(2)}%
+            {/* ROI Text - Positioned under the curve */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pt-8">
+              <div className="text-6xl font-bold text-purple-400 mb-1">
+                {calculations.roi.toFixed(1)}%
               </div>
-              <div className="text-lg text-gray-400">ROI</div>
+              <div className="text-lg text-gray-400 tracking-wider">ROI</div>
             </div>
             {/* Min/Max Labels */}
-            <div className="absolute bottom-0 left-0 text-sm text-gray-400">$0M</div>
-            <div className="absolute bottom-0 right-0 text-sm text-gray-400">$12M</div>
+            <div className="absolute bottom-4 left-2 text-sm text-gray-400">$0M</div>
+            <div className="absolute bottom-4 right-2 text-sm text-gray-400">$12M</div>
           </div>
         </div>
 
