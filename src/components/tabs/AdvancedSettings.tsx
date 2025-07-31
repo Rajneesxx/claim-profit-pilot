@@ -101,7 +101,6 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                       className="bg-background border-border text-foreground"
                       step={field.type === 'decimal' ? '0.01' : '1'}
                     />
-                    <p className="text-xs text-muted-foreground">{field.description}</p>
                   </div>
                 ))}
               </div>
