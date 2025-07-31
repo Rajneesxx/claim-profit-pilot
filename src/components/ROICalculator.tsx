@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import confetti from 'canvas-confetti';
 import { Calculator, Star, Download } from 'lucide-react';
-import { CalculatorTabs } from './CalculatorTabs';
-import { AggregateMetrics } from './AggregateMetrics';
+import { CombinedCalculator } from './CombinedCalculator';
 import { FloatingCTA } from './FloatingCTA';
 import { ModernEmailDialog } from './ModernEmailDialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -201,36 +200,26 @@ export const ROICalculator = () => {
         </div>
       </div>
 
-      {/* Main Content - Two Panel Layout */}
-      <div className="max-w-7xl mx-auto px-6 py-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Left Panel - Aggregate Metrics */}
-          <div className="lg:col-span-1">
-            <AggregateMetrics />
-          </div>
-
-          {/* Right Panel - Calculator */}
-          <div className="lg:col-span-3">
-            <CalculatorTabs 
-              metrics={metrics}
-              updateMetric={updateMetric}
-              onCalculateROI={handleCalculateROI}
-              calculations={{
-                totalCodingCosts,
-                deniedClaimsCost,
-                backlogCost,
-                totalOperationalCosts,
-                roi,
-                executiveSummary: {
-                  reducedCost,
-                  increaseRevenue,
-                  reducedRisk,
-                  totalImpact
-                }
-              }}
-            />
-          </div>
-        </div>
+      {/* Main Content */}
+      <div className="max-w-5xl mx-auto px-6 py-8 relative z-10">
+        <CombinedCalculator 
+          metrics={metrics}
+          updateMetric={updateMetric}
+          onCalculateROI={handleCalculateROI}
+          calculations={{
+            totalCodingCosts,
+            deniedClaimsCost,
+            backlogCost,
+            totalOperationalCosts,
+            roi,
+            executiveSummary: {
+              reducedCost,
+              increaseRevenue,
+              reducedRisk,
+              totalImpact
+            }
+          }}
+        />
       </div>
 
       {/* Footer */}
