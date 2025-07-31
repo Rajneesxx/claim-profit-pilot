@@ -105,9 +105,6 @@ export const BasicCalculator = ({
               </div>
               <div className="text-sm text-muted-foreground tracking-wider uppercase">ROI</div>
             </div>
-            {/* Min/Max Labels */}
-            <div className="absolute bottom-4 left-2 text-xs text-muted-foreground">$0M</div>
-            <div className="absolute bottom-4 right-2 text-xs text-muted-foreground">$12M</div>
           </div>
         </div>
 

@@ -43,15 +43,15 @@ export const CalculatorTabs = ({
   ];
 
   return (
-    <Card className="bg-gray-900/90 backdrop-blur-sm border border-gray-700">
+    <Card className="bg-background border border-border">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="border-b border-gray-700">
-          <TabsList className="grid w-full grid-cols-4 bg-transparent p-2">
+        <div className="border-b border-border">
+          <TabsList className="grid w-full grid-cols-4 bg-background p-2">
             {tabs.map((tab) => (
               <TabsTrigger
                 key={tab.id}
                 value={tab.id}
-                className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-purple-200 border border-purple-600/30 data-[state=active]:border-purple-500"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-foreground border border-border data-[state=active]:border-primary"
               >
                 <tab.icon className="h-4 w-4 mr-2" />
                 {tab.label}
