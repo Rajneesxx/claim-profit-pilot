@@ -14,23 +14,44 @@ export const ROICalculator = () => {
   const { toast } = useToast();
   
   const defaultMetrics: ROIMetrics = {
-    revenueClaimed: 23000000,
-    claimsPerAnnum: 42700,
-    chartsProcessedPerAnnum: 42700,
-    numberOfCoders: 10,
+    // Basic inputs
+    revenueClaimed: 10000000,
+    numberOfCoders: 3,
+    numberOfBillers: 3,
+    numberOfPhysicians: 50,
+    claimDeniedPercent: 10,
+
+    // Advanced inputs - Aggregate claims data
+    claimsPerAnnum: 66667,
+    averageCostPerClaim: 150,
+    chartsProcessedPerAnnum: 66667,
+
+    // Coding costs
     salaryPerCoder: 60000,
     overheadCostPercent: 38,
-    chartsPerCoderPerDay: 17,
-    claimDeniedPercent: 25,
-    costPerDeniedClaim: 42,
-    codingBacklogPercent: 5,
+    numberOfEncoderLicenses: 3,
+    averageCostPerLicensePerMonth: 500,
+    salaryPerBiller: 50000,
+    salaryPerPhysician: 350000,
+    avgTimePerPhysicianPerChart: 15,
+    chartsPerCoderPerDay: 88,
+
+    // Collection costs
+    costPerDeniedClaim: 13,
+
+    // Capital costs
+    codingBacklogPercent: 20,
     daysPerChartInBacklog: 20,
     costOfCapital: 5,
-    rvusCodedPerAnnum: 718750,
+
+    // RVUs
+    rvusCodedPerAnnum: 312500,
     weightedAverageGPCI: 1.03,
-    overCodingPercent: 13,
-    underCodingPercent: 10,
-    avgBillableCodesPerChart: 4
+
+    // Audit data
+    overCodingPercent: 5,
+    underCodingPercent: 5,
+    avgBillableCodesPerChart: 5
   };
 
   const [metrics, setMetrics] = useState<ROIMetrics>(defaultMetrics);
@@ -143,17 +164,17 @@ export const ROICalculator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-700 relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Floating Background Icons */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <Calculator className="absolute top-20 left-10 h-16 w-16 text-purple-400/20 animate-pulse" />
-        <Star className="absolute top-40 right-20 h-12 w-12 text-purple-300/20 animate-bounce" />
-        <Calculator className="absolute bottom-40 left-20 h-20 w-20 text-purple-500/20 animate-pulse" />
-        <Star className="absolute bottom-20 right-10 h-14 w-14 text-purple-400/20 animate-bounce" />
+        <Calculator className="absolute top-20 left-10 h-16 w-16 text-primary/10 animate-pulse" />
+        <Star className="absolute top-40 right-20 h-12 w-12 text-primary/10 animate-bounce" />
+        <Calculator className="absolute bottom-40 left-20 h-20 w-20 text-primary/10 animate-pulse" />
+        <Star className="absolute bottom-20 right-10 h-14 w-14 text-primary/10 animate-bounce" />
       </div>
 
       {/* Header */}
-      <div className="bg-purple-800/50 backdrop-blur-sm border-b border-purple-600/30 relative z-10">
+      <div className="bg-card backdrop-blur-sm border-b border-border relative z-10">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -164,14 +185,14 @@ export const ROICalculator = () => {
               />
             </div>
             <div className="flex items-center gap-3">
-              <Calculator className="h-8 w-8 text-white" />
-              <h1 className="text-2xl font-semibold text-white">ROI Calculator</h1>
+              <Calculator className="h-8 w-8 text-foreground" />
+              <h1 className="text-2xl font-semibold text-foreground">ROI Calculator</h1>
             </div>
             <div className="flex items-center gap-4">
               <Button 
                 onClick={() => window.open('https://calendly.com/rapidclaims', '_blank')}
                 variant="outline" 
-                className="border-white/30 text-white hover:bg-white/10"
+                className="border-border hover:bg-muted"
               >
                 Book a Demo
               </Button>
@@ -213,7 +234,7 @@ export const ROICalculator = () => {
       </div>
 
       {/* Footer */}
-      <div className="bg-purple-900/50 backdrop-blur-sm border-t border-purple-600/30 mt-16 relative z-10">
+      <div className="bg-card backdrop-blur-sm border-t border-border mt-16 relative z-10">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -222,9 +243,9 @@ export const ROICalculator = () => {
                 alt="RapidClaims" 
                 className="h-8 w-auto"
               />
-              <span className="text-white text-sm">AI-based RCM automation solution</span>
+              <span className="text-foreground text-sm">AI-based RCM automation solution</span>
             </div>
-            <div className="text-gray-400 text-sm">
+            <div className="text-muted-foreground text-sm">
               © 2024 RapidClaims. All rights reserved.
             </div>
           </div>
@@ -246,7 +267,7 @@ export const ROICalculator = () => {
       {/* Results Modal */}
       {showResults && (
         <Dialog open={showResults} onOpenChange={setShowResults}>
-          <DialogContent className="max-w-4xl bg-gray-900 border border-gray-700 text-white">
+          <DialogContent className="max-w-4xl bg-card border border-border text-foreground">
             <DialogHeader>
               <DialogTitle className="text-2xl text-center text-white">🎉 Your ROI Analysis Results</DialogTitle>
             </DialogHeader>

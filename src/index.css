@@ -8,14 +8,14 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 260 25% 15%;
-    --foreground: 0 0% 95%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 5%;
 
-    --card: 260 25% 18%;
-    --card-foreground: 0 0% 95%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 5%;
 
-    --popover: 260 25% 18%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 5%;
 
     --primary: 225 39% 22%; /* RapidClaims dark navy */
     --primary-foreground: 0 0% 100%;
@@ -23,11 +23,11 @@ All colors MUST be HSL.
     --coral: 14 100% 57%; /* RapidClaims coral accent */
     --coral-foreground: 0 0% 100%;
 
-    --secondary: 260 25% 22%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 260 25% 20%;
-    --muted-foreground: 0 0% 70%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
     --accent: 15 90% 55%;
     --accent-foreground: 0 0% 100%;
@@ -35,9 +35,9 @@ All colors MUST be HSL.
     --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 260 25% 25%;
-    --input: 260 25% 22%;
-    --ring: 270 80% 60%;
+    --border: 0 0% 90%;
+    --input: 0 0% 100%;
+    --ring: 225 39% 22%;
 
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;

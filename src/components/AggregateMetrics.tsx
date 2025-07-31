@@ -5,38 +5,38 @@ export const AggregateMetrics = () => {
   const metrics = [
     {
       icon: Users,
-      label: "Finance Leaders",
-      value: "2,847",
+      label: "Healthcare Organizations",
+      value: "450+",
       description: "have calculated their ROI",
-      color: "text-blue-400"
+      color: "text-primary"
     },
     {
       icon: DollarSign,
-      label: "Total ROI Calculated",
-      value: "$847M",
-      description: "in potential savings",
-      color: "text-green-400"
+      label: "Average Annual Savings",
+      value: "$2.4M",
+      description: "per organization",
+      color: "text-coral"
     },
     {
       icon: TrendingUp,
-      label: "Average Savings",
-      value: "312%",
-      description: "ROI improvement",
-      color: "text-purple-400"
+      label: "Typical ROI Range",
+      value: "180-350%",
+      description: "within 12 months",
+      color: "text-primary"
     },
     {
       icon: Calculator,
-      label: "Calculations Today",
-      value: "156",
+      label: "Calculations This Month",
+      value: "89",
       description: "organizations analyzed",
-      color: "text-orange-400"
+      color: "text-coral"
     }
   ];
 
   return (
-    <Card className="bg-gray-900/90 backdrop-blur-sm border border-gray-700 h-fit">
-      <CardHeader className="border-b border-gray-700">
-        <CardTitle className="text-white text-center">
+    <Card className="bg-card backdrop-blur-sm border border-border h-fit">
+      <CardHeader className="border-b border-border">
+        <CardTitle className="text-foreground text-center">
           Community Impact
         </CardTitle>
       </CardHeader>
@@ -50,23 +50,23 @@ export const AggregateMetrics = () => {
               <div className={`text-3xl font-bold ${metric.color} mb-1`}>
                 {metric.value}
               </div>
-              <div className="text-gray-300 font-medium text-sm mb-1">
+              <div className="text-foreground font-medium text-sm mb-1">
                 {metric.label}
               </div>
-              <div className="text-gray-500 text-xs">
+              <div className="text-muted-foreground text-xs">
                 {metric.description}
               </div>
             </div>
           ))}
         </div>
         
-        <div className="mt-8 p-4 bg-purple-900/30 rounded-lg border border-purple-700/50">
+        <div className="mt-8 p-4 bg-muted rounded-lg border border-border">
           <div className="text-center">
-            <div className="text-purple-400 text-sm font-medium mb-1">
-              Latest Update
+            <div className="text-primary text-sm font-medium mb-1">
+              Latest Success
             </div>
-            <div className="text-gray-300 text-xs">
-              Healthcare Systems Inc. just saved $2.3M annually with our solution
+            <div className="text-muted-foreground text-xs">
+              Metro Health Network reduced coding costs by 45% in 6 months
             </div>
           </div>
         </div>
