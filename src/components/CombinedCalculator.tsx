@@ -7,7 +7,8 @@ import { Slider } from "@/components/ui/slider";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Award, Settings, ChevronDown, ChevronUp, Download, Calendar, Phone, Minus, Plus } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Award, Settings, ChevronDown, ChevronUp, Download, Calendar, Phone, Minus, Plus, Target } from 'lucide-react';
 import { ROIMetrics } from "@/types/roi";
 
 interface CombinedCalculatorProps {
@@ -31,6 +32,18 @@ interface CombinedCalculatorProps {
 
 export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calculations }: CombinedCalculatorProps) => {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+  const [isAssumptionsOpen, setIsAssumptionsOpen] = useState(false);
+  const [confidenceLevels, setConfidenceLevels] = useState({
+    coderProductivity: 'medium',
+    billingAutomation: 'medium',
+    physicianTimeSaved: 'medium',
+    technologyCostSaved: 'medium',
+    claimDenialReduction: 'medium',
+    codingBacklog: 'medium',
+    increaseRVUs: 'medium',
+    overCodingReduction: 'medium',
+    underCodingReduction: 'medium',
+  });
 
   const handleBookCall = () => {
     window.open('https://calendly.com/rapidclaims', '_blank');
@@ -42,6 +55,71 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
 
   const handleDecrement = (key: keyof ROIMetrics, step: number = 1) => {
     updateMetric(key, Math.max(0, metrics[key] - step));
+  };
+
+  const handleConfidenceLevelChange = (lever: string, level: string) => {
+    setConfidenceLevels(prev => ({ ...prev, [lever]: level }));
+  };
+
+  // Levers data with confidence levels
+  const leversData = {
+    coderProductivity: { low: 40, medium: 80, high: 300 },
+    billingAutomation: { low: 50, medium: 70, high: 120 },
+    physicianTimeSaved: { low: 30, medium: 50, high: 70 },
+    technologyCostSaved: { low: 50, medium: 70, high: 100 },
+    claimDenialReduction: { low: 30, medium: 50, high: 70 },
+    codingBacklog: { low: 60, medium: 80, high: 100 },
+    increaseRVUs: { low: 0.1, medium: 0.5, high: 1.5 },
+    overCodingReduction: { low: 50, medium: 80, high: 100 },
+    underCodingReduction: { low: 50, medium: 80, high: 100 },
+  };
+
+  const leverDescriptions = {
+    coderProductivity: {
+      title: "Coder Productivity",
+      case: "Primary care center improves coding productivity per coder by 90%",
+      features: ["Autonomous coding", "User friendly UI and managed workflow", "Easy code search"]
+    },
+    billingAutomation: {
+      title: "Billing Automation", 
+      case: "Clinic replaced manual charge entry; 40% fewer billing FTEs",
+      features: ["AI charge‑capture", "e‑claim builder", "auto ERA posting"]
+    },
+    physicianTimeSaved: {
+      title: "Physician Time Saved",
+      case: "Clinic cut chart‑related physician queries by 30% in 6 months", 
+      features: ["Inline AI code suggestions", "One‑click query approval", "E/M prompts inside the note"]
+    },
+    technologyCostSaved: {
+      title: "Technology Cost Saved",
+      case: "Health system retired legacy encoder; USD 150k licence cost removed",
+      features: ["Single cloud platform", "Usage‑based pricing"]
+    },
+    claimDenialReduction: {
+      title: "Claim Denial Reduction",
+      case: "MSO managing primary care center sees 15% reduction in claim denials",
+      features: ["NCCI edits check", "MCD check", "ICD conflict"]
+    },
+    codingBacklog: {
+      title: "Coding Backlog Elimination", 
+      case: "ASC clinic eliminates code backlog from 28% to 0%",
+      features: ["E2E connectivity with EHR platform", "E2E connectivity with Billing system"]
+    },
+    increaseRVUs: {
+      title: "Increase in RVUs",
+      case: "Nephrology center identifies incremental opportunity with >95% of level 3s to be level 4s",
+      features: ["E&M scoring module"]
+    },
+    overCodingReduction: {
+      title: "Over Coding Issues Reduction",
+      case: "Primary care center reduced overcoding issues by 70%", 
+      features: ["Over coding check"]
+    },
+    underCodingReduction: {
+      title: "Under Coding Issues Reduction",
+      case: "Primary care center reduced undercoding issues by 70%",
+      features: ["Under coding scan"]
+    }
   };
 
   // ROI meter calculation for visualization
@@ -73,9 +151,6 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
     { key: 'costOfCapital' as keyof ROIMetrics, label: 'Cost of Capital (%)' },
     { key: 'rvusCodedPerAnnum' as keyof ROIMetrics, label: 'RVUs Coded Per Year' },
     { key: 'weightedAverageGPCI' as keyof ROIMetrics, label: 'Weighted Average GPCI' },
-    { key: 'overCodingPercent' as keyof ROIMetrics, label: 'Over Coding (%)' },
-    { key: 'underCodingPercent' as keyof ROIMetrics, label: 'Under Coding (%)' },
-    { key: 'avgBillableCodesPerChart' as keyof ROIMetrics, label: 'Avg Billable Codes Per Chart' },
   ];
 
   return (
@@ -244,7 +319,7 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
           <CollapsibleTrigger asChild>
             <Button variant="outline" className="w-full mb-6 bg-white border-border">
               <Settings className="h-4 w-4 mr-2" />
-              Advanced Inputs & Assumptions
+              Advanced Inputs
               {isAdvancedOpen ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
             </Button>
           </CollapsibleTrigger>
@@ -261,6 +336,70 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
                   />
                 </div>
               ))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Assumptions & Levers (Collapsible) */}
+        <Collapsible open={isAssumptionsOpen} onOpenChange={setIsAssumptionsOpen}>
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" className="w-full mb-6 bg-white border-border">
+              <Target className="h-4 w-4 mr-2" />
+              RapidClaims AI Impact Levers & Assumptions
+              {isAssumptionsOpen ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {Object.entries(leverDescriptions).map(([key, description]) => {
+                const leverKey = key as keyof typeof leversData;
+                const currentLevel = confidenceLevels[leverKey] as 'low' | 'medium' | 'high';
+                const currentValue = leversData[leverKey][currentLevel];
+                
+                return (
+                  <div key={key} className="p-4 bg-white border border-border rounded-lg space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-semibold text-foreground">{description.title}</h4>
+                      <Badge variant="outline" className="bg-white">
+                        {currentValue}%
+                      </Badge>
+                    </div>
+                    
+                    <p className="text-sm text-muted-foreground italic">
+                      "{description.case}"
+                    </p>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Key Features:</Label>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        {description.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-center gap-2">
+                            <div className="w-1 h-1 bg-primary rounded-full"></div>
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Confidence Level:</Label>
+                      <Select 
+                        value={currentLevel} 
+                        onValueChange={(value) => handleConfidenceLevelChange(leverKey, value)}
+                      >
+                        <SelectTrigger className="bg-white border-border">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                          <SelectItem value="low">Low ({leversData[leverKey].low}%)</SelectItem>
+                          <SelectItem value="medium">Medium ({leversData[leverKey].medium}%)</SelectItem>
+                          <SelectItem value="high">High ({leversData[leverKey].high}%)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </CollapsibleContent>
         </Collapsible>
