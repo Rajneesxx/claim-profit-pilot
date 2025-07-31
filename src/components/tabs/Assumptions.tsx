@@ -65,8 +65,8 @@ export const Assumptions = ({ metrics }: AssumptionsProps) => {
 
   return (
     <>
-      <CardHeader className="border-b border-gray-700">
-        <CardTitle className="flex items-center gap-2 text-white">
+      <CardHeader className="border-b border-border">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <BookOpen className="h-5 w-5" />
           Assumptions & References
         </CardTitle>
@@ -75,19 +75,19 @@ export const Assumptions = ({ metrics }: AssumptionsProps) => {
         {/* Key Assumptions */}
         <div className="space-y-8 mb-8">
           {assumptions.map((category, index) => (
-            <div key={index} className="bg-gray-800/30 rounded-lg p-6">
+            <div key={index} className="bg-muted rounded-lg p-6">
               <div className="flex items-center gap-3 mb-4">
-                <category.icon className="h-6 w-6 text-purple-400" />
-                <h3 className="text-xl font-semibold text-white">{category.category}</h3>
+                <category.icon className="h-6 w-6 text-primary" />
+                <h3 className="text-xl font-semibold text-foreground">{category.category}</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {category.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className="bg-gray-700/30 rounded-lg p-4">
+                  <div key={itemIndex} className="bg-background border border-border rounded-lg p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <span className="text-gray-300 text-sm">{item.label}</span>
-                      <span className="text-white font-semibold">{item.value}</span>
+                      <span className="text-muted-foreground text-sm">{item.label}</span>
+                      <span className="text-foreground font-semibold">{item.value}</span>
                     </div>
-                    <div className="text-gray-500 text-xs">{item.source}</div>
+                    <div className="text-muted-foreground text-xs">{item.source}</div>
                   </div>
                 ))}
               </div>
@@ -96,40 +96,40 @@ export const Assumptions = ({ metrics }: AssumptionsProps) => {
         </div>
 
         {/* Current Calculation Inputs */}
-        <div className="bg-gray-800/30 rounded-lg p-6 mb-8">
-          <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-muted rounded-lg p-6 mb-8">
+          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
             <FileText className="h-5 w-5" />
             Your Current Inputs
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-purple-900/20 border border-purple-700/50 rounded-lg p-4">
-              <div className="text-purple-400 text-sm mb-1">Annual Revenue</div>
-              <div className="text-white text-lg font-semibold">${metrics.revenueClaimed.toLocaleString()}</div>
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
+              <div className="text-primary text-sm mb-1">Annual Revenue</div>
+              <div className="text-foreground text-lg font-semibold">${metrics.revenueClaimed.toLocaleString()}</div>
             </div>
-            <div className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-4">
-              <div className="text-blue-400 text-sm mb-1">Number of Coders</div>
-              <div className="text-white text-lg font-semibold">{metrics.numberOfCoders}</div>
+            <div className="bg-info/10 border border-info/20 rounded-lg p-4">
+              <div className="text-info text-sm mb-1">Number of Coders</div>
+              <div className="text-foreground text-lg font-semibold">{metrics.numberOfCoders}</div>
             </div>
-            <div className="bg-red-900/20 border border-red-700/50 rounded-lg p-4">
-              <div className="text-red-400 text-sm mb-1">Claim Denial Rate</div>
-              <div className="text-white text-lg font-semibold">{metrics.claimDeniedPercent}%</div>
+            <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+              <div className="text-destructive text-sm mb-1">Claim Denial Rate</div>
+              <div className="text-foreground text-lg font-semibold">{metrics.claimDeniedPercent}%</div>
             </div>
           </div>
         </div>
 
         {/* References */}
-        <div className="bg-gray-800/30 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-white mb-4">Industry References</h3>
+        <div className="bg-muted rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-foreground mb-4">Industry References</h3>
           <div className="space-y-4">
             {references.map((ref, index) => (
-              <div key={index} className="border-l-4 border-purple-500 pl-4">
-                <div className="text-white font-medium mb-1">{ref.title}</div>
-                <div className="text-gray-300 text-sm mb-2">{ref.description}</div>
+              <div key={index} className="border-l-4 border-primary pl-4">
+                <div className="text-foreground font-medium mb-1">{ref.title}</div>
+                <div className="text-muted-foreground text-sm mb-2">{ref.description}</div>
                 <a 
                   href={ref.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-purple-400 hover:text-purple-300 text-sm underline"
+                  className="text-primary hover:text-primary/80 text-sm underline"
                 >
                   {ref.url}
                 </a>
@@ -139,9 +139,9 @@ export const Assumptions = ({ metrics }: AssumptionsProps) => {
         </div>
 
         {/* Disclaimer */}
-        <div className="mt-8 p-4 bg-yellow-900/20 border border-yellow-700/50 rounded-lg">
-          <div className="text-yellow-400 font-medium mb-2">Important Disclaimer</div>
-          <div className="text-gray-300 text-sm">
+        <div className="mt-8 p-4 bg-warning/10 border border-warning/20 rounded-lg">
+          <div className="text-warning font-medium mb-2">Important Disclaimer</div>
+          <div className="text-foreground text-sm">
             This calculator provides estimates based on industry benchmarks and your inputs. Actual results may vary 
             depending on your organization's specific circumstances, implementation approach, and market conditions. 
             We recommend consulting with our team for a detailed analysis tailored to your organization.
