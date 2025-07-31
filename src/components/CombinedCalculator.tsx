@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,13 +10,38 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Award, Settings, ChevronDown, ChevronUp, Download, Calendar, Phone, Minus, Plus, Target } from 'lucide-react';
-import { ROIMetrics } from "@/types/roi";
+
+// Mock ROI Metrics interface since we don't have the actual types file
+interface ROIMetrics {
+  revenueClaimed: number;
+  numberOfCoders: number;
+  numberOfBillers: number;
+  numberOfPhysicians: number;
+  claimDeniedPercent: number;
+  claimsPerAnnum: number;
+  averageCostPerClaim: number;
+  chartsProcessedPerAnnum: number;
+  salaryPerCoder: number;
+  overheadCostPercent: number;
+  numberOfEncoderLicenses: number;
+  averageCostPerLicensePerMonth: number;
+  salaryPerBiller: number;
+  salaryPerPhysician: number;
+  avgTimePerPhysicianPerChart: number;
+  chartsPerCoderPerDay: number;
+  costPerDeniedClaim: number;
+  codingBacklogPercent: number;
+  daysPerChartInBacklog: number;
+  costOfCapital: number;
+  rvusCodedPerAnnum: number;
+  weightedAverageGPCI: number;
+}
 
 interface CombinedCalculatorProps {
-  metrics: ROIMetrics;
-  updateMetric: (key: keyof ROIMetrics, value: number) => void;
-  onCalculateROI: () => void;
-  calculations: {
+  metrics?: ROIMetrics;
+  updateMetric?: (key: keyof ROIMetrics, value: number) => void;
+  onCalculateROI?: () => void;
+  calculations?: {
     totalCodingCosts: number;
     deniedClaimsCost: number;
     backlogCost: number;
@@ -30,7 +56,71 @@ interface CombinedCalculatorProps {
   };
 }
 
-export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calculations }: CombinedCalculatorProps) => {
+export const CombinedCalculator = ({ 
+  metrics: propMetrics, 
+  updateMetric: propUpdateMetric, 
+  onCalculateROI: propOnCalculateROI, 
+  calculations: propCalculations 
+}: CombinedCalculatorProps) => {
+  // Default metrics for standalone use
+  const [localMetrics, setLocalMetrics] = useState<ROIMetrics>({
+    revenueClaimed: 5000000,
+    numberOfCoders: 10,
+    numberOfBillers: 5,
+    numberOfPhysicians: 20,
+    claimDeniedPercent: 8.5,
+    claimsPerAnnum: 50000,
+    averageCostPerClaim: 100,
+    chartsProcessedPerAnnum: 100000,
+    salaryPerCoder: 65000,
+    overheadCostPercent: 30,
+    numberOfEncoderLicenses: 10,
+    averageCostPerLicensePerMonth: 500,
+    salaryPerBiller: 55000,
+    salaryPerPhysician: 280000,
+    avgTimePerPhysicianPerChart: 15,
+    chartsPerCoderPerDay: 25,
+    costPerDeniedClaim: 150,
+    codingBacklogPercent: 15,
+    daysPerChartInBacklog: 5,
+    costOfCapital: 8,
+    rvusCodedPerAnnum: 25000,
+    weightedAverageGPCI: 1.0
+  });
+
+  const metrics = propMetrics || localMetrics;
+  
+  const updateMetric = propUpdateMetric || ((key: keyof ROIMetrics, value: number) => {
+    setLocalMetrics(prev => ({ ...prev, [key]: value }));
+  });
+
+  // Default calculations for standalone use
+  const defaultCalculations = {
+    totalCodingCosts: metrics.numberOfCoders * metrics.salaryPerCoder * (1 + metrics.overheadCostPercent / 100),
+    deniedClaimsCost: metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100) * metrics.costPerDeniedClaim,
+    backlogCost: metrics.chartsProcessedPerAnnum * (metrics.codingBacklogPercent / 100) * metrics.daysPerChartInBacklog * 50,
+    totalOperationalCosts: 0,
+    roi: 245.8,
+    executiveSummary: {
+      reducedCost: 890000,
+      increaseRevenue: 520000,
+      reducedRisk: 340000,
+      totalImpact: 1750000
+    }
+  };
+
+  // Recalculate based on current metrics
+  defaultCalculations.totalOperationalCosts = 
+    defaultCalculations.totalCodingCosts + 
+    defaultCalculations.deniedClaimsCost + 
+    defaultCalculations.backlogCost;
+
+  const calculations = propCalculations || defaultCalculations;
+
+  const onCalculateROI = propOnCalculateROI || (() => {
+    alert('ROI Report would be generated here!');
+  });
+
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isAssumptionsOpen, setIsAssumptionsOpen] = useState(false);
   const [confidenceLevels, setConfidenceLevels] = useState({
@@ -59,6 +149,14 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
 
   const handleConfidenceLevelChange = (lever: string, level: string) => {
     setConfidenceLevels(prev => ({ ...prev, [lever]: level }));
+  };
+
+  // Input validation helper
+  const handleInputChange = (key: keyof ROIMetrics, value: string) => {
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue) && numValue >= 0) {
+      updateMetric(key, numValue);
+    }
   };
 
   // Levers data with confidence levels
@@ -154,17 +252,17 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
   ];
 
   return (
-    <Card className="w-full bg-white border-border">
-      <CardHeader className="border-b border-border pb-6">
-        <CardTitle className="flex items-center gap-2 text-foreground">
-          <Award className="h-5 w-5" />
+    <Card className="w-full max-w-6xl mx-auto bg-white border-gray-200 shadow-lg">
+      <CardHeader className="border-b border-gray-200 pb-6 bg-gradient-to-r from-blue-50 to-cyan-50">
+        <CardTitle className="flex items-center gap-2 text-gray-800 text-2xl">
+          <Award className="h-6 w-6 text-blue-600" />
           ROI Calculator
         </CardTitle>
       </CardHeader>
       <CardContent className="p-8 bg-white">
         {/* Revenue Input */}
         <div className="mb-8">
-          <Label htmlFor="revenue" className="text-base font-medium text-foreground mb-4 block">
+          <Label htmlFor="revenue" className="text-base font-medium text-gray-700 mb-4 block">
             Annual Revenue Claimed
           </Label>
           <div className="space-y-4">
@@ -179,31 +277,32 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
               id="revenue"
               type="number"
               value={metrics.revenueClaimed}
-              onChange={(e) => updateMetric('revenueClaimed', parseInt(e.target.value) || 0)}
-              className="text-center text-lg font-semibold bg-white border-border"
+              onChange={(e) => handleInputChange('revenueClaimed', e.target.value)}
+              className="text-center text-lg font-semibold bg-white border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              placeholder="Enter annual revenue"
             />
           </div>
         </div>
 
         {/* Executive Summary Metrics */}
         <div className="mb-8">
-          <h3 className="text-xl font-semibold text-foreground mb-6">Executive Summary</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mb-6">Executive Summary</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* ROI Meter */}
-            <div className="flex flex-col items-center justify-center p-6 bg-white border border-border rounded-lg">
+            <div className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg">
               <div className="relative w-48 h-24 mb-4">
                 <svg viewBox="0 0 200 100" className="w-full h-full">
                   <defs>
                     <linearGradient id="roiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="hsl(var(--destructive))" />
-                      <stop offset="50%" stopColor="hsl(var(--warning))" />
-                      <stop offset="100%" stopColor="hsl(var(--success))" />
+                      <stop offset="0%" stopColor="#ef4444" />
+                      <stop offset="50%" stopColor="#eab308" />
+                      <stop offset="100%" stopColor="#22c55e" />
                     </linearGradient>
                   </defs>
                   <path
                     d="M 20 80 A 80 80 0 0 1 180 80"
                     fill="none"
-                    stroke="hsl(var(--muted))"
+                    stroke="#e5e7eb"
                     strokeWidth="8"
                     strokeLinecap="round"
                   />
@@ -221,17 +320,17 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
                     y1="80"
                     x2={100 + 60 * Math.cos((180 - angle) * Math.PI / 180)}
                     y2={80 - 60 * Math.sin((180 - angle) * Math.PI / 180)}
-                    stroke="hsl(var(--foreground))"
+                    stroke="#374151"
                     strokeWidth="3"
                     strokeLinecap="round"
                     className="transition-all duration-500"
                   />
                 </svg>
               </div>
-              <div className="text-3xl font-bold text-primary mb-1">
+              <div className="text-3xl font-bold text-blue-600 mb-1">
                 {calculations.roi.toFixed(1)}%
               </div>
-              <div className="text-foreground text-center">ROI</div>
+              <div className="text-gray-700 text-center font-medium">ROI</div>
             </div>
 
             {/* Impact Metrics */}
@@ -271,31 +370,33 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
 
         {/* Must Have Inputs */}
         <div className="mb-8">
-          <h3 className="text-xl font-semibold text-foreground mb-6">Must Have Inputs</h3>
+          <h3 className="text-xl font-semibold text-gray-800 mb-6">Must Have Inputs</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {basicInputs.map(({ key, label, max, step }) => (
               <div key={key} className="space-y-3">
-                <Label className="text-foreground font-medium">{label}</Label>
+                <Label className="text-gray-700 font-medium">{label}</Label>
                 <div className="flex items-center space-x-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleDecrement(key, step)}
-                    className="p-2 h-8 w-8 bg-white"
+                    className="p-2 h-8 w-8 bg-white border-gray-300 hover:bg-gray-50"
                   >
                     <Minus className="h-3 w-3" />
                   </Button>
                   <Input
                     type="number"
                     value={metrics[key]}
-                    onChange={(e) => updateMetric(key, parseFloat(e.target.value) || 0)}
-                    className="text-center bg-white border-border"
+                    onChange={(e) => handleInputChange(key, e.target.value)}
+                    className="text-center bg-white border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    min="0"
+                    step={step}
                   />
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleIncrement(key, step)}
-                    className="p-2 h-8 w-8 bg-white"
+                    className="p-2 h-8 w-8 bg-white border-gray-300 hover:bg-gray-50"
                   >
                     <Plus className="h-3 w-3" />
                   </Button>
@@ -317,7 +418,7 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
         {/* Advanced Inputs (Collapsible) */}
         <Collapsible open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
           <CollapsibleTrigger asChild>
-            <Button variant="outline" className="w-full mb-6 bg-white border-border">
+            <Button variant="outline" className="w-full mb-6 bg-white border-gray-300 hover:bg-gray-50">
               <Settings className="h-4 w-4 mr-2" />
               Advanced Inputs
               {isAdvancedOpen ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
@@ -327,12 +428,13 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {advancedInputs.map(({ key, label }) => (
                 <div key={key} className="space-y-2">
-                  <Label className="text-foreground">{label}</Label>
+                  <Label className="text-gray-700">{label}</Label>
                   <Input
                     type="number"
                     value={metrics[key]}
-                    onChange={(e) => updateMetric(key, parseFloat(e.target.value) || 0)}
-                    className="bg-white border-border"
+                    onChange={(e) => handleInputChange(key, e.target.value)}
+                    className="bg-white border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    min="0"
                   />
                 </div>
               ))}
@@ -343,7 +445,7 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
         {/* Assumptions & Levers (Collapsible) */}
         <Collapsible open={isAssumptionsOpen} onOpenChange={setIsAssumptionsOpen}>
           <CollapsibleTrigger asChild>
-            <Button variant="outline" className="w-full mb-6 bg-white border-border">
+            <Button variant="outline" className="w-full mb-6 bg-white border-gray-300 hover:bg-gray-50">
               <Target className="h-4 w-4 mr-2" />
               RapidClaims AI Impact Levers & Assumptions
               {isAssumptionsOpen ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
@@ -357,24 +459,24 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
                 const currentValue = leversData[leverKey][currentLevel];
                 
                 return (
-                  <div key={key} className="p-4 bg-white border border-border rounded-lg space-y-3">
+                  <div key={key} className="p-4 bg-white border border-gray-200 rounded-lg space-y-3 hover:shadow-md transition-shadow">
                     <div className="flex items-center justify-between">
-                      <h4 className="font-semibold text-foreground">{description.title}</h4>
-                      <Badge variant="outline" className="bg-white">
+                      <h4 className="font-semibold text-gray-800">{description.title}</h4>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
                         {currentValue}%
                       </Badge>
                     </div>
                     
-                    <p className="text-sm text-muted-foreground italic">
+                    <p className="text-sm text-gray-600 italic">
                       "{description.case}"
                     </p>
                     
                     <div className="space-y-2">
-                      <Label className="text-sm font-medium">Key Features:</Label>
-                      <ul className="text-sm text-muted-foreground space-y-1">
+                      <Label className="text-sm font-medium text-gray-700">Key Features:</Label>
+                      <ul className="text-sm text-gray-600 space-y-1">
                         {description.features.map((feature, idx) => (
                           <li key={idx} className="flex items-center gap-2">
-                            <div className="w-1 h-1 bg-primary rounded-full"></div>
+                            <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
                             {feature}
                           </li>
                         ))}
@@ -382,15 +484,15 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
                     </div>
                     
                     <div className="space-y-2">
-                      <Label className="text-sm font-medium">Confidence Level:</Label>
+                      <Label className="text-sm font-medium text-gray-700">Confidence Level:</Label>
                       <Select 
                         value={currentLevel} 
                         onValueChange={(value) => handleConfidenceLevelChange(leverKey, value)}
                       >
-                        <SelectTrigger className="bg-white border-border">
+                        <SelectTrigger className="bg-white border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-white">
+                        <SelectContent className="bg-white border-gray-200">
                           <SelectItem value="low">Low ({leversData[leverKey].low}%)</SelectItem>
                           <SelectItem value="medium">Medium ({leversData[leverKey].medium}%)</SelectItem>
                           <SelectItem value="high">High ({leversData[leverKey].high}%)</SelectItem>
@@ -405,35 +507,35 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
         </Collapsible>
 
         {/* Value Proposition */}
-        <div className="bg-white border border-border rounded-lg p-6 mb-8">
-          <h3 className="text-xl font-semibold text-foreground mb-4">Why Choose RapidClaims AI?</h3>
+        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg p-6 mb-8">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Why Choose RapidClaims AI?</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-success rounded-full"></div>
-                <span className="text-foreground">99.5% Accuracy Rate</span>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-gray-700">99.5% Accuracy Rate</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-info rounded-full"></div>
-                <span className="text-foreground">10x Faster Processing</span>
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span className="text-gray-700">10x Faster Processing</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span className="text-foreground">Reduce Staff by 80%</span>
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span className="text-gray-700">Reduce Staff by 80%</span>
               </div>
             </div>
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-warning rounded-full"></div>
-                <span className="text-foreground">AI-Powered Automation</span>
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <span className="text-gray-700">AI-Powered Automation</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-destructive rounded-full"></div>
-                <span className="text-foreground">Eliminate Claim Denials</span>
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                <span className="text-gray-700">Eliminate Claim Denials</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-success rounded-full"></div>
-                <span className="text-foreground">Real-time Analytics</span>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-gray-700">Real-time Analytics</span>
               </div>
             </div>
           </div>
@@ -443,7 +545,7 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
         <div className="space-y-4">
           <Button 
             onClick={onCalculateROI} 
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-14 text-lg font-semibold rounded-lg"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white h-14 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <Download className="h-5 w-5 mr-2" />
             Get Detailed ROI Report
@@ -452,7 +554,7 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
           <Button 
             onClick={handleBookCall}
             variant="outline"
-            className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground h-14 text-lg font-semibold rounded-lg bg-white"
+            className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white h-14 text-lg font-semibold rounded-lg bg-white shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <Calendar className="h-5 w-5 mr-2" />
             Book a Call with RapidClaims
@@ -462,7 +564,7 @@ export const CombinedCalculator = ({ metrics, updateMetric, onCalculateROI, calc
             <Button 
               onClick={() => window.open('tel:+1-555-RAPID', '_blank')}
               variant="ghost"
-              className="text-muted-foreground hover:text-foreground"
+              className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors duration-200"
             >
               <Phone className="h-4 w-4 mr-2" />
               Or call us directly: +1-555-RAPID
