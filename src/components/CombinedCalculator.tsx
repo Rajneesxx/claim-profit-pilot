@@ -103,64 +103,61 @@ export const CombinedCalculator = ({
     return baseValue * leverImpacts[leverKey][level];
   };
 
-  // Individual lever calculations - scaled to revenue size
+  // Individual lever calculations - more realistic scaling to revenue size
   const coderProductivitySavings = (() => {
-    const chartsPerYear = Math.min(metrics.chartsProcessedPerAnnum, metrics.revenueClaimed / 50); // Scale charts to revenue
-    const timePerChart = 0.2; // 12 minutes = 0.2 hours
-    const costPerCoderPerHour = (metrics.salaryPerCoder * (1 + metrics.overheadCostPercent / 100)) / (52 * 40);
+    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000); // Square root scaling for diminishing returns
+    const baseProductivity = 15000; // Base savings per coder
     const productivityIncrease = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
-    return chartsPerYear * (productivityIncrease / (1 + productivityIncrease)) * timePerChart * costPerCoderPerHour;
+    return baseProductivity * metrics.numberOfCoders * productivityIncrease * revenueScale;
   })();
 
   const billingAutomationSavings = (() => {
-    const reductionRate = leverImpacts.billingAutomation[leverLevels.billingAutomation as 'low' | 'medium' | 'high'];
-    const scaledBillers = Math.min(metrics.numberOfBillers, Math.max(1, metrics.revenueClaimed / 1000000)); // Scale to revenue
-    return scaledBillers * metrics.salaryPerBiller * reductionRate;
+    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
+    const baseBillingEfficiency = 12000; // Base savings per biller
+    const automationIncrease = leverImpacts.billingAutomation[leverLevels.billingAutomation as 'low' | 'medium' | 'high'];
+    return baseBillingEfficiency * metrics.numberOfBillers * automationIncrease * revenueScale;
   })();
 
   const physicianTimeSavings = (() => {
-    const chartsPerYear = Math.min(metrics.chartsProcessedPerAnnum, metrics.revenueClaimed / 50);
-    const hoursSavedPerChart = (metrics.avgTimePerPhysicianPerChart / 60) * 
-      leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
-    const hourlyPay = metrics.salaryPerPhysician / (52 * 40);
-    const scaledPhysicians = Math.min(metrics.numberOfPhysicians, Math.max(1, metrics.revenueClaimed / 250000));
-    return hoursSavedPerChart * chartsPerYear * scaledPhysicians * hourlyPay;
+    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
+    const baseTimeSavings = 8000; // Base savings per physician
+    const timeSavingMultiplier = leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
+    return baseTimeSavings * metrics.numberOfPhysicians * timeSavingMultiplier * revenueScale;
   })();
 
   const technologyCostSavings = (() => {
+    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
+    const baseTechSavings = metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12;
     const reductionRate = leverImpacts.technologyCostSaved[leverLevels.technologyCostSaved as 'low' | 'medium' | 'high'];
-    const scaledLicenses = Math.min(metrics.numberOfEncoderLicenses, Math.max(1, metrics.revenueClaimed / 500000));
-    return scaledLicenses * metrics.averageCostPerLicensePerMonth * 12 * reductionRate;
+    return baseTechSavings * reductionRate * Math.min(revenueScale, 2); // Cap scaling at 2x
   })();
 
   const claimDenialSavings = (() => {
+    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
+    const baseDenialCost = (metrics.revenueClaimed / 100) * (metrics.claimDeniedPercent / 100) * 0.05; // 5% of denied claims value
     const reductionRate = leverImpacts.claimDenialReduction[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high'];
-    const scaledClaims = Math.min(metrics.claimsPerAnnum, metrics.revenueClaimed / 100); // Scale claims to revenue
-    return scaledClaims * (metrics.claimDeniedPercent / 100) * reductionRate * metrics.costPerDeniedClaim;
+    return baseDenialCost * reductionRate * Math.min(revenueScale, 1.5); // Cap scaling
   })();
 
   const backlogReductionSavings = (() => {
+    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
+    const baseBacklogCost = (metrics.revenueClaimed * 0.001) * (metrics.codingBacklogPercent / 100); // 0.1% of revenue affected by backlog
     const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
-    const chartsPerYear = Math.min(metrics.chartsProcessedPerAnnum, metrics.revenueClaimed / 50);
-    const avgValuePerChart = metrics.averageCostPerClaim;
-    return chartsPerYear * (metrics.codingBacklogPercent / 100) * 
-      avgValuePerChart * (metrics.daysPerChartInBacklog / 365) * (metrics.costOfCapital / 100) * reductionRate;
+    return baseBacklogCost * reductionRate * Math.min(revenueScale, 1.5);
   })();
 
-  // Revenue increase from RVU optimization - scaled to revenue
+  // Revenue increase from RVU optimization - conservative scaling
   const rvuIncrease = (() => {
-    const incrementRate = 0.001; // 0.1% for low impact
-    const scaledRVUs = Math.min(metrics.rvusCodedPerAnnum, metrics.revenueClaimed / 200); // Scale RVUs to revenue
-    return scaledRVUs * incrementRate * metrics.weightedAverageGPCI * 36;
+    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
+    const baseRVUImprovement = metrics.revenueClaimed * 0.002; // 0.2% revenue improvement
+    return baseRVUImprovement * Math.min(revenueScale, 1.2); // Minimal scaling for revenue increases
   })();
 
-  // Over/Under coding reduction (risk mitigation) - scaled to revenue
+  // Over/Under coding reduction (risk mitigation) - scales with revenue
   const overCodingReduction = (() => {
-    const reductionRate = 0.8; // 80% reduction (medium impact)
-    const chartsPerYear = Math.min(metrics.chartsProcessedPerAnnum, metrics.revenueClaimed / 50);
-    const chartsWithOvercoding = chartsPerYear * (metrics.overCodingPercent / 100);
-    const complianceCostPerChart = 102; // Average compliance cost
-    return chartsWithOvercoding * reductionRate * complianceCostPerChart;
+    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
+    const baseComplianceSavings = metrics.revenueClaimed * 0.001; // 0.1% of revenue in compliance savings
+    return baseComplianceSavings * Math.min(revenueScale, 1.3);
   })();
 
   // Total calculations
