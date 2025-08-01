@@ -595,27 +595,6 @@ export const CombinedCalculator = ({
                 </Card>
               </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Impact Summary</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center p-4 bg-primary/10 rounded-lg">
-                      <div className="text-2xl font-bold text-primary">{totalCostSavings.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
-                      <div className="text-sm text-muted-foreground">Total Cost Savings</div>
-                    </div>
-                    <div className="text-center p-4 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                      <div className="text-2xl font-bold text-green-600">{totalRevenueIncrease.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
-                      <div className="text-sm text-muted-foreground">Revenue Increase</div>
-                    </div>
-                    <div className="text-center p-4 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                      <div className="text-2xl font-bold text-blue-600">{totalRiskReduction.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
-                      <div className="text-sm text-muted-foreground">Risk Reduction</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </TabsContent>
 
