@@ -166,6 +166,17 @@ export const CombinedCalculator = ({
   const implementationCostPercent = 0.02; // 2% of annual revenue as implementation cost
   const implementationCost = metrics.revenueClaimed * implementationCostPercent;
   const roi = implementationCost > 0 ? ((totalImpact / implementationCost) * 100) : 0;
+  
+  // Debug logs
+  console.log('ROI Calculation Debug:', {
+    revenueClaimed: metrics.revenueClaimed,
+    implementationCost,
+    totalImpact,
+    roi,
+    totalCostSavings,
+    totalRevenueIncrease,
+    totalRiskReduction
+  });
 
   const handleLeverLevelChange = (lever: string, level: string) => {
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
@@ -197,6 +208,14 @@ export const CombinedCalculator = ({
   // ROI meter calculation for visualization
   const roiPercentage = Math.min(Math.max(roi, 0), 1200);
   const angle = (roiPercentage / 1200) * 180;
+  
+  // Debug meter calculation
+  console.log('ROI Meter Debug:', {
+    roi,
+    roiPercentage,
+    angle,
+    strokeDasharray: `${(angle / 180) * 251.2} 251.2`
+  });
 
   const basicInputs = [
     { key: 'numberOfCoders' as keyof ROIMetrics, label: 'Number of Coders', max: 50, step: 1 },
@@ -304,6 +323,7 @@ export const CombinedCalculator = ({
                         strokeWidth="8"
                         strokeLinecap="round"
                         strokeDasharray={`${(angle / 180) * 251.2} 251.2`}
+                        key={`meter-${angle}`}
                         className="transition-all duration-500"
                       />
                       <line
@@ -314,6 +334,7 @@ export const CombinedCalculator = ({
                         stroke="#374151"
                         strokeWidth="3"
                         strokeLinecap="round"
+                        key={`needle-${angle}`}
                         className="transition-all duration-500"
                       />
                     </svg>
