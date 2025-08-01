@@ -171,13 +171,13 @@ export const CombinedCalculator = ({
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
   
   // ROI calculation - More realistic implementation cost model
-  const baseImplementationCost = 50000; // Base cost regardless of size
-  const variableImplementationCost = metrics.revenueClaimed * 0.005; // 0.5% of revenue
+  const baseImplementationCost = 100000; // Higher base cost for more realistic ROI
+  const variableImplementationCost = metrics.revenueClaimed * 0.02; // 2% of revenue for implementation
   const implementationCost = baseImplementationCost + variableImplementationCost;
   const roi = implementationCost > 0 ? ((totalImpact / implementationCost) * 100) : 0;
   
-  // Cap ROI at reasonable maximum (500%)
-  const cappedRoi = Math.min(roi,25000);
+  // Cap ROI at realistic maximum for healthcare implementations (300%)
+  const cappedRoi = Math.min(Math.max(roi, 0), 300);
 
   const handleLeverLevelChange = (lever: string, level: string) => {
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
@@ -206,9 +206,9 @@ export const CombinedCalculator = ({
     alert('ROI Report would be generated here!');
   });
 
-  // ROI meter calculation for visualization
-  const roiPercentage = Math.min(Math.max(cappedRoi, 0), 500);
-  const angle = (roiPercentage / 500) * 180;
+  // ROI meter calculation for visualization - scale to 300% max for realistic display
+  const roiPercentage = Math.min(Math.max(cappedRoi, 0), 300);
+  const angle = (roiPercentage / 300) * 180;
 
   const basicInputs = [
     { key: 'numberOfCoders' as keyof ROIMetrics, label: 'Number of Coders', max: 50, step: 1 },
