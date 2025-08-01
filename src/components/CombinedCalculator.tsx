@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,33 +8,10 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Award, Settings, ChevronDown, ChevronUp, Download, Calendar, Phone, Minus, Plus, Target } from 'lucide-react';
-
-// Mock ROI Metrics interface since we don't have the actual types file
-interface ROIMetrics {
-  revenueClaimed: number;
-  numberOfCoders: number;
-  numberOfBillers: number;
-  numberOfPhysicians: number;
-  claimDeniedPercent: number;
-  claimsPerAnnum: number;
-  averageCostPerClaim: number;
-  chartsProcessedPerAnnum: number;
-  salaryPerCoder: number;
-  overheadCostPercent: number;
-  numberOfEncoderLicenses: number;
-  averageCostPerLicensePerMonth: number;
-  salaryPerBiller: number;
-  salaryPerPhysician: number;
-  avgTimePerPhysicianPerChart: number;
-  chartsPerCoderPerDay: number;
-  costPerDeniedClaim: number;
-  codingBacklogPercent: number;
-  daysPerChartInBacklog: number;
-  costOfCapital: number;
-  rvusCodedPerAnnum: number;
-  weightedAverageGPCI: number;
-}
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ChevronDown, ChevronUp, Calculator, TrendingUp, DollarSign, Shield, Info, ExternalLink, Settings, BarChart3, Award, Target, Minus, Plus, Download, Calendar, Phone } from "lucide-react";
+import { ROIMetrics } from "@/types/roi";
+import { References } from "./tabs/References";
 
 interface CombinedCalculatorProps {
   metrics?: ROIMetrics;
@@ -85,7 +61,10 @@ export const CombinedCalculator = ({
     daysPerChartInBacklog: 5,
     costOfCapital: 8,
     rvusCodedPerAnnum: 25000,
-    weightedAverageGPCI: 1.0
+    weightedAverageGPCI: 1.0,
+    overCodingPercent: 5,
+    underCodingPercent: 8,
+    avgBillableCodesPerChart: 3.2
   });
 
   const metrics = propMetrics || localMetrics;
@@ -94,46 +73,104 @@ export const CombinedCalculator = ({
     setLocalMetrics(prev => ({ ...prev, [key]: value }));
   });
 
-  // Default calculations for standalone use
-  const defaultCalculations = {
-    totalCodingCosts: metrics.numberOfCoders * metrics.salaryPerCoder * (1 + metrics.overheadCostPercent / 100),
-    deniedClaimsCost: metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100) * metrics.costPerDeniedClaim,
-    backlogCost: metrics.chartsProcessedPerAnnum * (metrics.codingBacklogPercent / 100) * metrics.daysPerChartInBacklog * 50,
-    totalOperationalCosts: 0,
-    roi: 245.8,
-    executiveSummary: {
-      reducedCost: 890000,
-      increaseRevenue: 520000,
-      reducedRisk: 340000,
-      totalImpact: 1750000
-    }
-  };
-
-  // Recalculate based on current metrics
-  defaultCalculations.totalOperationalCosts = 
-    defaultCalculations.totalCodingCosts + 
-    defaultCalculations.deniedClaimsCost + 
-    defaultCalculations.backlogCost;
-
-  const calculations = propCalculations || defaultCalculations;
-
-  const onCalculateROI = propOnCalculateROI || (() => {
-    alert('ROI Report would be generated here!');
-  });
-
-  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
-  const [isAssumptionsOpen, setIsAssumptionsOpen] = useState(false);
-  const [confidenceLevels, setConfidenceLevels] = useState({
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showAssumptions, setShowAssumptions] = useState(false);
+  const [activeTab, setActiveTab] = useState("calculator");
+  
+  // Lever confidence levels (Medium as default)
+  const [leverLevels, setLeverLevels] = useState({
     coderProductivity: 'medium',
-    billingAutomation: 'medium',
+    billingAutomation: 'medium', 
     physicianTimeSaved: 'medium',
     technologyCostSaved: 'medium',
     claimDenialReduction: 'medium',
-    codingBacklog: 'medium',
-    increaseRVUs: 'medium',
-    overCodingReduction: 'medium',
-    underCodingReduction: 'medium',
+    codingBacklogElimination: 'medium'
   });
+
+  // Lever impact definitions
+  const leverImpacts = {
+    coderProductivity: { low: 0.4, medium: 0.8, high: 3.0 },
+    billingAutomation: { low: 0.5, medium: 0.7, high: 1.2 },
+    physicianTimeSaved: { low: 0.3, medium: 0.5, high: 0.7 },
+    technologyCostSaved: { low: 0.5, medium: 0.7, high: 1.0 },
+    claimDenialReduction: { low: 0.3, medium: 0.5, high: 0.7 },
+    codingBacklogElimination: { low: 0.6, medium: 0.8, high: 1.0 }
+  };
+
+  // Calculate lever impacts based on confidence levels
+  const calculateLeverImpact = (leverKey: keyof typeof leverImpacts, baseValue: number) => {
+    const level = leverLevels[leverKey] as 'low' | 'medium' | 'high';
+    return baseValue * leverImpacts[leverKey][level];
+  };
+
+  // Individual lever calculations
+  const coderProductivitySavings = (() => {
+    const chartsPerYear = metrics.chartsProcessedPerAnnum;
+    const timePerChart = 0.2; // 12 minutes = 0.2 hours
+    const costPerCoderPerHour = (metrics.salaryPerCoder * (1 + metrics.overheadCostPercent / 100)) / (52 * 40);
+    const productivityIncrease = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
+    return chartsPerYear * (productivityIncrease / (1 + productivityIncrease)) * timePerChart * costPerCoderPerHour;
+  })();
+
+  const billingAutomationSavings = (() => {
+    const reductionRate = leverImpacts.billingAutomation[leverLevels.billingAutomation as 'low' | 'medium' | 'high'];
+    return metrics.numberOfBillers * metrics.salaryPerBiller * reductionRate;
+  })();
+
+  const physicianTimeSavings = (() => {
+    const hoursSavedPerChart = (metrics.avgTimePerPhysicianPerChart / 60) * 
+      leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
+    const hourlyPay = metrics.salaryPerPhysician / (52 * 40);
+    return hoursSavedPerChart * metrics.chartsProcessedPerAnnum * metrics.numberOfPhysicians * hourlyPay;
+  })();
+
+  const technologyCostSavings = (() => {
+    const reductionRate = leverImpacts.technologyCostSaved[leverLevels.technologyCostSaved as 'low' | 'medium' | 'high'];
+    return metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12 * reductionRate;
+  })();
+
+  const claimDenialSavings = (() => {
+    const reductionRate = leverImpacts.claimDenialReduction[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high'];
+    return metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100) * reductionRate * metrics.costPerDeniedClaim;
+  })();
+
+  const backlogReductionSavings = (() => {
+    const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
+    const avgValuePerChart = metrics.averageCostPerClaim;
+    return metrics.chartsProcessedPerAnnum * (metrics.codingBacklogPercent / 100) * 
+      avgValuePerChart * (metrics.daysPerChartInBacklog / 365) * (metrics.costOfCapital / 100) * reductionRate;
+  })();
+
+  // Revenue increase from RVU optimization
+  const rvuIncrease = (() => {
+    const incrementRate = 0.001; // 0.1% for low impact
+    return metrics.rvusCodedPerAnnum * incrementRate * metrics.weightedAverageGPCI * 36;
+  })();
+
+  // Over/Under coding reduction (risk mitigation)
+  const overCodingReduction = (() => {
+    const reductionRate = 0.8; // 80% reduction (medium impact)
+    const chartsWithOvercoding = metrics.chartsProcessedPerAnnum * (metrics.overCodingPercent / 100);
+    const complianceCostPerChart = 102; // Average compliance cost
+    return chartsWithOvercoding * reductionRate * complianceCostPerChart;
+  })();
+
+  // Total calculations
+  const totalCostSavings = coderProductivitySavings + billingAutomationSavings + physicianTimeSavings + 
+    technologyCostSavings + claimDenialSavings + backlogReductionSavings;
+  const totalRevenueIncrease = rvuIncrease;
+  const totalRiskReduction = overCodingReduction;
+  const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
+  
+  // ROI calculation
+  const totalCurrentCosts = (metrics.numberOfCoders * metrics.salaryPerCoder * (1 + metrics.overheadCostPercent / 100)) + 
+    (metrics.numberOfBillers * metrics.salaryPerBiller) + 
+    (metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12);
+  const roi = totalCurrentCosts > 0 ? ((totalImpact / totalCurrentCosts) * 100) : 0;
+
+  const handleLeverLevelChange = (lever: string, level: string) => {
+    setLeverLevels(prev => ({ ...prev, [lever]: level }));
+  };
 
   const handleBookCall = () => {
     window.open('https://calendly.com/rapidclaims', '_blank');
@@ -147,11 +184,6 @@ export const CombinedCalculator = ({
     updateMetric(key, Math.max(0, metrics[key] - step));
   };
 
-  const handleConfidenceLevelChange = (lever: string, level: string) => {
-    setConfidenceLevels(prev => ({ ...prev, [lever]: level }));
-  };
-
-  // Input validation helper
   const handleInputChange = (key: keyof ROIMetrics, value: string) => {
     const numValue = parseFloat(value);
     if (!isNaN(numValue) && numValue >= 0) {
@@ -159,69 +191,12 @@ export const CombinedCalculator = ({
     }
   };
 
-  // Levers data with confidence levels
-  const leversData = {
-    coderProductivity: { low: 40, medium: 80, high: 300 },
-    billingAutomation: { low: 50, medium: 70, high: 120 },
-    physicianTimeSaved: { low: 30, medium: 50, high: 70 },
-    technologyCostSaved: { low: 50, medium: 70, high: 100 },
-    claimDenialReduction: { low: 30, medium: 50, high: 70 },
-    codingBacklog: { low: 60, medium: 80, high: 100 },
-    increaseRVUs: { low: 0.1, medium: 0.5, high: 1.5 },
-    overCodingReduction: { low: 50, medium: 80, high: 100 },
-    underCodingReduction: { low: 50, medium: 80, high: 100 },
-  };
-
-  const leverDescriptions = {
-    coderProductivity: {
-      title: "Coder Productivity",
-      case: "Primary care center improves coding productivity per coder by 90%",
-      features: ["Autonomous coding", "User friendly UI and managed workflow", "Easy code search"]
-    },
-    billingAutomation: {
-      title: "Billing Automation", 
-      case: "Clinic replaced manual charge entry; 40% fewer billing FTEs",
-      features: ["AI charge‑capture", "e‑claim builder", "auto ERA posting"]
-    },
-    physicianTimeSaved: {
-      title: "Physician Time Saved",
-      case: "Clinic cut chart‑related physician queries by 30% in 6 months", 
-      features: ["Inline AI code suggestions", "One‑click query approval", "E/M prompts inside the note"]
-    },
-    technologyCostSaved: {
-      title: "Technology Cost Saved",
-      case: "Health system retired legacy encoder; USD 150k licence cost removed",
-      features: ["Single cloud platform", "Usage‑based pricing"]
-    },
-    claimDenialReduction: {
-      title: "Claim Denial Reduction",
-      case: "MSO managing primary care center sees 15% reduction in claim denials",
-      features: ["NCCI edits check", "MCD check", "ICD conflict"]
-    },
-    codingBacklog: {
-      title: "Coding Backlog Elimination", 
-      case: "ASC clinic eliminates code backlog from 28% to 0%",
-      features: ["E2E connectivity with EHR platform", "E2E connectivity with Billing system"]
-    },
-    increaseRVUs: {
-      title: "Increase in RVUs",
-      case: "Nephrology center identifies incremental opportunity with >95% of level 3s to be level 4s",
-      features: ["E&M scoring module"]
-    },
-    overCodingReduction: {
-      title: "Over Coding Issues Reduction",
-      case: "Primary care center reduced overcoding issues by 70%", 
-      features: ["Over coding check"]
-    },
-    underCodingReduction: {
-      title: "Under Coding Issues Reduction",
-      case: "Primary care center reduced undercoding issues by 70%",
-      features: ["Under coding scan"]
-    }
-  };
+  const onCalculateROI = propOnCalculateROI || (() => {
+    alert('ROI Report would be generated here!');
+  });
 
   // ROI meter calculation for visualization
-  const roiPercentage = Math.min(Math.max(calculations.roi, 0), 1200);
+  const roiPercentage = Math.min(Math.max(roi, 0), 1200);
   const angle = (roiPercentage / 1200) * 180;
 
   const basicInputs = [
@@ -252,325 +227,386 @@ export const CombinedCalculator = ({
   ];
 
   return (
-    <Card className="w-full max-w-6xl mx-auto bg-white border-gray-200 shadow-lg">
-      <CardHeader className="border-b border-gray-200 pb-6 bg-gradient-to-r from-blue-50 to-cyan-50">
-        <CardTitle className="flex items-center gap-2 text-gray-800 text-2xl">
-          <Award className="h-6 w-6 text-blue-600" />
-          ROI Calculator
+    <Card className="w-full max-w-6xl mx-auto">
+      <CardHeader className="text-center">
+        <CardTitle className="flex items-center justify-center gap-2 text-2xl">
+          <Calculator className="h-6 w-6" />
+          RapidClaims ROI Calculator
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-8 bg-white">
-        {/* Revenue Input */}
-        <div className="mb-8">
-          <Label htmlFor="revenue" className="text-base font-medium text-gray-700 mb-4 block">
-            Annual Revenue Claimed
-          </Label>
-          <div className="space-y-4">
-            <Slider
-              value={[metrics.revenueClaimed]}
-              onValueChange={(value) => updateMetric('revenueClaimed', value[0])}
-              max={50000000}
-              step={100000}
-              className="w-full"
-            />
-            <Input
-              id="revenue"
-              type="number"
-              value={metrics.revenueClaimed}
-              onChange={(e) => handleInputChange('revenueClaimed', e.target.value)}
-              className="text-center text-lg font-semibold bg-white border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-              placeholder="Enter annual revenue"
-            />
-          </div>
-        </div>
+      <CardContent>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="calculator" className="flex items-center gap-2">
+              <Calculator className="h-4 w-4" />
+              Calculator
+            </TabsTrigger>
+            <TabsTrigger value="assumptions" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Assumptions & Levers
+            </TabsTrigger>
+            <TabsTrigger value="references" className="flex items-center gap-2">
+              <ExternalLink className="h-4 w-4" />
+              References
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Executive Summary Metrics */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold text-gray-800 mb-6">Executive Summary</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            {/* ROI Meter */}
-            <div className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg">
-              <div className="relative w-48 h-24 mb-4">
-                <svg viewBox="0 0 200 100" className="w-full h-full">
-                  <defs>
-                    <linearGradient id="roiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#ef4444" />
-                      <stop offset="50%" stopColor="#eab308" />
-                      <stop offset="100%" stopColor="#22c55e" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 20 80 A 80 80 0 0 1 180 80"
-                    fill="none"
-                    stroke="#e5e7eb"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M 20 80 A 80 80 0 0 1 180 80"
-                    fill="none"
-                    stroke="url(#roiGradient)"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                    strokeDasharray={`${(angle / 180) * 251.2} 251.2`}
-                    className="transition-all duration-500"
-                  />
-                  <line
-                    x1="100"
-                    y1="80"
-                    x2={100 + 60 * Math.cos((180 - angle) * Math.PI / 180)}
-                    y2={80 - 60 * Math.sin((180 - angle) * Math.PI / 180)}
-                    stroke="#374151"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    className="transition-all duration-500"
-                  />
-                </svg>
+          <TabsContent value="calculator" className="space-y-6">
+            {/* Annual Revenue Section */}
+            <div className="mb-8">
+              <Label htmlFor="revenue" className="text-base font-medium text-gray-700 mb-4 block">
+                Annual Revenue Claimed
+              </Label>
+              <div className="space-y-4">
+                <Slider
+                  value={[metrics.revenueClaimed]}
+                  onValueChange={(value) => updateMetric('revenueClaimed', value[0])}
+                  max={50000000}
+                  step={100000}
+                  className="w-full"
+                />
+                <Input
+                  id="revenue"
+                  type="number"
+                  value={metrics.revenueClaimed}
+                  onChange={(e) => handleInputChange('revenueClaimed', e.target.value)}
+                  className="text-center text-lg font-semibold"
+                  placeholder="Enter annual revenue"
+                />
               </div>
-              <div className="text-3xl font-bold text-blue-600 mb-1">
-                {calculations.roi.toFixed(1)}%
-              </div>
-              <div className="text-gray-700 text-center font-medium">ROI</div>
             </div>
 
-            {/* Impact Metrics */}
-            <div className="space-y-4">
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="text-lg font-semibold text-blue-600 mb-1">Reduced Cost</div>
-                <div className="text-2xl font-bold text-blue-800">
-                  ${calculations.executiveSummary.reducedCost.toLocaleString()}
+            {/* Executive Summary Metrics */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-6">Executive Summary</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                {/* ROI Meter */}
+                <div className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg">
+                  <div className="relative w-48 h-24 mb-4">
+                    <svg viewBox="0 0 200 100" className="w-full h-full">
+                      <defs>
+                        <linearGradient id="roiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#ef4444" />
+                          <stop offset="50%" stopColor="#eab308" />
+                          <stop offset="100%" stopColor="#22c55e" />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        d="M 20 80 A 80 80 0 0 1 180 80"
+                        fill="none"
+                        stroke="#e5e7eb"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M 20 80 A 80 80 0 0 1 180 80"
+                        fill="none"
+                        stroke="url(#roiGradient)"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        strokeDasharray={`${(angle / 180) * 251.2} 251.2`}
+                        className="transition-all duration-500"
+                      />
+                      <line
+                        x1="100"
+                        y1="80"
+                        x2={100 + 60 * Math.cos((180 - angle) * Math.PI / 180)}
+                        y2={80 - 60 * Math.sin((180 - angle) * Math.PI / 180)}
+                        stroke="#374151"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        className="transition-all duration-500"
+                      />
+                    </svg>
+                  </div>
+                  <div className="text-3xl font-bold text-blue-600 mb-1">
+                    {roi.toFixed(1)}%
+                  </div>
+                  <div className="text-gray-700 text-center font-medium">ROI</div>
+                </div>
+
+                {/* Impact Metrics */}
+                <div className="space-y-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-primary">{totalCostSavings.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
+                    <div className="text-sm text-muted-foreground">Reduced Cost</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-green-600">{totalRevenueIncrease.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
+                    <div className="text-sm text-muted-foreground">Increased Revenue</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blue-600">{totalRiskReduction.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
+                    <div className="text-sm text-muted-foreground">Reduced Risk</div>
+                  </div>
                 </div>
               </div>
-              <div className="p-4 bg-cyan-50 border border-cyan-200 rounded-lg">
-                <div className="text-lg font-semibold text-cyan-600 mb-1">Increased Revenue</div>
-                <div className="text-2xl font-bold text-cyan-800">
-                  ${calculations.executiveSummary.increaseRevenue.toLocaleString()}
+
+              <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="text-lg font-semibold text-yellow-600 mb-1">Total Impact</div>
+                <div className="text-3xl font-bold text-yellow-800">
+                  {totalImpact.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
-              <div className="text-lg font-semibold text-purple-600 mb-1">Reduced Risk</div>
-              <div className="text-2xl font-bold text-purple-800">
-                ${calculations.executiveSummary.reducedRisk.toLocaleString()}
-              </div>
-            </div>
-            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <div className="text-lg font-semibold text-yellow-600 mb-1">Total Impact</div>
-              <div className="text-2xl font-bold text-yellow-800">
-                ${calculations.executiveSummary.totalImpact.toLocaleString()}
-              </div>
-            </div>
-          </div>
-        </div>
+            <Separator className="my-8" />
 
-        <Separator className="my-8" />
-
-        {/* Must Have Inputs */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold text-gray-800 mb-6">Must Have Inputs</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {basicInputs.map(({ key, label, max, step }) => (
-              <div key={key} className="space-y-3">
-                <Label className="text-gray-700 font-medium">{label}</Label>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDecrement(key, step)}
-                    className="p-2 h-8 w-8 bg-white border-gray-300 hover:bg-gray-50"
-                  >
-                    <Minus className="h-3 w-3" />
-                  </Button>
-                  <Input
-                    type="number"
-                    value={metrics[key]}
-                    onChange={(e) => handleInputChange(key, e.target.value)}
-                    className="text-center bg-white border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                    min="0"
-                    step={step}
-                  />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleIncrement(key, step)}
-                    className="p-2 h-8 w-8 bg-white border-gray-300 hover:bg-gray-50"
-                  >
-                    <Plus className="h-3 w-3" />
-                  </Button>
-                </div>
-                {max && (
-                  <Slider
-                    value={[metrics[key]]}
-                    onValueChange={(value) => updateMetric(key, value[0])}
-                    max={max}
-                    step={step}
-                    className="w-full"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Advanced Inputs (Collapsible) */}
-        <Collapsible open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
-          <CollapsibleTrigger asChild>
-            <Button variant="outline" className="w-full mb-6 bg-white border-gray-300 hover:bg-gray-50">
-              <Settings className="h-4 w-4 mr-2" />
-              Advanced Inputs
-              {isAdvancedOpen ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {advancedInputs.map(({ key, label }) => (
-                <div key={key} className="space-y-2">
-                  <Label className="text-gray-700">{label}</Label>
-                  <Input
-                    type="number"
-                    value={metrics[key]}
-                    onChange={(e) => handleInputChange(key, e.target.value)}
-                    className="bg-white border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                    min="0"
-                  />
-                </div>
-              ))}
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* Assumptions & Levers (Collapsible) */}
-        <Collapsible open={isAssumptionsOpen} onOpenChange={setIsAssumptionsOpen}>
-          <CollapsibleTrigger asChild>
-            <Button variant="outline" className="w-full mb-6 bg-white border-gray-300 hover:bg-gray-50">
-              <Target className="h-4 w-4 mr-2" />
-              RapidClaims AI Impact Levers & Assumptions
-              {isAssumptionsOpen ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {Object.entries(leverDescriptions).map(([key, description]) => {
-                const leverKey = key as keyof typeof leversData;
-                const currentLevel = confidenceLevels[leverKey] as 'low' | 'medium' | 'high';
-                const currentValue = leversData[leverKey][currentLevel];
-                
-                return (
-                  <div key={key} className="p-4 bg-white border border-gray-200 rounded-lg space-y-3 hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-semibold text-gray-800">{description.title}</h4>
-                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                        {currentValue}%
-                      </Badge>
-                    </div>
-                    
-                    <p className="text-sm text-gray-600 italic">
-                      "{description.case}"
-                    </p>
-                    
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700">Key Features:</Label>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        {description.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-center gap-2">
-                            <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700">Confidence Level:</Label>
-                      <Select 
-                        value={currentLevel} 
-                        onValueChange={(value) => handleConfidenceLevelChange(leverKey, value)}
+            {/* Must Have Inputs */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-6">Must Have Inputs</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {basicInputs.map(({ key, label, max, step }) => (
+                  <div key={key} className="space-y-3">
+                    <Label>{label}</Label>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDecrement(key, step)}
+                        className="p-2 h-8 w-8"
                       >
-                        <SelectTrigger className="bg-white border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                        <Minus className="h-3 w-3" />
+                      </Button>
+                      <Input
+                        type="number"
+                        value={metrics[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className="text-center"
+                        min="0"
+                        step={step}
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleIncrement(key, step)}
+                        className="p-2 h-8 w-8"
+                      >
+                        <Plus className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    {max && (
+                      <Slider
+                        value={[metrics[key]]}
+                        onValueChange={(value) => updateMetric(key, value[0])}
+                        max={max}
+                        step={step}
+                        className="w-full"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Advanced Inputs (Collapsible) */}
+            <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+              <CollapsibleTrigger asChild>
+                <Button variant="outline" className="w-full mb-6">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Advanced Inputs
+                  {showAdvanced ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {advancedInputs.map(({ key, label }) => (
+                    <div key={key} className="space-y-2">
+                      <Label>{label}</Label>
+                      <Input
+                        type="number"
+                        value={metrics[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        min="0"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* CTA Buttons */}
+            <div className="space-y-4">
+              <Button 
+                onClick={onCalculateROI} 
+                className="w-full h-14 text-lg font-semibold"
+              >
+                <Download className="h-5 w-5 mr-2" />
+                Get Detailed ROI Report
+              </Button>
+              
+              <Button 
+                onClick={handleBookCall}
+                variant="outline"
+                className="w-full h-14 text-lg font-semibold"
+              >
+                <Calendar className="h-5 w-5 mr-2" />
+                Book a Call with RapidClaims
+              </Button>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="assumptions" className="space-y-6">
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Impact Lever Configuration</h3>
+                <p className="text-muted-foreground mb-6">
+                  Adjust the confidence levels for each impact lever based on your organization's readiness and implementation approach.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Operational Efficiency Levers</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Coder Productivity</Label>
+                      <Select value={leverLevels.coderProductivity} onValueChange={(value) => handleLeverLevelChange('coderProductivity', value)}>
+                        <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-gray-200">
-                          <SelectItem value="low">Low ({leversData[leverKey].low}%)</SelectItem>
-                          <SelectItem value="medium">Medium ({leversData[leverKey].medium}%)</SelectItem>
-                          <SelectItem value="high">High ({leversData[leverKey].high}%)</SelectItem>
+                        <SelectContent>
+                          <SelectItem value="low">Low (40% improvement) - ${coderProductivitySavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="medium">Medium (80% improvement) - ${coderProductivitySavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="high">High (300% improvement) - ${coderProductivitySavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
                         </SelectContent>
                       </Select>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <p><strong>Features:</strong> Autonomous coding, user-friendly UI, easy code search</p>
+                        <p><strong>Case Study:</strong> Primary care center (90% improvement), RCM provider (120% improvement)</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Billing Automation</Label>
+                      <Select value={leverLevels.billingAutomation} onValueChange={(value) => handleLeverLevelChange('billingAutomation', value)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="low">Low (50% improvement) - ${billingAutomationSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="medium">Medium (70% improvement) - ${billingAutomationSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="high">High (120% improvement) - ${billingAutomationSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <p><strong>Features:</strong> AI charge-capture, e-claim builder, auto ERA posting</p>
+                        <p><strong>Case Study:</strong> Clinic reduced billing FTEs by 40% after replacing manual charge entry</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Physician Time Saved</Label>
+                      <Select value={leverLevels.physicianTimeSaved} onValueChange={(value) => handleLeverLevelChange('physicianTimeSaved', value)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="low">Low (30% improvement) - ${physicianTimeSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="medium">Medium (50% improvement) - ${physicianTimeSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="high">High (70% improvement) - ${physicianTimeSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <p><strong>Features:</strong> Inline AI code suggestions, one-click query approval, E/M prompts</p>
+                        <p><strong>Case Study:</strong> Clinic cut chart-related physician queries by 30% in 6 months</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Cost & Risk Reduction Levers</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Technology Cost Saved</Label>
+                      <Select value={leverLevels.technologyCostSaved} onValueChange={(value) => handleLeverLevelChange('technologyCostSaved', value)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="low">Low (50% savings) - ${technologyCostSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="medium">Medium (70% savings) - ${technologyCostSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="high">High (100% savings) - ${technologyCostSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <p><strong>Features:</strong> Single cloud platform, usage-based pricing</p>
+                        <p><strong>Case Study:</strong> Health system retired legacy encoder, removing $150k license cost</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Claim Denial Reduction</Label>
+                      <Select value={leverLevels.claimDenialReduction} onValueChange={(value) => handleLeverLevelChange('claimDenialReduction', value)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="low">Low (30% reduction) - ${claimDenialSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="medium">Medium (50% reduction) - ${claimDenialSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="high">High (70% reduction) - ${claimDenialSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <p><strong>Features:</strong> NCCI edits check, MCD check, ICD conflict detection</p>
+                        <p><strong>Case Study:</strong> MSO managing primary care center achieved 15% reduction in claim denials</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Coding Backlog Elimination</Label>
+                      <Select value={leverLevels.codingBacklogElimination} onValueChange={(value) => handleLeverLevelChange('codingBacklogElimination', value)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="low">Low (60% reduction) - ${backlogReductionSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="medium">Medium (80% reduction) - ${backlogReductionSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="high">High (100% elimination) - ${backlogReductionSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <p><strong>Features:</strong> E2E connectivity with EHR platform, E2E connectivity with billing system</p>
+                        <p><strong>Case Study:</strong> ASC clinic eliminated coding backlog from 28% of charts (17-20 days) to 0%</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Impact Summary</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="text-center p-4 bg-primary/10 rounded-lg">
+                      <div className="text-2xl font-bold text-primary">{totalCostSavings.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
+                      <div className="text-sm text-muted-foreground">Total Cost Savings</div>
+                    </div>
+                    <div className="text-center p-4 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                      <div className="text-2xl font-bold text-green-600">{totalRevenueIncrease.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
+                      <div className="text-sm text-muted-foreground">Revenue Increase</div>
+                    </div>
+                    <div className="text-center p-4 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                      <div className="text-2xl font-bold text-blue-600">{totalRiskReduction.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
+                      <div className="text-sm text-muted-foreground">Risk Reduction</div>
                     </div>
                   </div>
-                );
-              })}
+                </CardContent>
+              </Card>
             </div>
-          </CollapsibleContent>
-        </Collapsible>
+          </TabsContent>
 
-        {/* Value Proposition */}
-        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg p-6 mb-8">
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">Why Choose RapidClaims AI?</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-gray-700">99.5% Accuracy Rate</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="text-gray-700">10x Faster Processing</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span className="text-gray-700">Reduce Staff by 80%</span>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                <span className="text-gray-700">AI-Powered Automation</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                <span className="text-gray-700">Eliminate Claim Denials</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-gray-700">Real-time Analytics</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA Buttons */}
-        <div className="space-y-4">
-          <Button 
-            onClick={onCalculateROI} 
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white h-14 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            <Download className="h-5 w-5 mr-2" />
-            Get Detailed ROI Report
-          </Button>
-          
-          <Button 
-            onClick={handleBookCall}
-            variant="outline"
-            className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white h-14 text-lg font-semibold rounded-lg bg-white shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            <Calendar className="h-5 w-5 mr-2" />
-            Book a Call with RapidClaims
-          </Button>
-          
-          <div className="text-center">
-            <Button 
-              onClick={() => window.open('tel:+1-555-RAPID', '_blank')}
-              variant="ghost"
-              className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors duration-200"
-            >
-              <Phone className="h-4 w-4 mr-2" />
-              Or call us directly: +1-555-RAPID
-            </Button>
-          </div>
-        </div>
+          <TabsContent value="references">
+            <References />
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );
