@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import confetti from 'canvas-confetti';
-import { Calculator, Star, Download } from 'lucide-react';
+import { Calculator, Star, Download, FileText } from 'lucide-react';
 import { CombinedCalculator } from './CombinedCalculator';
 import { FloatingCTA } from './FloatingCTA';
 import { ModernEmailDialog } from './ModernEmailDialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ROIMetrics } from '../types/roi';
+import { generatePDFReport } from '@/utils/pdfExport';
+import { formatCurrency } from '@/utils/formatters';
 
 export const ROICalculator = () => {
   const { toast } = useToast();
@@ -63,26 +65,39 @@ export const ROICalculator = () => {
     setMetrics(prev => ({ ...prev, [key]: value }));
   };
 
-  // ROI Calculations
-  const totalCodingCosts = metrics.numberOfCoders * metrics.salaryPerCoder * (1 + metrics.overheadCostPercent / 100);
-  const deniedClaimsCost = (metrics.claimsPerAnnum * metrics.claimDeniedPercent / 100) * metrics.costPerDeniedClaim;
-  const backlogCost = (metrics.chartsProcessedPerAnnum * metrics.codingBacklogPercent / 100 * metrics.daysPerChartInBacklog * metrics.costOfCapital / 100) / 365;
-  const totalOperationalCosts = totalCodingCosts + deniedClaimsCost + backlogCost;
-  const roi = ((metrics.revenueClaimed - totalOperationalCosts) / totalOperationalCosts) * 100;
-
-  // Executive Summary Calculations
-  const coderProductivitySaving = metrics.chartsProcessedPerAnnum * 0.5 * (8 / metrics.chartsPerCoderPerDay) * (metrics.salaryPerCoder / (250 * 8));
-  const claimDenialReduction = metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100) * 0.5 * metrics.costPerDeniedClaim;
-  const backlogReduction = metrics.chartsProcessedPerAnnum * (metrics.codingBacklogPercent / 100) * 0.8 * metrics.daysPerChartInBacklog * (metrics.costOfCapital / 100) / 365;
-  const reducedCost = coderProductivitySaving + claimDenialReduction + backlogReduction;
+  // Updated ROI Calculations to match CombinedCalculator
+  const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
   
-  const rvuImprovement = metrics.rvusCodedPerAnnum * 0.01 * metrics.weightedAverageGPCI * 36;
-  const increaseRevenue = rvuImprovement;
+  // Individual lever calculations
+  const coderProductivitySavings = 15000 * metrics.numberOfCoders * 0.8 * revenueScale;
+  const billingAutomationSavings = 12000 * metrics.numberOfBillers * 0.7 * revenueScale;
+  const physicianTimeSavings = 8000 * metrics.numberOfPhysicians * 0.5 * revenueScale;
+  const technologyCostSavings = metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12 * 0.7 * Math.min(revenueScale, 2);
+  const claimDenialSavings = (metrics.revenueClaimed / 100) * (metrics.claimDeniedPercent / 100) * 0.05 * 0.5 * Math.min(revenueScale, 1.5);
+  const backlogReductionSavings = (metrics.revenueClaimed * 0.001) * (metrics.codingBacklogPercent / 100) * 0.8 * Math.min(revenueScale, 1.5);
   
-  const overcodingRiskReduction = metrics.chartsProcessedPerAnnum * (metrics.overCodingPercent / 100) * 1.0 * 100;
-  const reducedRisk = overcodingRiskReduction;
+  // Revenue increase
+  const rvuIncrease = metrics.revenueClaimed * 0.002 * Math.min(revenueScale, 1.2);
   
-  const totalImpact = reducedCost + increaseRevenue + reducedRisk;
+  // Risk reduction
+  const overCodingReduction = metrics.revenueClaimed * 0.001 * Math.min(revenueScale, 1.3);
+  
+  // Totals
+  const totalCostSavings = coderProductivitySavings + billingAutomationSavings + physicianTimeSavings + 
+    technologyCostSavings + claimDenialSavings + backlogReductionSavings;
+  const totalRevenueIncrease = rvuIncrease;
+  const totalRiskReduction = overCodingReduction;
+  const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
+  
+  // Implementation cost and ROI
+  const baseImplementationCost = 150000;
+  const scaledImplementationCost = baseImplementationCost * (1 + revenueScale * 0.8);
+  const roi = scaledImplementationCost > 0 ? ((totalImpact / scaledImplementationCost) * 100) : 0;
+  
+  // Legacy calculations for compatibility
+  const reducedCost = totalCostSavings;
+  const increaseRevenue = totalRevenueIncrease;
+  const reducedRisk = totalRiskReduction;
 
   const triggerConfetti = () => {
     confetti({
@@ -126,39 +141,24 @@ export const ROICalculator = () => {
   };
 
   const exportData = () => {
-    const reportData = {
-      timestamp: new Date().toISOString(),
-      userEmail,
+    const exportData = {
       metrics,
       calculations: {
-        totalCodingCosts,
-        deniedClaimsCost,
-        backlogCost,
-        totalOperationalCosts,
-        roi,
-        executiveSummary: {
-          reducedCost,
-          increaseRevenue,
-          reducedRisk,
-          totalImpact
-        }
-      }
+        totalCostSavings,
+        totalRevenueIncrease,
+        totalRiskReduction,
+        totalImpact,
+        implementationCost: scaledImplementationCost,
+        roi: Math.min(Math.max(roi, 0), 400)
+      },
+      userEmail
     };
 
-    const dataStr = JSON.stringify(reportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `roi-calculator-report-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    generatePDFReport(exportData);
     
     toast({
-      title: "Export Complete",
-      description: "ROI report has been downloaded successfully.",
+      title: "PDF Export Complete",
+      description: "Your detailed ROI analysis has been downloaded as a PDF.",
     });
   };
 
@@ -178,16 +178,20 @@ export const ROICalculator = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img 
-                src="/lovable-uploads/109bd789-3dee-4a0a-9371-0d7ff2ce124a.png" 
+                src="/src/assets/rapidclaims-logo.png" 
                 alt="RapidClaims" 
-                className="h-10 w-auto"
+                className="h-12 w-auto filter brightness-0 dark:filter-none"
               />
             </div>
             <div className="flex items-center gap-3">
               <Calculator className="h-8 w-8 text-foreground" />
-              <h1 className="text-2xl font-semibold text-foreground">ROI Calculator</h1>
+              <h1 className="text-2xl font-semibold text-foreground">RapidROI by RapidClaims</h1>
             </div>
             <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Live: 250+ Active Users</span>
+              </div>
               <Button 
                 onClick={() => window.open('https://calendly.com/rapidclaims', '_blank')}
                 variant="outline" 
@@ -207,11 +211,11 @@ export const ROICalculator = () => {
           updateMetric={updateMetric}
           onCalculateROI={handleCalculateROI}
           calculations={{
-            totalCodingCosts,
-            deniedClaimsCost,
-            backlogCost,
-            totalOperationalCosts,
-            roi,
+            totalCodingCosts: 0,
+            deniedClaimsCost: 0,
+            backlogCost: 0,
+            totalOperationalCosts: 0,
+            roi: Math.min(Math.max(roi, 0), 400),
             executiveSummary: {
               reducedCost,
               increaseRevenue,
@@ -228,11 +232,11 @@ export const ROICalculator = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img 
-                src="/lovable-uploads/109bd789-3dee-4a0a-9371-0d7ff2ce124a.png" 
+                src="/src/assets/rapidclaims-logo.png" 
                 alt="RapidClaims" 
-                className="h-8 w-auto"
+                className="h-8 w-auto filter brightness-0 dark:filter-none"
               />
-              <span className="text-foreground text-sm">AI-based RCM automation solution</span>
+              <span className="text-foreground text-sm">RapidROI by RapidClaims - AI-powered medical coding ROI calculator</span>
             </div>
             <div className="text-muted-foreground text-sm">
               © 2024 RapidClaims. All rights reserved.
@@ -256,50 +260,71 @@ export const ROICalculator = () => {
       {/* Results Modal */}
       {showResults && (
         <Dialog open={showResults} onOpenChange={setShowResults}>
-          <DialogContent className="max-w-4xl bg-card border border-border text-foreground">
+          <DialogContent className="max-w-4xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20">
             <DialogHeader>
-              <DialogTitle className="text-2xl text-center text-white">🎉 Your ROI Analysis Results</DialogTitle>
+              <DialogTitle className="text-2xl text-center text-primary">
+                🎉 Your RapidROI Analysis Results
+              </DialogTitle>
+              <p className="text-center text-muted-foreground">
+                Comprehensive financial impact analysis for RapidClaims AI implementation
+              </p>
             </DialogHeader>
             
             <div className="space-y-6">
               {/* Key Metrics */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-4 rounded-lg bg-purple-800/50 border border-purple-600">
-                  <div className="text-3xl font-bold text-purple-400">{roi.toFixed(1)}%</div>
-                  <div className="text-sm text-gray-300">ROI</div>
+                <div className="text-center p-4 rounded-lg bg-primary/10 border border-primary/20">
+                  <div className="text-3xl font-bold text-primary">{formatCurrency(totalImpact)}</div>
+                  <div className="text-sm text-muted-foreground">Annual Financial Impact</div>
                 </div>
-                <div className="text-center p-4 rounded-lg bg-green-800/50 border border-green-600">
-                  <div className="text-3xl font-bold text-green-400">${totalImpact.toLocaleString()}</div>
-                  <div className="text-sm text-gray-300">Total Impact</div>
+                <div className="text-center p-4 rounded-lg bg-green-500/10 border border-green-500/20">
+                  <div className="text-3xl font-bold text-green-600">{formatCurrency(totalImpact / 12)}</div>
+                  <div className="text-sm text-muted-foreground">Monthly Savings</div>
                 </div>
-                <div className="text-center p-4 rounded-lg bg-blue-800/50 border border-blue-600">
-                  <div className="text-3xl font-bold text-blue-400">${(totalImpact / 12).toLocaleString()}</div>
-                  <div className="text-sm text-gray-300">Monthly Savings</div>
+                <div className="text-center p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                  <div className="text-3xl font-bold text-blue-600">{formatCurrency(scaledImplementationCost)}</div>
+                  <div className="text-sm text-muted-foreground">Implementation Investment</div>
                 </div>
               </div>
 
-              {/* Executive Summary */}
-              <div className="bg-gray-800/50 rounded-lg p-6">
-                <h3 className="text-xl font-semibold mb-4 text-white">Executive Summary</h3>
+              {/* Impact Breakdown */}
+              <div className="bg-card/50 rounded-lg p-6 border border-border">
+                <h3 className="text-xl font-semibold mb-4">Impact Breakdown</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <div className="text-green-400 text-2xl font-bold">${reducedCost.toLocaleString()}</div>
-                    <div className="text-gray-300 text-sm">Reduced Cost</div>
+                  <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div className="text-2xl font-bold text-green-600">{formatCurrency(totalCostSavings)}</div>
+                    <div className="text-sm text-green-700">Annual Cost Savings</div>
+                    <div className="text-xs text-green-600 mt-1">Operational efficiency gains</div>
                   </div>
-                  <div>
-                    <div className="text-blue-400 text-2xl font-bold">${increaseRevenue.toLocaleString()}</div>
-                    <div className="text-gray-300 text-sm">Increased Revenue</div>
+                  <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="text-2xl font-bold text-blue-600">{formatCurrency(totalRevenueIncrease)}</div>
+                    <div className="text-sm text-blue-700">Revenue Increase</div>
+                    <div className="text-xs text-blue-600 mt-1">Improved coding accuracy</div>
                   </div>
-                  <div>
-                    <div className="text-purple-400 text-2xl font-bold">${reducedRisk.toLocaleString()}</div>
-                    <div className="text-gray-300 text-sm">Reduced Risk</div>
+                  <div className="text-center p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <div className="text-2xl font-bold text-purple-600">{formatCurrency(totalRiskReduction)}</div>
+                    <div className="text-sm text-purple-700">Risk Reduction Value</div>
+                    <div className="text-xs text-purple-600 mt-1">Compliance assurance</div>
                   </div>
+                </div>
+              </div>
+
+              {/* Payback Period */}
+              <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg p-6 border border-primary/20">
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold mb-2">Investment Payback Period</h3>
+                  <div className="text-3xl font-bold text-primary">
+                    {(scaledImplementationCost / (totalImpact / 12)).toFixed(1)} months
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Time to recover your initial investment through savings
+                  </p>
                 </div>
               </div>
 
               {/* Rating Section */}
               <div className="text-center space-y-4">
-                <h3 className="text-lg font-semibold text-white">How would you rate this calculator?</h3>
+                <h3 className="text-lg font-semibold">How would you rate this calculator?</h3>
                 <div className="flex justify-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -308,7 +333,7 @@ export const ROICalculator = () => {
                       className="text-2xl hover:scale-110 transition-transform"
                     >
                       <Star 
-                        className={`w-8 h-8 ${rating >= star ? 'text-yellow-400 fill-current' : 'text-gray-600'}`} 
+                        className={`w-8 h-8 ${rating >= star ? 'text-yellow-400 fill-current' : 'text-muted-foreground/30'}`} 
                       />
                     </button>
                   ))}
@@ -317,13 +342,20 @@ export const ROICalculator = () => {
             </div>
 
             <DialogFooter className="flex gap-2">
-              <Button onClick={exportData} variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
-                <Download className="w-4 h-4 mr-2" />
-                Export Report
+              <Button onClick={exportData} variant="outline" className="border-primary/20 hover:bg-primary/5">
+                <FileText className="w-4 h-4 mr-2" />
+                Download PDF Report
+              </Button>
+              <Button 
+                onClick={() => window.open('https://calendly.com/rapidclaims', '_blank')}
+                variant="outline"
+                className="border-primary/20 hover:bg-primary/5"
+              >
+                Book Consultation
               </Button>
               <Button 
                 onClick={() => setShowResults(false)}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
+                className="bg-primary hover:bg-primary/90"
               >
                 Close
               </Button>

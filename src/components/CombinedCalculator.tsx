@@ -12,6 +12,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronDown, ChevronUp, Calculator, TrendingUp, DollarSign, Shield, Info, ExternalLink, Settings, BarChart3, Award, Target, Minus, Plus, Download, Calendar, Phone } from "lucide-react";
 import { ROIMetrics } from "@/types/roi";
 import { References } from "./tabs/References";
+import { ProductDescription } from "./ProductDescription";
+import { MetricsExpandedView } from "./MetricsExpandedView";
+import { TooltipInfo } from "./TooltipInfo";
+import { formatCurrency, formatNumber } from "@/utils/formatters";
 
 interface CombinedCalculatorProps {
   metrics?: ROIMetrics;
@@ -235,13 +239,17 @@ export const CombinedCalculator = ({
   ];
 
   return (
-    <Card className="w-full max-w-6xl mx-auto">
-      <CardHeader className="text-center">
-        <CardTitle className="flex items-center justify-center gap-2 text-2xl">
-          <Calculator className="h-6 w-6" />
-          RapidClaims ROI Calculator
-        </CardTitle>
-      </CardHeader>
+    <div className="w-full max-w-6xl mx-auto space-y-6">
+      <ProductDescription />
+      
+      <Card className="w-full">
+        <CardHeader className="text-center">
+          <CardTitle className="flex items-center justify-center gap-2 text-2xl">
+            <Calculator className="h-6 w-6" />
+            RapidROI Calculator
+            <TooltipInfo content="Calculate your potential return on investment with RapidClaims AI-powered medical coding solution" />
+          </CardTitle>
+        </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
@@ -262,9 +270,12 @@ export const CombinedCalculator = ({
           <TabsContent value="calculator" className="space-y-6">
             {/* Annual Revenue Section */}
             <div className="mb-8">
-              <Label htmlFor="revenue" className="text-base font-medium text-gray-700 mb-4 block">
-                Annual Revenue Claimed
-              </Label>
+              <div className="flex items-center gap-2 mb-4">
+                <Label htmlFor="revenue" className="text-base font-medium">
+                  Annual Revenue Claimed
+                </Label>
+                <TooltipInfo content="Enter your organization's total annual revenue from medical claims" />
+              </div>
               <div className="space-y-4">
                 <Slider
                   value={[metrics.revenueClaimed]}
@@ -281,94 +292,89 @@ export const CombinedCalculator = ({
                   className="text-center text-lg font-semibold"
                   placeholder="Enter annual revenue"
                 />
+                <div className="text-center text-sm text-muted-foreground">
+                  Current: {formatCurrency(metrics.revenueClaimed)}
+                </div>
               </div>
             </div>
 
             {/* Executive Summary Metrics */}
             <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-6">Executive Summary</h3>
+              <div className="flex items-center gap-2 mb-6">
+                <h3 className="text-xl font-semibold">Executive Summary</h3>
+                <TooltipInfo content="High-level overview of your potential financial impact with RapidClaims AI" />
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                {/* ROI Meter */}
-                <div className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg">
-                  <div className="relative w-48 h-24 mb-4">
-                    <svg viewBox="0 0 200 100" className="w-full h-full">
-                      <defs>
-                        <linearGradient id="roiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#ef4444" />
-                          <stop offset="50%" stopColor="#eab308" />
-                          <stop offset="100%" stopColor="#22c55e" />
-                        </linearGradient>
-                      </defs>
-                      <path
-                        d="M 20 80 A 80 80 0 0 1 180 80"
-                        fill="none"
-                        stroke="#e5e7eb"
-                        strokeWidth="8"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d="M 20 80 A 80 80 0 0 1 180 80"
-                        fill="none"
-                        stroke="url(#roiGradient)"
-                        strokeWidth="8"
-                        strokeLinecap="round"
-                        strokeDasharray={`${(angle / 180) * 251.2} 251.2`}
-                        key={`meter-${angle}`}
-                        className="transition-all duration-500"
-                      />
-                      <line
-                        x1="100"
-                        y1="80"
-                        x2={100 + 60 * Math.cos((180 - angle) * Math.PI / 180)}
-                        y2={80 - 60 * Math.sin((180 - angle) * Math.PI / 180)}
-                        stroke="#374151"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        key={`needle-${angle}`}
-                        className="transition-all duration-500"
-                      />
-                    </svg>
+                {/* Financial Impact Display */}
+                <div className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20 rounded-lg">
+                  <div className="text-center space-y-2 mb-4">
+                    <div className="text-sm text-muted-foreground">Estimated Annual Financial Impact</div>
+                    <div className="text-4xl font-bold text-primary">
+                      {formatCurrency(totalImpact)}
+                    </div>
                   </div>
-                  <div className="text-3xl font-bold text-blue-600 mb-1">
-                    {cappedRoi.toFixed(1)}%
+                  <div className="text-sm text-center text-muted-foreground">
+                    Implementation Investment: {formatCurrency(scaledImplementationCost)}
                   </div>
-                  <div className="text-gray-700 text-center font-medium">ROI</div>
+                  <div className="text-sm text-center text-muted-foreground">
+                    Monthly Savings: {formatCurrency(totalImpact / 12)}
+                  </div>
                 </div>
 
                 {/* Impact Metrics */}
                 <div className="space-y-4">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-primary">{totalCostSavings.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
-                    <div className="text-sm text-muted-foreground">Reduced Cost</div>
+                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-600 font-medium">Cost Savings</span>
+                      <TooltipInfo content="Annual savings from operational efficiencies and productivity gains" />
+                    </div>
+                    <div className="text-xl font-bold text-green-600">{formatCurrency(totalCostSavings)}</div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-green-600">{totalRevenueIncrease.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
-                    <div className="text-sm text-muted-foreground">Increased Revenue</div>
+                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-600 font-medium">Revenue Increase</span>
+                      <TooltipInfo content="Additional revenue from improved coding accuracy and RVU optimization" />
+                    </div>
+                    <div className="text-xl font-bold text-blue-600">{formatCurrency(totalRevenueIncrease)}</div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600">{totalRiskReduction.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}</div>
-                    <div className="text-sm text-muted-foreground">Reduced Risk</div>
+                  <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-200">
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-600 font-medium">Risk Reduction</span>
+                      <TooltipInfo content="Value of reduced compliance risks and audit exposure" />
+                    </div>
+                    <div className="text-xl font-bold text-purple-600">{formatCurrency(totalRiskReduction)}</div>
                   </div>
-                </div>
-              </div>
-
-              <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <div className="text-lg font-semibold text-yellow-600 mb-1">Total Impact</div>
-                <div className="text-3xl font-bold text-yellow-800">
-                  {totalImpact.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })}
                 </div>
               </div>
             </div>
+
+            {/* Detailed Metrics Breakdown */}
+            <MetricsExpandedView
+              coderProductivitySavings={coderProductivitySavings}
+              billingAutomationSavings={billingAutomationSavings}
+              physicianTimeSavings={physicianTimeSavings}
+              technologyCostSavings={technologyCostSavings}
+              claimDenialSavings={claimDenialSavings}
+              backlogReductionSavings={backlogReductionSavings}
+              rvuIncrease={rvuIncrease}
+              overCodingReduction={overCodingReduction}
+            />
 
             <Separator className="my-8" />
 
             {/* Must Have Inputs */}
             <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-6">Must Have Inputs</h3>
+              <div className="flex items-center gap-2 mb-6">
+                <h3 className="text-xl font-semibold">Key Input Parameters</h3>
+                <TooltipInfo content="Essential metrics that drive your ROI calculation. Adjust these to match your organization's profile." />
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {basicInputs.map(({ key, label, max, step }) => (
                   <div key={key} className="space-y-3">
-                    <Label>{label}</Label>
+                    <div className="flex items-center gap-2">
+                      <Label>{label}</Label>
+                      <TooltipInfo content={getTooltipContent(key)} />
+                    </div>
                     <div className="flex items-center space-x-2">
                       <Button
                         variant="outline"
@@ -619,5 +625,18 @@ export const CombinedCalculator = ({
         </Tabs>
       </CardContent>
     </Card>
+    </div>
   );
+
+  // Helper function to provide tooltips for input fields
+  function getTooltipContent(key: keyof ROIMetrics): string {
+    const tooltips = {
+      numberOfCoders: "Full-time equivalent medical coders in your organization",
+      numberOfBillers: "Full-time equivalent billing staff members",
+      numberOfPhysicians: "Total number of physicians generating coded encounters",
+      claimDeniedPercent: "Percentage of submitted claims that are initially denied",
+      revenueClaimed: "Total annual revenue from medical claims submitted"
+    };
+    return tooltips[key] || "";
+  }
 };

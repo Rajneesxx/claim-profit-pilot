@@ -29,22 +29,22 @@ export const ModernEmailDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gray-900 border border-gray-700 text-white max-w-md">
+      <DialogContent className="bg-card border border-border max-w-md">
         <DialogHeader className="text-center space-y-4">
-          <div className="mx-auto bg-purple-600 w-16 h-16 rounded-full flex items-center justify-center">
-            <Download className="h-8 w-8 text-white" />
+          <div className="mx-auto bg-primary w-16 h-16 rounded-full flex items-center justify-center">
+            <Download className="h-8 w-8 text-primary-foreground" />
           </div>
-          <DialogTitle className="text-2xl text-white">
-            Get Your ROI Report
+          <DialogTitle className="text-2xl">
+            Get Your RapidROI Analysis
           </DialogTitle>
-          <p className="text-gray-300 text-sm">
-            Enter your email to receive a detailed analysis of your potential savings
+          <p className="text-muted-foreground text-sm">
+            Enter your email to receive a comprehensive PDF report with detailed financial analysis and implementation recommendations
           </p>
         </DialogHeader>
         
         <div className="space-y-6 py-4">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-300 flex items-center gap-2">
+            <Label htmlFor="email" className="flex items-center gap-2">
               <Mail className="h-4 w-4" />
               Business Email Address
             </Label>
@@ -54,25 +54,25 @@ export const ModernEmailDialog = ({
               placeholder="yourname@company.com"
               value={userEmail}
               onChange={(e) => handleEmailChange(e.target.value)}
-              className={`bg-gray-800 border-gray-600 text-white h-12 ${
-                isValid ? 'border-green-500' : userEmail ? 'border-red-500' : 'border-gray-600'
+              className={`h-12 ${
+                isValid ? 'border-green-500' : userEmail ? 'border-red-500' : ''
               }`}
             />
             {isValid && (
-              <div className="flex items-center gap-2 text-green-400 text-sm">
+              <div className="flex items-center gap-2 text-green-600 text-sm">
                 <CheckCircle className="h-4 w-4" />
                 Email format is valid
               </div>
             )}
           </div>
           
-          <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+          <div className="bg-muted/50 rounded-lg p-4 border border-border">
             <div className="flex items-center gap-2 mb-2">
-              <Shield className="h-4 w-4 text-green-400" />
-              <span className="text-green-400 text-sm font-medium">Your data is secure</span>
+              <Shield className="h-4 w-4 text-green-600" />
+              <span className="text-green-600 text-sm font-medium">Your data is secure</span>
             </div>
-            <p className="text-gray-400 text-xs">
-              We respect your privacy and will only use your email to send you the ROI report. 
+            <p className="text-muted-foreground text-xs">
+              We respect your privacy and will only use your email to send you the detailed ROI analysis. 
               No spam, unsubscribe anytime.
             </p>
           </div>
@@ -80,10 +80,10 @@ export const ModernEmailDialog = ({
           <Button 
             onClick={onSubmit}
             disabled={!isValid}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white h-12 text-lg font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary h-12 text-lg font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Download className="h-5 w-5 mr-2" />
-            Get My ROI Report
+            Generate My RapidROI Report
           </Button>
         </div>
       </DialogContent>
