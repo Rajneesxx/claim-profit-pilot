@@ -167,14 +167,14 @@ export const CombinedCalculator = ({
   const totalRiskReduction = overCodingReduction;
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
   
-  // ROI calculation - More realistic implementation cost model
-  const baseImplementationCost = 100000; // Higher base cost for more realistic ROI
-  const variableImplementationCost = metrics.revenueClaimed * 0.02; // 2% of revenue for implementation
-  const implementationCost = baseImplementationCost + variableImplementationCost;
-  const roi = implementationCost > 0 ? ((totalImpact / implementationCost) * 100) : 0;
+  // ROI calculation - Implementation cost with diminishing returns (like benefits)
+  const baseImplementationCost = 150000; // Base implementation cost
+  const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000); // Same scaling as benefits
+  const scaledImplementationCost = baseImplementationCost * (1 + revenueScale * 0.8); // Implementation grows slower than benefits
+  const roi = scaledImplementationCost > 0 ? ((totalImpact / scaledImplementationCost) * 100) : 0;
   
-  // Cap ROI at realistic maximum for healthcare implementations (300%)
-  const cappedRoi = Math.min(Math.max(roi, 0), 300);
+  // Cap ROI at realistic maximum for healthcare implementations (400%)
+  const cappedRoi = Math.min(Math.max(roi, 0), 400);
 
   const handleLeverLevelChange = (lever: string, level: string) => {
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
@@ -203,9 +203,9 @@ export const CombinedCalculator = ({
     alert('ROI Report would be generated here!');
   });
 
-  // ROI meter calculation for visualization - scale to 300% max for realistic display
-  const roiPercentage = Math.min(Math.max(cappedRoi, 0), 300);
-  const angle = (roiPercentage / 300) * 180;
+  // ROI meter calculation for visualization - scale to 400% max for realistic display
+  const roiPercentage = Math.min(Math.max(cappedRoi, 0), 400);
+  const angle = (roiPercentage / 400) * 180;
 
   const basicInputs = [
     { key: 'numberOfCoders' as keyof ROIMetrics, label: 'Number of Coders', max: 50, step: 1 },
