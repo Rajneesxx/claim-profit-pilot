@@ -100,66 +100,66 @@ export const MetricsExpandedView = ({
                 )}
               </Button>
             </CollapsibleTrigger>
+            <CollapsibleContent>
+              <CardContent className="space-y-6">
+                {/* Cost Savings */}
+                <div>
+                  <h4 className="text-lg font-semibold text-green-600 mb-3">Cost Savings</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {costSavingsMetrics.map((metric, index) => (
+                      <div key={index} className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-medium text-green-800">{metric.label}</span>
+                          <TooltipInfo content={metric.description} />
+                        </div>
+                        <div className="text-2xl font-bold text-green-600">
+                          {formatCurrency(metric.value)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Revenue Increase */}
+                <div>
+                  <h4 className="text-lg font-semibold text-blue-600 mb-3">Revenue Increase</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {revenueMetrics.map((metric, index) => (
+                      <div key={index} className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-medium text-blue-800">{metric.label}</span>
+                          <TooltipInfo content={metric.description} />
+                        </div>
+                        <div className="text-2xl font-bold text-blue-600">
+                          {formatCurrency(metric.value)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Risk Reduction */}
+                <div>
+                  <h4 className="text-lg font-semibold text-purple-600 mb-3">Risk Reduction</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {riskMetrics.map((metric, index) => (
+                      <div key={index} className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-medium text-purple-800">{metric.label}</span>
+                          <TooltipInfo content={metric.description} />
+                        </div>
+                        <div className="text-2xl font-bold text-purple-600">
+                          {formatCurrency(metric.value)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </CollapsibleContent>
           </Collapsible>
         </div>
       </CardHeader>
-      <CollapsibleContent>
-        <CardContent className="space-y-6">
-          {/* Cost Savings */}
-          <div>
-            <h4 className="text-lg font-semibold text-green-600 mb-3">Cost Savings</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {costSavingsMetrics.map((metric, index) => (
-                <div key={index} className="p-4 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-green-800">{metric.label}</span>
-                    <TooltipInfo content={metric.description} />
-                  </div>
-                  <div className="text-2xl font-bold text-green-600">
-                    {formatCurrency(metric.value)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Revenue Increase */}
-          <div>
-            <h4 className="text-lg font-semibold text-blue-600 mb-3">Revenue Increase</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {revenueMetrics.map((metric, index) => (
-                <div key={index} className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-blue-800">{metric.label}</span>
-                    <TooltipInfo content={metric.description} />
-                  </div>
-                  <div className="text-2xl font-bold text-blue-600">
-                    {formatCurrency(metric.value)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Risk Reduction */}
-          <div>
-            <h4 className="text-lg font-semibold text-purple-600 mb-3">Risk Reduction</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {riskMetrics.map((metric, index) => (
-                <div key={index} className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-purple-800">{metric.label}</span>
-                    <TooltipInfo content={metric.description} />
-                  </div>
-                  <div className="text-2xl font-bold text-purple-600">
-                    {formatCurrency(metric.value)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </CardContent>
-      </CollapsibleContent>
     </Card>
   );
 };
