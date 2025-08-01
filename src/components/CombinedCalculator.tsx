@@ -162,11 +162,10 @@ export const CombinedCalculator = ({
   const totalRiskReduction = overCodingReduction;
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
   
-  // ROI calculation
-  const totalCurrentCosts = (metrics.numberOfCoders * metrics.salaryPerCoder * (1 + metrics.overheadCostPercent / 100)) + 
-    (metrics.numberOfBillers * metrics.salaryPerBiller) + 
-    (metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12);
-  const roi = totalCurrentCosts > 0 ? ((totalImpact / totalCurrentCosts) * 100) : 0;
+  // ROI calculation - Based on implementation cost percentage of annual revenue
+  const implementationCostPercent = 0.02; // 2% of annual revenue as implementation cost
+  const implementationCost = metrics.revenueClaimed * implementationCostPercent;
+  const roi = implementationCost > 0 ? ((totalImpact / implementationCost) * 100) : 0;
 
   const handleLeverLevelChange = (lever: string, level: string) => {
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
