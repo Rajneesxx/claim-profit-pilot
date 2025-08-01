@@ -177,7 +177,7 @@ export const CombinedCalculator = ({
   const roi = implementationCost > 0 ? ((totalImpact / implementationCost) * 100) : 0;
   
   // Cap ROI at reasonable maximum (500%)
-  const cappedRoi = Math.min(roi, 500);
+  const cappedRoi = Math.min(roi,25000);
 
   const handleLeverLevelChange = (lever: string, level: string) => {
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
