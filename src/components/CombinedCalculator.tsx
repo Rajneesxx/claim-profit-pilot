@@ -103,9 +103,9 @@ export const CombinedCalculator = ({
     return baseValue * leverImpacts[leverKey][level];
   };
 
-  // Individual lever calculations
+  // Individual lever calculations - scaled to revenue size
   const coderProductivitySavings = (() => {
-    const chartsPerYear = metrics.chartsProcessedPerAnnum;
+    const chartsPerYear = Math.min(metrics.chartsProcessedPerAnnum, metrics.revenueClaimed / 50); // Scale charts to revenue
     const timePerChart = 0.2; // 12 minutes = 0.2 hours
     const costPerCoderPerHour = (metrics.salaryPerCoder * (1 + metrics.overheadCostPercent / 100)) / (52 * 40);
     const productivityIncrease = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
@@ -114,43 +114,51 @@ export const CombinedCalculator = ({
 
   const billingAutomationSavings = (() => {
     const reductionRate = leverImpacts.billingAutomation[leverLevels.billingAutomation as 'low' | 'medium' | 'high'];
-    return metrics.numberOfBillers * metrics.salaryPerBiller * reductionRate;
+    const scaledBillers = Math.min(metrics.numberOfBillers, Math.max(1, metrics.revenueClaimed / 1000000)); // Scale to revenue
+    return scaledBillers * metrics.salaryPerBiller * reductionRate;
   })();
 
   const physicianTimeSavings = (() => {
+    const chartsPerYear = Math.min(metrics.chartsProcessedPerAnnum, metrics.revenueClaimed / 50);
     const hoursSavedPerChart = (metrics.avgTimePerPhysicianPerChart / 60) * 
       leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
     const hourlyPay = metrics.salaryPerPhysician / (52 * 40);
-    return hoursSavedPerChart * metrics.chartsProcessedPerAnnum * metrics.numberOfPhysicians * hourlyPay;
+    const scaledPhysicians = Math.min(metrics.numberOfPhysicians, Math.max(1, metrics.revenueClaimed / 250000));
+    return hoursSavedPerChart * chartsPerYear * scaledPhysicians * hourlyPay;
   })();
 
   const technologyCostSavings = (() => {
     const reductionRate = leverImpacts.technologyCostSaved[leverLevels.technologyCostSaved as 'low' | 'medium' | 'high'];
-    return metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12 * reductionRate;
+    const scaledLicenses = Math.min(metrics.numberOfEncoderLicenses, Math.max(1, metrics.revenueClaimed / 500000));
+    return scaledLicenses * metrics.averageCostPerLicensePerMonth * 12 * reductionRate;
   })();
 
   const claimDenialSavings = (() => {
     const reductionRate = leverImpacts.claimDenialReduction[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high'];
-    return metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100) * reductionRate * metrics.costPerDeniedClaim;
+    const scaledClaims = Math.min(metrics.claimsPerAnnum, metrics.revenueClaimed / 100); // Scale claims to revenue
+    return scaledClaims * (metrics.claimDeniedPercent / 100) * reductionRate * metrics.costPerDeniedClaim;
   })();
 
   const backlogReductionSavings = (() => {
     const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
+    const chartsPerYear = Math.min(metrics.chartsProcessedPerAnnum, metrics.revenueClaimed / 50);
     const avgValuePerChart = metrics.averageCostPerClaim;
-    return metrics.chartsProcessedPerAnnum * (metrics.codingBacklogPercent / 100) * 
+    return chartsPerYear * (metrics.codingBacklogPercent / 100) * 
       avgValuePerChart * (metrics.daysPerChartInBacklog / 365) * (metrics.costOfCapital / 100) * reductionRate;
   })();
 
-  // Revenue increase from RVU optimization
+  // Revenue increase from RVU optimization - scaled to revenue
   const rvuIncrease = (() => {
     const incrementRate = 0.001; // 0.1% for low impact
-    return metrics.rvusCodedPerAnnum * incrementRate * metrics.weightedAverageGPCI * 36;
+    const scaledRVUs = Math.min(metrics.rvusCodedPerAnnum, metrics.revenueClaimed / 200); // Scale RVUs to revenue
+    return scaledRVUs * incrementRate * metrics.weightedAverageGPCI * 36;
   })();
 
-  // Over/Under coding reduction (risk mitigation)
+  // Over/Under coding reduction (risk mitigation) - scaled to revenue
   const overCodingReduction = (() => {
     const reductionRate = 0.8; // 80% reduction (medium impact)
-    const chartsWithOvercoding = metrics.chartsProcessedPerAnnum * (metrics.overCodingPercent / 100);
+    const chartsPerYear = Math.min(metrics.chartsProcessedPerAnnum, metrics.revenueClaimed / 50);
+    const chartsWithOvercoding = chartsPerYear * (metrics.overCodingPercent / 100);
     const complianceCostPerChart = 102; // Average compliance cost
     return chartsWithOvercoding * reductionRate * complianceCostPerChart;
   })();
@@ -162,21 +170,14 @@ export const CombinedCalculator = ({
   const totalRiskReduction = overCodingReduction;
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
   
-  // ROI calculation - Based on implementation cost percentage of annual revenue
-  const implementationCostPercent = 0.02; // 2% of annual revenue as implementation cost
-  const implementationCost = metrics.revenueClaimed * implementationCostPercent;
+  // ROI calculation - More realistic implementation cost model
+  const baseImplementationCost = 50000; // Base cost regardless of size
+  const variableImplementationCost = metrics.revenueClaimed * 0.005; // 0.5% of revenue
+  const implementationCost = baseImplementationCost + variableImplementationCost;
   const roi = implementationCost > 0 ? ((totalImpact / implementationCost) * 100) : 0;
   
-  // Debug logs
-  console.log('ROI Calculation Debug:', {
-    revenueClaimed: metrics.revenueClaimed,
-    implementationCost,
-    totalImpact,
-    roi,
-    totalCostSavings,
-    totalRevenueIncrease,
-    totalRiskReduction
-  });
+  // Cap ROI at reasonable maximum (500%)
+  const cappedRoi = Math.min(roi, 500);
 
   const handleLeverLevelChange = (lever: string, level: string) => {
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
@@ -206,16 +207,8 @@ export const CombinedCalculator = ({
   });
 
   // ROI meter calculation for visualization
-  const roiPercentage = Math.min(Math.max(roi, 0), 1200);
-  const angle = (roiPercentage / 1200) * 180;
-  
-  // Debug meter calculation
-  console.log('ROI Meter Debug:', {
-    roi,
-    roiPercentage,
-    angle,
-    strokeDasharray: `${(angle / 180) * 251.2} 251.2`
-  });
+  const roiPercentage = Math.min(Math.max(cappedRoi, 0), 500);
+  const angle = (roiPercentage / 500) * 180;
 
   const basicInputs = [
     { key: 'numberOfCoders' as keyof ROIMetrics, label: 'Number of Coders', max: 50, step: 1 },
@@ -340,7 +333,7 @@ export const CombinedCalculator = ({
                     </svg>
                   </div>
                   <div className="text-3xl font-bold text-blue-600 mb-1">
-                    {roi.toFixed(1)}%
+                    {cappedRoi.toFixed(1)}%
                   </div>
                   <div className="text-gray-700 text-center font-medium">ROI</div>
                 </div>
