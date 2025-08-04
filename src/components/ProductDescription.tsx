@@ -15,8 +15,11 @@ export const ProductDescription = () => {
           <h1 className="text-3xl font-bold">RapidROI by RapidClaims</h1>
         </div>
         <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-          Discover the transformative power of AI-driven medical coding automation. 
-          Calculate your potential savings, revenue increases, and risk reduction with our comprehensive ROI analyzer.
+          <span className="font-semibold text-primary">Instant Insights. Real ROI.</span>
+          <br />
+          RapidROI helps you calculate the impact of using RapidClaims across your claims workflow. Enter basic data like annual revenue, claims denied, and headcount to get a clear breakdown of potential time savings, cost reductions, and efficiency gains.
+          <br /><br />
+          The tool runs the numbers in real-time; no setup, no hassle - so you can quickly assess how automation could improve your bottom line.
         </p>
       </div>
 
