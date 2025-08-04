@@ -90,10 +90,10 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   // ================== EXECUTIVE SUMMARY ==================
   doc.setTextColor(0, 0, 0);
   doc.setFillColor(240, 248, 255);
-  doc.rect(margin, yPosition, pageWidth - 1.7* margin, 45, 'F');
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 45, 'F');
   doc.setDrawColor(59, 130, 246);
   doc.setLineWidth(1);
-  doc.rect(margin, yPosition, pageWidth - 1.7* margin, 45, 'S');
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 45, 'S');
   
   yPosition += 8;
   doc.setFontSize(16);
