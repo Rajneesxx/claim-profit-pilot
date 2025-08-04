@@ -16,7 +16,7 @@ export const ROICalculator = () => {
   
   const defaultMetrics: ROIMetrics = {
     // Basic inputs
-    revenueClaimed: 10000000,
+    revenueClaimed: 5000000,
     numberOfCoders: 3,
     numberOfBillers: 3,
     numberOfPhysicians: 50,
@@ -207,10 +207,6 @@ export const ROICalculator = () => {
               <h1 className="text-2xl font-semibold text-foreground">RapidROI by RapidClaims</h1>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span>Live: 250+ Active Users</span>
-              </div>
               <Button 
                 onClick={() => window.open('https://calendly.com/rapidclaims', '_blank')}
                 variant="outline" 
