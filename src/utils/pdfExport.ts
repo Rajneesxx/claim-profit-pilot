@@ -158,9 +158,9 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   canvas.height = 160;
   
   const chartData = [
-    { label: 'Cost Savings', value: data.calculations.totalCostSavings },
-    { label: 'Revenue Increase', value: data.calculations.totalRevenueIncrease },
-    { label: 'Risk Reduction', value: data.calculations.totalRiskReduction }
+    { label: '', value: data.calculations.totalCostSavings },
+    { label: '', value: data.calculations.totalRevenueIncrease },
+    { label: '', value: data.calculations.totalRiskReduction }
   ];
   
   const chartColors = ['#10b981', '#3b82f6', '#8b5cf6'];
