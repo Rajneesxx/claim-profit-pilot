@@ -324,7 +324,7 @@ export const CombinedCalculator = ({
                     id="revenue"
                     type="text"
                     inputMode="numeric"
-                    value={formatNumberWithCommas(metrics.revenueClaimed)}
+                    value={formatNumber(metrics.revenueClaimed)}
                     onChange={(e) => {
                       // Remove commas for parsing
                       const rawValue = e.target.value.replace(/,/g, "");
