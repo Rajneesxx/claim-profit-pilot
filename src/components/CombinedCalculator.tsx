@@ -346,7 +346,7 @@ export const CombinedCalculator = ({
                 <div className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20 rounded-lg">
                   <div className="text-center space-y-2 mb-4">
                     <span className="text-sm text-muted-foreground">Estimated Annual Financial Impact</span>
-                    <TooltipInfo content="Estimated Annual Finance using the input cost and impact of everything used" />
+                    <TooltipInfo content="Estimated Annual Finance using the input cost and impact of every resource utilised" />
                     <div className="text-4xl font-bold text-primary">
                       {formatCurrency(totalImpact)}
                     </div>
