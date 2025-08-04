@@ -123,7 +123,11 @@ export const BasicCalculator = ({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => updateMetric('numberOfCoders', Math.max(1, metrics.numberOfCoders - 1))}
+                  onClick={() => {
+                    const newValue = Math.max(1, metrics.numberOfCoders - 1);
+                    updateMetric('numberOfCoders', newValue);
+                    updateMetric('numberOfEncoderLicenses', newValue);
+                  }}
                   className="w-8 h-8 p-0"
                 >
                   <Minus className="h-4 w-4" />
@@ -142,7 +146,11 @@ export const BasicCalculator = ({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => updateMetric('numberOfCoders', metrics.numberOfCoders + 1)}
+                  onClick={() => {
+                    const newValue = metrics.numberOfCoders + 1;
+                    updateMetric('numberOfCoders', newValue);
+                    updateMetric('numberOfEncoderLicenses', newValue);
+                  }}
                   className="w-8 h-8 p-0"
                 >
                   <Plus className="h-4 w-4" />

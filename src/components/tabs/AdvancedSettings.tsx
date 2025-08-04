@@ -97,7 +97,14 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                       id={field.key}
                       type="number"
                       value={formatValue(metrics[field.key as keyof ROIMetrics], field.type)}
-                      onChange={(e) => updateMetric(field.key as keyof ROIMetrics, parseFloat(e.target.value) || 0)}
+                      onChange={(e) => {
+                        const value = parseFloat(e.target.value) || 0;
+                        updateMetric(field.key as keyof ROIMetrics, value);
+                        // Auto-update encoder licenses when number of coders changes
+                        if (field.key === 'numberOfCoders') {
+                          updateMetric('numberOfEncoderLicenses', value);
+                        }
+                      }}
                       className="bg-background border-border text-foreground"
                       step={field.type === 'decimal' ? '0.01' : '1'}
                     />
