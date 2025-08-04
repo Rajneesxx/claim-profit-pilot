@@ -314,8 +314,8 @@ export const CombinedCalculator = ({
                 <Slider
                   value={[metrics.revenueClaimed]}
                   onValueChange={(value) => updateMetric('revenueClaimed', value[0])}
-                  max={50000000}
-                  step={100000}
+                  max={500,000,000,000}
+                  step={100,000}
                   className="w-full"
                 />
                 <div className="relative">
