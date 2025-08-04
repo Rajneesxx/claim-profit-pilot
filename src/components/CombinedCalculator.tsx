@@ -293,7 +293,7 @@ export const CombinedCalculator = ({
             </TabsTrigger>
             <TabsTrigger value="assumptions" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
-              Assumptions & Levers
+              Benchmarks & Levers
             </TabsTrigger>
             <TabsTrigger value="references" className="flex items-center gap-2">
               <ExternalLink className="h-4 w-4" />
