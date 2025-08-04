@@ -218,7 +218,7 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   const tableData = [
     ['Category', 'Annual Value', 'Description'],
     ['Cost Savings', formatCurrency(data.calculations.totalCostSavings), 'Operational efficiency gains'],
-    ['Revenue Enhancement', formatCurrency(data.calculations.totalRevenueIncrease), 'Improved coding accuracy'],
+    ['Revenue Enhanced', formatCurrency(data.calculations.totalRevenueIncrease), 'Improved coding accuracy'],
     ['Risk Mitigation', formatCurrency(data.calculations.totalRiskReduction), 'Compliance protection'],
     ['Total Benefit', formatCurrency(data.calculations.totalImpact), 'Combined annual impact']
   ];
