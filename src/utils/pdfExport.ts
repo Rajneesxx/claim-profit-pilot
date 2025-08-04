@@ -90,10 +90,10 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   // ================== EXECUTIVE SUMMARY ==================
   doc.setTextColor(0, 0, 0);
   doc.setFillColor(240, 248, 255);
-  doc.rect(margin, yPosition, pageWidth - 1.7* margin, 45, 'F');
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 35, 'F');
   doc.setDrawColor(59, 130, 246);
   doc.setLineWidth(1);
-  doc.rect(margin, yPosition, pageWidth - 1.7* margin, 45, 'S');
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 35, 'S');
   
   yPosition += 8;
   doc.setFontSize(16);
@@ -142,7 +142,7 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   doc.setTextColor(59, 130, 246);
   doc.text(formatCurrency(data.metrics.revenueClaimed), rightCol + 45, yPosition);
   
-  yPosition += 20;
+  yPosition += 15;
 
   // ================== IMPACT BREAKDOWN CHART ==================
   doc.setTextColor(0, 0, 0);
@@ -158,9 +158,9 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   canvas.height = 160;
   
   const chartData = [
-    { label: '', value: data.calculations.totalCostSavings },
-    { label: '', value: data.calculations.totalRevenueIncrease },
-    { label: '', value: data.calculations.totalRiskReduction }
+    { label: 'Cost Savings', value: data.calculations.totalCostSavings },
+    { label: 'Revenue Increase', value: data.calculations.totalRevenueIncrease },
+    { label: 'Risk Reduction', value: data.calculations.totalRiskReduction }
   ];
   
   const chartColors = ['#10b981', '#3b82f6', '#8b5cf6'];
