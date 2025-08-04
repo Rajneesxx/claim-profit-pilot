@@ -150,18 +150,33 @@ export const CombinedCalculator = ({
     return baseBacklogCost * reductionRate * Math.min(revenueScale, 1.5);
   })();
 
-  // Revenue increase from RVU optimization - conservative scaling
+  // Revenue increase from RVU optimization - using actual RVU data
   const rvuIncrease = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    const baseRVUImprovement = metrics.revenueClaimed * 0.002; // 0.2% revenue improvement
-    return baseRVUImprovement * Math.min(revenueScale, 1.2); // Minimal scaling for revenue increases
+    // Calculate improvement based on RVUs coded and weighted average GPCI
+    const rvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 35; // Avg $35 per RVU
+    const improvementRate = 0.03; // 3% improvement in RVU capture through better coding
+    const rvuRevenueIncrease = rvuValue * improvementRate;
+    
+    // Additional revenue from better code selection
+    const codeOptimizationGain = metrics.avgBillableCodesPerChart * metrics.chartsProcessedPerAnnum * 2.5; // $2.5 per additional code opportunity
+    
+    return (rvuRevenueIncrease + codeOptimizationGain) * Math.min(revenueScale, 1.2);
   })();
 
-  // Over/Under coding reduction (risk mitigation) - scales with revenue
+  // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
   const overCodingReduction = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    const baseComplianceSavings = metrics.revenueClaimed * 0.001; // 0.1% of revenue in compliance savings
-    return baseComplianceSavings * Math.min(revenueScale, 1.3);
+    
+    // Calculate risk reduction based on actual over/under coding percentages
+    const overCodingRisk = (metrics.revenueClaimed * (metrics.overCodingPercent / 100)) * 0.25; // 25% penalty risk
+    const underCodingRisk = (metrics.revenueClaimed * (metrics.underCodingPercent / 100)) * 0.15; // 15% lost revenue risk
+    
+    // AI reduces both risks by 80%
+    const riskReductionRate = 0.8;
+    const totalRiskReduction = (overCodingRisk + underCodingRisk) * riskReductionRate;
+    
+    return totalRiskReduction * Math.min(revenueScale, 1.3);
   })();
 
   // Total calculations

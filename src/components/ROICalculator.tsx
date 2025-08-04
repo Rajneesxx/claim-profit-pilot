@@ -76,11 +76,16 @@ export const ROICalculator = () => {
   const claimDenialSavings = (metrics.revenueClaimed / 100) * (metrics.claimDeniedPercent / 100) * 0.05 * 0.5 * Math.min(revenueScale, 1.5);
   const backlogReductionSavings = (metrics.revenueClaimed * 0.001) * (metrics.codingBacklogPercent / 100) * 0.8 * Math.min(revenueScale, 1.5);
   
-  // Revenue increase
-  const rvuIncrease = metrics.revenueClaimed * 0.002 * Math.min(revenueScale, 1.2);
+  // Revenue increase - using actual RVU data
+  const rvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 35;
+  const rvuRevenueIncrease = rvuValue * 0.03; // 3% improvement
+  const codeOptimizationGain = metrics.avgBillableCodesPerChart * metrics.chartsProcessedPerAnnum * 2.5;
+  const rvuIncrease = (rvuRevenueIncrease + codeOptimizationGain) * Math.min(revenueScale, 1.2);
   
-  // Risk reduction
-  const overCodingReduction = metrics.revenueClaimed * 0.001 * Math.min(revenueScale, 1.3);
+  // Risk reduction - using actual coding accuracy data
+  const overCodingRisk = (metrics.revenueClaimed * (metrics.overCodingPercent / 100)) * 0.25;
+  const underCodingRisk = (metrics.revenueClaimed * (metrics.underCodingPercent / 100)) * 0.15;
+  const overCodingReduction = (overCodingRisk + underCodingRisk) * 0.8 * Math.min(revenueScale, 1.3);
   
   // Totals
   const totalCostSavings = coderProductivitySavings + billingAutomationSavings + physicianTimeSavings + 
