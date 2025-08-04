@@ -223,8 +223,8 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
     ['Total Benefit', formatCurrency(data.calculations.totalImpact), 'Combined annual impact']
   ];
 
-  const colWidths = [35, 45, 70];
-  const startX = margin + 8;
+  const colWidths = [36, 45, 70];
+  const startX = margin + 9;
 
   tableData.forEach((row, index) => {
     let xPos = startX;
