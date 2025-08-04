@@ -76,16 +76,22 @@ export const ROICalculator = () => {
   const claimDenialSavings = (metrics.revenueClaimed / 100) * (metrics.claimDeniedPercent / 100) * 0.05 * 0.5 * Math.min(revenueScale, 1.5);
   const backlogReductionSavings = (metrics.revenueClaimed * 0.001) * (metrics.codingBacklogPercent / 100) * 0.8 * Math.min(revenueScale, 1.5);
   
-  // Revenue increase - using actual RVU data
-  const rvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 35;
-  const rvuRevenueIncrease = rvuValue * 0.03; // 3% improvement
-  const codeOptimizationGain = metrics.avgBillableCodesPerChart * metrics.chartsProcessedPerAnnum * 2.5;
-  const rvuIncrease = (rvuRevenueIncrease + codeOptimizationGain) * Math.min(revenueScale, 1.2);
+  // Revenue increase - using actual RVU data (matching CombinedCalculator logic)
+  const currentRvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 36.5; // 2024 conversion factor
+  const rvuRevenueIncrease = currentRvuValue * 0.025; // 2.5% improvement from better RVU capture
+  const avgRevenuePerChart = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum, 1);
+  const codeOptimizationGain = avgRevenuePerChart * metrics.chartsProcessedPerAnnum * 0.015; // 1.5% improvement per chart
+  const claimsEfficiencyGain = (metrics.claimsPerAnnum * metrics.averageCostPerClaim * 0.01); // 1% efficiency gain
+  const rvuIncrease = (rvuRevenueIncrease + codeOptimizationGain + claimsEfficiencyGain) * Math.min(revenueScale, 1.2);
   
-  // Risk reduction - using actual coding accuracy data
-  const overCodingRisk = (metrics.revenueClaimed * (metrics.overCodingPercent / 100)) * 0.25;
-  const underCodingRisk = (metrics.revenueClaimed * (metrics.underCodingPercent / 100)) * 0.15;
-  const overCodingReduction = (overCodingRisk + underCodingRisk) * 0.8 * Math.min(revenueScale, 1.3);
+  // Risk reduction - using actual coding accuracy data (matching CombinedCalculator logic)
+  const overCodingFinancialRisk = (metrics.revenueClaimed * (metrics.overCodingPercent / 100)) * 0.3; // 30% average audit penalty
+  const underCodingLostRevenue = (metrics.revenueClaimed * (metrics.underCodingPercent / 100)) * 0.2; // 20% typical loss
+  const auditCosts = metrics.chartsProcessedPerAnnum * 0.5; // $0.50 per chart for compliance overhead
+  const deniedClaimReworkCosts = (metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100)) * metrics.costPerDeniedClaim;
+  const codingErrorReduction = (overCodingFinancialRisk + underCodingLostRevenue) * 0.85;
+  const complianceReduction = (auditCosts + deniedClaimReworkCosts) * 0.7;
+  const overCodingReduction = (codingErrorReduction + complianceReduction) * Math.min(revenueScale, 1.3);
   
   // Totals
   const totalCostSavings = coderProductivitySavings + billingAutomationSavings + physicianTimeSavings + 

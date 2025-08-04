@@ -153,30 +153,42 @@ export const CombinedCalculator = ({
   // Revenue increase from RVU optimization - using actual RVU data
   const rvuIncrease = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    // Calculate improvement based on RVUs coded and weighted average GPCI
-    const rvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 35; // Avg $35 per RVU
-    const improvementRate = 0.03; // 3% improvement in RVU capture through better coding
-    const rvuRevenueIncrease = rvuValue * improvementRate;
     
-    // Additional revenue from better code selection
-    const codeOptimizationGain = metrics.avgBillableCodesPerChart * metrics.chartsProcessedPerAnnum * 2.5; // $2.5 per additional code opportunity
+    // Base RVU revenue calculation using actual organizational data
+    const currentRvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 36.5; // 2024 conversion factor
     
-    return (rvuRevenueIncrease + codeOptimizationGain) * Math.min(revenueScale, 1.2);
+    // Revenue improvements from AI coding optimization
+    const improvementRate = 0.025; // 2.5% improvement from better RVU capture
+    const rvuRevenueIncrease = currentRvuValue * improvementRate;
+    
+    // Additional revenue from optimized code selection using actual chart volume
+    const avgRevenuePerChart = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum, 1);
+    const codeOptimizationRate = 0.015; // 1.5% improvement per chart
+    const codeOptimizationGain = avgRevenuePerChart * metrics.chartsProcessedPerAnnum * codeOptimizationRate;
+    
+    // Account for claims processing efficiency
+    const claimsEfficiencyGain = (metrics.claimsPerAnnum * metrics.averageCostPerClaim * 0.01); // 1% efficiency gain
+    
+    return (rvuRevenueIncrease + codeOptimizationGain + claimsEfficiencyGain) * Math.min(revenueScale, 1.2);
   })();
 
   // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
   const overCodingReduction = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
     
-    // Calculate risk reduction based on actual over/under coding percentages
-    const overCodingRisk = (metrics.revenueClaimed * (metrics.overCodingPercent / 100)) * 0.25; // 25% penalty risk
-    const underCodingRisk = (metrics.revenueClaimed * (metrics.underCodingPercent / 100)) * 0.15; // 15% lost revenue risk
+    // Calculate actual financial risk from coding inaccuracies
+    const overCodingFinancialRisk = (metrics.revenueClaimed * (metrics.overCodingPercent / 100)) * 0.3; // 30% average audit penalty
+    const underCodingLostRevenue = (metrics.revenueClaimed * (metrics.underCodingPercent / 100)) * 0.2; // 20% typical loss
     
-    // AI reduces both risks by 80%
-    const riskReductionRate = 0.8;
-    const totalRiskReduction = (overCodingRisk + underCodingRisk) * riskReductionRate;
+    // Additional compliance costs
+    const auditCosts = metrics.chartsProcessedPerAnnum * 0.5; // $0.50 per chart for compliance overhead
+    const deniedClaimReworkCosts = (metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100)) * metrics.costPerDeniedClaim;
     
-    return totalRiskReduction * Math.min(revenueScale, 1.3);
+    // AI reduces coding errors by 85% and compliance overhead by 70%
+    const codingErrorReduction = (overCodingFinancialRisk + underCodingLostRevenue) * 0.85;
+    const complianceReduction = (auditCosts + deniedClaimReworkCosts) * 0.7;
+    
+    return (codingErrorReduction + complianceReduction) * Math.min(revenueScale, 1.3);
   })();
 
   // Total calculations
