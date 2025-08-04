@@ -125,6 +125,7 @@ export const BasicCalculator = ({
                   size="sm"
                   onClick={() => {
                     const newValue = Math.max(1, metrics.numberOfCoders - 1);
+                    console.log('Minus button: Updating coders to:', newValue, 'and licenses to:', newValue);
                     updateMetric('numberOfCoders', newValue);
                     updateMetric('numberOfEncoderLicenses', newValue);
                   }}
@@ -137,6 +138,7 @@ export const BasicCalculator = ({
                   value={metrics.numberOfCoders}
                   onChange={(e) => {
                     const value = parseInt(e.target.value) || 1;
+                    console.log('Updating coders to:', value, 'and licenses to:', value);
                     updateMetric('numberOfCoders', value);
                     updateMetric('numberOfEncoderLicenses', value); // Auto-update licenses
                   }}
@@ -148,6 +150,7 @@ export const BasicCalculator = ({
                   size="sm"
                   onClick={() => {
                     const newValue = metrics.numberOfCoders + 1;
+                    console.log('Plus button: Updating coders to:', newValue, 'and licenses to:', newValue);
                     updateMetric('numberOfCoders', newValue);
                     updateMetric('numberOfEncoderLicenses', newValue);
                   }}

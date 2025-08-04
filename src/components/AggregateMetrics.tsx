@@ -37,7 +37,7 @@ export const AggregateMetrics = () => {
     <Card className="bg-card backdrop-blur-sm border border-border h-fit">
       <CardHeader className="border-b border-border">
         <CardTitle className="text-foreground text-center">
-          Community Impact
+          Industry Metrics
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
