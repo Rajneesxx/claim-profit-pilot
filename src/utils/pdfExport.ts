@@ -63,14 +63,100 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   const pageWidth = doc.internal.pageSize.width;
   const pageHeight = doc.internal.pageSize.height;
   const margin = 20;
-  let yPosition = 30;
+  let yPosition = 20;
 
-  // Create chart canvas
-  const canvas = document.createElement('canvas');
-  canvas.width = 300;
-  canvas.height = 200;
+  // ================== HEADER SECTION ==================
+  doc.setFillColor(59, 130, 246);
+  doc.rect(0, 0, pageWidth, 40, 'F');
   
-  // Chart data
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.text('RapidROI by RapidClaims', pageWidth / 2, 18, { align: 'center' });
+  
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('AI-Powered Medical Coding ROI Analysis Report', pageWidth / 2, 28, { align: 'center' });
+  
+  doc.setFontSize(9);
+  doc.text(`Generated: ${new Date().toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric'
+  })} | Report for: ${data.userEmail}`, pageWidth / 2, 36, { align: 'center' });
+  
+  yPosition = 55;
+
+  // ================== EXECUTIVE SUMMARY ==================
+  doc.setTextColor(0, 0, 0);
+  doc.setFillColor(240, 248, 255);
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 45, 'F');
+  doc.setDrawColor(59, 130, 246);
+  doc.setLineWidth(1);
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 45, 'S');
+  
+  yPosition += 8;
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(59, 130, 246);
+  doc.text('Executive Summary', margin + 8, yPosition);
+  
+  yPosition += 12;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  
+  // Two-column layout for key metrics
+  const leftCol = margin + 8;
+  const rightCol = pageWidth / 2 + 5;
+  
+  // Left column
+  doc.setFont('helvetica', 'normal');
+  doc.text('Total Annual Impact:', leftCol, yPosition);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(16, 185, 129);
+  doc.text(formatCurrency(data.calculations.totalImpact), leftCol + 55, yPosition);
+  
+  // Right column
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Implementation Cost:', rightCol, yPosition);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(239, 68, 68);
+  doc.text(formatCurrency(data.calculations.implementationCost), rightCol + 55, yPosition);
+  
+  yPosition += 8;
+  
+  // Second row
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Payback Period:', leftCol, yPosition);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(139, 92, 246);
+  const paybackMonths = (data.calculations.implementationCost / (data.calculations.totalImpact / 12)).toFixed(1);
+  doc.text(`${paybackMonths} months`, leftCol + 45, yPosition);
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Annual Revenue:', rightCol, yPosition);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(59, 130, 246);
+  doc.text(formatCurrency(data.metrics.revenueClaimed), rightCol + 45, yPosition);
+  
+  yPosition += 20;
+
+  // ================== IMPACT BREAKDOWN CHART ==================
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Financial Impact Breakdown', margin, yPosition);
+  
+  yPosition += 10;
+  
+  // Create and add chart
+  const canvas = document.createElement('canvas');
+  canvas.width = 280;
+  canvas.height = 160;
+  
   const chartData = [
     { label: 'Cost Savings', value: data.calculations.totalCostSavings },
     { label: 'Revenue Increase', value: data.calculations.totalRevenueIncrease },
@@ -78,202 +164,155 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   ];
   
   const chartColors = ['#10b981', '#3b82f6', '#8b5cf6'];
-  createChart(canvas, 300, 200, chartData, chartColors);
+  createChart(canvas, 280, 160, chartData, chartColors);
 
-  // Header with improved styling
-  doc.setFillColor(59, 130, 246); // Blue background
-  doc.rect(0, 0, pageWidth, 35, 'F');
-  
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(24);
-  doc.setFont('helvetica', 'bold');
-  doc.text('RapidROI by RapidClaims', pageWidth / 2, 20, { align: 'center' });
-  
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.text('AI-Powered Medical Coding ROI Analysis Report', pageWidth / 2, 30, { align: 'center' });
-  
-  // Reset colors
-  doc.setTextColor(0, 0, 0);
-  yPosition = 50;
-  
-  // Report metadata
-  doc.setFontSize(10);
-  doc.setTextColor(100, 100, 100);
-  doc.text(`Generated: ${new Date().toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })}`, margin, yPosition);
-  doc.text(`Report for: ${data.userEmail}`, margin, yPosition + 7);
-  
-  yPosition += 25;
-
-  // Executive Summary Box
-  doc.setFillColor(240, 248, 255);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 60, 'F');
-  doc.setDrawColor(59, 130, 246);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 60, 'S');
-  
-  yPosition += 10;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.text('📊 Executive Summary', margin + 10, yPosition);
-  
-  yPosition += 15;
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'normal');
-  
-  // Key metrics in a grid layout
-  const col1X = margin + 10;
-  const col2X = pageWidth / 2 + 10;
-  
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(16, 185, 129);
-  doc.text('Total Annual Impact:', col1X, yPosition);
-  doc.setTextColor(0, 0, 0);
-  doc.text(formatCurrency(data.calculations.totalImpact), col1X + 65, yPosition);
-  
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(59, 130, 246);
-  doc.text('Implementation Cost:', col2X, yPosition);
-  doc.setTextColor(0, 0, 0);
-  doc.text(formatCurrency(data.calculations.implementationCost), col2X + 60, yPosition);
-  
-  yPosition += 10;
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(139, 92, 246);
-  doc.text('Payback Period:', col1X, yPosition);
-  doc.setTextColor(0, 0, 0);
-  const paybackMonths = (data.calculations.implementationCost / (data.calculations.totalImpact / 12)).toFixed(1);
-  doc.text(`${paybackMonths} months`, col1X + 50, yPosition);
-  
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(234, 88, 12);
-  doc.text('Annual Revenue:', col2X, yPosition);
-  doc.setTextColor(0, 0, 0);
-  doc.text(formatCurrency(data.metrics.revenueClaimed), col2X + 50, yPosition);
-
-  yPosition += 25;
-
-  // Add chart
   try {
     const chartDataUrl = canvas.toDataURL('image/png');
-    doc.addImage(chartDataUrl, 'PNG', margin, yPosition, 80, 50);
+    doc.addImage(chartDataUrl, 'PNG', margin, yPosition, 70, 45);
     
-    // Chart legend
-    const legendX = margin + 90;
-    let legendY = yPosition + 10;
+    // Chart legend - properly aligned
+    const legendX = margin + 80;
+    let legendY = yPosition + 8;
     
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.text('Impact Breakdown:', legendX, legendY);
+    doc.text('Impact Categories:', legendX, legendY);
     
-    legendY += 8;
+    legendY += 6;
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     
     chartData.forEach((item, index) => {
       doc.setFillColor(...hexToRgb(chartColors[index]));
-      doc.circle(legendX + 2, legendY - 2, 2, 'F');
-      doc.text(`${item.label}: ${formatCurrency(item.value)}`, legendX + 8, legendY);
+      doc.circle(legendX + 3, legendY - 1, 2, 'F');
+      doc.setTextColor(0, 0, 0);
+      doc.text(`${item.label}:`, legendX + 10, legendY);
+      doc.setFont('helvetica', 'bold');
+      doc.text(formatCurrency(item.value), legendX + 60, legendY);
+      doc.setFont('helvetica', 'normal');
       legendY += 6;
     });
   } catch (error) {
-    console.warn('Could not add chart to PDF:', error);
+    console.warn('Chart generation failed:', error);
   }
 
-  yPosition += 60;
+  yPosition += 55;
 
-  // Detailed Analysis Section
+  // ================== DETAILED ANALYSIS ==================
   doc.setFillColor(248, 250, 252);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 70, 'F');
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 55, 'F');
   doc.setDrawColor(148, 163, 184);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 70, 'S');
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 55, 'S');
+  
+  yPosition += 8;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Detailed Financial Analysis', margin + 8, yPosition);
   
   yPosition += 10;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('💼 Detailed Financial Analysis', margin + 10, yPosition);
-  
-  yPosition += 15;
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
-  
-  const detailedData = [
-    ['Annual Cost Savings:', formatCurrency(data.calculations.totalCostSavings), 'From operational efficiency gains'],
-    ['Revenue Enhancement:', formatCurrency(data.calculations.totalRevenueIncrease), 'Through improved coding accuracy'],
-    ['Risk Mitigation Value:', formatCurrency(data.calculations.totalRiskReduction), 'Compliance and audit protection'],
-    ['Net Annual Benefit:', formatCurrency(data.calculations.totalImpact), 'Total financial impact per year']
-  ];
-
-  detailedData.forEach(([label, value, description]) => {
-    doc.setFont('helvetica', 'bold');
-    doc.text(label, margin + 10, yPosition);
-    doc.setFont('helvetica', 'bold');
-    doc.text(value, margin + 80, yPosition);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 100, 100);
-    doc.text(description, margin + 130, yPosition);
-    doc.setTextColor(0, 0, 0);
-    yPosition += 8;
-  });
-
-  yPosition += 20;
-
-  // Input Parameters Section
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('⚙️ Analysis Parameters', margin, yPosition);
-  
-  yPosition += 15;
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   
-  const inputData = [
-    ['Organization Size', ''],
+  // Organized in a table format
+  const tableData = [
+    ['Category', 'Annual Value', 'Description'],
+    ['Cost Savings', formatCurrency(data.calculations.totalCostSavings), 'Operational efficiency gains'],
+    ['Revenue Enhancement', formatCurrency(data.calculations.totalRevenueIncrease), 'Improved coding accuracy'],
+    ['Risk Mitigation', formatCurrency(data.calculations.totalRiskReduction), 'Compliance protection'],
+    ['Total Benefit', formatCurrency(data.calculations.totalImpact), 'Combined annual impact']
+  ];
+
+  const colWidths = [35, 45, 70];
+  const startX = margin + 8;
+
+  tableData.forEach((row, index) => {
+    let xPos = startX;
+    
+    if (index === 0) {
+      // Header row
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(59, 130, 246);
+    } else if (index === tableData.length - 1) {
+      // Total row
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(0, 0, 0);
+    } else {
+      // Data rows
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(0, 0, 0);
+    }
+    
+    row.forEach((cell, colIndex) => {
+      doc.text(cell, xPos, yPosition);
+      xPos += colWidths[colIndex];
+    });
+    
+    yPosition += 6;
+  });
+
+  yPosition += 15;
+
+  // ================== ORGANIZATION PARAMETERS ==================
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 0);
+  doc.text('Organization Parameters', margin, yPosition);
+  
+  yPosition += 8;
+  doc.setFontSize(10);
+  
+  // Two-column parameter layout
+  const paramLeftCol = margin;
+  const paramRightCol = pageWidth / 2;
+  let leftY = yPosition;
+  let rightY = yPosition;
+  
+  // Left column parameters
+  const leftParams = [
     ['Annual Revenue Claimed:', formatCurrency(data.metrics.revenueClaimed)],
     ['Number of Coders:', formatNumber(data.metrics.numberOfCoders)],
     ['Number of Billers:', formatNumber(data.metrics.numberOfBillers)],
-    ['Number of Physicians:', formatNumber(data.metrics.numberOfPhysicians)],
-    ['', ''],
-    ['Current Performance', ''],
-    ['Claims Denied Rate:', `${data.metrics.claimDeniedPercent}%`],
-    ['Coding Backlog:', `${data.metrics.codingBacklogPercent}%`],
     ['Claims Per Year:', formatNumber(data.metrics.claimsPerAnnum)]
   ];
-
-  inputData.forEach(([label, value]) => {
-    if (label && !value) {
-      // Section header
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(59, 130, 246);
-      doc.text(label, margin, yPosition);
-      doc.setTextColor(0, 0, 0);
-    } else if (label && value) {
-      doc.setFont('helvetica', 'normal');
-      doc.text(label, margin + 5, yPosition);
-      doc.setFont('helvetica', 'bold');
-      doc.text(value, margin + 80, yPosition);
-    }
-    yPosition += label ? 8 : 4;
+  
+  // Right column parameters
+  const rightParams = [
+    ['Number of Physicians:', formatNumber(data.metrics.numberOfPhysicians)],
+    ['Claims Denied Rate:', `${data.metrics.claimDeniedPercent}%`],
+    ['Coding Backlog:', `${data.metrics.codingBacklogPercent || 15}%`],
+    ['Avg Cost/Claim:', `$${data.metrics.averageCostPerClaim}`]
+  ];
+  
+  // Render left column
+  leftParams.forEach(([label, value]) => {
+    doc.setFont('helvetica', 'normal');
+    doc.text(label, paramLeftCol, leftY);
+    doc.setFont('helvetica', 'bold');
+    doc.text(value, paramLeftCol + 60, leftY);
+    leftY += 6;
+  });
+  
+  // Render right column
+  rightParams.forEach(([label, value]) => {
+    doc.setFont('helvetica', 'normal');
+    doc.text(label, paramRightCol, rightY);
+    doc.setFont('helvetica', 'bold');
+    doc.text(value, paramRightCol + 60, rightY);
+    rightY += 6;
   });
 
-  // Footer
-  yPosition = pageHeight - 25;
+  // ================== FOOTER ==================
+  const footerY = pageHeight - 20;
   doc.setDrawColor(59, 130, 246);
-  doc.line(margin, yPosition - 5, pageWidth - margin, yPosition - 5);
+  doc.setLineWidth(0.5);
+  doc.line(margin, footerY - 8, pageWidth - margin, footerY - 8);
   
-  doc.setFontSize(9);
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'italic');
   doc.setTextColor(100, 100, 100);
-  doc.text('This comprehensive analysis was generated by RapidROI Calculator', pageWidth / 2, yPosition, { align: 'center' });
-  doc.text('RapidClaims AI-Powered Medical Coding Solutions | rapidclaims.com', pageWidth / 2, yPosition + 7, { align: 'center' });
-  doc.text('For questions or to schedule a consultation, contact us at info@rapidclaims.com', pageWidth / 2, yPosition + 14, { align: 'center' });
+  doc.text('RapidClaims AI-Powered Medical Coding Solutions', pageWidth / 2, footerY - 3, { align: 'center' });
+  doc.text('For consultation: info@rapidclaims.com | rapidclaims.com', pageWidth / 2, footerY + 3, { align: 'center' });
 
   // Save the PDF
   const fileName = `rapidroi-analysis-${new Date().toISOString().split('T')[0]}.pdf`;
