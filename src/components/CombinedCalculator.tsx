@@ -314,17 +314,22 @@ export const CombinedCalculator = ({
                 <Slider
                   value={[metrics.revenueClaimed]}
                   onValueChange={(value) => updateMetric('revenueClaimed', value[0])}
-                  max={500,000,000,000}
-                  step={100,000}
+                  max={500000000000}
+                  step={100000}
                   className="w-full"
                 />
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
                   <Input
                     id="revenue"
-                    type="number"
-                    value={metrics.revenueClaimed}
-                    onChange={(e) => handleInputChange('revenueClaimed', e.target.value)}
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(metrics.revenueClaimed)}
+                    onChange={(e) => {
+                      // Remove commas for parsing
+                      const rawValue = e.target.value.replace(/,/g, "");
+                      handleInputChange('revenueClaimed', rawValue);
+                    }}
                     className="text-center text-lg font-semibold pl-8"
                     placeholder="Enter annual revenue"
                   />
