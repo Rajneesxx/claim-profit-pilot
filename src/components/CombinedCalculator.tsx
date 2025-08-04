@@ -315,7 +315,7 @@ export const CombinedCalculator = ({
                   value={[metrics.revenueClaimed]}
                   onValueChange={(value) => updateMetric('revenueClaimed', value[0])}
                   max={500000000}
-                  step={100000}
+                  step={10000}
                   className="w-full"
                 />
                 <div className="relative">
