@@ -34,7 +34,7 @@ export const Summary = ({ calculations, onCalculateROI }: SummaryProps) => {
       </CardHeader>
       <CardContent className="p-8">
         {/* Key Results */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <div className="text-center p-6 rounded-lg bg-primary/10 border border-primary/20">
             <div className="text-4xl font-bold text-primary mb-2">
               {calculations.roi.toFixed(1)}%
@@ -46,12 +46,6 @@ export const Summary = ({ calculations, onCalculateROI }: SummaryProps) => {
               ${calculations.executiveSummary.totalImpact.toLocaleString()}
             </div>
             <div className="text-foreground">Total Annual Savings</div>
-          </div>
-          <div className="text-center p-6 rounded-lg bg-info/10 border border-info/20">
-            <div className="text-4xl font-bold text-info mb-2">
-              ${(calculations.executiveSummary.totalImpact / 12).toLocaleString()}
-            </div>
-            <div className="text-foreground">Monthly Savings</div>
           </div>
         </div>
 

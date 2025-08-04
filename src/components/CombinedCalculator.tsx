@@ -316,9 +316,6 @@ export const CombinedCalculator = ({
                   <div className="text-sm text-center text-muted-foreground">
                     Implementation Investment: {formatCurrency(scaledImplementationCost)}
                   </div>
-                  <div className="text-sm text-center text-muted-foreground">
-                    Monthly Savings: {formatCurrency(totalImpact / 12)}
-                  </div>
                 </div>
 
                 {/* Impact Metrics */}

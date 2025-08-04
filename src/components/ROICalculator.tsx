@@ -140,7 +140,7 @@ export const ROICalculator = () => {
     });
   };
 
-  const exportData = () => {
+  const exportData = async () => {
     const exportData = {
       metrics,
       calculations: {
@@ -154,7 +154,7 @@ export const ROICalculator = () => {
       userEmail
     };
 
-    generatePDFReport(exportData);
+    await generatePDFReport(exportData);
     
     toast({
       title: "PDF Export Complete",
