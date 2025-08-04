@@ -62,7 +62,15 @@ export const ROICalculator = () => {
   const [rating, setRating] = useState(0);
 
   const updateMetric = (key: keyof ROIMetrics, value: number) => {
-    setMetrics(prev => ({ ...prev, [key]: value }));
+    setMetrics(prev => {
+      const updated = { ...prev, [key]: value };
+      // Auto-update encoder licenses when number of coders changes (1 license per coder)
+      if (key === 'numberOfCoders') {
+        updated.numberOfEncoderLicenses = value;
+        console.log('ROICalculator: Updated coders to:', value, 'and licenses to:', value);
+      }
+      return updated;
+    });
   };
 
   // Updated ROI Calculations to match CombinedCalculator
