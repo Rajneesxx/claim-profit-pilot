@@ -74,7 +74,14 @@ export const CombinedCalculator = ({
   const metrics = propMetrics || localMetrics;
   
   const updateMetric = propUpdateMetric || ((key: keyof ROIMetrics, value: number) => {
-    setLocalMetrics(prev => ({ ...prev, [key]: value }));
+    setLocalMetrics(prev => {
+      const updated = { ...prev, [key]: value };
+      // Auto-update encoder licenses when number of coders changes (1 license per coder)
+      if (key === 'numberOfCoders') {
+        updated.numberOfEncoderLicenses = value;
+      }
+      return updated;
+    });
   });
 
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -311,16 +318,19 @@ export const CombinedCalculator = ({
                   step={100000}
                   className="w-full"
                 />
-                <Input
-                  id="revenue"
-                  type="number"
-                  value={metrics.revenueClaimed}
-                  onChange={(e) => handleInputChange('revenueClaimed', e.target.value)}
-                  className="text-center text-lg font-semibold"
-                  placeholder="Enter annual revenue"
-                />
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+                  <Input
+                    id="revenue"
+                    type="number"
+                    value={metrics.revenueClaimed}
+                    onChange={(e) => handleInputChange('revenueClaimed', e.target.value)}
+                    className="text-center text-lg font-semibold pl-8"
+                    placeholder="Enter annual revenue"
+                  />
+                </div>
                 <div className="text-center text-sm text-muted-foreground">
-                  Current: {formatCurrency(metrics.revenueClaimed)}
+                  {formatCurrency(metrics.revenueClaimed)}
                 </div>
               </div>
             </div>

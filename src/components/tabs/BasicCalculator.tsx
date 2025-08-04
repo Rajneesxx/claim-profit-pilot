@@ -57,14 +57,17 @@ export const BasicCalculator = ({
             </div>
             <div className="mt-4">
               <Label htmlFor="revenue-input" className="text-sm text-muted-foreground">Enter exact amount:</Label>
-              <Input
-                id="revenue-input"
-                type="number"
-                value={metrics.revenueClaimed}
-                onChange={(e) => updateMetric('revenueClaimed', parseInt(e.target.value) || 0)}
-                className="mt-2 text-center"
-                placeholder="Enter revenue amount"
-              />
+              <div className="relative mt-2">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+                <Input
+                  id="revenue-input"
+                  type="number"
+                  value={metrics.revenueClaimed}
+                  onChange={(e) => updateMetric('revenueClaimed', parseInt(e.target.value) || 0)}
+                  className="text-center pl-8"
+                  placeholder="Enter revenue amount"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -128,7 +131,11 @@ export const BasicCalculator = ({
                 <Input
                   type="number"
                   value={metrics.numberOfCoders}
-                  onChange={(e) => updateMetric('numberOfCoders', parseInt(e.target.value) || 1)}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value) || 1;
+                    updateMetric('numberOfCoders', value);
+                    updateMetric('numberOfEncoderLicenses', value); // Auto-update licenses
+                  }}
                   className="text-center font-semibold"
                   min="1"
                 />
