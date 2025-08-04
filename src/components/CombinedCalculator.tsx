@@ -334,6 +334,9 @@ export const CombinedCalculator = ({
                     placeholder="Enter annual revenue"
                   />
                 </div>
+                <div className="text-center text-sm text-muted-foreground">
+                  {formatCurrency(metrics.revenueClaimed)}
+                </div>
               </div>
             </div>
 
