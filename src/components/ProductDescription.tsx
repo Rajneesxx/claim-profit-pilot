@@ -22,7 +22,5 @@ export const ProductDescription = () => {
           The tool runs the numbers in real-time; no setup, no hassle - so you can quickly assess how automation could improve your bottom line.
         </p>
       </div>
-
-
   );
 };
