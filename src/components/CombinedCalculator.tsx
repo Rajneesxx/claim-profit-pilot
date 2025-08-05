@@ -58,7 +58,7 @@ export const CombinedCalculator = ({
     averageCostPerLicensePerMonth: 500,
     salaryPerBiller: 55000,
     salaryPerPhysician: 280000,
-    avgTimePerPhysicianPerChart: 0, // Set to 0 by default
+    avgTimePerPhysicianPerChart: 15, // Set to 0 by default
     chartsPerCoderPerDay: 80, // Default at 80 as requested
     costPerDeniedClaim: 150,
     codingBacklogPercent: 15,
