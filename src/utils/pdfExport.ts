@@ -44,14 +44,33 @@ const createChart = (canvas: HTMLCanvasElement, width: number, height: number, d
     ctx.lineWidth = 2;
     ctx.stroke();
     
-    // Draw label
+    // Draw label with better positioning and formatting
     const labelAngle = currentAngle + sliceAngle / 2;
-    const labelX = centerX + Math.cos(labelAngle) * (radius + 20);
-    const labelY = centerY + Math.sin(labelAngle) * (radius + 20);
+    const labelRadius = radius + 30;
+    const labelX = centerX + Math.cos(labelAngle) * labelRadius;
+    const labelY = centerY + Math.sin(labelAngle) * labelRadius;
     
-    ctx.fillStyle = '#000';
-    ctx.font = '12px Arial';
-    ctx.textAlign = 'center';
+    // Determine text alignment based on position
+    let textAlign: CanvasTextAlign = 'center';
+    if (labelX < centerX - radius * 0.5) textAlign = 'right';
+    else if (labelX > centerX + radius * 0.5) textAlign = 'left';
+    
+    // Draw white background for better readability
+    ctx.font = 'bold 11px Arial';
+    ctx.textAlign = textAlign;
+    const textMetrics = ctx.measureText(item.label);
+    const textWidth = textMetrics.width;
+    const textHeight = 12;
+    
+    let bgX = labelX;
+    if (textAlign === 'right') bgX -= textWidth;
+    else if (textAlign === 'center') bgX -= textWidth / 2;
+    
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.fillRect(bgX - 3, labelY - textHeight, textWidth + 6, textHeight + 4);
+    
+    // Draw text with dark color
+    ctx.fillStyle = '#1a1a1a';
     ctx.fillText(item.label, labelX, labelY);
     
     currentAngle += sliceAngle;
