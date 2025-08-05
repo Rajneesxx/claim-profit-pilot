@@ -90,6 +90,19 @@ export const ROICalculator = () => {
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
       }
       
+      // Auto-calculate number of coders when charts processed per year changes
+      if (key === 'chartsProcessedPerAnnum') {
+        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 250));
+        updated.numberOfEncoderLicenses = updated.numberOfCoders;
+      }
+      
+      // Auto-calculate number of coders when claims per year changes
+      if (key === 'claimsPerAnnum') {
+        updated.chartsProcessedPerAnnum = value; // Sync charts with claims
+        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 250));
+        updated.numberOfEncoderLicenses = updated.numberOfCoders;
+      }
+      
       return updated;
     });
   };
