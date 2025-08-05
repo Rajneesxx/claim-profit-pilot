@@ -49,22 +49,22 @@ export const CombinedCalculator = ({
     numberOfBillers: 5,
     numberOfPhysicians: 20,
     claimDeniedPercent: 8.5,
-    claimsPerAnnum: 50000,
-    averageCostPerClaim: 100,
-    chartsProcessedPerAnnum: 100000,
+    claimsPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
+    averageCostPerClaim: 150,
+    chartsProcessedPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
     salaryPerCoder: 65000,
     overheadCostPercent: 30,
     numberOfEncoderLicenses: 10,
     averageCostPerLicensePerMonth: 500,
     salaryPerBiller: 55000,
     salaryPerPhysician: 280000,
-    avgTimePerPhysicianPerChart: 15,
-    chartsPerCoderPerDay: 25,
+    avgTimePerPhysicianPerChart: 0, // Set to 0 by default
+    chartsPerCoderPerDay: 80, // Default at 80 as requested
     costPerDeniedClaim: 150,
     codingBacklogPercent: 15,
     daysPerChartInBacklog: 5,
     costOfCapital: 8,
-    rvusCodedPerAnnum: 25000,
+    rvusCodedPerAnnum: 156250, // Auto-calculated: revenue / 32
     weightedAverageGPCI: 1.0,
     overCodingPercent: 5,
     underCodingPercent: 8,
@@ -76,10 +76,25 @@ export const CombinedCalculator = ({
   const updateMetric = propUpdateMetric || ((key: keyof ROIMetrics, value: number) => {
     setLocalMetrics(prev => {
       const updated = { ...prev, [key]: value };
+      
       // Auto-update encoder licenses when number of coders changes (1 license per coder)
       if (key === 'numberOfCoders') {
         updated.numberOfEncoderLicenses = value;
       }
+      
+      // Auto-calculate claims and charts when revenue changes
+      if (key === 'revenueClaimed') {
+        updated.claimsPerAnnum = Math.round(value / updated.averageCostPerClaim);
+        updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
+        updated.rvusCodedPerAnnum = Math.round(value / 32);
+      }
+      
+      // Auto-calculate claims and charts when average cost per claim changes
+      if (key === 'averageCostPerClaim') {
+        updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
+        updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
+      }
+      
       return updated;
     });
   });
@@ -198,9 +213,12 @@ export const CombinedCalculator = ({
     return (codingErrorReduction + complianceReduction) * Math.min(revenueScale, 1.3);
   })();
 
-  // Total calculations
-  const totalCostSavings = coderProductivitySavings + billingAutomationSavings + physicianTimeSavings + 
-    technologyCostSavings + claimDenialSavings + backlogReductionSavings;
+  // Total calculations with capping to prevent savings exceeding revenue
+  const totalCostSavings = Math.min(
+    coderProductivitySavings + billingAutomationSavings + physicianTimeSavings + 
+    technologyCostSavings + claimDenialSavings + backlogReductionSavings,
+    metrics.revenueClaimed * 0.8 // Cap at 80% of revenue
+  );
   const totalRevenueIncrease = rvuIncrease;
   const totalRiskReduction = overCodingReduction;
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
@@ -246,7 +264,7 @@ export const CombinedCalculator = ({
   const angle = (roiPercentage / 400) * 180;
 
   const basicInputs = [
-    { key: 'numberOfCoders' as keyof ROIMetrics, label: 'Number of Coders', max: 50, step: 1 },
+    { key: 'numberOfCoders' as keyof ROIMetrics, label: 'Number of Coders', max: 2000, step: 1 },
     { key: 'numberOfBillers' as keyof ROIMetrics, label: 'Number of Billers', max: 50, step: 1 },
     { key: 'numberOfPhysicians' as keyof ROIMetrics, label: 'Number of Physicians', max: 100, step: 1 },
     { key: 'claimDeniedPercent' as keyof ROIMetrics, label: 'Claims Denied %', max: 50, step: 0.1 },
