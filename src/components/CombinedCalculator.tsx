@@ -87,12 +87,18 @@ export const CombinedCalculator = ({
         updated.claimsPerAnnum = Math.round(value / updated.averageCostPerClaim);
         updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
         updated.rvusCodedPerAnnum = Math.round(value / 32);
+        // Auto-calculate number of coders based on charts per coder per day (80) and 250 working days
+        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 250));
+        updated.numberOfEncoderLicenses = updated.numberOfCoders;
       }
       
       // Auto-calculate claims and charts when average cost per claim changes
       if (key === 'averageCostPerClaim') {
         updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
         updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
+        // Auto-calculate number of coders based on charts per coder per day (80) and 250 working days
+        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 250));
+        updated.numberOfEncoderLicenses = updated.numberOfCoders;
       }
       
       return updated;
