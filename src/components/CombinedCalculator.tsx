@@ -136,7 +136,7 @@ export const CombinedCalculator = ({
   const leverImpacts = {
     coderProductivity: { low: 0.4, medium: 0.8, high: 3.0 },
     billingAutomation: { low: 0.5, medium: 0.7, high: 1.2 },
-    physicianTimeSaved: { low: 0.0, medium: 0.5, high: 0.7 },
+    physicianTimeSaved: { low: 0.0, medium: 0.0, high: 0.0 },
     technologyCostSaved: { low: 0.5, medium: 0.7, high: 1.0 },
     claimDenialReduction: { low: 0.3, medium: 0.5, high: 0.7 },
     codingBacklogElimination: { low: 0.6, medium: 0.8, high: 1.0 }
