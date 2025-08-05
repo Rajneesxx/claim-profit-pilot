@@ -114,7 +114,7 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   doc.text('Total Annual Impact:', leftCol, yPosition);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(16, 185, 129);
-  doc.text(formatCurrency(data.calculations.totalImpact), leftCol + 55, yPosition);
+  doc.text(formatCurrency(data.calculations.totalImpact), leftCol + 45 , yPosition);
   
   // Right column
   doc.setTextColor(0, 0, 0);
@@ -122,7 +122,7 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   doc.text('Implementation Cost:', rightCol, yPosition);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(239, 68, 68);
-  doc.text(formatCurrency(data.calculations.implementationCost), rightCol + 55, yPosition);
+  doc.text(formatCurrency(data.calculations.implementationCost), rightCol + 45, yPosition);
   
   yPosition += 8;
   
