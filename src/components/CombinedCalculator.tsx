@@ -299,7 +299,7 @@ export const CombinedCalculator = ({
     { key: 'averageCostPerLicensePerMonth' as keyof ROIMetrics, label: 'Cost Per License/Month ($)' },
     { key: 'salaryPerBiller' as keyof ROIMetrics, label: 'Salary Per Biller ($)' },
     { key: 'salaryPerPhysician' as keyof ROIMetrics, label: 'Salary Per Physician ($)' },
-    { key: 'avgTimePerPhysicianPerChart' as keyof ROIMetrics, label: 'Avg Time Per Chart (min)' },
+    { key: 'avgTimePerPhysicianPerChart' as keyof ROIMetrics, label: 'Avg Time Spent by Physician Per Chart (min)' },
     { key: 'chartsPerCoderPerDay' as keyof ROIMetrics, label: 'Charts Per Coder Per Day' },
     { key: 'costPerDeniedClaim' as keyof ROIMetrics, label: 'Cost Per Denied Claim ($)' },
     { key: 'codingBacklogPercent' as keyof ROIMetrics, label: 'Coding Backlog (%)' },
