@@ -17,25 +17,25 @@ export const ROICalculator = () => {
   const defaultMetrics: ROIMetrics = {
     // Basic inputs
     revenueClaimed: 5000000,
-    numberOfCoders: 3,
+    numberOfCoders: 10,
     numberOfBillers: 3,
     numberOfPhysicians: 50,
     claimDeniedPercent: 10,
 
     // Advanced inputs - Aggregate claims data
-    claimsPerAnnum: 66667,
+    claimsPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
     averageCostPerClaim: 150,
-    chartsProcessedPerAnnum: 66667,
+    chartsProcessedPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
 
     // Coding costs
     salaryPerCoder: 60000,
     overheadCostPercent: 38,
-    numberOfEncoderLicenses: 3,
+    numberOfEncoderLicenses: 10,
     averageCostPerLicensePerMonth: 500,
     salaryPerBiller: 50000,
     salaryPerPhysician: 350000,
-    avgTimePerPhysicianPerChart: 15,
-    chartsPerCoderPerDay: 88,
+    avgTimePerPhysicianPerChart: 0, // Set to 0 by default
+    chartsPerCoderPerDay: 80, // Default at 80 as requested
 
     // Collection costs
     costPerDeniedClaim: 13,
@@ -46,7 +46,7 @@ export const ROICalculator = () => {
     costOfCapital: 5,
 
     // RVUs
-    rvusCodedPerAnnum: 312500,
+    rvusCodedPerAnnum: 156250, // Auto-calculated: revenue / 32
     weightedAverageGPCI: 1.03,
 
     // Audit data
@@ -64,11 +64,26 @@ export const ROICalculator = () => {
   const updateMetric = (key: keyof ROIMetrics, value: number) => {
     setMetrics(prev => {
       const updated = { ...prev, [key]: value };
+      
       // Auto-update encoder licenses when number of coders changes (1 license per coder)
       if (key === 'numberOfCoders') {
         updated.numberOfEncoderLicenses = value;
         console.log('ROICalculator: Updated coders to:', value, 'and licenses to:', value);
       }
+      
+      // Auto-calculate claims and charts when revenue changes
+      if (key === 'revenueClaimed') {
+        updated.claimsPerAnnum = Math.round(value / updated.averageCostPerClaim);
+        updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
+        updated.rvusCodedPerAnnum = Math.round(value / 32);
+      }
+      
+      // Auto-calculate claims and charts when average cost per claim changes
+      if (key === 'averageCostPerClaim') {
+        updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
+        updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
+      }
+      
       return updated;
     });
   };
@@ -101,9 +116,12 @@ export const ROICalculator = () => {
   const complianceReduction = (auditCosts + deniedClaimReworkCosts) * 0.7;
   const overCodingReduction = (codingErrorReduction + complianceReduction) * Math.min(revenueScale, 1.3);
   
-  // Totals
-  const totalCostSavings = coderProductivitySavings + billingAutomationSavings + physicianTimeSavings + 
-    technologyCostSavings + claimDenialSavings + backlogReductionSavings;
+  // Totals with capping to prevent savings exceeding revenue
+  const totalCostSavings = Math.min(
+    coderProductivitySavings + billingAutomationSavings + physicianTimeSavings + 
+    technologyCostSavings + claimDenialSavings + backlogReductionSavings,
+    metrics.revenueClaimed * 0.8 // Cap at 80% of revenue
+  );
   const totalRevenueIncrease = rvuIncrease;
   const totalRiskReduction = overCodingReduction;
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
