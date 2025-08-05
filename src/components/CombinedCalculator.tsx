@@ -267,7 +267,18 @@ export const CombinedCalculator = ({
     updateMetric(key, Math.max(0, metrics[key] - step));
   };
 
-  const handleInputChange = (key: keyof ROIMetrics, value: string) => {
+  const handleInputChange = (key: keyof ROIMetrics, value: string | number) => {
+    if (typeof value === 'number') {
+      updateMetric(key, value);
+      return;
+    }
+    
+    // Handle empty string - allow temporary empty state
+    if (value === '') {
+      updateMetric(key, 0);
+      return;
+    }
+    
     const numValue = parseFloat(value);
     if (!isNaN(numValue) && numValue >= 0) {
       updateMetric(key, numValue);
@@ -365,13 +376,28 @@ export const CombinedCalculator = ({
         id="revenue"
         type="text"
         inputMode="numeric"
-        value={formatNumber(Math.max(1000000, Math.min(10000000000, metrics.revenueClaimed)))}
+        value={metrics.revenueClaimed === 0 ? '' : formatNumber(metrics.revenueClaimed)}
         onChange={(e) => {
           // Remove commas for parsing
           const rawValue = e.target.value.replace(/,/g, "");
+          
+          // Allow empty string during editing
+          if (rawValue === '') {
+            handleInputChange('revenueClaimed', '');
+            return;
+          }
+          
+          const numericValue = parseInt(rawValue);
+          if (!isNaN(numericValue)) {
+            handleInputChange('revenueClaimed', numericValue.toString());
+          }
+        }}
+        onBlur={(e) => {
+          // Apply minimum constraints only when user finishes editing
+          const rawValue = e.target.value.replace(/,/g, "");
           const numericValue = parseInt(rawValue) || 1000000;
           const clampedValue = Math.max(1000000, Math.min(10000000000, numericValue));
-          handleInputChange('revenueClaimed', clampedValue);
+          updateMetric('revenueClaimed', clampedValue);
         }}
         className="text-center text-lg font-semibold pl-8"
         placeholder="Enter annual revenue (min $1M, max $10B)"
