@@ -154,8 +154,8 @@ export const CombinedCalculator = ({
   // We'll use metrics.chartsProcessedPerAnnum, leverImpacts.coderProductivity[level], metrics.avgTimePerChart (in hours), metrics.costPerCoderPerHour
   const incrementalProductivity = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
   const chartsPerYear = metrics.chartsProcessedPerAnnum;
-  const timePerChart = metrics.avgTimePerChart || 1; // Default to 1 hour if not set
-  const costPerHour = metrics.costPerCoderPerHour || (metrics.salaryPerCoder / 2080); // Estimate if not set
+  const timePerChart = (metrics.avgTimePerPhysicianPerChart || 15) / 60; // Convert minutes to hours
+  const costPerHour = (metrics.salaryPerCoder / 2080); // Calculate hourly rate from annual salary
   return chartsPerYear * (incrementalProductivity / (1 + incrementalProductivity)) * timePerChart * costPerHour;
 })();
 
@@ -239,9 +239,9 @@ export const CombinedCalculator = ({
 
   // Total calculations with capping to prevent savings exceeding revenue
   const totalCostSavings = Math.min(
-    coderProductivitySavings + billingAutomationSavings + physicianTimeSavings + 
+    coderProductivityCost + billingAutomationSavings + physicianTimeSavings + 
     technologyCostSavings + claimDenialSavings + backlogReductionSavings,
-    metrics.revenueClaimed *0.75 // Cap at 80% of revenue
+    metrics.revenueClaimed * 0.75 // Cap at 75% of revenue
   );
   const totalRevenueIncrease = rvuIncrease;
   const totalRiskReduction = overCodingReduction;
@@ -461,7 +461,7 @@ export const CombinedCalculator = ({
 
             {/* Detailed Metrics Breakdown */}
             <MetricsExpandedView
-              coderProductivitySavings={coderProductivitySavings}
+              coderProductivitySavings={coderProductivityCost}
               billingAutomationSavings={billingAutomationSavings}
               physicianTimeSavings={physicianTimeSavings}
               technologyCostSavings={technologyCostSavings}
@@ -595,9 +595,9 @@ export const CombinedCalculator = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="low">Low (40% improvement) - ${coderProductivitySavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="medium">Medium (80% improvement) - ${coderProductivitySavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="high">High (300% improvement) - ${coderProductivitySavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="low">Low (40% improvement) - ${coderProductivityCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="medium">Medium (80% improvement) - ${coderProductivityCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="high">High (300% improvement) - ${coderProductivityCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
                         </SelectContent>
                       </Select>
                       <div className="text-xs text-muted-foreground space-y-1">
