@@ -114,15 +114,12 @@ export const ROICalculator = () => {
   const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
   
   // Individual lever calculations
-  const incrementalProductivity = 0.8;
-  const timeToCodeAChart = 8 / metrics.chartsPerCoderPerDay; // 8 hours/day divided by charts per coder per day
-  const costPerCoderPerHour = metrics.salaryPerCoder / 2000; // Assuming 2000 work hours/year
   const coderProductivitySavings = metrics.chartsProcessedPerAnnum*(incrementalProductivity / (1 + incrementalProductivity))* timeToCodeAChart* costPerCoderPerHour;
-  const billingAutomationSavings = 12000 * metrics.numberOfBillers * 0.7 * revenueScale;
-  const physicianTimeSavings = 8000 * metrics.numberOfPhysicians * 0.5 * revenueScale;
-  const technologyCostSavings = metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12 * 0.7 * Math.min(revenueScale, 2);
-  const claimDenialSavings = (metrics.revenueClaimed / 100) * (metrics.claimDeniedPercent / 100) * 0.05 * 0.5 * Math.min(revenueScale, 1.5);
-  const backlogReductionSavings = (metrics.revenueClaimed * 0.001) * (metrics.codingBacklogPercent / 100) * 0.8 * Math.min(revenueScale, 1.5);
+  const billingAutomationSavings = numberOfBillers * averageSalaryPerBiller * automationImpact;
+  const physicianTimeSavings = hoursPerChart * chartsPerYear * metrics.numberOfPhysicians * hourlyRate * timeSavedRate;
+  const technologyCostSavings = baseTechSavings * reductionRate * Math.min(revenueScale, 2);
+  const claimDenialSavings = baseDenials * reductionRate * costPerDeniedClaim;
+  const backlogReductionSavings =  chartsPerAnnum * avgChartValue * codingBacklogPercent * avgBacklogDays * reductionRate * (costOfCapital / 365);
   
   // Revenue increase - using actual RVU data (matching CombinedCalculator logic)
   const currentRvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 36.5; // 2024 conversion factor
