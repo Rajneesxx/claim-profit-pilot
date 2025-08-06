@@ -93,6 +93,10 @@ export const CombinedCalculator = ({
         // Auto-calculate number of coders based on charts per coder per day (80) and 250 working days
         updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 250));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
+        // Auto-scale billers and physicians based on revenue growth (scale with charts)
+        const revenueGrowthFactor = value / 5000000; // 5M is the base revenue
+        updated.numberOfBillers = Math.ceil(5 * revenueGrowthFactor); // Base 5 billers
+        updated.numberOfPhysicians = Math.ceil(20 * revenueGrowthFactor); // Base 20 physicians
       }
       
       // Auto-calculate claims and charts when average cost per claim changes
@@ -102,12 +106,20 @@ export const CombinedCalculator = ({
         // Auto-calculate number of coders based on charts per coder per day (80) and 250 working days
         updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 250));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
+        // Auto-scale billers and physicians based on revenue growth
+        const revenueGrowthFactor = updated.revenueClaimed / 5000000; // 5M is the base revenue
+        updated.numberOfBillers = Math.ceil(5 * revenueGrowthFactor); // Base 5 billers
+        updated.numberOfPhysicians = Math.ceil(20 * revenueGrowthFactor); // Base 20 physicians
       }
       
       // Auto-calculate number of coders when charts processed per year changes
       if (key === 'chartsProcessedPerAnnum') {
         updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 250));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
+        // Auto-scale billers and physicians based on chart volume
+        const chartGrowthFactor = value / 33333; // Base charts (5M revenue / 150 per claim)
+        updated.numberOfBillers = Math.ceil(5 * chartGrowthFactor); // Base 5 billers
+        updated.numberOfPhysicians = Math.ceil(20 * chartGrowthFactor); // Base 20 physicians
       }
       
       // Auto-calculate number of coders when claims per year changes
@@ -115,6 +127,10 @@ export const CombinedCalculator = ({
         updated.chartsProcessedPerAnnum = value; // Sync charts with claims
         updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 250));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
+        // Auto-scale billers and physicians based on claim volume
+        const claimGrowthFactor = value / 33333; // Base claims (5M revenue / 150 per claim)
+        updated.numberOfBillers = Math.ceil(5 * claimGrowthFactor); // Base 5 billers
+        updated.numberOfPhysicians = Math.ceil(20 * claimGrowthFactor); // Base 20 physicians
       }
       
       return updated;
