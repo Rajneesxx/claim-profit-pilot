@@ -132,12 +132,48 @@ export const ROICalculator = () => {
   const backlogReductionSavings = metrics.chartsProcessedPerAnnum * avgChartValue * (metrics.codingBacklogPercent / 100) * metrics.daysPerChartInBacklog * 0.8 * (metrics.costOfCapital / 365);
   
   // Revenue increase - using actual RVU data (matching CombinedCalculator logic)
-  const currentRvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 36.5; // 2024 conversion factor
-  const rvuRevenueIncrease = currentRvuValue * 0.025; // 2.5% improvement from better RVU capture
-  const avgRevenuePerChart = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum, 1);
-  const codeOptimizationGain = avgRevenuePerChart * metrics.chartsProcessedPerAnnum * 0.015; // 1.5% improvement per chart
-  const claimsEfficiencyGain = (metrics.claimsPerAnnum * metrics.averageCostPerClaim * 0.01); // 1% efficiency gain
-  const rvuIncrease = (rvuRevenueIncrease + codeOptimizationGain + claimsEfficiencyGain) * Math.min(revenueScale, 1.2);
+    const rvuIncrease = (() => {
+    // 2024 Medicare conversion factor
+    const conversionFactor = 36.5;
+
+    // Revenue scale based on organization size
+    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
+    const cappedRevenueScale = Math.min(revenueScale, 1.2);
+
+    // 1. E&M RVU Optimization (0.5% increment)
+    const rvuIncrementRate = 0.005;
+    const rvuRevenueIncreaseByEandM =
+        metrics.rvusCodedPerAnnum * rvuIncrementRate * metrics.weightedAverageGPCI * conversionFactor;
+
+    // 2. AI Coding Optimization (2.5% improvement)
+    const improvementRate = 0.025;
+    const currentRvuValue =
+        metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * conversionFactor;
+    const rvuRevenueIncrease = currentRvuValue * improvementRate;
+
+    // 3. Code Optimization Gain (1.5% per chart)
+    const codeOptimizationRate = 0.015;
+    const avgRevenuePerChart =
+        metrics.chartsProcessedPerAnnum > 0
+            ? metrics.revenueClaimed / metrics.chartsProcessedPerAnnum
+            : 0;
+    const codeOptimizationGain =
+        avgRevenuePerChart * metrics.chartsProcessedPerAnnum * codeOptimizationRate;
+
+    // 4. Claims Processing Efficiency Gain (1% efficiency gain)
+    const claimsEfficiencyRate = 0.01;
+    const claimsEfficiencyGain =
+        metrics.claimsPerAnnum * metrics.averageCostPerClaim * claimsEfficiencyRate;
+
+    // 5. Final Revenue Increase Calculation
+    const totalIncrease =
+        rvuRevenueIncreaseByEandM +
+        rvuRevenueIncrease +
+        codeOptimizationGain +
+        claimsEfficiencyGain;
+
+    return totalIncrease * cappedRevenueScale;
+})();
   
   // Risk reduction - using actual coding accuracy data (matching CombinedCalculator logic)
   const overCodingFinancialRisk = (metrics.revenueClaimed * (metrics.overCodingPercent / 100)) * 0.3; // 30% average audit penalty
