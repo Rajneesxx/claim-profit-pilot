@@ -202,25 +202,47 @@ export const CombinedCalculator = ({
 
   // Revenue increase from RVU optimization - using actual RVU data
   const rvuIncrease = (() => {
+    // 2024 Medicare conversion factor
+    const conversionFactor = 36.5;
+
+    // Revenue scale based on organization size
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    
-    // Base RVU revenue calculation using actual organizational data
-    const currentRvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 36.5; // 2024 conversion factor
-    
-    // Revenue improvements from AI coding optimization
-    const improvementRate = 0.025; // 2.5% improvement from better RVU capture
+    const cappedRevenueScale = Math.min(revenueScale, 1.2);
+
+    // 1. E&M RVU Optimization (0.5% increment)
+    const rvuIncrementRate = 0.005;
+    const rvuRevenueIncreaseByEandM =
+        metrics.rvusCodedPerAnnum * rvuIncrementRate * metrics.weightedAverageGPCI * conversionFactor;
+
+    // 2. AI Coding Optimization (2.5% improvement)
+    const improvementRate = 0.025;
+    const currentRvuValue =
+        metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * conversionFactor;
     const rvuRevenueIncrease = currentRvuValue * improvementRate;
-    
-    // Additional revenue from optimized code selection using actual chart volume
-    const avgRevenuePerChart = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum, 1);
-    const codeOptimizationRate = 0.015; // 1.5% improvement per chart
-    const codeOptimizationGain = avgRevenuePerChart * metrics.chartsProcessedPerAnnum * codeOptimizationRate;
-    
-    // Account for claims processing efficiency
-    const claimsEfficiencyGain = (metrics.claimsPerAnnum * metrics.averageCostPerClaim * 0.01); // 1% efficiency gain
-    
-    return (rvuRevenueIncrease + codeOptimizationGain + claimsEfficiencyGain) * Math.min(revenueScale, 1.2);
-  })();
+
+    // 3. Code Optimization Gain (1.5% per chart)
+    const codeOptimizationRate = 0.015;
+    const avgRevenuePerChart =
+        metrics.chartsProcessedPerAnnum > 0
+            ? metrics.revenueClaimed / metrics.chartsProcessedPerAnnum
+            : 0;
+    const codeOptimizationGain =
+        avgRevenuePerChart * metrics.chartsProcessedPerAnnum * codeOptimizationRate;
+
+    // 4. Claims Processing Efficiency Gain (1% efficiency gain)
+    const claimsEfficiencyRate = 0.01;
+    const claimsEfficiencyGain =
+        metrics.claimsPerAnnum * metrics.averageCostPerClaim * claimsEfficiencyRate;
+
+    // 5. Final Revenue Increase Calculation
+    const totalIncrease =
+        rvuRevenueIncreaseByEandM +
+        rvuRevenueIncrease +
+        codeOptimizationGain +
+        claimsEfficiencyGain;
+
+    return totalIncrease * cappedRevenueScale;
+})();
 
   // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
   const overCodingReduction = (() => {
