@@ -114,12 +114,22 @@ export const ROICalculator = () => {
   const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
   
   // Individual lever calculations
-  const coderProductivitySavings = metrics.chartsProcessedPerAnnum*(incrementalProductivity / (1 + incrementalProductivity))* timeToCodeAChart* costPerCoderPerHour;
-  const billingAutomationSavings = numberOfBillers * averageSalaryPerBiller * automationImpact;
-  const physicianTimeSavings = hoursPerChart * chartsPerYear * metrics.numberOfPhysicians * hourlyRate * timeSavedRate;
-  const technologyCostSavings = baseTechSavings * reductionRate * Math.min(revenueScale, 2);
-  const claimDenialSavings = baseDenials * reductionRate * costPerDeniedClaim;
-  const backlogReductionSavings =  chartsPerAnnum * avgChartValue * codingBacklogPercent * avgBacklogDays * reductionRate * (costOfCapital / 365);
+  const incrementalProductivity = 0.8;
+  const timeToCodeAChart = 8 / metrics.chartsPerCoderPerDay; // 8 hours/day divided by charts per coder per day
+  const costPerCoderPerHour = metrics.salaryPerCoder / 2000; // Assuming 2000 work hours/year
+  const coderProductivitySavings = metrics.chartsProcessedPerAnnum * (incrementalProductivity / (1 + incrementalProductivity)) * timeToCodeAChart * costPerCoderPerHour;
+  
+  const billingAutomationSavings = metrics.numberOfBillers * metrics.salaryPerBiller * 0.7 * revenueScale;
+  
+  const hourlyPhysicianRate = metrics.salaryPerPhysician / 2000; // Assuming 2000 work hours/year
+  const physicianTimeSavings = metrics.avgTimePerPhysicianPerChart * metrics.chartsProcessedPerAnnum * metrics.numberOfPhysicians * hourlyPhysicianRate * 0.5;
+  
+  const technologyCostSavings = metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12 * 0.7 * Math.min(revenueScale, 2);
+  
+  const claimDenialSavings = (metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100)) * metrics.costPerDeniedClaim * 0.5;
+  
+  const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum, 1);
+  const backlogReductionSavings = metrics.chartsProcessedPerAnnum * avgChartValue * (metrics.codingBacklogPercent / 100) * metrics.daysPerChartInBacklog * 0.8 * (metrics.costOfCapital / 365);
   
   // Revenue increase - using actual RVU data (matching CombinedCalculator logic)
   const currentRvuValue = metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * 36.5; // 2024 conversion factor
