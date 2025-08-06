@@ -186,11 +186,14 @@ export const CombinedCalculator = ({
 })();
   
   const backlogReductionSavings = (() => {
-    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    const baseBacklogCost = (metrics.revenueClaimed * 0.001) * (metrics.codingBacklogPercent / 100); // 0.1% of revenue affected by backlog
-    const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
-    return baseBacklogCost * reductionRate * Math.min(revenueScale, 1.5);
-  })();
+    const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
+     const avgChartValue = metrics.avgChartValue;
+     const codingBacklogPercent = metrics.codingBacklogPercent / 100;
+      const avgBacklogDays = metrics.avgBacklogDays;
+      const reductionRate = leverImpacts.arDaysReduction[leverLevels.arDaysReduction as 'low' | 'medium' | 'high'];
+      const costOfCapital = metrics.costOfCapital; // e.g. 0.04 for 4%
+     return chartsPerAnnum * avgChartValue *codingBacklogPercent *avgBacklogDays *reductionRate *(costOfCapital / 360);
+})();
 
   // Revenue increase from RVU optimization - using actual RVU data
   const rvuIncrease = (() => {
