@@ -93,10 +93,17 @@ export const CombinedCalculator = ({
         // Auto-calculate number of coders based on charts per coder per day (80) and 250 working days
         updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 250));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
-        // Auto-scale billers and physicians based on revenue growth (scale with charts)
-        const revenueGrowthFactor = value / 5000000; // 5M is the base revenue
-        updated.numberOfBillers = Math.ceil(5 * revenueGrowthFactor); // Base 5 billers
-        updated.numberOfPhysicians = Math.ceil(20 * revenueGrowthFactor); // Base 20 physicians
+        // Only auto-scale billers and physicians if they are at default ratios (not manually changed)
+        const isDefaultBillerRatio = Math.abs(updated.numberOfBillers - (updated.revenueClaimed / 5000000) * 5) < 1;
+        const isDefaultPhysicianRatio = Math.abs(updated.numberOfPhysicians - (updated.revenueClaimed / 5000000) * 20) < 1;
+        if (isDefaultBillerRatio) {
+          const revenueGrowthFactor = value / 5000000; // 5M is the base revenue
+          updated.numberOfBillers = Math.ceil(5 * revenueGrowthFactor); // Base 5 billers
+        }
+        if (isDefaultPhysicianRatio) {
+          const revenueGrowthFactor = value / 5000000; // 5M is the base revenue
+          updated.numberOfPhysicians = Math.ceil(20 * revenueGrowthFactor); // Base 20 physicians
+        }
       }
       
       // Auto-calculate claims and charts when average cost per claim changes
@@ -106,20 +113,14 @@ export const CombinedCalculator = ({
         // Auto-calculate number of coders based on charts per coder per day (80) and 250 working days
         updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 250));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
-        // Auto-scale billers and physicians based on revenue growth
-        const revenueGrowthFactor = updated.revenueClaimed / 5000000; // 5M is the base revenue
-        updated.numberOfBillers = Math.ceil(5 * revenueGrowthFactor); // Base 5 billers
-        updated.numberOfPhysicians = Math.ceil(20 * revenueGrowthFactor); // Base 20 physicians
+        // Don't auto-scale billers and physicians when cost per claim changes
       }
       
       // Auto-calculate number of coders when charts processed per year changes
       if (key === 'chartsProcessedPerAnnum') {
         updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 250));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
-        // Auto-scale billers and physicians based on chart volume
-        const chartGrowthFactor = value / 33333; // Base charts (5M revenue / 150 per claim)
-        updated.numberOfBillers = Math.ceil(5 * chartGrowthFactor); // Base 5 billers
-        updated.numberOfPhysicians = Math.ceil(20 * chartGrowthFactor); // Base 20 physicians
+        // Don't auto-scale billers and physicians when charts change
       }
       
       // Auto-calculate number of coders when claims per year changes
@@ -127,10 +128,7 @@ export const CombinedCalculator = ({
         updated.chartsProcessedPerAnnum = value; // Sync charts with claims
         updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 250));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
-        // Auto-scale billers and physicians based on claim volume
-        const claimGrowthFactor = value / 33333; // Base claims (5M revenue / 150 per claim)
-        updated.numberOfBillers = Math.ceil(5 * claimGrowthFactor); // Base 5 billers
-        updated.numberOfPhysicians = Math.ceil(20 * claimGrowthFactor); // Base 20 physicians
+        // Don't auto-scale billers and physicians when claims change
       }
       
       return updated;
@@ -183,7 +181,9 @@ export const CombinedCalculator = ({
     // Use dynamic lever levels and impacts
     const automationLevel = leverLevels.billingAutomation as 'low' | 'medium' | 'high';
     const automationImpact = leverImpacts.billingAutomation[automationLevel]; // Should be a decimal, e.g., 0.7 for 70%
-    return numberOfBillers * averageSalaryPerBiller * automationImpact;
+    const result = numberOfBillers * averageSalaryPerBiller * automationImpact;
+    console.log('Billing Automation Savings:', { numberOfBillers, averageSalaryPerBiller, automationLevel, automationImpact, result });
+    return result;
 })();
 
     const physicianTimeSavings = (() => {
@@ -192,7 +192,9 @@ export const CombinedCalculator = ({
       const hourlyRate = metrics.salaryPerPhysician / (40 * 52); // Convert annual salary to hourly
       const numberOfPhysicians = metrics.numberOfPhysicians;
       const timeSavedRate = leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
-      return hoursPerChart * chartsPerYear * numberOfPhysicians * hourlyRate * timeSavedRate;
+      const result = hoursPerChart * chartsPerYear * numberOfPhysicians * hourlyRate * timeSavedRate;
+      console.log('Physician Time Savings:', { hoursPerChart, chartsPerYear, hourlyRate, numberOfPhysicians, timeSavedRate, result });
+      return result;
     })();
 
   const technologyCostSavings = (() => {
