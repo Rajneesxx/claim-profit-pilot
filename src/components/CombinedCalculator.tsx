@@ -155,7 +155,7 @@ export const CombinedCalculator = ({
   const leverImpacts = {
     coderProductivity: { low: 0.4, medium: 0.8, high: 3.0 },
     billingAutomation: { low: 0.5, medium: 0.7, high: 1.2 },
-    physicianTimeSaved: { low: 0.0, medium: 0.0, high: 0.0 },
+    physicianTimeSaved: { low: 0.05, medium: 0.1, high: 0.15 }, // Added meaningful values
     technologyCostSaved: { low: 0.5, medium: 0.7, high: 1.0 },
     claimDenialReduction: { low: 0.3, medium: 0.5, high: 0.7 },
     codingBacklogElimination: { low: 0.6, medium: 0.8, high: 1.0 }
@@ -187,11 +187,12 @@ export const CombinedCalculator = ({
 })();
 
     const physicianTimeSavings = (() => {
-      const hoursPerChart = metrics.avgTimePerPhysicianPerChart;
+      const hoursPerChart = (metrics.avgTimePerPhysicianPerChart || 0) / 60; // Convert minutes to hours
       const chartsPerYear = metrics.chartsProcessedPerAnnum;
       const hourlyRate = metrics.salaryPerPhysician / (40 * 52); // Convert annual salary to hourly
+      const numberOfPhysicians = metrics.numberOfPhysicians;
       const timeSavedRate = leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
-      return hoursPerChart * chartsPerYear * metrics.numberOfPhysicians * hourlyRate * timeSavedRate;
+      return hoursPerChart * chartsPerYear * numberOfPhysicians * hourlyRate * timeSavedRate;
     })();
 
   const technologyCostSavings = (() => {
