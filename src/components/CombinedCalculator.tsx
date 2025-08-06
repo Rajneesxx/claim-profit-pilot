@@ -159,12 +159,14 @@ export const CombinedCalculator = ({
   return chartsPerYear * (incrementalProductivity / (1 + incrementalProductivity)) * timePerChart * costPerHour;
 })();
 
-  const billingAutomationSavings = (() => {
-    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    const baseBillingEfficiency = 12000; // Base savings per biller
-    const automationIncrease = leverImpacts.billingAutomation[leverLevels.billingAutomation as 'low' | 'medium' | 'high'];
-    return baseBillingEfficiency * metrics.numberOfBillers * automationIncrease * revenueScale;
-  })();
+ const billingAutomationSavings = (() => {
+    const numberOfBillers = 3; // Or metrics.numberOfBillers if dynamic
+    const averageSalaryPerBiller = 50000;
+    // Use dynamic lever levels and impacts
+    const automationLevel = leverLevels.billingAutomation as 'low' | 'medium' | 'high';
+    const automationImpact = leverImpacts.billingAutomation[automationLevel]; // Should be a decimal, e.g., 0.7 for 70%
+    return numberOfBillers * averageSalaryPerBiller * automationImpact;
+})();
 
   const physicianTimeSavings = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
