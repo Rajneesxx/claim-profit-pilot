@@ -68,10 +68,10 @@ export const CombinedCalculator = ({
     weightedAverageGPCI: 1.0,
     overCodingPercent: 5,
     underCodingPercent: 8,
-    avgBillableCodesPerChart: 3.2
-    percentOverCodedCharts: number;     // e.g. 0.8 for 80%
-    percentReductionNCCI: number;       // e.g. 0.67 for 67%
-     complianceCostPerCode: number;      // e.g. 1500
+    avgBillableCodesPerChart: 3.2,
+    percentOverCodedCharts: 0.8,     // 80%
+    percentReductionNCCI: 0.67,       // 67%
+    complianceCostPerCode: 1500       // $1500
   });
 
   const metrics = propMetrics || localMetrics;

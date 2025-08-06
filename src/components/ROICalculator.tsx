@@ -52,7 +52,10 @@ export const ROICalculator = () => {
     // Audit data
     overCodingPercent: 5,
     underCodingPercent: 5,
-    avgBillableCodesPerChart: 5
+    avgBillableCodesPerChart: 5,
+    percentOverCodedCharts: 0.8,     // 80%
+    percentReductionNCCI: 0.67,       // 67%
+    complianceCostPerCode: 1500       // $1500
   };
 
   const [metrics, setMetrics] = useState<ROIMetrics>(defaultMetrics);
