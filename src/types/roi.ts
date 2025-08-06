@@ -37,4 +37,9 @@ export interface ROIMetrics {
   overCodingPercent: number;
   underCodingPercent: number;
   avgBillableCodesPerChart: number;
+
+
+  percentOverCodedCharts: number;     // e.g. 0.8 for 80%
+ percentReductionNCCI: number;       // e.g. 0.67 for 67%
+ complianceCostPerCode: number;      // e.g. 1500
 }
