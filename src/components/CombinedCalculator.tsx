@@ -177,13 +177,14 @@ export const CombinedCalculator = ({
     return baseTechSavings * reductionRate * Math.min(revenueScale, 2); // Cap scaling at 2x
   })();
 
-  const claimDenialSavings = (() => {
-    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    const baseDenialCost = (metrics.revenueClaimed / 100) * (metrics.claimDeniedPercent / 100) * 0.05; // 5% of denied claims value
-    const reductionRate = leverImpacts.claimDenialReduction[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high'];
-    return baseDenialCost * reductionRate * Math.min(revenueScale, 1.5); // Cap scaling
-  })();
-
+ const claimDenialSavings = (() => {
+  // Assume metrics.numberOfClaims, metrics.claimDeniedPercent, leverImpacts.claimDenialReduction, leverLevels.claimDenialReduction, and metrics.costPerDeniedClaim exist
+  const baseDenials = metrics.numberOfClaims * (metrics.claimDeniedPercent / 100);
+  const reductionRate = leverImpacts.claimDenialReduction[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high']; // e.g., medium = 0.5, high = 0.7
+  const costPerDeniedClaim = metrics.costPerDeniedClaim; // e.g., $50
+  return baseDenials * reductionRate * costPerDeniedClaim;
+})();
+  
   const backlogReductionSavings = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
     const baseBacklogCost = (metrics.revenueClaimed * 0.001) * (metrics.codingBacklogPercent / 100); // 0.1% of revenue affected by backlog
