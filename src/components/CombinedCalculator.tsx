@@ -168,12 +168,7 @@ export const CombinedCalculator = ({
     return numberOfBillers * averageSalaryPerBiller * automationImpact;
 })();
 
-  const physicianTimeSavings = (() => {
-    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    const baseTimeSavings = 8000; // Base savings per physician
-    const timeSavingMultiplier = leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
-    return baseTimeSavings * metrics.numberOfPhysicians * timeSavingMultiplier * revenueScale;
-  })();
+    const physicianTimeSavings =hoursSavedPerChart *chartsPerYear *metrics.numberOfPhysicians *hourlyPayPerPhysician *leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
 
   const technologyCostSavings = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
