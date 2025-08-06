@@ -153,7 +153,6 @@ export const CombinedCalculator = ({
 
   // Individual lever calculations - more realistic scaling to revenue size
  const coderProductivityCost = (() => {
-  // "Number of charts processed per annum x (Incremental productivity/(1+Incremental productivity)) x Time to code a chart x cost per coder per hour"
   // We'll use metrics.chartsProcessedPerAnnum, leverImpacts.coderProductivity[level], metrics.avgTimePerChart (in hours), metrics.costPerCoderPerHour
   const incrementalProductivity = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
   const chartsPerYear = metrics.chartsProcessedPerAnnum;
