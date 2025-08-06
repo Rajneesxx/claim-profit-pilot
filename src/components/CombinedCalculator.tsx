@@ -168,7 +168,13 @@ export const CombinedCalculator = ({
     return numberOfBillers * averageSalaryPerBiller * automationImpact;
 })();
 
-    const physicianTimeSavings =hoursSavedPerChart *chartsPerYear *metrics.numberOfPhysicians *hourlyPayPerPhysician *leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
+    const physicianTimeSavings = (() => {
+      const hoursPerChart = metrics.avgTimePerPhysicianPerChart;
+      const chartsPerYear = metrics.chartsProcessedPerAnnum;
+      const hourlyRate = metrics.salaryPerPhysician / (40 * 52); // Convert annual salary to hourly
+      const timeSavedRate = leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
+      return hoursPerChart * chartsPerYear * metrics.numberOfPhysicians * hourlyRate * timeSavedRate;
+    })();
 
   const technologyCostSavings = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
@@ -178,21 +184,20 @@ export const CombinedCalculator = ({
   })();
 
  const claimDenialSavings = (() => {
-  // Assume metrics.numberOfClaims, metrics.claimDeniedPercent, leverImpacts.claimDenialReduction, leverLevels.claimDenialReduction, and metrics.costPerDeniedClaim exist
-  const baseDenials = metrics.numberOfClaims * (metrics.claimDeniedPercent / 100);
-  const reductionRate = leverImpacts.claimDenialReduction[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high']; // e.g., medium = 0.5, high = 0.7
-  const costPerDeniedClaim = metrics.costPerDeniedClaim; // e.g., $50
+  const baseDenials = metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100);
+  const reductionRate = leverImpacts.claimDenialReduction[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high'];
+  const costPerDeniedClaim = metrics.costPerDeniedClaim;
   return baseDenials * reductionRate * costPerDeniedClaim;
 })();
   
   const backlogReductionSavings = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
-     const avgChartValue = metrics.avgChartValue;
-     const codingBacklogPercent = metrics.codingBacklogPercent / 100;
-      const avgBacklogDays = metrics.avgBacklogDays;
-      const reductionRate = leverImpacts.arDaysReduction[leverLevels.arDaysReduction as 'low' | 'medium' | 'high'];
-      const costOfCapital = metrics.costOfCapital; // e.g. 0.04 for 4%
-     return chartsPerAnnum * avgChartValue *codingBacklogPercent *avgBacklogDays *reductionRate *(costOfCapital / 360);
+    const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum, 1);
+    const codingBacklogPercent = metrics.codingBacklogPercent / 100;
+    const avgBacklogDays = metrics.daysPerChartInBacklog;
+    const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
+    const costOfCapital = metrics.costOfCapital;
+    return chartsPerAnnum * avgChartValue * codingBacklogPercent * avgBacklogDays * reductionRate * (costOfCapital / 365);
 })();
 
   // Revenue increase from RVU optimization - using actual RVU data
