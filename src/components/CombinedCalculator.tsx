@@ -163,8 +163,8 @@ export const CombinedCalculator = ({
 })();
 
  const billingAutomationSavings = (() => {
-    const numberOfBillers = 3; // Or metrics.numberOfBillers if dynamic
-    const averageSalaryPerBiller = 50000;
+    const numberOfBillers = metrics.numberOfBillers; // Use actual number of billers from input
+    const averageSalaryPerBiller = metrics.salaryPerBiller; // Use actual salary from input
     // Use dynamic lever levels and impacts
     const automationLevel = leverLevels.billingAutomation as 'low' | 'medium' | 'high';
     const automationImpact = leverImpacts.billingAutomation[automationLevel]; // Should be a decimal, e.g., 0.7 for 70%
