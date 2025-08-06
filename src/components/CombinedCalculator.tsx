@@ -149,12 +149,15 @@ export const CombinedCalculator = ({
   };
 
   // Individual lever calculations - more realistic scaling to revenue size
-  const coderProductivitySavings = (() => {
-    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000); // Square root scaling for diminishing returns
-    const baseProductivity = 15000; // Base savings per coder
-    const productivityIncrease = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
-    return baseProductivity * metrics.numberOfCoders * productivityIncrease * revenueScale;
-  })();
+ const coderProductivityCost = (() => {
+  // "Number of charts processed per annum x (Incremental productivity/(1+Incremental productivity)) x Time to code a chart x cost per coder per hour"
+  // We'll use metrics.chartsProcessedPerAnnum, leverImpacts.coderProductivity[level], metrics.avgTimePerChart (in hours), metrics.costPerCoderPerHour
+  const incrementalProductivity = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
+  const chartsPerYear = metrics.chartsProcessedPerAnnum;
+  const timePerChart = metrics.avgTimePerChart || 1; // Default to 1 hour if not set
+  const costPerHour = metrics.costPerCoderPerHour || (metrics.salaryPerCoder / 2080); // Estimate if not set
+  return chartsPerYear * (incrementalProductivity / (1 + incrementalProductivity)) * timePerChart * costPerHour;
+})();
 
   const billingAutomationSavings = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
