@@ -69,6 +69,9 @@ export const CombinedCalculator = ({
     overCodingPercent: 5,
     underCodingPercent: 8,
     avgBillableCodesPerChart: 3.2
+    percentOverCodedCharts: number;     // e.g. 0.8 for 80%
+    percentReductionNCCI: number;       // e.g. 0.67 for 67%
+     complianceCostPerCode: number;      // e.g. 1500
   });
 
   const metrics = propMetrics || localMetrics;
@@ -245,24 +248,15 @@ export const CombinedCalculator = ({
 })();
 
   // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
-  const overCodingReduction = (() => {
-    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    
-    // Calculate actual financial risk from coding inaccuracies
-    const overCodingFinancialRisk = (metrics.revenueClaimed * (metrics.overCodingPercent / 100)) * 0.3; // 30% average audit penalty
-    const underCodingLostRevenue = (metrics.revenueClaimed * (metrics.underCodingPercent / 100)) * 0.2; // 20% typical loss
-    
-    // Additional compliance costs
-    const auditCosts = metrics.chartsProcessedPerAnnum * 0.5; // $0.50 per chart for compliance overhead
-    const deniedClaimReworkCosts = (metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100)) * metrics.costPerDeniedClaim;
-    
-    // AI reduces coding errors by 85% and compliance overhead by 70%
-    const codingErrorReduction = (overCodingFinancialRisk + underCodingLostRevenue) * 0.85;
-    const complianceReduction = (auditCosts + deniedClaimReworkCosts) * 0.7;
-    
-    return (codingErrorReduction + complianceReduction) * Math.min(revenueScale, 1.3);
-  })();
+  // Overcoding risk reduction using NCCI edits
+ const overCodingReduction = (() => {
+  const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
+  const percentOverCodedCharts = metrics.percentOverCodedCharts;
+  const percentReductionNCCI = metrics.percentReductionNCCI;
+  const complianceCostPerCode = metrics.complianceCostPerCode;
 
+  return chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode;
+})();
   // Total calculations with capping to prevent savings exceeding revenue
   const totalCostSavings = Math.min(
     coderProductivityCost + billingAutomationSavings + physicianTimeSavings + 
@@ -349,6 +343,9 @@ export const CombinedCalculator = ({
     { key: 'costOfCapital' as keyof ROIMetrics, label: 'Cost of Capital (%)' },
     { key: 'rvusCodedPerAnnum' as keyof ROIMetrics, label: 'RVUs Coded Per Year' },
     { key: 'weightedAverageGPCI' as keyof ROIMetrics, label: 'Weighted Average GPCI' },
+    { key: 'percentOverCodedCharts' as keyof ROIMetrics, label: '% Charts Overcoded (0-1)' },
+    { key: 'percentReductionNCCI' as keyof ROIMetrics, label: '% Reduction in Overcoded Charts (0-1)' },
+    { key: 'complianceCostPerCode' as keyof ROIMetrics, label: 'Compliance Cost Per Code ($)' },
   ];
 
   return (
