@@ -111,7 +111,10 @@ export const ROICalculator = () => {
   const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
   
   // Individual lever calculations
-  const coderProductivitySavings = 15000 * metrics.numberOfCoders * 0.8 * revenueScale;
+  const incrementalProductivity = 0.8;
+  const timeToCodeAChart = 8 / metrics.chartsPerCoderPerDay; // 8 hours/day divided by charts per coder per day
+  const costPerCoderPerHour = metrics.salaryPerCoder / 2000; // Assuming 2000 work hours/year
+  const coderProductivitySavings = metrics.chartsProcessedPerAnnum*(incrementalProductivity / (1 + incrementalProductivity))* timeToCodeAChart* costPerCoderPerHour;
   const billingAutomationSavings = 12000 * metrics.numberOfBillers * 0.7 * revenueScale;
   const physicianTimeSavings = 8000 * metrics.numberOfPhysicians * 0.5 * revenueScale;
   const technologyCostSavings = metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12 * 0.7 * Math.min(revenueScale, 2);
