@@ -55,7 +55,7 @@ export const ROICalculator = () => {
     avgBillableCodesPerChart: 5,
     percentOverCodedCharts: 0.8,     // 80%
     percentReductionNCCI: 0.67,       // 67%
-    complianceCostPerCode: 1500       // $1500
+    complianceCostPerCode: 15         // $15 per overcoded chart
   };
 
   const [metrics, setMetrics] = useState<ROIMetrics>(defaultMetrics);
