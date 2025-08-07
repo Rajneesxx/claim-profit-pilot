@@ -156,7 +156,7 @@ export const CombinedCalculator = ({
     physicianTimeSaved: { low: 0.05, medium: 0.1, high: 0.15 }, // Added meaningful values
     technologyCostSaved: { low: 0.5, medium: 0.7, high: 1.0 },
     claimDenialReduction: { low: 0.3, medium: 0.5, high: 0.7 },
-    codingBacklogElimination: { low: 0.6, medium: 0.8, high: 1.0 }
+    codingBacklogElimination: { low: 0.08, medium: 0.04, high: 0 }
   };
 
   // Calculate lever impacts based on confidence levels
@@ -214,7 +214,7 @@ export const CombinedCalculator = ({
   const backlogReductionSavings = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
     const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum, 1);
-    const codingBacklogPercent = metrics.codingBacklogPercent / 100;
+    const codingBacklogPercent = metrics.codingBacklogPercent/100;
     const avgBacklogDays = metrics.daysPerChartInBacklog;
     const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
     const costOfCapital = metrics.costOfCapital;
