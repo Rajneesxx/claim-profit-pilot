@@ -70,8 +70,8 @@ export const CombinedCalculator = ({
     underCodingPercent: 5,
     avgBillableCodesPerChart: 5,
     percentOverCodedCharts: 0.05,     // 5% (more realistic)
-    percentReductionNCCI: 0.67,       // 67%
-    complianceCostPerCode: 15          // $15 per overcoded chart
+    percentReductionNCCI: 0.67,
+    complianceCostPerChart: 1.3
   });
 
   const metrics = propMetrics || localMetrics;
