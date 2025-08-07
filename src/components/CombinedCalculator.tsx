@@ -68,10 +68,10 @@ export const CombinedCalculator = ({
     weightedAverageGPCI: 1.03,
     overCodingPercent: 5,
     underCodingPercent: 5,
-    avgBillableCodesPerChart:5,
-    percentOverCodedCharts: 0.8,     // 80%
+    avgBillableCodesPerChart: 5,
+    percentOverCodedCharts: 0.05,     // 5% (more realistic)
     percentReductionNCCI: 0.67,       // 67%
-    complianceCostPerCode: 1.3         // $15 per overcoded chart
+    complianceCostPerCode: 15          // $15 per overcoded chart
   });
 
   const metrics = propMetrics || localMetrics;
@@ -245,12 +245,12 @@ export const CombinedCalculator = ({
   // Overcoding risk reduction using NCCI edits
   const overCodingReduction = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
-    const percentOverCodedCharts = metrics.percentOverCodedCharts;
-    const percentReductionNCCI = metrics.percentReductionNCCI;
-    const complianceCostPerCode = metrics.complianceCostPerCode;
+    const percentOverCodedCharts = metrics.percentOverCodedCharts; // Should be decimal (e.g., 0.05 for 5%)
+    const percentReductionNCCI = metrics.percentReductionNCCI; // Should be decimal (e.g., 0.67 for 67%)
+    const complianceCostPerChart = metrics.complianceCostPerCode; // Cost per overcoded chart
 
-    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode;
-    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, result });
+    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerChart;
+    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerChart, result });
     return result;
   })();
   // Total calculations with capping to prevent savings exceeding revenue
