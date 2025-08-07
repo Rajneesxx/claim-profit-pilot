@@ -65,7 +65,7 @@ export const CombinedCalculator = ({
     daysPerChartInBacklog: 5,
     costOfCapital: 8,
     rvusCodedPerAnnum: 156250, // Auto-calculated: revenue / 32
-    weightedAverageGPCI: 1.0,
+    weightedAverageGPCI: 1.03,
     overCodingPercent: 5,
     underCodingPercent: 8,
     avgBillableCodesPerChart: 3.2,
@@ -224,7 +224,7 @@ export const CombinedCalculator = ({
   // Revenue increase from RVU optimization - using actual RVU data
   const rvuIncrease = (() => {
     // 2024 Medicare conversion factor
-    const conversionFactor = 36.5;
+    const conversionFactor = 32.7442;
 
     // Revenue scale based on organization size
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
@@ -235,33 +235,9 @@ export const CombinedCalculator = ({
     const rvuRevenueIncreaseByEandM =
         metrics.rvusCodedPerAnnum * rvuIncrementRate * metrics.weightedAverageGPCI * conversionFactor;
 
-    // 2. AI Coding Optimization (2.5% improvement)
-    const improvementRate = 0.025;
-    const currentRvuValue =
-        metrics.rvusCodedPerAnnum * metrics.weightedAverageGPCI * conversionFactor;
-    const rvuRevenueIncrease = currentRvuValue * improvementRate;
-
-    // 3. Code Optimization Gain (1.5% per chart)
-    const codeOptimizationRate = 0.015;
-    const avgRevenuePerChart =
-        metrics.chartsProcessedPerAnnum > 0
-            ? metrics.revenueClaimed / metrics.chartsProcessedPerAnnum
-            : 0;
-    const codeOptimizationGain =
-        avgRevenuePerChart * metrics.chartsProcessedPerAnnum * codeOptimizationRate;
-
-    // 4. Claims Processing Efficiency Gain (1% efficiency gain)
-    const claimsEfficiencyRate = 0.01;
-    const claimsEfficiencyGain =
-        metrics.claimsPerAnnum * metrics.averageCostPerClaim * claimsEfficiencyRate;
-
-    // 5. Final Revenue Increase Calculation
+    // 2. Final Revenue Increase Calculation
     const totalIncrease =
-        rvuRevenueIncreaseByEandM +
-        rvuRevenueIncrease +
-        codeOptimizationGain +
-        claimsEfficiencyGain;
-
+        rvuRevenueIncreaseByEandM;
     return totalIncrease * cappedRevenueScale;
 })();
 
