@@ -243,14 +243,16 @@ export const CombinedCalculator = ({
 
   // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
   // Overcoding risk reduction using NCCI edits
- const overCodingReduction = (() => {
-  const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
-  const percentOverCodedCharts = metrics.percentOverCodedCharts;
-  const percentReductionNCCI = metrics.percentReductionNCCI;
-  const complianceCostPerCode = metrics.complianceCostPerCode;
+  const overCodingReduction = (() => {
+    const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
+    const percentOverCodedCharts = metrics.percentOverCodedCharts;
+    const percentReductionNCCI = metrics.percentReductionNCCI;
+    const complianceCostPerCode = metrics.complianceCostPerCode;
 
-  return chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode;
-})();
+    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode;
+    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, result });
+    return result;
+  })();
   // Total calculations with capping to prevent savings exceeding revenue
   const totalCostSavings = Math.min(
     coderProductivityCost + billingAutomationSavings + physicianTimeSavings + 
