@@ -247,10 +247,10 @@ export const CombinedCalculator = ({
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
     const percentOverCodedCharts = metrics.percentOverCodedCharts; // Should be decimal (e.g., 0.05 for 5%)
     const percentReductionNCCI = metrics.percentReductionNCCI; // Should be decimal (e.g., 0.67 for 67%)
-    const complianceCostPerChart = metrics.complianceCostPerCode; // Cost per overcoded chart
+    const complianceCostPerCode = metrics.complianceCostPerCode; // Cost per overcoded chart
 
-    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerChart;
-    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerChart, result });
+    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode;
+    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, result });
     return result;
   })();
   // Total calculations with capping to prevent savings exceeding revenue
