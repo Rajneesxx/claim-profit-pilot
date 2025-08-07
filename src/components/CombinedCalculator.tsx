@@ -45,30 +45,30 @@ export const CombinedCalculator = ({
   // Default metrics for standalone use
   const [localMetrics, setLocalMetrics] = useState<ROIMetrics>({
     revenueClaimed: 5000000,
-    numberOfCoders: 10,
-    numberOfBillers: 5,
-    numberOfPhysicians: 20,
-    claimDeniedPercent: 8.5,
+    numberOfCoders: 3,
+    numberOfBillers: 3,
+    numberOfPhysicians: 50,
+    claimDeniedPercent: 10,
     claimsPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
     averageCostPerClaim: 150,
     chartsProcessedPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
-    salaryPerCoder: 65000,
-    overheadCostPercent: 30,
-    numberOfEncoderLicenses: 10,
+    salaryPerCoder: 60000,
+    overheadCostPercent: 38,
+    numberOfEncoderLicenses: 3,
     averageCostPerLicensePerMonth: 500,
-    salaryPerBiller: 55000,
-    salaryPerPhysician: 280000,
+    salaryPerBiller: 50000,
+    salaryPerPhysician: 350000,
     avgTimePerPhysicianPerChart: 15, // Set to 0 by default
     chartsPerCoderPerDay: 80, // Default at 80 as requested
-    costPerDeniedClaim: 150,
-    codingBacklogPercent: 15,
-    daysPerChartInBacklog: 5,
-    costOfCapital: 8,
+    costPerDeniedClaim: 13,
+    codingBacklogPercent: 20,
+    daysPerChartInBacklog: 20,
+    costOfCapital: 5,
     rvusCodedPerAnnum: 156250, // Auto-calculated: revenue / 32
     weightedAverageGPCI: 1.03,
     overCodingPercent: 5,
-    underCodingPercent: 8,
-    avgBillableCodesPerChart: 3.2,
+    underCodingPercent: 5,
+    avgBillableCodesPerChart:5,
     percentOverCodedCharts: 0.8,     // 80%
     percentReductionNCCI: 0.67,       // 67%
     complianceCostPerCode: 13         // $15 per overcoded chart
