@@ -254,8 +254,7 @@ export const CombinedCalculator = ({
   // Total calculations with capping to prevent savings exceeding revenue
   const totalCostSavings = Math.min(
     coderProductivityCost + billingAutomationSavings + physicianTimeSavings + 
-    technologyCostSavings + claimDenialSavings + backlogReductionSavings,
-    metrics.revenueClaimed * 0.75 // Cap at 75% of revenue
+    technologyCostSavings + claimDenialSavings + backlogReductionSavings; // Cap at 75% of revenue
   );
   const totalRevenueIncrease = rvuIncrease;
   const totalRiskReduction = overCodingReduction;
