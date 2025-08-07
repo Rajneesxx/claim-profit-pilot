@@ -218,7 +218,7 @@ export const CombinedCalculator = ({
     const avgBacklogDays = metrics.daysPerChartInBacklog;
     const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
     const costOfCapital = metrics.costOfCapital;
-    return chartsPerAnnum * avgChartValue * codingBacklogPercent * avgBacklogDays * reductionRate * (costOfCapital / 365);
+    return chartsPerAnnum * avgChartValue * codingBacklogPercent * avgBacklogDays * reductionRate * (costOfCapital / 360);
 })();
 
   // Revenue increase from RVU optimization - using actual RVU data
