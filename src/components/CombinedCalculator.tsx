@@ -71,7 +71,7 @@ export const CombinedCalculator = ({
     avgBillableCodesPerChart:5,
     percentOverCodedCharts: 0.8,     // 80%
     percentReductionNCCI: 0.67,       // 67%
-    complianceCostPerCode: 13         // $15 per overcoded chart
+    complianceCostPerCode: 1.3         // $15 per overcoded chart
   });
 
   const metrics = propMetrics || localMetrics;
