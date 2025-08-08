@@ -195,8 +195,8 @@ export const CombinedCalculator = ({
     // Use dynamic lever levels and impacts
     const automationLevel = leverLevels.billingAutomation as 'low' | 'medium' | 'high';
     const automationImpact = leverImpacts.billingAutomation[automationLevel]; // Should be a decimal, e.g., 0.7 for 70%
-    const result = numberOfBillers * averageSalaryPerBiller * automationImpact;
-    console.log('Billing Automation Savings:', { numberOfBillers, averageSalaryPerBiller, automationLevel, automationImpact, result });
+    const result = numberOfBillers * averageSalaryPerBiller;
+    console.log('Billing Automation Savings:', { numberOfBillers, averageSalaryPerBiller, result });
     return result;
 })();
 
