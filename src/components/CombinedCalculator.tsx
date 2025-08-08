@@ -165,7 +165,7 @@ export const CombinedCalculator = ({
 
   // Lever impact definitions
   const leverImpacts = {
-    coderProductivity: { low: 0.4, medium: 0.8, high: 3.0 },
+    coderProductivity: { low: 0.4, medium: 0.8, high: 1.0 },
     billingAutomation: { low: 0.5, medium: 0.7, high: 1.2 },
     physicianTimeSaved: { low: 0.05, medium: 0.1, high: 0.15 }, // Added meaningful values
     technologyCostSaved: { low: 0.5, medium: 0.7, high: 1.0 },
