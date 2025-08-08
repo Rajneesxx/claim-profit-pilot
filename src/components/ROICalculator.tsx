@@ -80,7 +80,7 @@ export const ROICalculator = () => {
         updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
         updated.rvusCodedPerAnnum = Math.round(value / 32);
         // Auto-calculate number of coders based on charts per coder per day (80) and 252 working days
-        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 252));
+        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 21));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
       }
       
@@ -88,21 +88,21 @@ export const ROICalculator = () => {
       if (key === 'averageCostPerClaim') {
         updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
         updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
-        // Auto-calculate number of coders based on charts per coder per day (80) and 252 working days
-        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 252));
+        // Auto-calculate number of coders based on charts per coder per day (80) and 251 working days
+        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 21));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
       }
       
       // Auto-calculate number of coders when charts processed per year changes
       if (key === 'chartsProcessedPerAnnum') {
-        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 252));
+        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 21));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
       }
       
       // Auto-calculate number of coders when claims per year changes
       if (key === 'claimsPerAnnum') {
         updated.chartsProcessedPerAnnum = value; // Sync charts with claims
-        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 252));
+        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 21));
         updated.numberOfEncoderLicenses = updated.numberOfCoders;
       }
       
