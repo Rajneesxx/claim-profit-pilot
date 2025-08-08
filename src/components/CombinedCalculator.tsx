@@ -59,7 +59,7 @@ export const CombinedCalculator = ({
     salaryPerBiller: 50000,
     salaryPerPhysician: 350000,
     avgTimePerPhysicianPerChart: 15,
-    avgTimePerCoderPerchart:0,// Set to 0 by default
+    avgTimePerCoderPerchart:10,
     chartsPerCoderPerDay: 80, // Will be calculated dynamically
     costPerDeniedClaim: 13,
     codingBacklogPercent: 20,
@@ -184,7 +184,7 @@ export const CombinedCalculator = ({
   // We'll use metrics.chartsProcessedPerAnnum, leverImpacts.coderProductivity[level], metrics.avgTimePerChart (in hours), metrics.costPerCoderPerHour
   const incrementalProductivity = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
   const chartsPerYear = metrics.chartsProcessedPerAnnum;
-  const timePerChart = (metrics.avgTimePerPhysicianPerChart || 15) / 60; // Convert minutes to hours
+  const timePerChart = (metrics.avgTimePerCoderPerchart || 15) / 60; // Convert minutes to hours
   const costPerHour = (metrics.salaryPerCoder / 2080); // Calculate hourly rate from annual salary
   return chartsPerYear * (incrementalProductivity / (1 + incrementalProductivity)) * timePerChart * costPerHour;
 })();
