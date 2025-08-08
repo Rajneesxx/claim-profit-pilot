@@ -19,6 +19,7 @@ export interface ROIMetrics {
   salaryPerBiller: number;
   salaryPerPhysician: number;
   avgTimePerPhysicianPerChart: number;
+  avgTimePerCoderPerChart: number;
   chartsPerCoderPerDay: number;
 
   // Collection costs
