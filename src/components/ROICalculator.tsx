@@ -16,7 +16,7 @@ export const ROICalculator = () => {
   
   const defaultMetrics: ROIMetrics = {
     // Basic inputs
-    revenueClaimed: 1000000,
+    revenueClaimed: 5000000,
     numberOfCoders: 3,
     numberOfBillers: 3,
     numberOfPhysicians: 50,
