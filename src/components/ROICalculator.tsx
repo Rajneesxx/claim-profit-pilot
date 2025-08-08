@@ -16,8 +16,8 @@ export const ROICalculator = () => {
   
   const defaultMetrics: ROIMetrics = {
     // Basic inputs
-    revenueClaimed: 5000000,
-    numberOfCoders: 10,
+    revenueClaimed: 1000000,
+    numberOfCoders: 3,
     numberOfBillers: 3,
     numberOfPhysicians: 50,
     claimDeniedPercent: 10,
@@ -30,7 +30,7 @@ export const ROICalculator = () => {
     // Coding costs
     salaryPerCoder: 60000,
     overheadCostPercent: 38,
-    numberOfEncoderLicenses: 10,
+    numberOfEncoderLicenses: 3,
     averageCostPerLicensePerMonth: 500,
     salaryPerBiller: 50000,
     salaryPerPhysician: 350000,
