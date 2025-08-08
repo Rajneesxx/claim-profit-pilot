@@ -35,7 +35,7 @@ export const ROICalculator = () => {
     salaryPerBiller: 50000,
     salaryPerPhysician: 350000,
     avgTimePerPhysicianPerChart: 0, // Set to 0 by default
-    chartsPerCoderPerDay: 80, // Default at 80 as requested
+    chartsPerCoderPerDay: 0, // Will be calculated dynamically
 
     // Collection costs
     costPerDeniedClaim: 13,
@@ -68,10 +68,19 @@ export const ROICalculator = () => {
     setMetrics(prev => {
       const updated = { ...prev, [key]: value };
       
+      // Calculate chartsPerCoderPerDay dynamically
+      if (updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
+        updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
+      }
+      
       // Auto-update encoder licenses when number of coders changes (1 license per coder)
       if (key === 'numberOfCoders') {
         updated.numberOfEncoderLicenses = value;
         console.log('ROICalculator: Updated coders to:', value, 'and licenses to:', value);
+        // Recalculate chartsPerCoderPerDay
+        if (updated.chartsProcessedPerAnnum > 0 && value > 0) {
+          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / value / 252;
+        }
       }
       
       // Auto-calculate claims and charts when revenue changes
@@ -79,31 +88,34 @@ export const ROICalculator = () => {
         updated.claimsPerAnnum = Math.round(value / updated.averageCostPerClaim);
         updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
         updated.rvusCodedPerAnnum = Math.round(value / 32);
-        // Auto-calculate number of coders based on charts per coder per day (80) and 252 working days
-        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 21));
-        updated.numberOfEncoderLicenses = updated.numberOfCoders;
+        // Auto-calculate number of coders based on charts and 252 working days
+        const calculatedChartsPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
+        updated.chartsPerCoderPerDay = calculatedChartsPerDay;
       }
       
       // Auto-calculate claims and charts when average cost per claim changes
       if (key === 'averageCostPerClaim') {
         updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
         updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
-        // Auto-calculate number of coders based on charts per coder per day (80) and 251 working days
-        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 21));
-        updated.numberOfEncoderLicenses = updated.numberOfCoders;
+        // Recalculate chartsPerCoderPerDay
+        if (updated.numberOfCoders > 0) {
+          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
+        }
       }
       
-      // Auto-calculate number of coders when charts processed per year changes
+      // Auto-calculate chartsPerCoderPerDay when charts processed per year changes
       if (key === 'chartsProcessedPerAnnum') {
-        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 21));
-        updated.numberOfEncoderLicenses = updated.numberOfCoders;
+        if (updated.numberOfCoders > 0) {
+          updated.chartsPerCoderPerDay = value / updated.numberOfCoders / 252;
+        }
       }
       
-      // Auto-calculate number of coders when claims per year changes
+      // Auto-calculate chartsPerCoderPerDay when claims per year changes
       if (key === 'claimsPerAnnum') {
         updated.chartsProcessedPerAnnum = value; // Sync charts with claims
-        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 21));
-        updated.numberOfEncoderLicenses = updated.numberOfCoders;
+        if (updated.numberOfCoders > 0) {
+          updated.chartsPerCoderPerDay = value / updated.numberOfCoders / 252;
+        }
       }
       
       return updated;
@@ -115,7 +127,8 @@ export const ROICalculator = () => {
   
   // Individual lever calculations
   const incrementalProductivity = 0.8;
-  const timeToCodeAChart = 8 / metrics.chartsPerCoderPerDay; // 8 hours/day divided by charts per coder per day
+  const dynamicChartsPerCoderPerDay = metrics.chartsProcessedPerAnnum / metrics.numberOfCoders / 252;
+  const timeToCodeAChart = 8 / dynamicChartsPerCoderPerDay; // 8 hours/day divided by charts per coder per day
   const costPerCoderPerHour = metrics.salaryPerCoder / 2000; // Assuming 2000 work hours/year
   const coderProductivitySavings = metrics.chartsProcessedPerAnnum * (incrementalProductivity / (1 + incrementalProductivity)) * timeToCodeAChart * costPerCoderPerHour;
   

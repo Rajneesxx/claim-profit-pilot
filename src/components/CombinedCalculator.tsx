@@ -59,7 +59,7 @@ export const CombinedCalculator = ({
     salaryPerBiller: 50000,
     salaryPerPhysician: 350000,
     avgTimePerPhysicianPerChart: 15, // Set to 0 by default
-    chartsPerCoderPerDay: 80, // Default at 80 as requested
+    chartsPerCoderPerDay: 0, // Will be calculated dynamically
     costPerDeniedClaim: 13,
     codingBacklogPercent: 20,
     daysPerChartInBacklog: 20,
@@ -80,9 +80,18 @@ export const CombinedCalculator = ({
     setLocalMetrics(prev => {
       const updated = { ...prev, [key]: value };
       
+      // Calculate chartsPerCoderPerDay dynamically
+      if (updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
+        updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
+      }
+      
       // Auto-update encoder licenses when number of coders changes (1 license per coder)
       if (key === 'numberOfCoders') {
         updated.numberOfEncoderLicenses = value;
+        // Recalculate chartsPerCoderPerDay
+        if (updated.chartsProcessedPerAnnum > 0 && value > 0) {
+          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / value / 252;
+        }
       }
       
       // Auto-calculate claims and charts when revenue changes
@@ -90,9 +99,6 @@ export const CombinedCalculator = ({
         updated.claimsPerAnnum = Math.round(value / updated.averageCostPerClaim);
         updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
         updated.rvusCodedPerAnnum = Math.round(value / 32);
-        // Auto-calculate number of coders based on charts per coder per day (80) and 21 working days
-        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 21));
-        updated.numberOfEncoderLicenses = updated.numberOfCoders;
         // Only auto-scale billers and physicians if they are at default ratios (not manually changed)
         const isDefaultBillerRatio = Math.abs(updated.numberOfBillers - (updated.revenueClaimed / 5000000) * 5) < 1;
         const isDefaultPhysicianRatio = Math.abs(updated.numberOfPhysicians - (updated.revenueClaimed / 5000000) * 20) < 1;
@@ -104,31 +110,38 @@ export const CombinedCalculator = ({
           const revenueGrowthFactor = value / 5000000; // 5M is the base revenue
           updated.numberOfPhysicians = Math.ceil(20 * revenueGrowthFactor); // Base 20 physicians
         }
+        // Recalculate chartsPerCoderPerDay
+        if (updated.numberOfCoders > 0) {
+          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
+        }
       }
       
       // Auto-calculate claims and charts when average cost per claim changes
       if (key === 'averageCostPerClaim') {
         updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
         updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
-        // Auto-calculate number of coders based on charts per coder per day (80) and 21 working days
-        updated.numberOfCoders = Math.ceil(updated.chartsProcessedPerAnnum / (updated.chartsPerCoderPerDay * 21));
-        updated.numberOfEncoderLicenses = updated.numberOfCoders;
         // Don't auto-scale billers and physicians when cost per claim changes
+        // Recalculate chartsPerCoderPerDay
+        if (updated.numberOfCoders > 0) {
+          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
+        }
       }
       
-      // Auto-calculate number of coders when charts processed per year changes
+      // Auto-calculate chartsPerCoderPerDay when charts processed per year changes
       if (key === 'chartsProcessedPerAnnum') {
-        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 21));
-        updated.numberOfEncoderLicenses = updated.numberOfCoders;
         // Don't auto-scale billers and physicians when charts change
+        if (updated.numberOfCoders > 0) {
+          updated.chartsPerCoderPerDay = value / updated.numberOfCoders / 252;
+        }
       }
       
-      // Auto-calculate number of coders when claims per year changes
+      // Auto-calculate chartsPerCoderPerDay when claims per year changes
       if (key === 'claimsPerAnnum') {
         updated.chartsProcessedPerAnnum = value; // Sync charts with claims
-        updated.numberOfCoders = Math.ceil(value / (updated.chartsPerCoderPerDay * 21));
-        updated.numberOfEncoderLicenses = updated.numberOfCoders;
         // Don't auto-scale billers and physicians when claims change
+        if (updated.numberOfCoders > 0) {
+          updated.chartsPerCoderPerDay = value / updated.numberOfCoders / 252;
+        }
       }
       
       return updated;
