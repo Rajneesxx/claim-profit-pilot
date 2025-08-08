@@ -59,7 +59,7 @@ export const CombinedCalculator = ({
     salaryPerBiller: 50000,
     salaryPerPhysician: 350000,
     avgTimePerPhysicianPerChart: 15, // Set to 0 by default
-    chartsPerCoderPerDay: 0, // Will be calculated dynamically
+    chartsPerCoderPerDay: 80, // Will be calculated dynamically
     costPerDeniedClaim: 13,
     codingBacklogPercent: 20,
     daysPerChartInBacklog: 20,
