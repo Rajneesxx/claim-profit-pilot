@@ -55,7 +55,7 @@ export const ROICalculator = () => {
     avgBillableCodesPerChart: 5,
     percentOverCodedCharts: 0.05,     // 5% Overcoded
     percentReductionNCCI: 0.67,       // 67%
-    complianceCostPerCode: 15        // $15 per overcoded chart
+    complianceCostPerCode: 702        // $702 per overcoded chart for default ~$23,400 risk reduction
   };
 
   const [metrics, setMetrics] = useState<ROIMetrics>(defaultMetrics);
@@ -115,7 +115,9 @@ export const ROICalculator = () => {
   
   // Individual lever calculations
   const incrementalProductivity = 0.8;
-  const timeToCodeAChart = 8 / metrics.chartsPerCoderPerDay; // 8 hours/day divided by charts per coder per day
+  // Calculate charts per coder per day dynamically: charts processed per annum / no. of coders / 252
+  const chartsPerCoderPerDay = metrics.chartsProcessedPerAnnum / (metrics.numberOfCoders * 252);
+  const timeToCodeAChart = 8 / chartsPerCoderPerDay; // 8 hours/day divided by dynamic charts per coder per day
   const costPerCoderPerHour = metrics.salaryPerCoder / 2000; // Assuming 2000 work hours/year
   const coderProductivitySavings = metrics.chartsProcessedPerAnnum * (incrementalProductivity / (1 + incrementalProductivity)) * timeToCodeAChart * costPerCoderPerHour;
   

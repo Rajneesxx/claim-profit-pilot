@@ -165,6 +165,9 @@ export const CombinedCalculator = ({
     return baseValue * leverImpacts[leverKey][level];
   };
 
+  // Calculate charts per coder per day dynamically
+  const chartsPerCoderPerDay = metrics.chartsProcessedPerAnnum / (metrics.numberOfCoders * 252);
+
   // Individual lever calculations - more realistic scaling to revenue size
  const coderProductivityCost = (() => {
   // We'll use metrics.chartsProcessedPerAnnum, leverImpacts.coderProductivity[level], metrics.avgTimePerChart (in hours), metrics.costPerCoderPerHour
@@ -230,37 +233,58 @@ export const CombinedCalculator = ({
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
     const cappedRevenueScale = Math.min(revenueScale, 1.2);
 
-    // 1. E&M RVU Optimization (0.5% increment)
-    const rvuIncrementRate = 0.005;
+    // E&M RVU Optimization - variable increment rates based on case study
+    // Case 1: Nephrology center identifies incremental opportunity with > 95% of level 3s to be identified as level 4s
+    const rvuIncrementRates = { low: 0.001, medium: 0.005, high: 0.015 }; // 0.1%, 0.5%, 1.5%
+    const selectedRate = rvuIncrementRates[leverLevels.coderProductivity as 'low' | 'medium' | 'high'] || 0.005;
+    
     const rvuRevenueIncreaseByEandM =
-        metrics.rvusCodedPerAnnum * rvuIncrementRate * metrics.weightedAverageGPCI * conversionFactor;
+        metrics.rvusCodedPerAnnum * selectedRate * metrics.weightedAverageGPCI * conversionFactor;
 
-    // 2. Final Revenue Increase Calculation
-    const totalIncrease =
-        rvuRevenueIncreaseByEandM;
-    return totalIncrease * cappedRevenueScale;
+    return rvuRevenueIncreaseByEandM * cappedRevenueScale;
 })();
 
   // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
-  // Overcoding risk reduction using NCCI edits
+  // Case 1: Primary care center identified and reduced overcoding and undercoding issues by 70%
   const overCodingReduction = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
+    
+    // Variable reduction rates based on confidence levels (50%, 80%, 100%)
+    const overCodingReductionRates = { low: 0.5, medium: 0.8, high: 1.0 };
+    const selectedReductionRate = overCodingReductionRates[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high'] || 0.8;
+    
     const percentOverCodedCharts = metrics.percentOverCodedCharts; // Should be decimal (e.g., 0.05 for 5%)
-    const percentReductionNCCI = metrics.percentReductionNCCI; // Should be decimal (e.g., 0.67 for 67%)
+    const adjustedReductionRate = metrics.percentReductionNCCI * selectedReductionRate; // Apply lever level to base reduction
     const complianceCostPerCode = metrics.complianceCostPerCode; // Cost per overcoded chart
 
-    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode;
-    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, result });
+    const result = chartsPerAnnum * percentOverCodedCharts * adjustedReductionRate * complianceCostPerCode;
+    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, adjustedReductionRate, complianceCostPerCode, result });
     return result;
-  })();
+  });
+
+  // Under coding improvement (revenue recovery)
+  const underCodingRecovery = (() => {
+    const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
+    
+    // Variable improvement rates based on confidence levels (50%, 80%, 100%)
+    const underCodingImprovementRates = { low: 0.5, medium: 0.8, high: 1.0 };
+    const selectedImprovementRate = underCodingImprovementRates[leverLevels.coderProductivity as 'low' | 'medium' | 'high'] || 0.8;
+    
+    const percentUnderCodedCharts = metrics.underCodingPercent / 100; // Convert percentage to decimal
+    const avgRevenuePerChart = metrics.revenueClaimed / chartsPerAnnum;
+    const underCodingLossPerChart = avgRevenuePerChart * 0.15; // Assume 15% revenue loss per under-coded chart
+    
+    const result = chartsPerAnnum * percentUnderCodedCharts * selectedImprovementRate * underCodingLossPerChart;
+    return result;
+  });
   // Total calculations with capping to prevent savings exceeding revenue
   const totalCostSavings = Math.min(
     coderProductivityCost + billingAutomationSavings + physicianTimeSavings + 
     technologyCostSavings + claimDenialSavings + backlogReductionSavings,
     metrics.revenueClaimed * 0.65 // Cap at 65% of revenue
   );
-  const totalRevenueIncrease = rvuIncrease;
-  const totalRiskReduction = overCodingReduction;
+  const totalRevenueIncrease = rvuIncrease + underCodingRecovery();
+  const totalRiskReduction = overCodingReduction();
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
   
   // ROI calculation - Implementation cost with diminishing returns (like benefits)
@@ -332,7 +356,6 @@ export const CombinedCalculator = ({
     { key: 'salaryPerBiller' as keyof ROIMetrics, label: 'Salary Per Biller ($)' },
     { key: 'salaryPerPhysician' as keyof ROIMetrics, label: 'Salary Per Physician ($)' },
     { key: 'avgTimePerPhysicianPerChart' as keyof ROIMetrics, label: 'Avg Time Spent by Physician Per Chart (min)' },
-    { key: 'chartsPerCoderPerDay' as keyof ROIMetrics, label: 'Charts Per Coder Per Day' },
     { key: 'costPerDeniedClaim' as keyof ROIMetrics, label: 'Cost Per Denied Claim ($)' },
     { key: 'codingBacklogPercent' as keyof ROIMetrics, label: 'Coding Backlog (%)' },
     { key: 'daysPerChartInBacklog' as keyof ROIMetrics, label: 'Days Per Chart in Backlog' },
@@ -487,7 +510,7 @@ export const CombinedCalculator = ({
               claimDenialSavings={claimDenialSavings}
               backlogReductionSavings={backlogReductionSavings}
               rvuIncrease={rvuIncrease}
-              overCodingReduction={overCodingReduction}
+              overCodingReduction={overCodingReduction()}
             />
 
             <Separator className="my-8" />
