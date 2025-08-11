@@ -104,26 +104,38 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                       {field.label}
                     </Label>
                     <input
-                      id={field.key}
-                      type="text"
-                      value={localValues[field.key] || ''}
-                      onChange={(e) => {
-                        const newValue = e.target.value;
-                        console.log(`Typing in ${field.key}: "${newValue}"`);
-                        
-                        setLocalValues(prev => {
-                          const updated = { ...prev, [field.key]: newValue };
-                          console.log(`Updated localValues:`, updated);
-                          return updated;
-                        });
-                      }}
-                      style={{
-                        padding: '8px 12px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        fontSize: '14px'
-                      }}
-                    />
+  id={field.key}
+  type="text"
+  value={localValues[field.key] || ''}
+  onChange={(e) => {
+    let newValue = e.target.value;
+
+    // Allow empty string
+    if (newValue === '') {
+      setLocalValues(prev => ({ ...prev, [field.key]: '' }));
+      return;
+    }
+
+    // Remove leading zeros for numeric types
+    if (/^\d+$/.test(newValue)) {
+      newValue = String(parseInt(newValue, 10)); // normalizes 01 → 1
+    }
+
+    setLocalValues(prev => ({ ...prev, [field.key]: newValue }));
+  }}
+  onBlur={() => {
+    // Optional: push final numeric value to updateMetric when user leaves the field
+    const finalValue = parseFloat(localValues[field.key] || '0') || 0;
+    updateMetric(field.key as keyof ROIMetrics, finalValue);
+  }}
+  style={{
+    padding: '8px 12px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    fontSize: '14px'
+  }}
+/>
+
                   </div>
                 ))}
               </div>
