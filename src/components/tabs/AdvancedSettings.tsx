@@ -12,6 +12,17 @@ interface AdvancedSettingsProps {
 
 export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProps) => {
   const [localValues, setLocalValues] = useState<Record<string, string>>({});
+  const [hasInitialized, setHasInitialized] = useState(false);
+
+  // Initialize values only once when component mounts
+  useEffect(() => {
+    if (!hasInitialized) {
+      const initialValues: Record<string, string> = {};
+      // Start with completely empty values
+      setLocalValues(initialValues);
+      setHasInitialized(true);
+    }
+  }, [hasInitialized]);
 
   const fieldSections = [
     {
@@ -95,14 +106,23 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <input
                       id={field.key}
                       type="text"
-                      value={localValues[field.key] ?? ''}
+                      value={localValues[field.key] || ''}
                       onChange={(e) => {
-                        setLocalValues(prev => ({
-                          ...prev,
-                          [field.key]: e.target.value
-                        }));
+                        const newValue = e.target.value;
+                        console.log(`Typing in ${field.key}: "${newValue}"`);
+                        
+                        setLocalValues(prev => {
+                          const updated = { ...prev, [field.key]: newValue };
+                          console.log(`Updated localValues:`, updated);
+                          return updated;
+                        });
                       }}
-                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style={{
+                        padding: '8px 12px',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        fontSize: '14px'
+                      }}
                     />
                   </div>
                 ))}
