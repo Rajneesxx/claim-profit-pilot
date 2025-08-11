@@ -102,48 +102,41 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Input
                       id={field.key}
                       type="text"
-                      inputMode="numeric"
-                      value={getDisplayValue(field.key, metrics[field.key as keyof ROIMetrics])}
+                      value={displayValues[field.key] !== undefined ? displayValues[field.key] : (metrics[field.key as keyof ROIMetrics] === 0 ? '' : String(metrics[field.key as keyof ROIMetrics]))}
                       onChange={(e) => {
                         const value = e.target.value;
                         
-                        // Update display value immediately
-                        setDisplayValues(prev => ({
-                          ...prev,
-                          [field.key]: value
-                        }));
-                        
-                        if (value === '') {
-                          // Empty field
-                          updateMetric(field.key as keyof ROIMetrics, 0);
-                          if (field.key === 'numberOfCoders') {
-                            updateMetric('numberOfEncoderLicenses', 0);
-                          }
-                        } else {
-                          // Parse and validate numeric input
-                          const numericValue = parseFloat(value);
-                          if (!isNaN(numericValue) && numericValue >= 0) {
-                            updateMetric(field.key as keyof ROIMetrics, numericValue);
+                        // Only allow valid numeric input (including empty string)
+                        if (value === '' || /^[0-9]*\.?[0-9]*$/.test(value)) {
+                          // Update display value to show exactly what user types
+                          setDisplayValues(prev => ({
+                            ...prev,
+                            [field.key]: value
+                          }));
+                          
+                          if (value === '') {
+                            updateMetric(field.key as keyof ROIMetrics, 0);
                             if (field.key === 'numberOfCoders') {
-                              updateMetric('numberOfEncoderLicenses', numericValue);
+                              updateMetric('numberOfEncoderLicenses', 0);
+                            }
+                          } else {
+                            const numericValue = parseFloat(value);
+                            if (!isNaN(numericValue)) {
+                              updateMetric(field.key as keyof ROIMetrics, numericValue);
+                              if (field.key === 'numberOfCoders') {
+                                updateMetric('numberOfEncoderLicenses', numericValue);
+                              }
                             }
                           }
                         }
                       }}
-                      onBlur={(e) => {
-                        // Clean up display value on blur
-                        const value = e.target.value;
-                        const numericValue = parseFloat(value);
-                        if (isNaN(numericValue) || numericValue < 0) {
+                      onFocus={(e) => {
+                        // Ensure we're tracking the current value when focused
+                        if (displayValues[field.key] === undefined) {
+                          const currentValue = metrics[field.key as keyof ROIMetrics];
                           setDisplayValues(prev => ({
                             ...prev,
-                            [field.key]: ''
-                          }));
-                          updateMetric(field.key as keyof ROIMetrics, 0);
-                        } else {
-                          setDisplayValues(prev => ({
-                            ...prev,
-                            [field.key]: numericValue === 0 ? '' : String(numericValue)
+                            [field.key]: currentValue === 0 ? '' : String(currentValue)
                           }));
                         }
                       }}
