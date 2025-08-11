@@ -98,13 +98,14 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                       type="number"
                       value={metrics[field.key as keyof ROIMetrics] === 0 ? '' : formatValue(metrics[field.key as keyof ROIMetrics], field.type)}
                       onChange={(e) => {
-                        const value = e.target.value === '' ? '' : parseFloat(e.target.value) || 0;
-                        updateMetric(field.key as keyof ROIMetrics, value === '' ? 0 : value);
+                        const value = e.target.value === '' ? 0 : parseFloat(e.target.value) || 0;
+                        updateMetric(field.key as keyof ROIMetrics, value);
                         // Auto-update encoder licenses when number of coders changes
                         if (field.key === 'numberOfCoders') {
-                          updateMetric('numberOfEncoderLicenses', value === '' ? 0 : value);
+                          updateMetric('numberOfEncoderLicenses', value);
                         }
                       }}
+                      placeholder={metrics[field.key as keyof ROIMetrics] === 0 ? '0' : ''}
                       className="bg-background border-border text-foreground"
                       step={field.type === 'decimal' ? '0.01' : '1'}
                     />
