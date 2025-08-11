@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Settings } from 'lucide-react';
 import { ROIMetrics } from '../../types/roi';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface AdvancedSettingsProps {
   metrics: ROIMetrics;
@@ -11,7 +11,7 @@ interface AdvancedSettingsProps {
 }
 
 export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProps) => {
-  const [inputValues, setInputValues] = useState<Record<string, string>>({});
+  const [localValues, setLocalValues] = useState<Record<string, string>>({});
 
   const fieldSections = [
     {
@@ -71,16 +71,6 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
     }
   ];
 
-  const getDisplayValue = (fieldKey: string): string => {
-    // Always prioritize what's in inputValues if it exists
-    if (fieldKey in inputValues) {
-      return inputValues[fieldKey];
-    }
-    
-    // Otherwise, show empty string (let user start fresh)
-    return '';
-  };
-
   return (
     <>
       <CardHeader className="border-b border-border">
@@ -105,30 +95,19 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Input
                       id={field.key}
                       type="text"
-                      value={getDisplayValue(field.key)}
+                      value={localValues[field.key] || ''}
                       onChange={(e) => {
-                        const rawValue = e.target.value;
-                        
-                        // Store exactly what user types
-                        setInputValues(prev => ({
+                        const value = e.target.value;
+                        setLocalValues(prev => ({
                           ...prev,
-                          [field.key]: rawValue
+                          [field.key]: value
                         }));
                         
-                        // Update metrics
-                        if (rawValue === '') {
-                          updateMetric(field.key as keyof ROIMetrics, 0);
-                          if (field.key === 'numberOfCoders') {
-                            updateMetric('numberOfEncoderLicenses', 0);
-                          }
-                        } else {
-                          const num = parseFloat(rawValue);
-                          if (!isNaN(num) && num >= 0) {
-                            updateMetric(field.key as keyof ROIMetrics, num);
-                            if (field.key === 'numberOfCoders') {
-                              updateMetric('numberOfEncoderLicenses', num);
-                            }
-                          }
+                        const numValue = parseFloat(value) || 0;
+                        updateMetric(field.key as keyof ROIMetrics, numValue);
+                        
+                        if (field.key === 'numberOfCoders') {
+                          updateMetric('numberOfEncoderLicenses', numValue);
                         }
                       }}
                       className="bg-background border-border text-foreground"
@@ -169,7 +148,7 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
             </div>
 
             <div className="bg-muted p-4 rounded-lg">
-              <h4 className="font-semibent text-foreground mb-3">Physician Time Saved</h4>
+              <h4 className="font-semibold text-foreground mb-3">Physician Time Saved</h4>
               <div className="space-y-2 text-sm">
                 <p className="text-muted-foreground">Clinic cut chart‑related physician queries by 30% in 6 months</p>
                 <div className="mt-2">
