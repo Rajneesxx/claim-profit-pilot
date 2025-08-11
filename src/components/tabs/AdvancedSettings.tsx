@@ -110,23 +110,18 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
   onChange={(e) => {
     let newValue = e.target.value;
 
-    // Allow empty string
+    // Allow empty value
     if (newValue === '') {
       setLocalValues(prev => ({ ...prev, [field.key]: '' }));
       return;
     }
 
-    // Remove leading zeros for numeric types
+    // If only digits, remove leading zeros
     if (/^\d+$/.test(newValue)) {
-      newValue = String(parseInt(newValue, 10)); // normalizes 01 → 1
+      newValue = String(parseInt(newValue, 10));
     }
 
     setLocalValues(prev => ({ ...prev, [field.key]: newValue }));
-  }}
-  onBlur={() => {
-    // Optional: push final numeric value to updateMetric when user leaves the field
-    const finalValue = parseFloat(localValues[field.key] || '0') || 0;
-    updateMetric(field.key as keyof ROIMetrics, finalValue);
   }}
   style={{
     padding: '8px 12px',
@@ -135,6 +130,7 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
     fontSize: '14px'
   }}
 />
+
 
                   </div>
                 ))}
