@@ -95,14 +95,18 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Input
                       id={field.key}
                       type="text"
-                      value={localValues[field.key] || ''}
+                      value={localValues[field.key] ?? ''}
                       onChange={(e) => {
-                        const value = e.target.value;
+                        const inputValue = e.target.value;
+                        
+                        // Only update local state - don't call updateMetric immediately
                         setLocalValues(prev => ({
                           ...prev,
-                          [field.key]: value
+                          [field.key]: inputValue
                         }));
-                        
+                      }}
+                      onBlur={(e) => {
+                        const value = e.target.value;
                         const numValue = parseFloat(value) || 0;
                         updateMetric(field.key as keyof ROIMetrics, numValue);
                         
