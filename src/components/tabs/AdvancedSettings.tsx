@@ -71,6 +71,54 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
     }
   ];
 
+  const getDisplayValue = (fieldKey: string): string => {
+    // If we have a user input value, show that
+    if (inputValues[fieldKey] !== undefined) {
+      return inputValues[fieldKey];
+    }
+    
+    // Otherwise, show the metric value (but only if it's not 0)
+    const metricValue = metrics[fieldKey as keyof ROIMetrics];
+    return metricValue === 0 ? '' : String(metricValue);
+  };
+
+  const handleInputChange = (fieldKey: string, rawValue: string) => {
+    // Store exactly what user types
+    setInputValues(prev => ({
+      ...prev,
+      [fieldKey]: rawValue
+    }));
+    
+    // Update metrics
+    if (rawValue === '') {
+      updateMetric(fieldKey as keyof ROIMetrics, 0);
+      if (fieldKey === 'numberOfCoders') {
+        updateMetric('numberOfEncoderLicenses', 0);
+      }
+    } else {
+      const num = parseFloat(rawValue);
+      if (!isNaN(num) && num >= 0) {
+        updateMetric(fieldKey as keyof ROIMetrics, num);
+        if (fieldKey === 'numberOfCoders') {
+          updateMetric('numberOfEncoderLicenses', num);
+        }
+      }
+    }
+  };
+
+  const handleInputFocus = (fieldKey: string) => {
+    // Only initialize if we don't already have a user input value
+    if (inputValues[fieldKey] === undefined) {
+      const metricValue = metrics[fieldKey as keyof ROIMetrics];
+      if (metricValue !== 0) {
+        setInputValues(prev => ({
+          ...prev,
+          [fieldKey]: String(metricValue)
+        }));
+      }
+    }
+  };
+
   return (
     <>
       <CardHeader className="border-b border-border">
@@ -95,41 +143,9 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Input
                       id={field.key}
                       type="text"
-                      value={inputValues[field.key] || ''}
-                      onChange={(e) => {
-                        const rawValue = e.target.value;
-                        
-                        // Store exactly what user types
-                        setInputValues(prev => ({
-                          ...prev,
-                          [field.key]: rawValue
-                        }));
-                        
-                        // Update metrics
-                        if (rawValue === '') {
-                          updateMetric(field.key as keyof ROIMetrics, 0);
-                          if (field.key === 'numberOfCoders') {
-                            updateMetric('numberOfEncoderLicenses', 0);
-                          }
-                        } else {
-                          const num = parseFloat(rawValue);
-                          if (!isNaN(num) && num >= 0) {
-                            updateMetric(field.key as keyof ROIMetrics, num);
-                            if (field.key === 'numberOfCoders') {
-                              updateMetric('numberOfEncoderLicenses', num);
-                            }
-                          }
-                        }
-                      }}
-                      onFocus={(e) => {
-                        // Initialize with current metric value only if not already in input state
-                        if (!inputValues[field.key] && metrics[field.key as keyof ROIMetrics] !== 0) {
-                          setInputValues(prev => ({
-                            ...prev,
-                            [field.key]: metrics[field.key as keyof ROIMetrics].toString()
-                          }));
-                        }
-                      }}
+                      value={getDisplayValue(field.key)}
+                      onChange={(e) => handleInputChange(field.key, e.target.value)}
+                      onFocus={() => handleInputFocus(field.key)}
                       className="bg-background border-border text-foreground"
                     />
                   </div>
@@ -168,7 +184,7 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
             </div>
 
             <div className="bg-muted p-4 rounded-lg">
-              <h4 className="font-semibold text-foreground mb-3">Physician Time Saved</h4>
+              <h4 className="font-semibent text-foreground mb-3">Physician Time Saved</h4>
               <div className="space-y-2 text-sm">
                 <p className="text-muted-foreground">Clinic cut chart‑related physician queries by 30% in 6 months</p>
                 <div className="mt-2">
