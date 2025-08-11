@@ -95,15 +95,26 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Input
                       id={field.key}
                       type="text"
-                      value={inputValues[field.key] ?? (metrics[field.key as keyof ROIMetrics] === 0 ? '' : metrics[field.key as keyof ROIMetrics].toString())}
+                      value={(() => {
+                        const currentInputValue = inputValues[field.key];
+                        const metricValue = metrics[field.key as keyof ROIMetrics];
+                        const finalValue = currentInputValue ?? (metricValue === 0 ? '' : metricValue.toString());
+                        console.log(`Field ${field.key}: inputValue=${currentInputValue}, metricValue=${metricValue}, finalValue="${finalValue}"`);
+                        return finalValue;
+                      })()}
                       onChange={(e) => {
                         const rawValue = e.target.value;
+                        console.log(`${field.key} onChange: rawValue="${rawValue}"`);
                         
                         // Store the raw input value
-                        setInputValues(prev => ({
-                          ...prev,
-                          [field.key]: rawValue
-                        }));
+                        setInputValues(prev => {
+                          const newValues = {
+                            ...prev,
+                            [field.key]: rawValue
+                          };
+                          console.log(`${field.key} setInputValues:`, newValues);
+                          return newValues;
+                        });
                         
                         // Update metrics
                         if (rawValue === '') {
