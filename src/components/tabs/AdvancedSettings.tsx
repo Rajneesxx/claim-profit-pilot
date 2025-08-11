@@ -11,14 +11,7 @@ interface AdvancedSettingsProps {
 }
 
 export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProps) => {
-  const [displayValues, setDisplayValues] = useState<Record<string, string>>({});
-
-  const getDisplayValue = (key: string, value: number): string => {
-    if (key in displayValues) {
-      return displayValues[key];
-    }
-    return value === 0 ? '' : String(value);
-  };
+  const [inputValues, setInputValues] = useState<Record<string, string>>({});
 
   const fieldSections = [
     {
@@ -102,42 +95,30 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Input
                       id={field.key}
                       type="text"
-                      value={displayValues[field.key] !== undefined ? displayValues[field.key] : (metrics[field.key as keyof ROIMetrics] === 0 ? '' : String(metrics[field.key as keyof ROIMetrics]))}
+                      value={inputValues[field.key] ?? (metrics[field.key as keyof ROIMetrics] === 0 ? '' : metrics[field.key as keyof ROIMetrics].toString())}
                       onChange={(e) => {
-                        const value = e.target.value;
+                        const rawValue = e.target.value;
                         
-                        // Only allow valid numeric input (including empty string)
-                        if (value === '' || /^[0-9]*\.?[0-9]*$/.test(value)) {
-                          // Update display value to show exactly what user types
-                          setDisplayValues(prev => ({
-                            ...prev,
-                            [field.key]: value
-                          }));
-                          
-                          if (value === '') {
-                            updateMetric(field.key as keyof ROIMetrics, 0);
+                        // Store the raw input value
+                        setInputValues(prev => ({
+                          ...prev,
+                          [field.key]: rawValue
+                        }));
+                        
+                        // Update metrics
+                        if (rawValue === '') {
+                          updateMetric(field.key as keyof ROIMetrics, 0);
+                          if (field.key === 'numberOfCoders') {
+                            updateMetric('numberOfEncoderLicenses', 0);
+                          }
+                        } else {
+                          const num = parseFloat(rawValue);
+                          if (!isNaN(num) && num >= 0) {
+                            updateMetric(field.key as keyof ROIMetrics, num);
                             if (field.key === 'numberOfCoders') {
-                              updateMetric('numberOfEncoderLicenses', 0);
-                            }
-                          } else {
-                            const numericValue = parseFloat(value);
-                            if (!isNaN(numericValue)) {
-                              updateMetric(field.key as keyof ROIMetrics, numericValue);
-                              if (field.key === 'numberOfCoders') {
-                                updateMetric('numberOfEncoderLicenses', numericValue);
-                              }
+                              updateMetric('numberOfEncoderLicenses', num);
                             }
                           }
-                        }
-                      }}
-                      onFocus={(e) => {
-                        // Ensure we're tracking the current value when focused
-                        if (displayValues[field.key] === undefined) {
-                          const currentValue = metrics[field.key as keyof ROIMetrics];
-                          setDisplayValues(prev => ({
-                            ...prev,
-                            [field.key]: currentValue === 0 ? '' : String(currentValue)
-                          }));
                         }
                       }}
                       className="bg-background border-border text-foreground"
