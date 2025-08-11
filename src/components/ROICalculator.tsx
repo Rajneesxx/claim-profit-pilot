@@ -16,16 +16,16 @@ export const ROICalculator = () => {
   
   const defaultMetrics: ROIMetrics = {
     // Basic inputs
-    revenueClaimed: 10000000,
+    revenueClaimed: 5000000,
     numberOfCoders: 3,
     numberOfBillers: 3,
     numberOfPhysicians: 50,
     claimDeniedPercent: 10,
 
     // Advanced inputs - Aggregate claims data
-    claimsPerAnnum: 66667, // Auto-calculated: revenue / averageCostPerClaim
+    claimsPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
     averageCostPerClaim: 150,
-    chartsProcessedPerAnnum: 66667, // Auto-calculated: revenue / averageCostPerClaim
+    chartsProcessedPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
 
     // Coding costs
     salaryPerCoder: 60000,
