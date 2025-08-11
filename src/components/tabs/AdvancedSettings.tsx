@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Settings } from 'lucide-react';
 import { ROIMetrics } from '../../types/roi';
+import { useState } from 'react';
 
 interface AdvancedSettingsProps {
   metrics: ROIMetrics;
@@ -10,6 +11,8 @@ interface AdvancedSettingsProps {
 }
 
 export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProps) => {
+  const [emptyFields, setEmptyFields] = useState<Set<string>>(new Set());
+
   const formatValue = (value: number, type: string) => {
     return value.toString();
   };
@@ -96,15 +99,21 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Input
                       id={field.key}
                       type="number"
-                      value={metrics[field.key as keyof ROIMetrics] === 0 ? '' : formatValue(metrics[field.key as keyof ROIMetrics], field.type)}
+                      value={emptyFields.has(field.key) ? '' : formatValue(metrics[field.key as keyof ROIMetrics], field.type)}
                       onChange={(e) => {
                         const value = e.target.value;
                         if (value === '') {
+                          setEmptyFields(prev => new Set([...prev, field.key]));
                           updateMetric(field.key as keyof ROIMetrics, 0);
                           if (field.key === 'numberOfCoders') {
                             updateMetric('numberOfEncoderLicenses', 0);
                           }
                         } else {
+                          setEmptyFields(prev => {
+                            const newSet = new Set(prev);
+                            newSet.delete(field.key);
+                            return newSet;
+                          });
                           const numericValue = parseFloat(value);
                           if (!isNaN(numericValue)) {
                             updateMetric(field.key as keyof ROIMetrics, numericValue);
