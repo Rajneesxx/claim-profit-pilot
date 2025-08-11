@@ -140,10 +140,6 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
 
     let finalValue = parseInt(rawValue, 10);
     if (isNaN(finalValue)) finalValue = 0;
-
-    // Optional: clamp finalValue here if you want min/max, e.g.:
-    // finalValue = Math.max(MIN_VALUE, Math.min(MAX_VALUE, finalValue));
-
     // Update the metric with numeric value
     updateMetric(field.key as keyof ROIMetrics, finalValue);
 
