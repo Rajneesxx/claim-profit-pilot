@@ -402,18 +402,18 @@ export const CombinedCalculator = ({
     <Label htmlFor="revenue" className="text-base font-medium">
       Annual Revenue Claimed
     </Label>
-    <TooltipInfo content="Enter your organization's total annual revenue from medical claims (minimum $1M, maximum $10B)" />
+    <TooltipInfo content="Enter your organization's total annual revenue from medical claims (minimum $5M, maximum $50M)" />
   </div>
   <div className="space-y-4">
     <Slider
-      value={[Math.max(1000000, Math.min(10000000000, metrics.revenueClaimed))]}
+      value={[Math.max(5000000, Math.min(50000000, metrics.revenueClaimed))]}
       onValueChange={(value) => {
-        const clampedValue = Math.max(1000000, Math.min(10000000000, value[0]));
+        const clampedValue = Math.max(5000000, Math.min(50000000, value[0]));
         updateMetric('revenueClaimed', clampedValue);
       }}
-      min={1000000}
-      max={10000000000}
-      step={10000}
+      min={5000000}
+      max={50000000}
+      step={100000}
       className="w-full"
     />
     <div className="relative">
@@ -441,12 +441,12 @@ export const CombinedCalculator = ({
         onBlur={(e) => {
           // Apply minimum constraints only when user finishes editing
           const rawValue = e.target.value.replace(/,/g, "");
-          const numericValue = parseInt(rawValue) || 1000000;
-          const clampedValue = Math.max(1000000, Math.min(10000000000, numericValue));
+          const numericValue = parseInt(rawValue) || 5000000;
+          const clampedValue = Math.max(5000000, Math.min(50000000, numericValue));
           updateMetric('revenueClaimed', clampedValue);
         }}
         className="text-center text-lg font-semibold pl-8"
-        placeholder="Enter annual revenue (min $1M, max $10B)"
+        placeholder="Enter annual revenue (min $5M, max $50M)"
       />
     </div>
   </div>
