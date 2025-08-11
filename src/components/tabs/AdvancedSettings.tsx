@@ -73,6 +73,17 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
 
   const handleBlur = (fieldKey: string) => {
     let rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
+    
+    // If field is empty, keep it empty
+    if (rawVal === "") {
+      updateMetric(fieldKey as keyof ROIMetrics, 0);
+      setLocalValues((prev) => ({
+        ...prev,
+        [fieldKey]: "",
+      }));
+      return;
+    }
+    
     let numericValue = parseInt(rawVal, 10);
     if (isNaN(numericValue)) numericValue = 0;
 
