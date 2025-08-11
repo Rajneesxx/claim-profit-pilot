@@ -98,8 +98,9 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     </Label>
                     <Input
                       id={field.key}
-                      type="number"
-                      value={emptyFields.has(field.key) ? '' : formatValue(metrics[field.key as keyof ROIMetrics], field.type)}
+                      type="text"
+                      inputMode="numeric"
+                      value={emptyFields.has(field.key) ? '' : String(metrics[field.key as keyof ROIMetrics])}
                       onChange={(e) => {
                         const value = e.target.value;
                         if (value === '') {
@@ -109,16 +110,19 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                             updateMetric('numberOfEncoderLicenses', 0);
                           }
                         } else {
-                          setEmptyFields(prev => {
-                            const newSet = new Set(prev);
-                            newSet.delete(field.key);
-                            return newSet;
-                          });
-                          const numericValue = parseFloat(value);
-                          if (!isNaN(numericValue)) {
-                            updateMetric(field.key as keyof ROIMetrics, numericValue);
-                            if (field.key === 'numberOfCoders') {
-                              updateMetric('numberOfEncoderLicenses', numericValue);
+                          // Only allow numbers and decimal point
+                          if (/^\d*\.?\d*$/.test(value)) {
+                            setEmptyFields(prev => {
+                              const newSet = new Set(prev);
+                              newSet.delete(field.key);
+                              return newSet;
+                            });
+                            const numericValue = parseFloat(value);
+                            if (!isNaN(numericValue)) {
+                              updateMetric(field.key as keyof ROIMetrics, numericValue);
+                              if (field.key === 'numberOfCoders') {
+                                updateMetric('numberOfEncoderLicenses', numericValue);
+                              }
                             }
                           }
                         }
