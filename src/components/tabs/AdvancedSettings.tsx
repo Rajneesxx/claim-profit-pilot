@@ -72,51 +72,13 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
   ];
 
   const getDisplayValue = (fieldKey: string): string => {
-    // If we have a user input value, show that
-    if (inputValues[fieldKey] !== undefined) {
+    // Always prioritize what's in inputValues if it exists
+    if (fieldKey in inputValues) {
       return inputValues[fieldKey];
     }
     
-    // Otherwise, show the metric value (but only if it's not 0)
-    const metricValue = metrics[fieldKey as keyof ROIMetrics];
-    return metricValue === 0 ? '' : String(metricValue);
-  };
-
-  const handleInputChange = (fieldKey: string, rawValue: string) => {
-    // Store exactly what user types
-    setInputValues(prev => ({
-      ...prev,
-      [fieldKey]: rawValue
-    }));
-    
-    // Update metrics
-    if (rawValue === '') {
-      updateMetric(fieldKey as keyof ROIMetrics, 0);
-      if (fieldKey === 'numberOfCoders') {
-        updateMetric('numberOfEncoderLicenses', 0);
-      }
-    } else {
-      const num = parseFloat(rawValue);
-      if (!isNaN(num) && num >= 0) {
-        updateMetric(fieldKey as keyof ROIMetrics, num);
-        if (fieldKey === 'numberOfCoders') {
-          updateMetric('numberOfEncoderLicenses', num);
-        }
-      }
-    }
-  };
-
-  const handleInputFocus = (fieldKey: string) => {
-    // Only initialize if we don't already have a user input value
-    if (inputValues[fieldKey] === undefined) {
-      const metricValue = metrics[fieldKey as keyof ROIMetrics];
-      if (metricValue !== 0) {
-        setInputValues(prev => ({
-          ...prev,
-          [fieldKey]: String(metricValue)
-        }));
-      }
-    }
+    // Otherwise, show empty string (let user start fresh)
+    return '';
   };
 
   return (
@@ -144,8 +106,31 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                       id={field.key}
                       type="text"
                       value={getDisplayValue(field.key)}
-                      onChange={(e) => handleInputChange(field.key, e.target.value)}
-                      onFocus={() => handleInputFocus(field.key)}
+                      onChange={(e) => {
+                        const rawValue = e.target.value;
+                        
+                        // Store exactly what user types
+                        setInputValues(prev => ({
+                          ...prev,
+                          [field.key]: rawValue
+                        }));
+                        
+                        // Update metrics
+                        if (rawValue === '') {
+                          updateMetric(field.key as keyof ROIMetrics, 0);
+                          if (field.key === 'numberOfCoders') {
+                            updateMetric('numberOfEncoderLicenses', 0);
+                          }
+                        } else {
+                          const num = parseFloat(rawValue);
+                          if (!isNaN(num) && num >= 0) {
+                            updateMetric(field.key as keyof ROIMetrics, num);
+                            if (field.key === 'numberOfCoders') {
+                              updateMetric('numberOfEncoderLicenses', num);
+                            }
+                          }
+                        }
+                      }}
                       className="bg-background border-border text-foreground"
                     />
                   </div>
