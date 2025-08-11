@@ -227,7 +227,7 @@ export const CombinedCalculator = ({
   
   const backlogReductionSavings = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
-    const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum,1);
+    const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum,0.2);
     const codingBacklogPercent = metrics.codingBacklogPercent/100;
     const avgBacklogDays = metrics.daysPerChartInBacklog;
     const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
