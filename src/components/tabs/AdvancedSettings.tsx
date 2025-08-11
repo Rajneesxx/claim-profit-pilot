@@ -95,26 +95,15 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Input
                       id={field.key}
                       type="text"
-                      value={(() => {
-                        const currentInputValue = inputValues[field.key];
-                        const metricValue = metrics[field.key as keyof ROIMetrics];
-                        const finalValue = currentInputValue ?? (metricValue === 0 ? '' : metricValue.toString());
-                        console.log(`Field ${field.key}: inputValue=${currentInputValue}, metricValue=${metricValue}, finalValue="${finalValue}"`);
-                        return finalValue;
-                      })()}
+                      value={inputValues[field.key] || ''}
                       onChange={(e) => {
                         const rawValue = e.target.value;
-                        console.log(`${field.key} onChange: rawValue="${rawValue}"`);
                         
-                        // Store the raw input value
-                        setInputValues(prev => {
-                          const newValues = {
-                            ...prev,
-                            [field.key]: rawValue
-                          };
-                          console.log(`${field.key} setInputValues:`, newValues);
-                          return newValues;
-                        });
+                        // Store exactly what user types
+                        setInputValues(prev => ({
+                          ...prev,
+                          [field.key]: rawValue
+                        }));
                         
                         // Update metrics
                         if (rawValue === '') {
@@ -132,8 +121,16 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                           }
                         }
                       }}
+                      onFocus={(e) => {
+                        // Initialize with current metric value only if not already in input state
+                        if (!inputValues[field.key] && metrics[field.key as keyof ROIMetrics] !== 0) {
+                          setInputValues(prev => ({
+                            ...prev,
+                            [field.key]: metrics[field.key as keyof ROIMetrics].toString()
+                          }));
+                        }
+                      }}
                       className="bg-background border-border text-foreground"
-                      step={field.type === 'decimal' ? '0.01' : '1'}
                     />
                   </div>
                 ))}
