@@ -35,7 +35,7 @@ export const ROICalculator = () => {
     salaryPerBiller: 50000,
     salaryPerPhysician: 350000,
     avgTimePerPhysicianPerChart: 0, // Set to 0 by default
-    avgTimePerCoderPerChart: 0.1167, // 7 minutes per chart by default
+    avgTimePerCoderPerChart: 0.1333, // 8 minutes per chart by default
     chartsPerCoderPerDay: 0, // Will be calculated dynamically
 
     // Collection costs
