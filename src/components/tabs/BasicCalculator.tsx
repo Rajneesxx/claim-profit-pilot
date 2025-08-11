@@ -48,7 +48,7 @@ export const BasicCalculator = ({
               value={[metrics.revenueClaimed]}
               onValueChange={(value) => updateMetric('revenueClaimed', value[0])}
               max={50000000}
-              min={1000000}
+              min={5000000}
               step={100000}
               className="w-full mb-4"
             />

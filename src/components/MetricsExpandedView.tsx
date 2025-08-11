@@ -12,7 +12,7 @@ interface MetricsExpandedViewProps {
   physicianTimeSavings: number;
   technologyCostSavings: number;
   claimDenialSavings: number;
-  backlogReductionSavings: number;
+  ARdays: number;
   rvuIncrease: number;
   overCodingReduction: number;
 }
@@ -23,7 +23,7 @@ export const MetricsExpandedView = ({
   physicianTimeSavings,
   technologyCostSavings,
   claimDenialSavings,
-  backlogReductionSavings,
+  ARdays,
   rvuIncrease,
   overCodingReduction,
 }: MetricsExpandedViewProps) => {
@@ -56,8 +56,8 @@ export const MetricsExpandedView = ({
       description: "Reduced costs from fewer claim denials and rework",
     },
     {
-      label: "Backlog Elimination",
-      value: backlogReductionSavings,
+      label: "ARdays",
+      value: ARdays,
       description: "Savings from eliminating coding backlogs and delays",
     },
   ];
