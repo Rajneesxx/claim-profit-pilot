@@ -507,7 +507,7 @@ export const CombinedCalculator = ({
               physicianTimeSavings={physicianTimeSavings}
               technologyCostSavings={technologyCostSavings}
               claimDenialSavings={claimDenialSavings}
-              backlogReductionSavings={ARdays}
+              ARdays={ARdays}
               rvuIncrease={rvuIncrease}
               overCodingReduction={overCodingReduction}
             />
