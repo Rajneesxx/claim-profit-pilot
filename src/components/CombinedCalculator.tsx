@@ -185,7 +185,7 @@ export const CombinedCalculator = ({
   const incrementalProductivity = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
   const chartsPerYear = metrics.chartsProcessedPerAnnum;
   const timePerChart = metrics.avgTimePerCoderPerChart;
-  const costPerHour = (metrics.salaryPerCoder / 2086); // Calculate hourly rate from annual salary
+  const costPerHour = (metrics.salaryPerCoder / 2095); // Calculate hourly rate from annual salary
   return chartsPerYear * (incrementalProductivity / (1 + incrementalProductivity)) * timePerChart * costPerHour;
 })();
 
