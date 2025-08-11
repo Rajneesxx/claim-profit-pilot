@@ -23,9 +23,9 @@ export const ROICalculator = () => {
     claimDeniedPercent: 10,
 
     // Advanced inputs - Aggregate claims data
-    claimsPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
+    claimsPerAnnum: 66667, // Auto-calculated: revenue / averageCostPerClaim
     averageCostPerClaim: 150,
-    chartsProcessedPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
+    chartsProcessedPerAnnum: 66667, // Auto-calculated: revenue / averageCostPerClaim
 
     // Coding costs
     salaryPerCoder: 60000,
