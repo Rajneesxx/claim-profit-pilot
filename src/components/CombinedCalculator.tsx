@@ -507,7 +507,7 @@ export const CombinedCalculator = ({
               physicianTimeSavings={physicianTimeSavings}
               technologyCostSavings={technologyCostSavings}
               claimDenialSavings={claimDenialSavings}
-              backlogReductionSavings={backlogReductionSavings}
+              backlogReductionSavings={ARdays}
               rvuIncrease={rvuIncrease}
               overCodingReduction={overCodingReduction}
             />
@@ -733,9 +733,9 @@ export const CombinedCalculator = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="low">Low (60% reduction) - ${backlogReductionSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="medium">Medium (80% reduction) - ${backlogReductionSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="high">High (100% elimination) - ${backlogReductionSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="low">Low (60% reduction) - ${ARdays.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="medium">Medium (80% reduction) - ${ARdays.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="high">High (100% elimination) - ${ARdays.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
                         </SelectContent>
                       </Select>
                       <div className="text-xs text-muted-foreground space-y-1">
