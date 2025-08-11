@@ -143,7 +143,7 @@ export const ROICalculator = () => {
   const claimDenialSavings = (metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100)) * metrics.costPerDeniedClaim * 0.5;
   
   const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum, 1);
-  const backlogReductionSavings = metrics.chartsProcessedPerAnnum * avgChartValue * (metrics.codingBacklogPercent / 100) * metrics.daysPerChartInBacklog * 0.8 * (metrics.costOfCapital / 365);
+  const backlogReductionSavings = metrics.chartsProcessedPerAnnum * avgChartValue * (metrics.codingBacklogPercent / 100) * metrics.daysPerChartInBacklog * 0.2 * (metrics.costOfCapital / 360);
   
   // Revenue increase - using actual RVU data (matching CombinedCalculator logic)
     const rvuIncrease = (() => {
