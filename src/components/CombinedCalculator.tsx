@@ -260,7 +260,7 @@ export const CombinedCalculator = ({
     // 3. Final Revenue Increase Calculation
     const totalIncrease = rvuRevenueIncreaseByEandM;
 
-    return totalIncrease * cappedRevenueScale;
+    return totalIncrease;
   })();
 
   // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
