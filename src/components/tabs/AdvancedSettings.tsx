@@ -11,10 +11,13 @@ interface AdvancedSettingsProps {
 }
 
 export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProps) => {
-  const [emptyFields, setEmptyFields] = useState<Set<string>>(new Set());
+  const [displayValues, setDisplayValues] = useState<Record<string, string>>({});
 
-  const formatValue = (value: number, type: string) => {
-    return value.toString();
+  const getDisplayValue = (key: string, value: number): string => {
+    if (key in displayValues) {
+      return displayValues[key];
+    }
+    return value === 0 ? '' : String(value);
   };
 
   const fieldSections = [
@@ -100,31 +103,48 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                       id={field.key}
                       type="text"
                       inputMode="numeric"
-                      value={emptyFields.has(field.key) ? '' : String(metrics[field.key as keyof ROIMetrics])}
+                      value={getDisplayValue(field.key, metrics[field.key as keyof ROIMetrics])}
                       onChange={(e) => {
                         const value = e.target.value;
+                        
+                        // Update display value immediately
+                        setDisplayValues(prev => ({
+                          ...prev,
+                          [field.key]: value
+                        }));
+                        
                         if (value === '') {
-                          setEmptyFields(prev => new Set([...prev, field.key]));
+                          // Empty field
                           updateMetric(field.key as keyof ROIMetrics, 0);
                           if (field.key === 'numberOfCoders') {
                             updateMetric('numberOfEncoderLicenses', 0);
                           }
                         } else {
-                          // Only allow numbers and decimal point
-                          if (/^\d*\.?\d*$/.test(value)) {
-                            setEmptyFields(prev => {
-                              const newSet = new Set(prev);
-                              newSet.delete(field.key);
-                              return newSet;
-                            });
-                            const numericValue = parseFloat(value);
-                            if (!isNaN(numericValue)) {
-                              updateMetric(field.key as keyof ROIMetrics, numericValue);
-                              if (field.key === 'numberOfCoders') {
-                                updateMetric('numberOfEncoderLicenses', numericValue);
-                              }
+                          // Parse and validate numeric input
+                          const numericValue = parseFloat(value);
+                          if (!isNaN(numericValue) && numericValue >= 0) {
+                            updateMetric(field.key as keyof ROIMetrics, numericValue);
+                            if (field.key === 'numberOfCoders') {
+                              updateMetric('numberOfEncoderLicenses', numericValue);
                             }
                           }
+                        }
+                      }}
+                      onBlur={(e) => {
+                        // Clean up display value on blur
+                        const value = e.target.value;
+                        const numericValue = parseFloat(value);
+                        if (isNaN(numericValue) || numericValue < 0) {
+                          setDisplayValues(prev => ({
+                            ...prev,
+                            [field.key]: ''
+                          }));
+                          updateMetric(field.key as keyof ROIMetrics, 0);
+                        } else {
+                          setDisplayValues(prev => ({
+                            ...prev,
+                            [field.key]: numericValue === 0 ? '' : String(numericValue)
+                          }));
                         }
                       }}
                       className="bg-background border-border text-foreground"
