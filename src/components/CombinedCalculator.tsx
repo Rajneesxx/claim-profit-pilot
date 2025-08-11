@@ -241,19 +241,28 @@ export const CombinedCalculator = ({
     const conversionFactor = 32.7442;
 
     // Revenue scale based on organization size
-    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    const cappedRevenueScale = Math.min(revenueScale, 1.2);
+   // Revenue scale based on organization size
+const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
+const cappedRevenueScale = Math.min(revenueScale, 1.2);
 
-    // 1. E&M RVU Optimization (0.5% increment)
-    const rvuIncrementRate = 0.005;
-    const rvuRevenueIncreaseByEandM =
-        metrics.rvusCodedPerAnnum * rvuIncrementRate * metrics.weightedAverageGPCI * conversionFactor;
+// Number of RVUs billed × % increment in RVUs × Wt. Avg GPCI × Conversion
 
-    // 2. Final Revenue Increase Calculation
-    const totalIncrease =
-        rvuRevenueIncreaseByEandM;
-    return totalIncrease * cappedRevenueScale;
-})();
+// 1. Define the components
+const numberOfRVUsBilled = metrics.rvusCodedPerAnnum;           // Number of RVUs billed
+const percentIncrementInRVUs = 0.005;                          // % increment in RVUs (0.5%)
+const weightedAverageGPCI = metrics.weightedAverageGPCI;        // Wt. Avg GPCI
+const conversionFactor = conversionFactor;                     // Conversion
+
+// 2. Calculate RVU Revenue Increase using the formula
+const rvuRevenueIncreaseByEandM = numberOfRVUsBilled * 
+                                  percentIncrementInRVUs * 
+                                  weightedAverageGPCI * 
+                                  conversionFactor;
+
+// 3. Final Revenue Increase Calculation
+const totalIncrease = rvuRevenueIncreaseByEandM;
+
+return totalIncrease * cappedRevenueScale;
 
   // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
   // Overcoding risk reduction using NCCI edits
