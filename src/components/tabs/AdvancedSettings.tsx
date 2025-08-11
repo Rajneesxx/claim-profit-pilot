@@ -18,10 +18,16 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
   useEffect(() => {
     const initialValues: Record<string, string> = {};
     Object.entries(metrics).forEach(([key, value]) => {
-      if (typeof value === "number" && value !== 0) {
-        initialValues[key] = value.toLocaleString("en-US");
+      // Only update if we don't have a local value or if the field has a meaningful value
+      if (localValues[key] === undefined || (typeof value === "number" && value > 0)) {
+        if (typeof value === "number" && value !== 0) {
+          initialValues[key] = value.toLocaleString("en-US");
+        } else {
+          initialValues[key] = "";
+        }
       } else {
-        initialValues[key] = "";
+        // Keep existing local value to preserve user input state
+        initialValues[key] = localValues[key] || "";
       }
     });
     setLocalValues(initialValues);
