@@ -248,7 +248,7 @@ export const CombinedCalculator = ({
 
     // 1. Define the components
     const numberOfRVUsBilled = metrics.rvusCodedPerAnnum;           // Number of RVUs billed
-    const percentIncrementInRVUs = 0.005;                          // % increment in RVUs (0.5%)
+    const percentIncrementInRVUs = 0.015;                          // % increment in RVUs (1.5%)
     const weightedAverageGPCI = metrics.weightedAverageGPCI;        // Wt. Avg GPCI
 
     // 2. Calculate RVU Revenue Increase using the formula
