@@ -64,7 +64,7 @@ export const CombinedCalculator = ({
     costPerDeniedClaim: 13,
     codingBacklogPercent: 0.2, //20% Backlog per chart
     daysPerChartInBacklog: 20,
-    costOfCapital: 5,
+    costOfCapital: 0.5, //5% is  the defined cost of capital
     rvusCodedPerAnnum: 156250, // Auto-calculated: revenue / 32
     weightedAverageGPCI: 1.03,
     overCodingPercent: 5,
