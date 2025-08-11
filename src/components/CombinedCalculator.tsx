@@ -225,7 +225,7 @@ export const CombinedCalculator = ({
   return baseDenials * reductionRate * costPerDeniedClaim;
 })();
   
-  const backlogReductionSavings = (() => {
+  const ARdays = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
     const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum,0.2);
     const codingBacklogPercent = metrics.codingBacklogPercent/100;
@@ -278,7 +278,7 @@ export const CombinedCalculator = ({
   // Total calculations with capping to prevent savings exceeding revenue
   const totalCostSavings = Math.min(
     coderProductivityCost + billingAutomationSavings + physicianTimeSavings + 
-    technologyCostSavings + claimDenialSavings + backlogReductionSavings,
+    technologyCostSavings + claimDenialSavings + ARdays,
     metrics.revenueClaimed * 0.65 // Cap at 65% of revenue
   );
   const totalRevenueIncrease = rvuIncrease;
