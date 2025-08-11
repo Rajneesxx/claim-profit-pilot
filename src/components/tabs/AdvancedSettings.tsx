@@ -92,29 +92,17 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Label htmlFor={field.key} className="text-foreground font-medium">
                       {field.label}
                     </Label>
-                    <Input
+                    <input
                       id={field.key}
                       type="text"
                       value={localValues[field.key] ?? ''}
                       onChange={(e) => {
-                        const inputValue = e.target.value;
-                        
-                        // Only update local state - don't call updateMetric immediately
                         setLocalValues(prev => ({
                           ...prev,
-                          [field.key]: inputValue
+                          [field.key]: e.target.value
                         }));
                       }}
-                      onBlur={(e) => {
-                        const value = e.target.value;
-                        const numValue = parseFloat(value) || 0;
-                        updateMetric(field.key as keyof ROIMetrics, numValue);
-                        
-                        if (field.key === 'numberOfCoders') {
-                          updateMetric('numberOfEncoderLicenses', numValue);
-                        }
-                      }}
-                      className="bg-background border-border text-foreground"
+                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 ))}
