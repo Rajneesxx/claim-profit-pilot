@@ -62,7 +62,7 @@ export const CombinedCalculator = ({
     avgTimePerCoderPerChart: 0.1333, // 8 minutes per chart by default
     chartsPerCoderPerDay: 80, // Will be calculated dynamically
     costPerDeniedClaim: 13,
-    codingBacklogPercent: 20,
+    codingBacklogPercent: 0.2, //20% Backlog per chart
     daysPerChartInBacklog: 20,
     costOfCapital: 5,
     rvusCodedPerAnnum: 156250, // Auto-calculated: revenue / 32
@@ -228,7 +228,7 @@ export const CombinedCalculator = ({
   const backlogReductionSavings = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
     const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum);
-    const codingBacklogPercent = metrics.codingBacklogPercent/100;
+    const codingBacklogPercent = metrics.codingBacklogPercent;
     const avgBacklogDays = metrics.daysPerChartInBacklog;
     const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
     const costOfCapital = metrics.costOfCapital;
