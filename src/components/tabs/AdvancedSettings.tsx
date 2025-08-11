@@ -106,22 +106,27 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <input
   id={field.key}
   type="text"
-  value={localValues[field.key] || ''}
+  value={localValues[field.key] ?? ''} // Always use local state for typing
   onChange={(e) => {
     let newValue = e.target.value;
 
-    // Allow empty value
+    // Allow empty string
     if (newValue === '') {
       setLocalValues(prev => ({ ...prev, [field.key]: '' }));
       return;
     }
 
-    // If only digits, remove leading zeros
+    // If purely digits, strip leading zeros
     if (/^\d+$/.test(newValue)) {
       newValue = String(parseInt(newValue, 10));
     }
 
     setLocalValues(prev => ({ ...prev, [field.key]: newValue }));
+  }}
+  onBlur={() => {
+    // Push numeric value to metrics only when editing ends
+    const finalValue = parseFloat(localValues[field.key] || '0') || 0;
+    updateMetric(field.key as keyof ROIMetrics, finalValue);
   }}
   style={{
     padding: '8px 12px',
@@ -130,7 +135,6 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
     fontSize: '14px'
   }}
 />
-
 
                   </div>
                 ))}
