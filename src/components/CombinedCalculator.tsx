@@ -215,7 +215,7 @@ export const CombinedCalculator = ({
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
     const baseTechSavings = metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth ;
     const reductionRate = leverImpacts.technologyCostSaved[leverLevels.technologyCostSaved as 'low' | 'medium' | 'high'];
-    return baseTechSavings * reductionRate * Math.min(revenueScale, 1); // Cap scaling at 1x
+    return baseTechSavings * reductionRate; // Cap scaling at 1.3x
   })();
 
  const claimDenialSavings = (() => {
