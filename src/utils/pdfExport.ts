@@ -299,8 +299,8 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   const rightParams = [
     ['Number of Physicians:', formatNumber(data.metrics.numberOfPhysicians)],
     ['Claims Denied Rate:', `${data.metrics.claimDeniedPercent}%`],
-    ['Coding Backlog:', `${data.metrics.codingBacklogPercent || 15}%`],
-    ['Avg Cost/Claim:', `$${data.metrics.averageCostPerClaim}`]
+    ['Coding Backlog:', `${data.metrics.codingBacklogPercent}%`],
+    ['Avg Cost/Claim:', formatCurrency(data.metrics.averageCostPerClaim)]
   ];
   
   // Render left column
