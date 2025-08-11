@@ -49,7 +49,7 @@ export const CombinedCalculator = ({
     numberOfBillers: 3,
     numberOfPhysicians: 50,
     claimDeniedPercent: 10,
-    claimsPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
+    claimsPerAnnum: 66667, // Auto-calculated: revenue / averageCostPerClaim
     averageCostPerClaim: 150,
     chartsProcessedPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
     salaryPerCoder: 60000,
