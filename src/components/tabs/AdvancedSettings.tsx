@@ -103,10 +103,13 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <Label htmlFor={field.key} className="text-foreground font-medium">
                       {field.label}
                     </Label>
-                    <input
+  <input
   id={field.key}
   type="text"
-  value={localValues[field.key] ?? ''} // Always use local state for typing
+  inputMode="numeric"
+  value={localValues[field.key] === 0 || localValues[field.key] === '' 
+    ? '' 
+    : Number(localValues[field.key]).toLocaleString('en-US')}
   onChange={(e) => {
     let newValue = e.target.value;
 
@@ -116,25 +119,48 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
       return;
     }
 
-    // If purely digits, strip leading zeros
-    if (/^\d+$/.test(newValue)) {
-      newValue = String(parseInt(newValue, 10));
+    // Remove commas for processing
+    newValue = newValue.replace(/,/g, '');
+
+    // Only digits allowed
+    if (!/^\d+$/.test(newValue)) {
+      // Ignore invalid input (or optionally handle partial input)
+      return;
     }
+
+    // Strip leading zeros by parsing to int
+    newValue = String(parseInt(newValue, 10));
 
     setLocalValues(prev => ({ ...prev, [field.key]: newValue }));
   }}
   onBlur={() => {
-    // Push numeric value to metrics only when editing ends
-    const finalValue = parseFloat(localValues[field.key] || '0') || 0;
+    // Get numeric value from localValues (handle empty or invalid)
+    let rawValue = localValues[field.key] || '';
+    rawValue = rawValue.toString().replace(/,/g, '');
+
+    let finalValue = parseInt(rawValue, 10);
+    if (isNaN(finalValue)) finalValue = 0;
+
+    // Optional: clamp finalValue here if you want min/max, e.g.:
+    // finalValue = Math.max(MIN_VALUE, Math.min(MAX_VALUE, finalValue));
+
+    // Update the metric with numeric value
     updateMetric(field.key as keyof ROIMetrics, finalValue);
+
+    // Update localValues to formatted value on blur
+    setLocalValues(prev => ({
+      ...prev,
+      [field.key]: finalValue === 0 ? '' : finalValue.toLocaleString('en-US'),
+    }));
   }}
   style={{
     padding: '8px 12px',
     border: '1px solid #ccc',
     borderRadius: '4px',
-    fontSize: '14px'
+    fontSize: '14px',
   }}
 />
+
 
                   </div>
                 ))}
