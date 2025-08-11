@@ -11,27 +11,24 @@ interface AdvancedSettingsProps {
 
 export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProps) => {
   const [localValues, setLocalValues] = useState<Record<string, string>>({});
+  const [isUserEditing, setIsUserEditing] = useState<Record<string, boolean>>({});
 
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  // Initialize localValues from metrics with formatted strings whenever metrics change
+  // Only initialize from metrics when not actively editing
   useEffect(() => {
     const initialValues: Record<string, string> = {};
     Object.entries(metrics).forEach(([key, value]) => {
-      // Only update if we don't have a local value or if the field has a meaningful value
-      if (localValues[key] === undefined || (typeof value === "number" && value > 0)) {
+      if (!isUserEditing[key]) {
         if (typeof value === "number" && value !== 0) {
           initialValues[key] = value.toLocaleString("en-US");
         } else {
           initialValues[key] = "";
         }
-      } else {
-        // Keep existing local value to preserve user input state
-        initialValues[key] = localValues[key] || "";
       }
     });
-    setLocalValues(initialValues);
-  }, [metrics]);
+    setLocalValues(prev => ({ ...prev, ...initialValues }));
+  }, [metrics, isUserEditing]);
 
   const formatWithCommas = (val: string) => {
     if (!val) return "";
@@ -77,7 +74,13 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
     }, 0);
   };
 
+  const handleFocus = (fieldKey: string) => {
+    setIsUserEditing(prev => ({ ...prev, [fieldKey]: true }));
+  };
+
   const handleBlur = (fieldKey: string) => {
+    setIsUserEditing(prev => ({ ...prev, [fieldKey]: false }));
+    
     let rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
     
     // If field is empty, keep it empty
@@ -163,6 +166,7 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                       inputMode="numeric"
                       value={localValues[field.key] ?? ""}
                       onChange={(e) => handleChange(field.key, e)}
+                      onFocus={() => handleFocus(field.key)}
                       onBlur={() => handleBlur(field.key)}
                       placeholder={`Enter ${field.label.toLowerCase()}`}
                       style={{
