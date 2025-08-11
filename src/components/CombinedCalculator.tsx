@@ -44,12 +44,12 @@ export const CombinedCalculator = ({
 }: CombinedCalculatorProps) => {
   // Default metrics for standalone use
   const [localMetrics, setLocalMetrics] = useState<ROIMetrics>({
-    revenueClaimed: 10000000,
+    revenueClaimed: 5000000,
     numberOfCoders: 3,
     numberOfBillers: 3,
     numberOfPhysicians: 50,
     claimDeniedPercent: 10,
-    claimsPerAnnum: 66667, // Auto-calculated: revenue / averageCostPerClaim
+    claimsPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
     averageCostPerClaim: 150,
     chartsProcessedPerAnnum: 33333, // Auto-calculated: revenue / averageCostPerClaim
     salaryPerCoder: 60000,
