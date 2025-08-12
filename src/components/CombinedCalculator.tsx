@@ -637,8 +637,8 @@ export const CombinedCalculator = ({
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="low">Low (40% improvement)</SelectItem>
-                          <SelectItem value="medium">Medium (80% improvement) - ${coderProductivityCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="high">High (300% improvement) - ${coderProductivityCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="medium">Medium (80% improvement)</SelectItem>
+                          <SelectItem value="high">High (300% improvement)</SelectItem>
                         </SelectContent>
                       </Select>
                       <div className="text-xs text-muted-foreground space-y-1">
@@ -654,9 +654,9 @@ export const CombinedCalculator = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="low">Low (50% improvement) - ${billingAutomationSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="medium">Medium (70% improvement) - ${billingAutomationSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="high">High (120% improvement) - ${billingAutomationSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="low">Low (50% improvement) </SelectItem>
+                          <SelectItem value="medium">Medium (70% improvement) </SelectItem>
+                          <SelectItem value="high">High (120% improvement)</SelectItem>
                         </SelectContent>
                       </Select>
                       <div className="text-xs text-muted-foreground space-y-1">
@@ -672,9 +672,9 @@ export const CombinedCalculator = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="low">Low (30% improvement) - ${physicianTimeSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="medium">Medium (50% improvement) - ${physicianTimeSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="high">High (70% improvement) - ${physicianTimeSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="low">Low (30% improvement) </SelectItem>
+                          <SelectItem value="medium">Medium (50% improvement) </SelectItem>
+                          <SelectItem value="high">High (70% improvement) </SelectItem>
                         </SelectContent>
                       </Select>
                       <div className="text-xs text-muted-foreground space-y-1">
@@ -697,9 +697,9 @@ export const CombinedCalculator = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="low">Low (50% savings) - ${technologyCostSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="medium">Medium (70% savings) - ${technologyCostSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="high">High (100% savings) - ${technologyCostSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="low">Low (50% savings) </SelectItem>
+                          <SelectItem value="medium">Medium (70% savings)</SelectItem>
+                          <SelectItem value="high">High (100% savings)</SelectItem>
                         </SelectContent>
                       </Select>
                       <div className="text-xs text-muted-foreground space-y-1">
@@ -715,9 +715,9 @@ export const CombinedCalculator = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="low">Low (30% reduction) - ${claimDenialSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="medium">Medium (50% reduction) - ${claimDenialSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="high">High (70% reduction) - ${claimDenialSavings.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="low">Low (30% reduction)</SelectItem>
+                          <SelectItem value="medium">Medium (50% reduction)</SelectItem>
+                          <SelectItem value="high">High (70% reduction) </SelectItem>
                         </SelectContent>
                       </Select>
                       <div className="text-xs text-muted-foreground space-y-1">
@@ -733,9 +733,9 @@ export const CombinedCalculator = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="low">Low (60% reduction) - ${ARdays.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="medium">Medium (80% reduction) - ${ARdays.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
-                          <SelectItem value="high">High (100% elimination) - ${ARdays.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="low">Low (60% reduction) </SelectItem>
+                          <SelectItem value="medium">Medium (80% reduction) </SelectItem>
+                          <SelectItem value="high">High (100% elimination) </SelectItem>
                         </SelectContent>
                       </Select>
                       <div className="text-xs text-muted-foreground space-y-1">
