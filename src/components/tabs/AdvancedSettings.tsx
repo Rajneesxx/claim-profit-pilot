@@ -207,6 +207,17 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                 </div>
               </div>
             </div>
+
+            <div className="bg-muted p-4 rounded-lg">
+              <h4 className="font-semibold text-foreground mb-3">Increase in RVUs</h4>
+              <div className="space-y-2 text-sm">
+                <p className="text-muted-foreground">Case 1: Nephrology center identifies incremental opportunity with &gt; 95% of level 3s to be identified as level 4s</p>
+                <p className="text-muted-foreground">1. E&M scoring module</p>
+                <div className="mt-2">
+                  <span className="text-primary font-medium">0.1% - 0.5% - 1.5% improvement range</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </CardContent>
