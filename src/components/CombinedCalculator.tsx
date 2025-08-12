@@ -77,77 +77,45 @@ export const CombinedCalculator = ({
 
   const metrics = propMetrics || localMetrics;
   
-  const updateMetric = propUpdateMetric || ((key: keyof ROIMetrics, value: number) => {
-    setLocalMetrics(prev => {
-      const updated = { ...prev, [key]: value };
-      
-      // Calculate chartsPerCoderPerDay dynamically
-        if (updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
-        updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
-      }
+  const updateMetric = (key: keyof ROIMetrics, value: number) => {
+  setMetrics(prev => {
+    const updated = { ...prev, [key]: value };
 
-      // Auto-update encoder licenses when number of coders changes (1 license per coder)
-      if (key === 'numberOfCoders') {
-        updated.numberOfEncoderLicenses = value;
-        // Recalculate chartsPerCoderPerDay
-        if (updated.chartsProcessedPerAnnum > 0 && value > 0) {
-          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / value / 252;
-        }
-      }
-      
-      // Auto-calculate claims and charts when revenue changes
-      if (key === 'revenueClaimed') {
-        updated.claimsPerAnnum = Math.round(value / updated.averageCostPerClaim);
-        updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
-        updated.rvusCodedPerAnnum = Math.round(value / 32);
-        // Only auto-scale billers and physicians if they are at default ratios (not manually changed)
-        const isDefaultBillerRatio = Math.abs(updated.numberOfBillers - (updated.revenueClaimed / 5000000) * 5) < 1;
-        const isDefaultPhysicianRatio = Math.abs(updated.numberOfPhysicians - (updated.revenueClaimed / 5000000) * 20) < 1;
-        if (isDefaultBillerRatio) {
-          const revenueGrowthFactor = value / 5000000; // 5M is the base revenue
-          updated.numberOfBillers = Math.ceil(5 * revenueGrowthFactor); // Base 5 billers
-        }
-        if (isDefaultPhysicianRatio) {
-          const revenueGrowthFactor = value / 5000000; // 5M is the base revenue
-          updated.numberOfPhysicians = Math.ceil(20 * revenueGrowthFactor); // Base 20 physicians
-        }
-        // Recalculate chartsPerCoderPerDay
-        if (updated.numberOfCoders > 0) {
-          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
-        }
-      }
-      
-      // Auto-calculate claims and charts when average cost per claim changes
-      if (key === 'averageCostPerClaim') {
-        updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
-        updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
-        // Don't auto-scale billers and physicians when cost per claim changes
-        // Recalculate chartsPerCoderPerDay
-        if (updated.numberOfCoders > 0) {
-          updated.chartsPerCoderPerDay = math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
-        }
-      }
-      
-      // Auto-calculate chartsPerCoderPerDay when charts processed per year changes
-      if (key === 'chartsProcessedPerAnnum') {
-        // Don't auto-scale billers and physicians when charts change
-        if (updated.numberOfCoders > 0) {
-          updated.chartsPerCoderPerDay = value / updated.numberOfCoders / 252;
-        }
-      }
-      
-      // Auto-calculate chartsPerCoderPerDay when claims per year changes
-      if (key === 'claimsPerAnnum') {
-        updated.chartsProcessedPerAnnum = value; // Sync charts with claims
-        // Don't auto-scale billers and physicians when claims change
-        if (updated.numberOfCoders > 0) {
-          updated.chartsPerCoderPerDay = value / updated.numberOfCoders / 252;
-        }
-      }
-      
-      return updated;
-    });
+    if (updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
+      updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
+    }
+
+    if (key === 'numberOfCoders') {
+      updated.numberOfEncoderLicenses = value;
+      updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / value / 252);
+    }
+
+    if (key === 'revenueClaimed') {
+      updated.claimsPerAnnum = Math.round(value / updated.averageCostPerClaim);
+      updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
+      updated.rvusCodedPerAnnum = Math.round(value / 32);
+      updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
+    }
+
+    if (key === 'averageCostPerClaim') {
+      updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
+      updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
+      updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
+    }
+
+    if (key === 'chartsProcessedPerAnnum') {
+      updated.chartsPerCoderPerDay = Math.round(value / updated.numberOfCoders / 252);
+    }
+
+    if (key === 'claimsPerAnnum') {
+      updated.chartsProcessedPerAnnum = value;
+      updated.chartsPerCoderPerDay = Math.round(value / updated.numberOfCoders / 252);
+    }
+
+    return updated;
   });
+};
+
 
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showAssumptions, setShowAssumptions] = useState(false);
