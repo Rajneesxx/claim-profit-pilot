@@ -11,24 +11,25 @@ interface AdvancedSettingsProps {
 
 export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProps) => {
   const [localValues, setLocalValues] = useState<Record<string, string>>({});
-  const [isUserEditing, setIsUserEditing] = useState<Record<string, boolean>>({});
+  const [initialized, setInitialized] = useState(false);
 
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  // Only initialize from metrics when not actively editing
+  // Initialize only once from metrics
   useEffect(() => {
-    const initialValues: Record<string, string> = {};
-    Object.entries(metrics).forEach(([key, value]) => {
-      if (!isUserEditing[key]) {
+    if (!initialized) {
+      const initialValues: Record<string, string> = {};
+      Object.entries(metrics).forEach(([key, value]) => {
         if (typeof value === "number" && value !== 0) {
           initialValues[key] = value.toLocaleString("en-US");
         } else {
           initialValues[key] = "";
         }
-      }
-    });
-    setLocalValues(prev => ({ ...prev, ...initialValues }));
-  }, [metrics, isUserEditing]);
+      });
+      setLocalValues(initialValues);
+      setInitialized(true);
+    }
+  }, [metrics, initialized]);
 
   const formatWithCommas = (val: string) => {
     if (!val) return "";
@@ -74,22 +75,12 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
     }, 0);
   };
 
-  const handleFocus = (fieldKey: string) => {
-    setIsUserEditing(prev => ({ ...prev, [fieldKey]: true }));
-  };
-
   const handleBlur = (fieldKey: string) => {
-    setIsUserEditing(prev => ({ ...prev, [fieldKey]: false }));
-    
     let rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
     
     // If field is empty, keep it empty
     if (rawVal === "") {
       updateMetric(fieldKey as keyof ROIMetrics, 0);
-      setLocalValues((prev) => ({
-        ...prev,
-        [fieldKey]: "",
-      }));
       return;
     }
     
@@ -97,11 +88,6 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
     if (isNaN(numericValue)) numericValue = 0;
 
     updateMetric(fieldKey as keyof ROIMetrics, numericValue);
-
-    setLocalValues((prev) => ({
-      ...prev,
-      [fieldKey]: numericValue === 0 ? "" : numericValue.toLocaleString("en-US"),
-    }));
   };
 
   const fieldSections = [
@@ -166,7 +152,7 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                       inputMode="numeric"
                       value={localValues[field.key] ?? ""}
                       onChange={(e) => handleChange(field.key, e)}
-                      onFocus={() => handleFocus(field.key)}
+                      
                       onBlur={() => handleBlur(field.key)}
                       placeholder={`Enter ${field.label.toLowerCase()}`}
                       style={{
