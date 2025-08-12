@@ -11,83 +11,55 @@ interface AdvancedSettingsProps {
 
 export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProps) => {
   const [localValues, setLocalValues] = useState<Record<string, string>>({});
-  const [initialized, setInitialized] = useState(false);
-
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  // Initialize only once from metrics
+  // Initialize values from metrics only once on mount
   useEffect(() => {
-    if (!initialized) {
-      const initialValues: Record<string, string> = {};
-      Object.entries(metrics).forEach(([key, value]) => {
-        if (typeof value === "number" && value !== 0) {
-          initialValues[key] = value.toLocaleString("en-US");
-        } else {
-          initialValues[key] = "";
-        }
-      });
-      setLocalValues(initialValues);
-      setInitialized(true);
-    }
-  }, [metrics, initialized]);
-
-  const formatWithCommas = (val: string) => {
-    if (!val) return "";
-    const num = parseInt(val.replace(/,/g, ""), 10);
-    if (isNaN(num)) return "";
-    return num.toLocaleString("en-US");
-  };
+    const initialValues: Record<string, string> = {};
+    Object.entries(metrics).forEach(([key, value]) => {
+      if (typeof value === "number" && value > 0) {
+        initialValues[key] = value.toLocaleString("en-US");
+      } else {
+        initialValues[key] = "";
+      }
+    });
+    setLocalValues(initialValues);
+  }, []); // Empty dependency array - only run once
 
   const handleChange = (fieldKey: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target;
-    let val = input.value;
+    let val = e.target.value;
 
-    // Save cursor position relative to right end
-    const cursorPosFromEnd = val.length - (input.selectionStart ?? val.length);
-
-    // Remove commas
-    let digitsOnly = val.replace(/,/g, "");
-
-    // Allow empty input
-    if (digitsOnly === "") {
+    // Handle empty input - allow it
+    if (val === "") {
       setLocalValues((prev) => ({ ...prev, [fieldKey]: "" }));
       return;
     }
 
-    // Only digits allowed
+    // Remove commas for processing
+    let digitsOnly = val.replace(/,/g, "");
+
+    // Only allow digits
     if (!/^\d+$/.test(digitsOnly)) return;
 
-    // Strip leading zeros
-    digitsOnly = String(parseInt(digitsOnly, 10));
+    // Convert to number and back to remove leading zeros
+    const num = parseInt(digitsOnly, 10);
+    if (isNaN(num)) return;
 
     // Format with commas
-    const formatted = formatWithCommas(digitsOnly);
-
+    const formatted = num.toLocaleString("en-US");
     setLocalValues((prev) => ({ ...prev, [fieldKey]: formatted }));
-
-    // Restore cursor position after formatting
-    setTimeout(() => {
-      const ref = inputRefs.current[fieldKey];
-      if (ref) {
-        const newPos = formatted.length - cursorPosFromEnd;
-        ref.selectionStart = ref.selectionEnd = Math.max(newPos, 0);
-      }
-    }, 0);
   };
 
   const handleBlur = (fieldKey: string) => {
-    let rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
+    const rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
     
-    // If field is empty, keep it empty
     if (rawVal === "") {
       updateMetric(fieldKey as keyof ROIMetrics, 0);
       return;
     }
     
-    let numericValue = parseInt(rawVal, 10);
-    if (isNaN(numericValue)) numericValue = 0;
-
-    updateMetric(fieldKey as keyof ROIMetrics, numericValue);
+    const numericValue = parseInt(rawVal, 10);
+    updateMetric(fieldKey as keyof ROIMetrics, isNaN(numericValue) ? 0 : numericValue);
   };
 
   const fieldSections = [
