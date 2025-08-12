@@ -99,7 +99,6 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
         },
       ],
     },
-    // add other sections as needed...
   ];
 
   return (
