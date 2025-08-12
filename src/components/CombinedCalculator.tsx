@@ -585,7 +585,7 @@ export const CombinedCalculator = ({
                         type="number"
                         value={metrics[key]}
                         onChange={(e) => handleInputChange(key, e.target.value)}
-                        min="0"
+                        min=""
                       />
                     </div>
                   ))}
