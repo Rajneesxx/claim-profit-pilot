@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 
 interface AdvancedSettingsProps {
   metrics: ROIMetrics;
-  updateMetric: (key: keyof ROIMetrics, value: number) => void;
+  updateMetric: (key: keyof ROIMetrics, value?: number) => void; // value optional for clearing
 }
 
 export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProps) => {
@@ -15,59 +15,59 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
 
   // Initialize values from metrics only once on mount
   useEffect(() => {
-  const initialValues: Record<string, string> = {};
-  Object.entries(metrics).forEach(([key, value]) => {
-    if (typeof value === "number" && value > 0) {
-      initialValues[key] = value.toLocaleString("en-US");
-    } else {
-      initialValues[key] = "";
+    const initialValues: Record<string, string> = {};
+    Object.entries(metrics).forEach(([key, value]) => {
+      if (typeof value === "number" && value > 0) {
+        initialValues[key] = value.toLocaleString("en-US");
+      } else {
+        initialValues[key] = "";
+      }
+    });
+    setLocalValues(initialValues);
+  }, [metrics]);
+
+  // Change handler: allow digits and commas only, no formatting here
+  const handleChange = (fieldKey: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+
+    // Allow empty string
+    if (val === "") {
+      setLocalValues((prev) => ({ ...prev, [fieldKey]: "" }));
+      return;
     }
-  });
-  setLocalValues(initialValues);
-}, []);
 
-// Change handler: only allow digits and commas, no formatting yet
-const handleChange = (fieldKey: string, e: React.ChangeEvent<HTMLInputElement>) => {
-  let val = e.target.value;
+    // Allow digits and commas only
+    if (/^[\d,]+$/.test(val)) {
+      setLocalValues((prev) => ({ ...prev, [fieldKey]: val }));
+    }
+    // else ignore input (do nothing)
+  };
 
-  // Allow empty string
-  if (val === "") {
-    setLocalValues((prev) => ({ ...prev, [fieldKey]: "" }));
-    return;
-  }
+  // Blur handler: parse, format, and update metric
+  const handleBlur = (fieldKey: string) => {
+    const rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
 
-  // Allow digits and commas only
-  if (/^[\d,]+$/.test(val)) {
-    setLocalValues((prev) => ({ ...prev, [fieldKey]: val }));
-  }
-  // else ignore input (do nothing)
-};
+    if (rawVal === "") {
+      // Clear metric value if input empty
+      updateMetric(fieldKey as keyof ROIMetrics);
+      return;
+    }
 
-// Blur handler: format and update metric
-const handleBlur = (fieldKey: string) => {
-  const rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
+    const numericValue = parseInt(rawVal, 10);
+    if (isNaN(numericValue)) {
+      updateMetric(fieldKey as keyof ROIMetrics);
+      return;
+    }
 
-  if (rawVal === "") {
-    updateMetric(fieldKey as keyof ROIMetrics);
-    return;
-  }
+    // Format with commas and update local input display
+    const formatted = numericValue.toLocaleString("en-US");
+    setLocalValues((prev) => ({ ...prev, [fieldKey]: formatted }));
 
-  const numericValue = parseInt(rawVal, 10);
-  if (isNaN(numericValue)) {
-    updateMetric(fieldKey as keyof ROIMetrics);
-    return;
-  }
-
-  // Format with commas and update localValues
-  const formatted = numericValue.toLocaleString("en-US");
-  setLocalValues((prev) => ({ ...prev, [fieldKey]: formatted }));
-
-  // Update metric with numeric value
-  updateMetric(fieldKey as keyof ROIMetrics, numericValue);
-};
+    // Update metric value as number
+    updateMetric(fieldKey as keyof ROIMetrics, numericValue);
+  };
 
   const fieldSections = [
-    // Your existing sections here ...
     {
       title: "Aggregate Claims Data",
       fields: [
@@ -99,7 +99,7 @@ const handleBlur = (fieldKey: string) => {
         },
       ],
     },
-    // add other sections here, same as you had...
+    // add other sections as needed...
   ];
 
   return (
@@ -124,11 +124,10 @@ const handleBlur = (fieldKey: string) => {
                     <input
                       id={field.key}
                       ref={(el) => (inputRefs.current[field.key] = el)}
-                      type="number"
-                      inputMode="numeric"
+                      type="text"               // <-- Use text here
+                      inputMode="numeric"       // <-- for numeric keyboard on mobile
                       value={localValues[field.key] ?? ""}
                       onChange={(e) => handleChange(field.key, e)}
-                      
                       onBlur={() => handleBlur(field.key)}
                       placeholder={`Enter ${field.label.toLowerCase()}`}
                       style={{
