@@ -124,7 +124,7 @@ export const CombinedCalculator = ({
         // Don't auto-scale billers and physicians when cost per claim changes
         // Recalculate chartsPerCoderPerDay
         if (updated.numberOfCoders > 0) {
-          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
+          updated.chartsPerCoderPerDay = math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
         }
       }
       
