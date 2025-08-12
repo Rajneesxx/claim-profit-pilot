@@ -15,52 +15,56 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
 
   // Initialize values from metrics only once on mount
   useEffect(() => {
-    const initialValues: Record<string, string> = {};
-    Object.entries(metrics).forEach(([key, value]) => {
-      if (typeof value === "number" && value > 0) {
-        initialValues[key] = value.toLocaleString("en-US");
-      } else {
-        initialValues[key] = "";
-      }
-    });
-    setLocalValues(initialValues);
-  }, []); // Empty dependency array - only run once
-
-  const handleChange = (fieldKey: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    let val = e.target.value;
-
-    // Handle empty input - allow it
-    if (val === "") {
-      setLocalValues((prev) => ({ ...prev, [fieldKey]: "" }));
-      return;
+  const initialValues: Record<string, string> = {};
+  Object.entries(metrics).forEach(([key, value]) => {
+    if (typeof value === "number" && value > 0) {
+      initialValues[key] = value.toLocaleString("en-US");
+    } else {
+      initialValues[key] = "";
     }
+  });
+  setLocalValues(initialValues);
+}, []);
 
-    // Remove commas for processing
-    let digitsOnly = val.replace(/,/g, "");
+// Change handler: only allow digits and commas, no formatting yet
+const handleChange = (fieldKey: string, e: React.ChangeEvent<HTMLInputElement>) => {
+  let val = e.target.value;
 
-    // Only allow digits
-    if (!/^\d+$/.test(digitsOnly)) return;
+  // Allow empty string
+  if (val === "") {
+    setLocalValues((prev) => ({ ...prev, [fieldKey]: "" }));
+    return;
+  }
 
-    // Convert to number and back to remove leading zeros
-    const num = parseInt(digitsOnly, 10);
-    if (isNaN(num)) return;
+  // Allow digits and commas only
+  if (/^[\d,]+$/.test(val)) {
+    setLocalValues((prev) => ({ ...prev, [fieldKey]: val }));
+  }
+  // else ignore input (do nothing)
+};
 
-    // Format with commas
-    const formatted = num.toLocaleString("en-US");
-    setLocalValues((prev) => ({ ...prev, [fieldKey]: formatted }));
-  };
+// Blur handler: format and update metric
+const handleBlur = (fieldKey: string) => {
+  const rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
 
-  const handleBlur = (fieldKey: string) => {
-    const rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
-    
-    if (rawVal === "") {
-      updateMetric(fieldKey as keyof ROIMetrics);
-      return;
-    }
-    
-    const numericValue = parseInt(rawVal, 10);
-    updateMetric(fieldKey as keyof ROIMetrics, isNaN(numericValue) ?  : numericValue);
-  };
+  if (rawVal === "") {
+    updateMetric(fieldKey as keyof ROIMetrics);
+    return;
+  }
+
+  const numericValue = parseInt(rawVal, 10);
+  if (isNaN(numericValue)) {
+    updateMetric(fieldKey as keyof ROIMetrics);
+    return;
+  }
+
+  // Format with commas and update localValues
+  const formatted = numericValue.toLocaleString("en-US");
+  setLocalValues((prev) => ({ ...prev, [fieldKey]: formatted }));
+
+  // Update metric with numeric value
+  updateMetric(fieldKey as keyof ROIMetrics, numericValue);
+};
 
   const fieldSections = [
     // Your existing sections here ...
