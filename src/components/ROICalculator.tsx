@@ -66,62 +66,43 @@ export const ROICalculator = () => {
   const [rating, setRating] = useState(0);
 
   const updateMetric = (key: keyof ROIMetrics, value: number) => {
-    setMetrics(prev => {
-      const updated = { ...prev, [key]: value };
-      
-      // Calculate chartsPerCoderPerDay dynamically
-      if (updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
-        updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
-      }
-      
-      // Auto-update encoder licenses when number of coders changes (1 license per coder)
-      if (key === 'numberOfCoders') {
-        updated.numberOfEncoderLicenses = value;
-        console.log('ROICalculator: Updated coders to:', value, 'and licenses to:', value);
-        // Recalculate chartsPerCoderPerDay
-        if (updated.chartsProcessedPerAnnum > 0 && value > 0) {
-          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / value / 252;
-        }
-      }
-      
-      // Auto-calculate claims and charts when revenue changes
-      if (key === 'revenueClaimed') {
-        updated.claimsPerAnnum = Math.round(value / updated.averageCostPerClaim);
-        updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
-        updated.rvusCodedPerAnnum = Math.round(value / 32);
-        // Auto-calculate number of coders based on charts and 252 working days
-        const calculatedChartsPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
-        updated.chartsPerCoderPerDay = calculatedChartsPerDay;
-      }
-      
-      // Auto-calculate claims and charts when average cost per claim changes
-      if (key === 'averageCostPerClaim') {
-        updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
-        updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
-        // Recalculate chartsPerCoderPerDay
-        if (updated.numberOfCoders > 0) {
-          updated.chartsPerCoderPerDay = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
-        }
-      }
-      
-      // Auto-calculate chartsPerCoderPerDay when charts processed per year changes
-      if (key === 'chartsProcessedPerAnnum') {
-        if (updated.numberOfCoders > 0) {
-          updated.chartsPerCoderPerDay = value / updated.numberOfCoders / 252;
-        }
-      }
-      
-      // Auto-calculate chartsPerCoderPerDay when claims per year changes
-      if (key === 'claimsPerAnnum') {
-        updated.chartsProcessedPerAnnum = value; // Sync charts with claims
-        if (updated.numberOfCoders > 0) {
-          updated.chartsPerCoderPerDay = value / updated.numberOfCoders / 252;
-        }
-      }
-      
-      return updated;
-    });
-  };
+  setMetrics(prev => {
+    const updated = { ...prev, [key]: value };
+
+    if (updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
+      updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
+    }
+
+    if (key === 'numberOfCoders') {
+      updated.numberOfEncoderLicenses = value;
+      updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / value / 252);
+    }
+
+    if (key === 'revenueClaimed') {
+      updated.claimsPerAnnum = Math.round(value / updated.averageCostPerClaim);
+      updated.chartsProcessedPerAnnum = Math.round(value / updated.averageCostPerClaim);
+      updated.rvusCodedPerAnnum = Math.round(value / 32);
+      updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
+    }
+
+    if (key === 'averageCostPerClaim') {
+      updated.claimsPerAnnum = Math.round(updated.revenueClaimed / value);
+      updated.chartsProcessedPerAnnum = Math.round(updated.revenueClaimed / value);
+      updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
+    }
+
+    if (key === 'chartsProcessedPerAnnum') {
+      updated.chartsPerCoderPerDay = Math.round(value / updated.numberOfCoders / 252);
+    }
+
+    if (key === 'claimsPerAnnum') {
+      updated.chartsProcessedPerAnnum = value;
+      updated.chartsPerCoderPerDay = Math.round(value / updated.numberOfCoders / 252);
+    }
+
+    return updated;
+  });
+};
 
   // Updated ROI Calculations to match CombinedCalculator
   const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
