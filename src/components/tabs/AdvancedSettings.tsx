@@ -120,7 +120,7 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
                     <input
                       id={field.key}
                       ref={(el) => (inputRefs.current[field.key] = el)}
-                      type="text"
+                      type="number"
                       inputMode="numeric"
                       value={localValues[field.key] ?? ""}
                       onChange={(e) => handleChange(field.key, e)}
