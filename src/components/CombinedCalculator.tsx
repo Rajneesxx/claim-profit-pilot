@@ -768,4 +768,4 @@ export const CombinedCalculator = ({
     };
     return tooltips[key] || "";
   }
-}
+};
