@@ -585,7 +585,7 @@ export const CombinedCalculator = ({
                         type="number"
                         value={metrics[key]}
                         onChange={(e) => handleInputChange(key, e.target.value)}
-                        min=""
+                        min=" "
                       />
                     </div>
                   ))}
@@ -636,7 +636,7 @@ export const CombinedCalculator = ({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="low">Low (40% improvement) - ${coderProductivityCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
+                          <SelectItem value="low">Low (40% improvement)</SelectItem>
                           <SelectItem value="medium">Medium (80% improvement) - ${coderProductivityCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
                           <SelectItem value="high">High (300% improvement) - ${coderProductivityCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</SelectItem>
                         </SelectContent>
