@@ -82,11 +82,9 @@ export const CombinedCalculator = ({
       const updated = { ...prev, [key]: value };
       
       // Calculate chartsPerCoderPerDay dynamically
-   if (updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
-  const rawValue = updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252;
-  updated.chartsPerCoderPerDay = Math.max(1, Math.floor(rawValue));
-}
-
+        if (updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
+        updated.chartsPerCoderPerDay = math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
+      }
 
       // Auto-update encoder licenses when number of coders changes (1 license per coder)
       if (key === 'numberOfCoders') {
