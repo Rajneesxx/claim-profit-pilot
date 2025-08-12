@@ -54,12 +54,12 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
     const rawVal = localValues[fieldKey]?.replace(/,/g, "") || "";
     
     if (rawVal === "") {
-      updateMetric(fieldKey as keyof ROIMetrics, 0);
+      updateMetric(fieldKey as keyof ROIMetrics);
       return;
     }
     
     const numericValue = parseInt(rawVal, 10);
-    updateMetric(fieldKey as keyof ROIMetrics, isNaN(numericValue) ? 0 : numericValue);
+    updateMetric(fieldKey as keyof ROIMetrics, isNaN(numericValue) ?  : numericValue);
   };
 
   const fieldSections = [
