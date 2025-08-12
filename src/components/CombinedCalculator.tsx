@@ -147,7 +147,7 @@ export const CombinedCalculator = ({
       
       return updated;
     });
-
+  };
 
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showAssumptions, setShowAssumptions] = useState(false);
