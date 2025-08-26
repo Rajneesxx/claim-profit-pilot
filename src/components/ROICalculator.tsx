@@ -5,8 +5,6 @@ import { Calculator, Star, Download, FileText } from 'lucide-react';
 import { CombinedCalculator } from './CombinedCalculator';
 import { FloatingCTA } from './FloatingCTA';
 import { ModernEmailDialog } from './ModernEmailDialog';
-import { FAQ } from './FAQ';
-import { Footer } from './Footer';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ROIMetrics } from '../types/roi';
@@ -325,11 +323,6 @@ export const ROICalculator = () => {
         />
       </div>
 
-      {/* FAQ Section */}
-      <FAQ />
-
-      {/* Footer Section */}
-      <Footer />
 
       {/* Floating CTA */}
       <FloatingCTA />
