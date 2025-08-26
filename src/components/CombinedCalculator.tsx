@@ -642,6 +642,12 @@ export const CombinedCalculator = ({
           </div>
         </div>
       </div>
+
+      {/* FAQ Section */}
+      <FAQ />
+
+      {/* Footer Section */}
+      <Footer />
     </div>
   );
 
