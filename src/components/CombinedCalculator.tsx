@@ -355,8 +355,8 @@ export const CombinedCalculator = ({
   ];
 
   return (
-    <div className="w-full space-y-8">
-      <div className="w-full max-w-6xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto space-y-6">
+      <div className="w-full">
         <div className="text-center py-4">
           <div className="flex items-center justify-center gap-2 text-2xl font-semibold">
             <Calculator className="h-6 w-6" />
@@ -397,280 +397,257 @@ export const CombinedCalculator = ({
                       step={100000}
                       className="w-full"
                     />
-                    <div className="flex items-center gap-4">
-                      <span className="text-sm text-muted-foreground whitespace-nowrap">$5M</span>
-                      <div className="flex items-center gap-2 flex-1">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDecrement('revenueClaimed', 500000)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                        <Input
-                          type="text"
-                          value={editingValues.revenueClaimed ?? formatCurrency(metrics.revenueClaimed)}
-                          onChange={(e) => handleInputChange('revenueClaimed', e.target.value)}
-                          onBlur={() => clearEditingValue('revenueClaimed')}
-                          className="text-center font-medium flex-1"
-                        />
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleIncrement('revenueClaimed', 500000)}
-                          className="h-8 w-8 p-0"
-                        >
-                          <Plus className="h-4 w-4" />
-                        </Button>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+                      <Input
+                        id="revenue"
+                        type="text"
+                        inputMode="numeric"
+                        value={metrics.revenueClaimed === 0 ? '' : formatNumber(metrics.revenueClaimed)}
+                        onChange={(e) => {
+                          const rawValue = e.target.value.replace(/,/g, "");
+                          if (rawValue === '') {
+                            handleInputChange('revenueClaimed', '');
+                            return;
+                          }
+                          const numericValue = parseInt(rawValue);
+                          if (!isNaN(numericValue)) {
+                            handleInputChange('revenueClaimed', numericValue.toString());
+                          }
+                        }}
+                        onBlur={(e) => {
+                          const rawValue = e.target.value.replace(/,/g, "");
+                          const numericValue = parseInt(rawValue) || 5000000;
+                          const clampedValue = Math.max(5000000, Math.min(50000000, numericValue));
+                          updateMetric('revenueClaimed', clampedValue);
+                        }}
+                        className="text-center text-lg font-semibold pl-8"
+                        placeholder="Enter annual revenue (min $5M, max $50M)"
+                      />
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">
+                        Revenue: {formatCurrency(metrics.revenueClaimed)}
                       </div>
-                      <span className="text-sm text-muted-foreground whitespace-nowrap">$50M</span>
                     </div>
                   </div>
                 </div>
-
-                {/* Basic Parameters Grid */}
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {basicInputs.map(({ key, label, max, step }) => (
                     <div key={key} className="space-y-3">
                       <div className="flex items-center gap-2">
-                        <Label htmlFor={key} className="text-sm font-medium">
-                          {label}
-                        </Label>
+                        <Label>{label}</Label>
                         <TooltipInfo content={getTooltipContent(key)} />
                       </div>
-                      <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDecrement(key, step)}
+                          className="p-2 h-8 w-8"
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <Input
+                          type="text"
+                          inputMode="numeric"
+                          value={
+                            editingValues[key] !== undefined
+                              ? editingValues[key]
+                              : ((key === 'chartsPerCoderPerDay' || key === 'avgTimePerPhysicianPerChart')
+                                  ? String(metrics[key] ?? 0)
+                                  : (metrics[key] === 0 ? '' : String(metrics[key])))
+                          }
+                          onChange={(e) => handleInputChange(key, e.target.value)}
+                          onBlur={(e) => {
+                            const raw = e.target.value.trim();
+                            if (raw === '') {
+                              return;
+                            }
+                            const parsed = parseFloat(raw);
+                            if (!isNaN(parsed) && parsed >= 0) {
+                              updateMetric(key, parsed);
+                            }
+                            clearEditingValue(key);
+                          }}
+                          className="text-center"
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleIncrement(key, step)}
+                          className="p-2 h-8 w-8"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      {max && (
                         <Slider
                           value={[metrics[key]]}
                           onValueChange={(value) => updateMetric(key, value[0])}
-                          min={0}
                           max={max}
                           step={step}
                           className="w-full"
                         />
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDecrement(key, step)}
-                            className="h-8 w-8 p-0"
-                          >
-                            <Minus className="h-4 w-4" />
-                          </Button>
-                          <Input
-                            type="text"
-                            value={editingValues[key] ?? (key === 'claimDeniedPercent' ? `${metrics[key]}%` : metrics[key].toString())}
-                            onChange={(e) => handleInputChange(key, e.target.value.replace('%', ''))}
-                            onBlur={() => clearEditingValue(key)}
-                            className="text-center font-medium flex-1"
-                          />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleIncrement(key, step)}
-                            className="h-8 w-8 p-0"
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
+                      )}
                     </div>
                   ))}
                 </div>
 
-                <Separator />
-
-                <Button 
-                  onClick={onCalculateROI}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 text-lg"
-                >
-                  <Download className="mr-2 h-5 w-5" />
-                  Generate ROI Report
-                </Button>
-
-                <div className="text-center">
-                  <Button
-                    onClick={handleBookCall}
-                    variant="outline"
-                    className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-                  >
-                    <Calendar className="mr-2 h-4 w-4" />
-                    Book a Demo Call
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                  <Button variant="outline" className="w-full" onClick={() => setShowAdvanced((v) => !v)}>
+                    <Settings className="h-4 w-4 mr-2" />
+                    Advanced Inputs {showAdvanced ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
+                  </Button>
+                  <Button variant="outline" className="w-full" onClick={() => setShowLevers((v) => !v)}>
+                    <Settings className="h-4 w-4 mr-2" />
+                    Benchmarks & Levers {showLevers ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Advanced Settings */}
-            <Card>
-              <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
-                <CollapsibleTrigger asChild>
-                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                    <CardTitle className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Settings className="h-5 w-5" />
-                        Advanced Settings
-                        <TooltipInfo content="Detailed configuration options for fine-tuning your ROI calculations" />
-                      </div>
-                      {showAdvanced ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-                    </CardTitle>
-                  </CardHeader>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <CardContent ref={advancedRef} className="space-y-6 pt-0">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+                  <CollapsibleContent className="space-y-6">
+                    <div ref={advancedRef} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {advancedInputs.map(({ key, label }) => (
                         <div key={key} className="space-y-2">
-                          <Label htmlFor={key} className="text-sm font-medium">
-                            {label}
-                          </Label>
-                          <div className="flex items-center gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleDecrement(key, 1)}
-                              className="h-8 w-8 p-0"
-                            >
-                              <Minus className="h-4 w-4" />
-                            </Button>
-                            <Input
-                              type="text"
-                              value={editingValues[key] ?? metrics[key].toString()}
-                              onChange={(e) => handleInputChange(key, e.target.value)}
-                              onBlur={() => clearEditingValue(key)}
-                              className="text-center font-medium flex-1"
-                            />
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleIncrement(key, 1)}
-                              className="h-8 w-8 p-0"
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                          </div>
+                          <Label>{label}</Label>
+                          <Input
+                            type="text"
+                            inputMode="numeric"
+                            value={
+                              editingValues[key] !== undefined
+                                ? editingValues[key]
+                                : ((key === 'chartsPerCoderPerDay' || key === 'avgTimePerPhysicianPerChart')
+                                    ? String(metrics[key] ?? 0)
+                                    : (metrics[key] === 0 ? '' : String(metrics[key])))
+                            }
+                            onChange={(e) => handleInputChange(key, e.target.value)}
+                            onBlur={(e) => {
+                              const raw = e.target.value.trim();
+                              if (raw === '') {
+                                return;
+                              }
+                              const parsed = parseFloat(raw);
+                              if (!isNaN(parsed) && parsed >= 0) {
+                                updateMetric(key, parsed);
+                              }
+                              clearEditingValue(key);
+                            }}
+                          />
                         </div>
                       ))}
                     </div>
-                  </CardContent>
-                </CollapsibleContent>
-              </Collapsible>
-            </Card>
+                  </CollapsibleContent>
+                </Collapsible>
 
-            {/* References */}
-            <Card>
-              <Collapsible open={showReferences} onOpenChange={setShowReferences}>
-                <CollapsibleTrigger asChild>
-                  <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
-                    <CardTitle className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <ExternalLink className="h-5 w-5" />
-                        References & Sources
-                        <TooltipInfo content="Industry data sources and calculation methodologies used in this ROI analysis" />
-                      </div>
-                      {showReferences ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-                    </CardTitle>
-                  </CardHeader>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <CardContent ref={referencesRef} className="pt-0">
+                <Collapsible open={showLevers} onOpenChange={setShowLevers}>
+                  <CollapsibleContent ref={leversRef} className="mt-4 space-y-4">
+                    <div className="text-sm text-muted-foreground">Configure assumptions and confidence levels to tune projected outcomes.</div>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                <Separator className="my-8" />
+
+                <Collapsible open={showReferences} onOpenChange={setShowReferences}>
+                  <CollapsibleTrigger asChild>
+                    <Button variant="outline" className="w-full">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      References {showReferences ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent ref={referencesRef} className="mt-4 space-y-4">
                     <References />
-                  </CardContent>
-                </CollapsibleContent>
-              </Collapsible>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                <div className="space-y-4">
+                  <Button 
+                    onClick={onCalculateROI} 
+                    className="w-full h-14 text-lg font-semibold"
+                  >
+                    <Download className="h-5 w-5 mr-2" />
+                    Get Detailed ROI Report
+                  </Button>
+                  <Button 
+                    onClick={handleBookCall}
+                    variant="outline"
+                    className="w-full h-14 text-lg font-semibold"
+                  >
+                    <Calendar className="h-5 w-5 mr-2" />
+                    Book a Call with RapidClaims
+                  </Button>
+                </div>
+              </CardContent>
             </Card>
           </div>
 
           {/* Right Panel - Executive Summary */}
           <div className="space-y-6">
             <Card className="h-fit">
-              <CardHeader>
-                <CardTitle className="text-xl">Executive Summary</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {/* Total Annual Impact */}
-                  <div className="text-center p-6 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg border border-primary/20">
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      {formatCurrency(totalImpact)}
-                    </div>
-                    <div className="text-sm text-muted-foreground">Total Annual Financial Impact</div>
+              <div
+                className="relative h-[600px] overflow-y-auto rounded-3xl p-6 md:p-8 text-white shadow-xl ring-1 ring-white/20
+                           bg-gradient-to-br from-blue-600 via-purple-600 to-blue-200"
+                style={{
+                  filter: 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5))'
+                }}
+              >
+                <button className="absolute right-4 top-4 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20">
+                  Sign in
+                </button>
+                <div className="text-2xl font-semibold mb-2">Executive Summary</div>
+                <div className="text-sm text-white/80 mb-4">Estimated Annual Financial Impact</div>
+                <div className="text-5xl md:text-6xl font-bold tracking-tight mb-2">{formatCurrency(totalImpact)}</div>
+                <div className="text-xs text-white/70 mb-6">Updated {new Date().toLocaleDateString()}</div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
+                    <span className="font-medium text-green-600">Cost Savings</span>
+                    <span className="font-semibold text-green-700">{formatCurrency(totalCostSavings)}</span>
                   </div>
-
-                  {/* ROI Metric */}
-                  <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-                    <div className="text-2xl font-bold text-green-600 mb-1">
-                      {cappedRoi.toFixed(0)}% ROI
-                    </div>
-                    <div className="text-sm text-green-700">Return on Investment</div>
+                  <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
+                    <span className="font-medium text-blue-600">Revenue Increase</span>
+                    <span className="font-semibold text-blue-700">{formatCurrency(totalRevenueIncrease)}</span>
                   </div>
-
-                  {/* Breakdown */}
-                  <div className="space-y-4">
-                    <Separator />
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                        <span className="text-sm font-medium text-green-800">Cost Savings</span>
-                        <span className="font-semibold text-green-700">{formatCurrency(totalCostSavings)}</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                        <span className="text-sm font-medium text-blue-800">Revenue Increase</span>
-                        <span className="font-semibold text-blue-700">{formatCurrency(totalRevenueIncrease)}</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
-                        <span className="text-sm font-medium text-purple-800">Risk Reduction</span>
-                        <span className="font-semibold text-purple-700">{formatCurrency(totalRiskReduction)}</span>
-                      </div>
-                    </div>
-                    <Separator />
-                    <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                      <span className="text-sm font-medium text-gray-800">Implementation Cost</span>
-                      <span className="font-semibold text-gray-700">{formatCurrency(scaledImplementationCost)}</span>
-                    </div>
-                  </div>
-
-                  {/* Payback Period */}
-                  <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <div className="text-2xl font-bold text-blue-600 mb-1">
-                      {(scaledImplementationCost / (totalImpact / 12)).toFixed(1)} months
-                    </div>
-                    <div className="text-sm text-blue-700">Payback Period</div>
+                  <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
+                    <span className="font-medium text-purple-600">Risk Reduction</span>
+                    <span className="font-semibold text-purple-700">{formatCurrency(totalRiskReduction)}</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Impact Visualization */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Financial Impact Breakdown</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <MetricsExpandedView 
-                  coderProductivitySavings={coderProductivityCost}
-                  billingAutomationSavings={billingAutomationSavings}
-                  physicianTimeSavings={physicianTimeSavings}
-                  technologyCostSavings={technologyCostSavings}
-                  claimDenialSavings={claimDenialSavings}
-                  ARdays={ARdays}
-                  rvuIncrease={rvuIncrease}
-                  overCodingReduction={overCodingReduction}
-                />
-              </CardContent>
+                <Collapsible className="mt-4" defaultOpen>
+                  <CollapsibleTrigger asChild>
+                    <button className="w-full text-left rounded-xl bg-white hover:bg-gray-100 px-4 py-3 border border-gray-300 text-black">
+                      <span className="font-medium">Advanced Analysis
+                        <TooltipInfo content="View detailed breakdown of all financial impact calculations" />
+                      </span>
+                    </button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-3">
+                    <div className="rounded-xl bg-white/5 border border-white/15 p-3">
+                       <MetricsExpandedView
+                         coderProductivitySavings={coderProductivityCost}
+                         billingAutomationSavings={billingAutomationSavings}
+                         physicianTimeSavings={physicianTimeSavings}
+                         technologyCostSavings={technologyCostSavings}
+                         claimDenialSavings={claimDenialSavings}
+                         ARdays={ARdays}
+                         rvuIncrease={rvuIncrease}
+                         overCodingReduction={overCodingReduction}
+                       />
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+                <div className="mt-6 text-white/80 text-sm">Implementation Investment: {formatCurrency(scaledImplementationCost)}</div>
+              </div>
             </Card>
           </div>
         </div>
       </div>
 
-      {/* FAQ Section - Full width, properly spaced */}
-      <div className="w-full bg-background">
-        <FAQ />
-      </div>
+      {/* FAQ Section */}
+      <FAQ />
 
-      {/* Footer Section - Full width, at the bottom */}
-      <div className="w-full">
-        <Footer />
-      </div>
+      {/* Footer Section */}
+      <Footer />
     </div>
   );
 
