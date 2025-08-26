@@ -7,7 +7,6 @@ import { Slider } from "@/components/ui/slider";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronDown, ChevronUp, Calculator, ExternalLink, Settings, Minus, Plus, Download, Calendar } from "lucide-react";
 import { ROIMetrics } from "@/types/roi";
 import { References } from "./tabs/References";
@@ -139,7 +138,6 @@ export const CombinedCalculator = ({
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showAssumptions, setShowAssumptions] = useState(false);
   const [showReferences, setShowReferences] = useState(false);
-  const [activeTab, setActiveTab] = useState("calculator");
   const [editingValues, setEditingValues] = useState<Partial<Record<keyof ROIMetrics, string>>>({});
   const [showLevers, setShowLevers] = useState(false);
   const advancedRef = useRef<HTMLDivElement | null>(null);
@@ -367,140 +365,136 @@ export const CombinedCalculator = ({
             <TooltipInfo content="Calculate your potential return on investment with RapidClaims AI-powered medical coding solution" />
           </div>
         </div>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-1">
-            <TabsTrigger value="calculator" className="flex items-center gap-2">
-              <Calculator className="h-4 w-4" />
-              Calculator
-            </TabsTrigger>
-          </TabsList>
 
-          <TabsContent value="calculator" className="space-y-6">
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-8">
-                <div className="mb-8">
-                  <div className="flex items-center gap-2 mb-6">
-                    <h3 className="text-xl font-semibold">Key Input Parameters</h3>
-                    <TooltipInfo content="Essential metrics that drive your ROI calculation. Adjust these to match your organization's profile." />
+        {/* Side-by-side layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left Panel - Calculations */}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calculator className="h-5 w-5" />
+                  Key Input Parameters
+                  <TooltipInfo content="Essential metrics that drive your ROI calculation. Adjust these to match your organization's profile." />
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Annual Revenue Claimed */}
+                <div className="p-6 bg-muted/30 rounded-lg border">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Label htmlFor="revenue" className="text-base font-medium">
+                      Annual Revenue Claimed
+                    </Label>
+                    <TooltipInfo content="Enter your organization's total annual revenue from medical claims (minimum $5M, maximum $50M)" />
                   </div>
-                  
-                  {/* Annual Revenue Claimed */}
-                  <div className="mb-8 p-6 bg-muted/30 rounded-lg border">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Label htmlFor="revenue" className="text-base font-medium">
-                        Annual Revenue Claimed
-                      </Label>
-                      <TooltipInfo content="Enter your organization's total annual revenue from medical claims (minimum $5M, maximum $50M)" />
-                    </div>
-                    <div className="space-y-4">
-                      <Slider
-                        value={[Math.max(5000000, Math.min(50000000, metrics.revenueClaimed))]}
-                        onValueChange={(value) => {
-                          const clampedValue = Math.max(5000000, Math.min(50000000, value[0]));
+                  <div className="space-y-4">
+                    <Slider
+                      value={[Math.max(5000000, Math.min(50000000, metrics.revenueClaimed))]}
+                      onValueChange={(value) => {
+                        const clampedValue = Math.max(5000000, Math.min(50000000, value[0]));
+                        updateMetric('revenueClaimed', clampedValue);
+                      }}
+                      min={5000000}
+                      max={50000000}
+                      step={100000}
+                      className="w-full"
+                    />
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+                      <Input
+                        id="revenue"
+                        type="text"
+                        inputMode="numeric"
+                        value={metrics.revenueClaimed === 0 ? '' : formatNumber(metrics.revenueClaimed)}
+                        onChange={(e) => {
+                          const rawValue = e.target.value.replace(/,/g, "");
+                          if (rawValue === '') {
+                            handleInputChange('revenueClaimed', '');
+                            return;
+                          }
+                          const numericValue = parseInt(rawValue);
+                          if (!isNaN(numericValue)) {
+                            handleInputChange('revenueClaimed', numericValue.toString());
+                          }
+                        }}
+                        onBlur={(e) => {
+                          const rawValue = e.target.value.replace(/,/g, "");
+                          const numericValue = parseInt(rawValue) || 5000000;
+                          const clampedValue = Math.max(5000000, Math.min(50000000, numericValue));
                           updateMetric('revenueClaimed', clampedValue);
                         }}
-                        min={5000000}
-                        max={50000000}
-                        step={100000}
-                        className="w-full"
+                        className="text-center text-lg font-semibold pl-8"
+                        placeholder="Enter annual revenue (min $5M, max $50M)"
                       />
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
-                        <Input
-                          id="revenue"
-                          type="text"
-                          inputMode="numeric"
-                          value={metrics.revenueClaimed === 0 ? '' : formatNumber(metrics.revenueClaimed)}
-                          onChange={(e) => {
-                            const rawValue = e.target.value.replace(/,/g, "");
-                            if (rawValue === '') {
-                              handleInputChange('revenueClaimed', '');
-                              return;
-                            }
-                            const numericValue = parseInt(rawValue);
-                            if (!isNaN(numericValue)) {
-                              handleInputChange('revenueClaimed', numericValue.toString());
-                            }
-                          }}
-                          onBlur={(e) => {
-                            const rawValue = e.target.value.replace(/,/g, "");
-                            const numericValue = parseInt(rawValue) || 5000000;
-                            const clampedValue = Math.max(5000000, Math.min(50000000, numericValue));
-                            updateMetric('revenueClaimed', clampedValue);
-                          }}
-                          className="text-center text-lg font-semibold pl-8"
-                          placeholder="Enter annual revenue (min $5M, max $50M)"
-                        />
-                      </div>
-                      <div className="text-center">
-                        <div className="text-sm text-muted-foreground">
-                          Revenue: {formatCurrency(metrics.revenueClaimed)}
-                        </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm text-muted-foreground">
+                        Revenue: {formatCurrency(metrics.revenueClaimed)}
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {basicInputs.map(({ key, label, max, step }) => (
-                      <div key={key} className="space-y-3">
-                        <div className="flex items-center gap-2">
-                          <Label>{label}</Label>
-                          <TooltipInfo content={getTooltipContent(key)} />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDecrement(key, step)}
-                            className="p-2 h-8 w-8"
-                          >
-                            <Minus className="h-3 w-3" />
-                          </Button>
-                          <Input
-                            type="text"
-                            inputMode="numeric"
-                            value={
-                              editingValues[key] !== undefined
-                                ? editingValues[key]
-                                : ((key === 'chartsPerCoderPerDay' || key === 'avgTimePerPhysicianPerChart')
-                                    ? String(metrics[key] ?? 0)
-                                    : (metrics[key] === 0 ? '' : String(metrics[key])))
-                            }
-                            onChange={(e) => handleInputChange(key, e.target.value)}
-                            onBlur={(e) => {
-                              const raw = e.target.value.trim();
-                              if (raw === '') {
-                                return;
-                              }
-                              const parsed = parseFloat(raw);
-                              if (!isNaN(parsed) && parsed >= 0) {
-                                updateMetric(key, parsed);
-                              }
-                              clearEditingValue(key);
-                            }}
-                            className="text-center"
-                          />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleIncrement(key, step)}
-                            className="p-2 h-8 w-8"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </Button>
-                        </div>
-                        {max && (
-                          <Slider
-                            value={[metrics[key]]}
-                            onValueChange={(value) => updateMetric(key, value[0])}
-                            max={max}
-                            step={step}
-                            className="w-full"
-                          />
-                        )}
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {basicInputs.map(({ key, label, max, step }) => (
+                    <div key={key} className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Label>{label}</Label>
+                        <TooltipInfo content={getTooltipContent(key)} />
                       </div>
-                    ))}
-                  </div>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDecrement(key, step)}
+                          className="p-2 h-8 w-8"
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <Input
+                          type="text"
+                          inputMode="numeric"
+                          value={
+                            editingValues[key] !== undefined
+                              ? editingValues[key]
+                              : ((key === 'chartsPerCoderPerDay' || key === 'avgTimePerPhysicianPerChart')
+                                  ? String(metrics[key] ?? 0)
+                                  : (metrics[key] === 0 ? '' : String(metrics[key])))
+                          }
+                          onChange={(e) => handleInputChange(key, e.target.value)}
+                          onBlur={(e) => {
+                            const raw = e.target.value.trim();
+                            if (raw === '') {
+                              return;
+                            }
+                            const parsed = parseFloat(raw);
+                            if (!isNaN(parsed) && parsed >= 0) {
+                              updateMetric(key, parsed);
+                            }
+                            clearEditingValue(key);
+                          }}
+                          className="text-center"
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleIncrement(key, step)}
+                          className="p-2 h-8 w-8"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      {max && (
+                        <Slider
+                          value={[metrics[key]]}
+                          onValueChange={(value) => updateMetric(key, value[0])}
+                          max={max}
+                          step={step}
+                          className="w-full"
+                        />
+                      )}
+                    </div>
+                  ))}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
@@ -552,125 +546,6 @@ export const CombinedCalculator = ({
                 <Collapsible open={showLevers} onOpenChange={setShowLevers}>
                   <CollapsibleContent ref={leversRef} className="mt-4 space-y-4">
                     <div className="text-sm text-muted-foreground">Configure assumptions and confidence levels to tune projected outcomes.</div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-lg">Operational Efficiency Levers</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <div className="space-y-2">
-                            <Label className="text-sm font-medium">Coder Productivity</Label>
-                            <Select value={leverLevels.coderProductivity} onValueChange={(value) => handleLeverLevelChange('coderProductivity', value)}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="low">Low (40% improvement)</SelectItem>
-                                <SelectItem value="medium">Medium (80% improvement)</SelectItem>
-                                <SelectItem value="high">High (300% improvement)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <div className="text-xs text-muted-foreground space-y-1">
-                              <p><strong>Features:</strong> Autonomous coding, user-friendly UI, easy code search</p>
-                              <p><strong>Case Study:</strong> Primary care center (90% improvement), RCM provider (120% improvement)</p>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm font-medium">Billing Automation</Label>
-                            <Select value={leverLevels.billingAutomation} onValueChange={(value) => handleLeverLevelChange('billingAutomation', value)}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="low">Low (50% improvement)</SelectItem>
-                                <SelectItem value="medium">Medium (70% improvement)</SelectItem>
-                                <SelectItem value="high">High (120% improvement)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <div className="text-xs text-muted-foreground space-y-1">
-                              <p><strong>Features:</strong> AI charge-capture, e-claim builder, auto ERA posting</p>
-                              <p><strong>Case Study:</strong> Clinic reduced billing FTEs by 40% after replacing manual charge entry</p>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm font-medium">Physician Time Saved</Label>
-                            <Select value={leverLevels.physicianTimeSaved} onValueChange={(value) => handleLeverLevelChange('physicianTimeSaved', value)}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="low">Low (30% improvement)</SelectItem>
-                                <SelectItem value="medium">Medium (50% improvement)</SelectItem>
-                                <SelectItem value="high">High (70% improvement)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <div className="text-xs text-muted-foreground space-y-1">
-                              <p><strong>Features:</strong> Inline AI code suggestions, one-click query approval, E/M prompts</p>
-                              <p><strong>Case Study:</strong> Clinic cut chart-related physician queries by 30% in 6 months</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-lg">Cost & Risk Reduction Levers</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <div className="space-y-2">
-                            <Label className="text-sm font-medium">Technology Cost Saved</Label>
-                            <Select value={leverLevels.technologyCostSaved} onValueChange={(value) => handleLeverLevelChange('technologyCostSaved', value)}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="low">Low (50% savings)</SelectItem>
-                                <SelectItem value="medium">Medium (70% savings)</SelectItem>
-                                <SelectItem value="high">High (100% savings)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <div className="text-xs text-muted-foreground space-y-1">
-                              <p><strong>Features:</strong> Single cloud platform, usage-based pricing</p>
-                              <p><strong>Case Study:</strong> Health system retired legacy encoder, removing $150k license cost</p>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm font-medium">Claim Denial Reduction</Label>
-                            <Select value={leverLevels.claimDenialReduction} onValueChange={(value) => handleLeverLevelChange('claimDenialReduction', value)}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="low">Low (30% reduction)</SelectItem>
-                                <SelectItem value="medium">Medium (50% reduction)</SelectItem>
-                                <SelectItem value="high">High (70% reduction)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <div className="text-xs text-muted-foreground space-y-1">
-                              <p><strong>Features:</strong> NCCI edits check, MCD check, ICD conflict detection</p>
-                              <p><strong>Case Study:</strong> MSO managing primary care center achieved 15% reduction in claim denials</p>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm font-medium">Coding Backlog Elimination</Label>
-                            <Select value={leverLevels.codingBacklogElimination} onValueChange={(value) => handleLeverLevelChange('codingBacklogElimination', value)}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="low">Low (60% reduction)</SelectItem>
-                                <SelectItem value="medium">Medium (80% reduction)</SelectItem>
-                                <SelectItem value="high">High (100% elimination)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <div className="text-xs text-muted-foreground space-y-1">
-                              <p><strong>Features:</strong> E2E connectivity with EHR platform, E2E connectivity with billing system</p>
-                              <p><strong>Case Study:</strong> ASC clinic eliminated coding backlog from 28% of charts (17-20 days) to 0%</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
                   </CollapsibleContent>
                 </Collapsible>
 
@@ -705,69 +580,69 @@ export const CombinedCalculator = ({
                     Book a Call with RapidClaims
                   </Button>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
+          </div>
 
-              <div className="md:sticky md:top-6">
+          {/* Right Panel - Executive Summary */}
+          <div className="space-y-6">
+            <Card className="h-fit">
               <div
-  className="relative h-[600px] overflow-y-auto rounded-3xl p-6 md:p-8 text-white shadow-xl ring-1 ring-white/20
-             bg-gradient-to-br from-blue-600 via-purple-600 to-blue-200"
-  style={{
-    filter: 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5))'
-
-  }}
->
-
-
-                  <button className="absolute right-4 top-4 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20">
-                    Sign in
-                  </button>
-                  <div className="text-2xl font-semibold mb-2">Executive Summary</div>
-                  <div className="text-sm text-white/80 mb-4">Estimated Annual Financial Impact</div>
-                  <div className="text-5xl md:text-6xl font-bold tracking-tight mb-2">{formatCurrency(totalImpact)}</div>
-                  <div className="text-xs text-white/70 mb-6">Updated {new Date().toLocaleDateString()}</div>
-                  <div className="space-y-3">
+                className="relative h-[600px] overflow-y-auto rounded-3xl p-6 md:p-8 text-white shadow-xl ring-1 ring-white/20
+                           bg-gradient-to-br from-blue-600 via-purple-600 to-blue-200"
+                style={{
+                  filter: 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5))'
+                }}
+              >
+                <button className="absolute right-4 top-4 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20">
+                  Sign in
+                </button>
+                <div className="text-2xl font-semibold mb-2">Executive Summary</div>
+                <div className="text-sm text-white/80 mb-4">Estimated Annual Financial Impact</div>
+                <div className="text-5xl md:text-6xl font-bold tracking-tight mb-2">{formatCurrency(totalImpact)}</div>
+                <div className="text-xs text-white/70 mb-6">Updated {new Date().toLocaleDateString()}</div>
+                <div className="space-y-3">
                   <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
-  <span className="font-medium text-green-600">Cost Savings</span>
-  <span className="font-semibold text-green-700">{formatCurrency(totalCostSavings)}</span>
-</div>
-<div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
-  <span className="font-medium text-blue-600">Revenue Increase</span>
-  <span className="font-semibold text-blue-700">{formatCurrency(totalRevenueIncrease)}</span>
-</div>
-<div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
-  <span className="font-medium text-purple-600">Risk Reduction</span>
-  <span className="font-semibold text-purple-700">{formatCurrency(totalRiskReduction)}</span>
-</div>
-
-
+                    <span className="font-medium text-green-600">Cost Savings</span>
+                    <span className="font-semibold text-green-700">{formatCurrency(totalCostSavings)}</span>
                   </div>
-                  <Collapsible className="mt-4" defaultOpen>
-                    <CollapsibleTrigger asChild>
-                    <button className="w-full text-left rounded-xl bg-white hover:bg-gray-100 px-4 py-3 border border-gray-300 text-black">
-                        <span className="font-medium">Detailed Metrics Breakdown</span>
-                      </button>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="mt-3">
-                      <div className="rounded-xl bg-white/5 border border-white/15 p-3">
-                         <MetricsExpandedView
-                           coderProductivitySavings={coderProductivityCost}
-                           billingAutomationSavings={billingAutomationSavings}
-                           physicianTimeSavings={physicianTimeSavings}
-                           technologyCostSavings={technologyCostSavings}
-                           claimDenialSavings={claimDenialSavings}
-                           ARdays={ARdays}
-                           rvuIncrease={rvuIncrease}
-                           overCodingReduction={overCodingReduction}
-                         />
-                      </div>
-                    </CollapsibleContent>
-                  </Collapsible>
-                  <div className="mt-6 text-white/80 text-sm">Implementation Investment: {formatCurrency(scaledImplementationCost)}</div>
+                  <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
+                    <span className="font-medium text-blue-600">Revenue Increase</span>
+                    <span className="font-semibold text-blue-700">{formatCurrency(totalRevenueIncrease)}</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
+                    <span className="font-medium text-purple-600">Risk Reduction</span>
+                    <span className="font-semibold text-purple-700">{formatCurrency(totalRiskReduction)}</span>
+                  </div>
                 </div>
+                <Collapsible className="mt-4" defaultOpen>
+                  <CollapsibleTrigger asChild>
+                    <button className="w-full text-left rounded-xl bg-white hover:bg-gray-100 px-4 py-3 border border-gray-300 text-black">
+                      <span className="font-medium">Advanced Analysis
+                        <TooltipInfo content="View detailed breakdown of all financial impact calculations" />
+                      </span>
+                    </button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-3">
+                    <div className="rounded-xl bg-white/5 border border-white/15 p-3">
+                       <MetricsExpandedView
+                         coderProductivitySavings={coderProductivityCost}
+                         billingAutomationSavings={billingAutomationSavings}
+                         physicianTimeSavings={physicianTimeSavings}
+                         technologyCostSavings={technologyCostSavings}
+                         claimDenialSavings={claimDenialSavings}
+                         ARdays={ARdays}
+                         rvuIncrease={rvuIncrease}
+                         overCodingReduction={overCodingReduction}
+                       />
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+                <div className="mt-6 text-white/80 text-sm">Implementation Investment: {formatCurrency(scaledImplementationCost)}</div>
               </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
