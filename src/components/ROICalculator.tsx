@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button";
 import { ROIMetrics } from '../types/roi';
 import { generatePDFReport } from '@/utils/pdfExport';
 import { formatCurrency } from '@/utils/formatters';
+import { FAQ } from '@/components/FAQ';
+import { Footer } from '@/components/Footer';
+
 
 export const ROICalculator = () => {
   const { toast } = useToast();
