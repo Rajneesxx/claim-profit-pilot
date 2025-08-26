@@ -1,8 +1,3 @@
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { formatCurrency } from "@/utils/formatters";
 import { TooltipInfo } from "./TooltipInfo";
 
@@ -27,7 +22,6 @@ export const MetricsExpandedView = ({
   rvuIncrease,
   overCodingReduction,
 }: MetricsExpandedViewProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const costSavingsMetrics = [
     {
@@ -79,87 +73,60 @@ export const MetricsExpandedView = ({
   ];
 
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            Detailed Metrics Breakdown
-            <TooltipInfo content="Click to view the breakdown of all calculated savings, revenue increases, and risk reductions" />
-          </CardTitle>
-          <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="sm">
-                {isExpanded ? (
-                  <>
-                    Hide Details <ChevronUp className="h-4 w-4 ml-1" />
-                  </>
-                ) : (
-                  <>
-                    Show Details <ChevronDown className="h-4 w-4 ml-1" />
-                  </>
-                )}
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <CardContent className="space-y-6">
-                {/* Cost Savings */}
-                <div>
-                  <h4 className="text-lg font-semibold text-green-600 mb-3">Cost Savings</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {costSavingsMetrics.map((metric, index) => (
-                      <div key={index} className="p-3 bg-green-50 rounded-lg border border-green-200">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-green-800">{metric.label}</span>
-                          <TooltipInfo content={metric.description} />
-                        </div>
-                        <div className="text-lg font-bold text-green-600">
-                          {formatCurrency(metric.value)}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Revenue Increase */}
-                <div>
-                  <h4 className="text-lg font-semibold text-blue-600 mb-3">Revenue Increase</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {revenueMetrics.map((metric, index) => (
-                      <div key={index} className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-blue-800">{metric.label}</span>
-                          <TooltipInfo content={metric.description} />
-                        </div>
-                        <div className="text-lg font-bold text-blue-600">
-                          {formatCurrency(metric.value)}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Risk Reduction */}
-                <div>
-                  <h4 className="text-lg font-semibold text-purple-600 mb-3">Risk Reduction</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {riskMetrics.map((metric, index) => (
-                      <div key={index} className="p-3 bg-purple-50 rounded-lg border border-purple-200">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-purple-800">{metric.label}</span>
-                          <TooltipInfo content={metric.description} />
-                        </div>
-                        <div className="text-lg font-bold text-purple-600">
-                          {formatCurrency(metric.value)}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </CollapsibleContent>
-          </Collapsible>
+    <div className="space-y-6">
+      {/* Cost Savings */}
+      <div>
+        <h4 className="text-lg font-semibold text-green-600 mb-3">Cost Savings</h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {costSavingsMetrics.map((metric, index) => (
+            <div key={index} className="p-3 bg-green-50 rounded-lg border border-green-200">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-sm font-medium text-green-800">{metric.label}</span>
+                <TooltipInfo content={metric.description} />
+              </div>
+              <div className="text-lg font-bold text-green-600">
+                {formatCurrency(metric.value)}
+              </div>
+            </div>
+          ))}
         </div>
-      </CardHeader>
-    </Card>
+      </div>
+
+      {/* Revenue Increase */}
+      <div>
+        <h4 className="text-lg font-semibold text-blue-600 mb-3">Revenue Increase</h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {revenueMetrics.map((metric, index) => (
+            <div key={index} className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-sm font-medium text-blue-800">{metric.label}</span>
+                <TooltipInfo content={metric.description} />
+              </div>
+              <div className="text-lg font-bold text-blue-600">
+                {formatCurrency(metric.value)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Risk Reduction */}
+      <div>
+        <h4 className="text-lg font-semibold text-purple-600 mb-3">Risk Reduction</h4>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {riskMetrics.map((metric, index) => (
+            <div key={index} className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-sm font-medium text-purple-800">{metric.label}</span>
+                <TooltipInfo content={metric.description} />
+              </div>
+              <div className="text-lg font-bold text-purple-600">
+                {formatCurrency(metric.value)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
