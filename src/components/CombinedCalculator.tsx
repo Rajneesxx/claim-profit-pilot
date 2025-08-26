@@ -153,6 +153,8 @@ export const CombinedCalculator = ({
   const [showAssumptions, setShowAssumptions] = useState(false);
   const [activeTab, setActiveTab] = useState("calculator");
   const [editingValues, setEditingValues] = useState<Partial<Record<keyof ROIMetrics, string>>>({});
+
+  
   
   // Lever confidence levels (Medium as default)
   const [leverLevels, setLeverLevels] = useState({
