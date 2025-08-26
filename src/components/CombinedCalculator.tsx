@@ -355,14 +355,11 @@ export const CombinedCalculator = ({
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
-      <ProductDescription />
-      
       <div className="w-full">
         <div className="text-center py-4">
           <div className="flex items-center justify-center gap-2 text-2xl font-semibold">
             <Calculator className="h-6 w-6" />
-            RapidROI Calculator
-            <TooltipInfo content="Calculate your potential return on investment with RapidClaims AI-powered medical coding solution" />
+            ROI Calculator
           </div>
         </div>
 
