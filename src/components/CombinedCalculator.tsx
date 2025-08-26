@@ -60,7 +60,7 @@ export const CombinedCalculator = ({
     salaryPerPhysician: 350000,
     avgTimePerPhysicianPerChart: 0,
     avgTimePerCoderPerChart: 0.1333, // 8 minutes per chart by default
-    chartsPerCoderPerDay: 80, // Will be calculated dynamically
+    chartsPerCoderPerDay: 44, // Will be calculated dynamically
     costPerDeniedClaim: 13,
     codingBacklogPercent: 20, //20% Backlog per chart
     daysPerChartInBacklog: 20,
