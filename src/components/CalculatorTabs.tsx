@@ -33,21 +33,26 @@ export const CalculatorTabs = ({
   onCalculateROI, 
   calculations 
 }: CalculatorTabsProps) => {
-  const [activeTab, setActiveTab] = useState("calculator");
+  const [activeTab, setActiveTab] = useState("calculations");
+  const [activeCalculationTab, setActiveCalculationTab] = useState("calculator");
 
-  const tabs = [
+  const mainTabs = [
+    { id: "calculations", label: "Calculations", icon: Calculator },
+    { id: "summary", label: "Executive Summary", icon: Award },
+  ];
+
+  const calculationTabs = [
     { id: "calculator", label: "Calculator", icon: Calculator },
     { id: "advanced", label: "Advanced", icon: Settings },
     { id: "assumptions", label: "Assumptions", icon: BookOpen },
-    { id: "summary", label: "Summary", icon: Award },
   ];
 
   return (
     <Card className="bg-background border border-border">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="border-b border-border">
-          <TabsList className="grid w-full grid-cols-4 bg-background p-2">
-            {tabs.map((tab) => (
+          <TabsList className="grid w-full grid-cols-2 bg-background p-2">
+            {mainTabs.map((tab) => (
               <TabsTrigger
                 key={tab.id}
                 value={tab.id}
@@ -60,26 +65,47 @@ export const CalculatorTabs = ({
           </TabsList>
         </div>
 
-        <TabsContent value="calculator" className="mt-0">
-          <BasicCalculator 
-            metrics={metrics}
-            updateMetric={updateMetric}
-            onCalculateROI={onCalculateROI}
-            calculations={calculations}
-          />
-        </TabsContent>
+        <TabsContent value="calculations" className="mt-0">
+          <div className="p-6">
+            <Tabs value={activeCalculationTab} onValueChange={setActiveCalculationTab} className="w-full">
+              <div className="border-b border-border mb-6">
+                <TabsList className="grid w-full grid-cols-3 bg-background p-2">
+                  {calculationTabs.map((tab) => (
+                    <TabsTrigger
+                      key={tab.id}
+                      value={tab.id}
+                      className="data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground text-muted-foreground border border-border data-[state=active]:border-secondary"
+                    >
+                      <tab.icon className="h-4 w-4 mr-2" />
+                      {tab.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
 
-        <TabsContent value="advanced" className="mt-0">
-          <AdvancedSettings 
-            metrics={metrics}
-            updateMetric={updateMetric}
-          />
-        </TabsContent>
+              <TabsContent value="calculator" className="mt-0">
+                <BasicCalculator 
+                  metrics={metrics}
+                  updateMetric={updateMetric}
+                  onCalculateROI={onCalculateROI}
+                  calculations={calculations}
+                />
+              </TabsContent>
 
-        <TabsContent value="assumptions" className="mt-0">
-          <Assumptions 
-            metrics={metrics}
-          />
+              <TabsContent value="advanced" className="mt-0">
+                <AdvancedSettings 
+                  metrics={metrics}
+                  updateMetric={updateMetric}
+                />
+              </TabsContent>
+
+              <TabsContent value="assumptions" className="mt-0">
+                <Assumptions 
+                  metrics={metrics}
+                />
+              </TabsContent>
+            </Tabs>
+          </div>
         </TabsContent>
 
         <TabsContent value="summary" className="mt-0">
