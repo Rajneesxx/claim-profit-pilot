@@ -376,57 +376,6 @@ export const CombinedCalculator = ({
           </TabsList>
 
           <TabsContent value="calculator" className="space-y-6">
-            <div className="mb-8">
-              <div className="flex items-center gap-2 mb-4">
-                <Label htmlFor="revenue" className="text-base font-medium">
-                  Annual Revenue Claimed
-                </Label>
-                <TooltipInfo content="Enter your organization's total annual revenue from medical claims (minimum $5M, maximum $50M)" />
-              </div>
-              <div className="space-y-4">
-                <Slider
-                  value={[Math.max(5000000, Math.min(50000000, metrics.revenueClaimed))]}
-                  onValueChange={(value) => {
-                    const clampedValue = Math.max(5000000, Math.min(50000000, value[0]));
-                    updateMetric('revenueClaimed', clampedValue);
-                  }}
-                  min={5000000}
-                  max={50000000}
-                  step={100000}
-                  className="w-full"
-                />
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input
-                    id="revenue"
-                    type="text"
-                    inputMode="numeric"
-                    value={metrics.revenueClaimed === 0 ? '' : formatNumber(metrics.revenueClaimed)}
-                    onChange={(e) => {
-                      const rawValue = e.target.value.replace(/,/g, "");
-                      if (rawValue === '') {
-                        handleInputChange('revenueClaimed', '');
-                        return;
-                      }
-                      const numericValue = parseInt(rawValue);
-                      if (!isNaN(numericValue)) {
-                        handleInputChange('revenueClaimed', numericValue.toString());
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const rawValue = e.target.value.replace(/,/g, "");
-                      const numericValue = parseInt(rawValue) || 5000000;
-                      const clampedValue = Math.max(5000000, Math.min(50000000, numericValue));
-                      updateMetric('revenueClaimed', clampedValue);
-                    }}
-                    className="text-center text-lg font-semibold pl-8"
-                    placeholder="Enter annual revenue (min $5M, max $50M)"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <Separator className="my-8" />
 
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-8">
@@ -434,6 +383,62 @@ export const CombinedCalculator = ({
                   <div className="flex items-center gap-2 mb-6">
                     <h3 className="text-xl font-semibold">Key Input Parameters</h3>
                     <TooltipInfo content="Essential metrics that drive your ROI calculation. Adjust these to match your organization's profile." />
+                  </div>
+                  
+                  {/* Annual Revenue Claimed */}
+                  <div className="mb-8 p-6 bg-muted/30 rounded-lg border">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Label htmlFor="revenue" className="text-base font-medium">
+                        Annual Revenue Claimed
+                      </Label>
+                      <TooltipInfo content="Enter your organization's total annual revenue from medical claims (minimum $5M, maximum $50M)" />
+                    </div>
+                    <div className="space-y-4">
+                      <Slider
+                        value={[Math.max(5000000, Math.min(50000000, metrics.revenueClaimed))]}
+                        onValueChange={(value) => {
+                          const clampedValue = Math.max(5000000, Math.min(50000000, value[0]));
+                          updateMetric('revenueClaimed', clampedValue);
+                        }}
+                        min={5000000}
+                        max={50000000}
+                        step={100000}
+                        className="w-full"
+                      />
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+                        <Input
+                          id="revenue"
+                          type="text"
+                          inputMode="numeric"
+                          value={metrics.revenueClaimed === 0 ? '' : formatNumber(metrics.revenueClaimed)}
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(/,/g, "");
+                            if (rawValue === '') {
+                              handleInputChange('revenueClaimed', '');
+                              return;
+                            }
+                            const numericValue = parseInt(rawValue);
+                            if (!isNaN(numericValue)) {
+                              handleInputChange('revenueClaimed', numericValue.toString());
+                            }
+                          }}
+                          onBlur={(e) => {
+                            const rawValue = e.target.value.replace(/,/g, "");
+                            const numericValue = parseInt(rawValue) || 5000000;
+                            const clampedValue = Math.max(5000000, Math.min(50000000, numericValue));
+                            updateMetric('revenueClaimed', clampedValue);
+                          }}
+                          className="text-center text-lg font-semibold pl-8"
+                          placeholder="Enter annual revenue (min $5M, max $50M)"
+                        />
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm text-muted-foreground">
+                          Revenue: {formatCurrency(metrics.revenueClaimed)}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {basicInputs.map(({ key, label, max, step }) => (
