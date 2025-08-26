@@ -14,6 +14,9 @@ import { ProductDescription } from "./ProductDescription";
 import { MetricsExpandedView } from "./MetricsExpandedView";
 import { TooltipInfo } from "./TooltipInfo";
 import { formatCurrency, formatNumber } from "@/utils/formatters";
+import { FAQ } from '@/components/FAQ';
+import { Footer } from '@/components/Footer';
+
 interface CombinedCalculatorProps {
   metrics?: ROIMetrics;
   updateMetric?: (key: keyof ROIMetrics, value: number) => void;
