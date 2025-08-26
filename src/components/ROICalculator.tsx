@@ -5,6 +5,8 @@ import { Calculator, Star, Download, FileText } from 'lucide-react';
 import { CombinedCalculator } from './CombinedCalculator';
 import { FloatingCTA } from './FloatingCTA';
 import { ModernEmailDialog } from './ModernEmailDialog';
+import { FAQ } from './FAQ';
+import { Footer } from './Footer';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ROIMetrics } from '../types/roi';
@@ -323,24 +325,11 @@ export const ROICalculator = () => {
         />
       </div>
 
-      {/* Footer */}
-      <div className="bg-card backdrop-blur-sm border-t border-border mt-16 relative z-10">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img 
-                src="/src/assets/rapidclaims-logo.png" 
-                alt="RapidClaims" 
-                className="h-8 w-auto filter brightness-0 dark:filter-none"
-              />
-              <span className="text-foreground text-sm">RapidROI by RapidClaims - AI-powered medical coding ROI calculator</span>
-            </div>
-            <div className="text-muted-foreground text-sm">
-              © 2024 RapidClaims. All rights reserved.
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* FAQ Section */}
+      <FAQ />
+
+      {/* Footer Section */}
+      <Footer />
 
       {/* Floating CTA */}
       <FloatingCTA />
