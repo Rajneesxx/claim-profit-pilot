@@ -744,18 +744,16 @@ export const CombinedCalculator = ({
                     </CollapsibleTrigger>
                     <CollapsibleContent className="mt-3">
                       <div className="rounded-xl bg-white/5 border border-white/15 p-3">
-                        <MetricsExpandedView
-                          coderProductivitySavings={coderProductivityCost}
-                          billingAutomationSavings={billingAutomationSavings}
-                          physicianTimeSavings={physicianTimeSavings}
-                          technologyCostSavings={technologyCostSavings}
-                          claimDenialSavings={claimDenialSavings}
-                          ARdays={ARdays}
-                          rvuIncrease={rvuIncrease}
-                          overCodingReduction={overCodingReduction}
-                          embedded
-                          defaultOpen
-                        />
+                         <MetricsExpandedView
+                           coderProductivitySavings={coderProductivityCost}
+                           billingAutomationSavings={billingAutomationSavings}
+                           physicianTimeSavings={physicianTimeSavings}
+                           technologyCostSavings={technologyCostSavings}
+                           claimDenialSavings={claimDenialSavings}
+                           ARdays={ARdays}
+                           rvuIncrease={rvuIncrease}
+                           overCodingReduction={overCodingReduction}
+                         />
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
