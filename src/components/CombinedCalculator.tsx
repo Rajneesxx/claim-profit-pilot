@@ -152,6 +152,7 @@ export const CombinedCalculator = ({
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showAssumptions, setShowAssumptions] = useState(false);
   const [activeTab, setActiveTab] = useState("calculator");
+  const [editingValues, setEditingValues] = useState<Partial<Record<keyof ROIMetrics, string>>>({});
   
   // Lever confidence levels (Medium as default)
   const [leverLevels, setLeverLevels] = useState({
@@ -301,24 +302,35 @@ export const CombinedCalculator = ({
   const handleBookCall = () => {
     window.open('https://calendly.com/rapidclaims', '_blank');
   };
+   const clearEditingValue = (key: keyof ROIMetrics) => {
+    setEditingValues(prev => {
+      const next = { ...prev } as Partial<Record<keyof ROIMetrics, string>>;
+      delete next[key];
+      return next;
+    });
+  };
+
 
   const handleIncrement = (key: keyof ROIMetrics, step: number = 1) => {
     updateMetric(key, metrics[key] + step);
+    clearEditingValue(key);
   };
 
   const handleDecrement = (key: keyof ROIMetrics, step: number = 1) => {
     updateMetric(key, Math.max(0, metrics[key] - step));
+    clearEditingValue(key);
   };
 
   const handleInputChange = (key: keyof ROIMetrics, value: string | number) => {
     if (typeof value === 'number') {
       updateMetric(key, value);
+      clearEditingValue(key);
       return;
     }
     
     // Handle empty string - allow temporary empty state
-    if (value === '') {
-      updateMetric(key, 0);
+    setEditingValues(prev => ({ ...prev, [key]: value }));
+    if (value.trim() === '') {
       return;
     }
     
@@ -537,12 +549,23 @@ export const CombinedCalculator = ({
                         <Minus className="h-3 w-3" />
                       </Button>
                       <Input
-                        type="number"
-                        value={metrics[key]}
+                        type="text"
+                        inputMode="numeric"
+                        value={editingValues[key] ?? (metrics[key] === 0 ? '' : String(metrics[key]))}
                         onChange={(e) => handleInputChange(key, e.target.value)}
+                        onBlur={(e) => {
+                          const raw = e.target.value.trim();
+                          if (raw === '') {
+                            // leave the metric unchanged when user clears; keep blank display
+                            return;
+                          }
+                          const parsed = parseFloat(raw);
+                          if (!isNaN(parsed) && parsed >= 0) {
+                            updateMetric(key, parsed);
+                          }
+                          clearEditingValue(key);
+                        }}
                         className="text-center"
-                        min="0"
-                        step={step}
                       />
                       <Button
                         variant="outline"
@@ -582,10 +605,21 @@ export const CombinedCalculator = ({
                     <div key={key} className="space-y-2">
                       <Label>{label}</Label>
                       <Input
-                        type="number"
-                        value={metrics[key]}
+                        type="text"
+                        inputMode="numeric"
+                        value={editingValues[key] ?? (metrics[key] === 0 ? '' : String(metrics[key]))}
                         onChange={(e) => handleInputChange(key, e.target.value)}
-                        min=" "
+                        onBlur={(e) => {
+                          const raw = e.target.value.trim();
+                          if (raw === '') {
+                            return;
+                          }
+                          const parsed = parseFloat(raw);
+                          if (!isNaN(parsed) && parsed >= 0) {
+                            updateMetric(key, parsed);
+                          }
+                          clearEditingValue(key);
+                        }}
                       />
                     </div>
                   ))}
