@@ -14,6 +14,8 @@ import { ProductDescription } from "./ProductDescription";
 import { MetricsExpandedView } from "./MetricsExpandedView";
 import { TooltipInfo } from "./TooltipInfo";
 import { formatCurrency, formatNumber } from "@/utils/formatters";
+import { FAQ } from "./FAQ";
+import { Footer } from "./Footer";
 
 interface CombinedCalculatorProps {
   metrics?: ROIMetrics;
@@ -640,13 +642,23 @@ export const CombinedCalculator = ({
           </div>
         </div>
       </div>
-
       
+      {/* FAQ Section - Full Width */}
+      <div className="w-full">
+        <FAQ />
+      </div>
+      
+      {/* Footer Section - Full Width */}
+      <div className="w-full">
+        <Footer />
+      </div>
+    </div>
+  );
 
   function getTooltipContent(key: keyof ROIMetrics): string {
     const tooltips = {
       numberOfCoders: "Full-time equivalent medical coders in your organization",
-      numberOfBillers: "Full-time equivalent billing staff members",
+      numberOfBillers: "Full-time equivalent billing staff members", 
       numberOfPhysicians: "Total number of physicians generating coded encounters",
       claimDeniedPercent: "Percentage of submitted claims that are initially denied",
       revenueClaimed: "Total annual revenue from medical claims submitted"
@@ -654,3 +666,4 @@ export const CombinedCalculator = ({
     return tooltips[key] || "";
   }
 };
+
