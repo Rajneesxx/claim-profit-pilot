@@ -8,7 +8,7 @@ interface FAQItem {
 const faqData: FAQItem[] = [
   {
     question: "How soon can we expect to see a measurable return on our investment?",
-    answer: "Most organizations see initial results within 30-60 days of implementation, with full ROI typically achieved within 6-12 months depending on organization size and complexity."
+    answer: "Most clients begin seeing measurable ROI within 3 to 6 months of deployment. By accelerating coding throughput, reducing denial rates, and improving risk capture, our AI quickly drives both cost savings and revenue lift. Many organizations also see immediate benefits in backlog clearance and faster claim submission cycles."
   },
   {
     question: "How do you ensure the accuracy of the AI's coding suggestions?",
@@ -16,7 +16,7 @@ const faqData: FAQItem[] = [
   },
   {
     question: "How does the AI stay updated with the latest coding regulations and guidelines?",
-    answer: "Our AI models are continuously updated with the latest coding guidelines, regulatory changes, and industry best practices through automated feeds from official sources and regular model retraining cycles."
+    answer: "The system is continuously trained and updated with the latest ICD, CPT, HCPCS, and payer-specific guidelines. Our compliance team works closely with coders and regulatory experts to integrate rule changes in real time, ensuring that every claim aligns with current requirements. This proactive updating helps clients stay compliant, reduce audit risks, and capture full reimbursement." are these ans correct?."
   }
 ];
 
