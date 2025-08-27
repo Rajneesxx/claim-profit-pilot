@@ -418,27 +418,6 @@ export const CombinedCalculator = ({
           </div>
         </div>
 
-        {/* Sign-in Banner for non-authenticated users */}
-        {!isSignedIn && (
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <LogIn className="h-6 w-6 text-blue-600" />
-                <div>
-                  <h3 className="font-semibold text-blue-900">Sign in to unlock full access</h3>
-                  <p className="text-sm text-blue-700">Get complete control over advanced settings, benchmarks, and detailed reports</p>
-                </div>
-              </div>
-              <Button 
-                onClick={handleSignInClick}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium"
-              >
-                Sign In
-              </Button>
-            </div>
-          </div>
-        )}
-
         {/* Side-by-side layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Panel - Calculations */}
@@ -798,24 +777,31 @@ export const CombinedCalculator = ({
           {/* Right Panel - Executive Summary */}
           <div className="space-y-6">
             <div className="h-fit relative">
-              {/* Sign-in overlay - positioned above the blurred content */}
+              {/* Sign-in overlay - enhanced and more prominent */}
               {!isSignedIn && (
-                <div className="absolute inset-0 z-20 flex items-center justify-center rounded-3xl">
-                  <div className="text-center bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-gray-200 max-w-sm mx-4">
-                    <LogIn className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      Unlock Full Analysis
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-6">
-                      Enter your email to access the complete ROI breakdown and enable calculator controls
-                    </p>
+                <div className="absolute inset-0 z-20 flex items-center justify-center rounded-3xl bg-black/20 backdrop-blur-sm">
+                  <div className="text-center bg-white/98 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-gray-200 max-w-sm mx-4 transform transition-all duration-300 hover:scale-105">
+                    <div className="mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <LogIn className="h-8 w-8 text-white" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                        Unlock Your ROI Analysis
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        Sign in to access the complete financial breakdown, control all calculator settings, and generate detailed ROI reports
+                      </p>
+                    </div>
                     <Button 
                       onClick={handleSignInClick}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg"
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transform transition-all duration-200 hover:shadow-xl"
                     >
-                      <LogIn className="h-4 w-4 mr-2" />
-                      Sign In to Continue
+                      <LogIn className="h-5 w-5 mr-2" />
+                      Sign In to Access Full Features
                     </Button>
+                    <p className="text-xs text-gray-500 mt-3">
+                      Free access • No payment required
+                    </p>
                   </div>
                 </div>
               )}
