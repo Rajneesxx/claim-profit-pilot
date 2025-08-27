@@ -792,11 +792,12 @@ const CombinedCalculator = ({
                 {/* Get Detailed ROI Report Button - moved after Advanced Analysis */}
                 <Collapsible className="mt-4" defaultOpen>
                   <CollapsibleTrigger asChild>
-                    <button className="w-full text-left rounded-xl bg-white hover:bg-gray-100 px-4 py-3 border border-gray-300 text-black">
-                      <span className="font-medium">Advanced Analysis
+                    <div className="w-full text-left rounded-xl bg-white hover:bg-gray-100 px-4 py-3 border border-gray-300 text-black cursor-pointer">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Advanced Analysis</span>
                         <TooltipInfo content="View detailed breakdown of all financial impact calculations" />
-                      </span>
-                    </button>
+                      </div>
+                    </div>
                   </CollapsibleTrigger>
                   <CollapsibleContent className="mt-3">
                     <div className="rounded-xl bg-white/5 border border-white/15 p-3">
