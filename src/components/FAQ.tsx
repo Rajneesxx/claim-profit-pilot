@@ -64,12 +64,29 @@ export const FAQ: React.FC = () => {
       </p>
 
       {/* Contact Button */}
-      <button 
-        onClick={() => window.open('https://www.rapidclaims.ai/get-in-touch', '_blank')
-        className="flex items-center justify-center gap-3 w-full lg:w-auto px-8 py-4 bg-primary hover:bg-primary-variant text-white font-semibold text-lg rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-      >
-        📞 Contact Us
-      </button>
+<button 
+  onClick={() => window.open('https://www.rapidclaims.ai/get-in-touch', '_blank')}
+  className="flex items-center justify-center gap-3 w-full lg:w-auto px-8 py-4 bg-primary hover:bg-primary-variant text-white font-semibold text-lg rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+>
+  <svg 
+    width="20" 
+    height="20" 
+    viewBox="0 0 14 14" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-5 h-5"
+  >
+    <path 
+      d="M12.8333 9.86989V11.6199C12.834 11.7824..."
+      stroke="currentColor" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      fill="none"
+    />
+  </svg>
+  Contact Us
+</button>
+
     </div>
 
     {/* RIGHT COLUMN: 8/12 width (~67%) */}
