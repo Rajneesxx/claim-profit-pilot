@@ -291,13 +291,13 @@ export const ROICalculator = () => {
               
               {/* Navigation Links */}
               <nav className="hidden md:flex items-center gap-6">
-                <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                <a href="https://www.rapidclaims.ai/" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
                   PRODUCTS
                 </a>
-                <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                <a href="https://www.rapidclaims.ai/solutions" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
                   SOLUTIONS
                 </a>
-                <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
                   RESOURCES
                 </a>
               </nav>
@@ -306,7 +306,7 @@ export const ROICalculator = () => {
             {/* Book a Demo Button - Right Side */}
             <div className="flex items-center">
               <Button 
-                onClick={() => window.open('https://calendly.com/rapidclaims', '_blank')}
+                onClick={() => window.open('https://www.rapidclaims.ai/get-in-touch', '_self')}
                 className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded-lg"
               >
                 Book a Demo

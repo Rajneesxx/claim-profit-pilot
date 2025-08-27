@@ -156,7 +156,7 @@ export const Footer: React.FC = () => {
           <div className="flex gap-20 flex-1 max-md:flex-col max-md:gap-10">
             <nav className="flex flex-col gap-4">
               <h4 className="text-[#A6A6A6] text-xs font-bold uppercase tracking-[-0.45px]">
-                PRODUCTS
+                <a href="https://www.rapidclaims.ai/" className="hover:text-gray-300 transition-colors">PRODUCTS</a>
               </h4>
               <a href="https://www.rapidclaims.ai/products/rapid-code" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
                 RapidCode
@@ -171,30 +171,30 @@ export const Footer: React.FC = () => {
 
             <nav className="flex flex-col gap-4">
               <h4 className="text-[#A6A6A6] text-xs font-bold uppercase tracking-[-0.45px]">
-                SOLUTIONS
+                <a href="https://www.rapidclaims.ai/solutions" className="hover:text-gray-300 transition-colors">SOLUTIONS</a>
               </h4>
-              <a href="#" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
+              <a href="https://www.rapidclaims.ai/solutions" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
                 For types of outcomes
               </a>
-              <a href="#" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
+              <a href="https://www.rapidclaims.ai/solutions" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
                 For types of organizations
               </a>
-              <a href="#" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
+              <a href="https://www.rapidclaims.ai/solutions" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
                 For types of use cases
               </a>
             </nav>
 
             <nav className="flex flex-col gap-4">
               <h4 className="text-[#A6A6A6] text-xs font-bold uppercase tracking-[-0.45px]">
-                RESOURCES
+                <a href="https://www.rapidclaims.ai/resources/blogs" className="hover:text-gray-300 transition-colors">RESOURCES</a>
               </h4>
-              <a href="#" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
+              <a href="https://www.rapidclaims.ai/resources/blogs" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
                 Blog
               </a>
-              <a href="#" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
+              <a href="https://www.rapidclaims.ai/resources/blogs" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
                 Case Studies
               </a>
-              <a href="#" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
+              <a href="https://www.rapidclaims.ai/resources/blogs" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
                 News
               </a>
             </nav>

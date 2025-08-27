@@ -462,6 +462,19 @@ const CombinedCalculator = ({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Panel - Calculations */}
           <div className="space-y-6">
+            {/* Introduction Text Block */}
+            <div className="text-center space-y-2 mb-8 p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-purple-200">
+              <h2 className="text-lg font-bold text-gray-900">
+                Replace guesswork with real insights.
+              </h2>
+              <p className="text-base text-purple-700 flex items-center justify-center gap-2">
+                📊 RapidROI by RapidClaims
+              </p>
+              <p className="text-sm text-gray-600 italic">
+                Presenting RapidROI, your no-cost, enterprise-grade RevOps Agent.
+              </p>
+            </div>
+
             <div>
               <div className="mb-6">
                 <div className="flex items-center gap-2 text-xl font-semibold mb-2">
