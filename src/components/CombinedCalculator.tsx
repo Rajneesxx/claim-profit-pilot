@@ -456,7 +456,7 @@ const CombinedCalculator = ({
           {/* Left Panel - Calculations */}
           <div className="space-y-6">
             {/* Introduction Text Block */}
-            <div className="text-center space-y-2 mb-8 p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-purple-200">
+            <div className="text-center space-y-2 mb-8">
               <h2 className="text-lg font-bold text-gray-900">
                 Replace guesswork with real insights.
               </h2>
