@@ -62,7 +62,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex-1 flex flex-col gap-5">
-          <div className="flex items-center justify-between cursor-pointer px-0 py-[15px] border-b-white border-b border-solid hover:opacity-80">
+          <a href="https://www.rapidclaims.ai/get-in-touch" className="flex items-center justify-between cursor-pointer px-0 py-[15px] border-b-white border-b border-solid hover:opacity-80">
             <span className="text-white text-lg font-normal">
               Request ROI Analysis
             </span>
@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
               height="25" 
               viewBox="0 0 25 25" 
               fill="none" 
-              xmlns="https://www.rapidclaims.ai/get-in-touch"
+              xmlns="http://www.w3.org/2000/svg"
               className="w-6 h-6"
             >
               <path 
@@ -82,9 +82,9 @@ export const Footer: React.FC = () => {
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
+          </a>
           
-          <div className="flex items-center justify-between cursor-pointer px-0 py-[15px] border-b-white border-b border-solid hover:opacity-80">
+          <a href="https://www.rapidclaims.ai/get-in-touch" className="flex items-center justify-between cursor-pointer px-0 py-[15px] border-b-white border-b border-solid hover:opacity-80">
             <span className="text-white text-lg font-normal">
               Calculate your savings
             </span>
@@ -104,9 +104,9 @@ export const Footer: React.FC = () => {
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
+          </a>
           
-          <div className="flex items-center justify-between cursor-pointer px-0 py-[15px] border-b-white border-b border-solid hover:opacity-80">
+          <a href="https://www.rapidclaims.ai/get-in-touch" className="flex items-center justify-between cursor-pointer px-0 py-[15px] border-b-white border-b border-solid hover:opacity-80">
             <span className="text-white text-lg font-normal">
               Schedule a demo
             </span>
@@ -126,7 +126,7 @@ export const Footer: React.FC = () => {
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
+          </a>
         </div>
       </div>
 
