@@ -350,8 +350,10 @@ const CombinedCalculator = ({
   };
 
   const handleROIClick = () => {
-    console.log('ROI button clicked, isSignedIn:', isSignedIn);
+    console.log('=== ROI BUTTON CLICKED ===');
+    console.log('isSignedIn:', isSignedIn);
     console.log('propOnCalculateROI exists:', !!propOnCalculateROI);
+    console.log('current showEmailDialog state:', showEmailDialog);
     
     if (isSignedIn) {
       if (propOnCalculateROI) {
@@ -365,8 +367,13 @@ const CombinedCalculator = ({
         });
       }
     } else {
-      console.log('Not signed in, showing email dialog');
+      console.log('Not signed in, setting showEmailDialog to TRUE');
       setShowEmailDialog(true);
+      console.log('showEmailDialog after setState:', true);
+      // Force a re-render to make sure state change is applied
+      setTimeout(() => {
+        console.log('Dialog should be visible now, showEmailDialog:', showEmailDialog);
+      }, 100);
     }
   };
 
@@ -925,7 +932,10 @@ const CombinedCalculator = ({
       {/* Email Dialog for ROI Report */}
       <ModernEmailDialog
         open={showEmailDialog}
-        onOpenChange={setShowEmailDialog}
+        onOpenChange={(open) => {
+          console.log('Dialog onOpenChange called with:', open);
+          setShowEmailDialog(open);
+        }}
         userEmail={userEmail}
         setUserEmail={setUserEmail}
         onSubmit={handleROIEmailSubmit}
