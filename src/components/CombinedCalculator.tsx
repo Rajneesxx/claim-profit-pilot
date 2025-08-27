@@ -60,7 +60,7 @@ export const CombinedCalculator = ({
     salaryPerPhysician: 350000,
     avgTimePerPhysicianPerChart: 15,
     avgTimePerCoderPerChart: 0.1333,
-    chartsPerCoderPerDay: 80,
+    chartsPerCoderPerDay: 88,
     costPerDeniedClaim: 13,
     codingBacklogPercent: 20,
     daysPerChartInBacklog: 20,
