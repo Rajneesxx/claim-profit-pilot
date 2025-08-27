@@ -437,7 +437,6 @@ const CombinedCalculator = ({
                     <Slider
                       value={[Math.max(5000000, Math.min(50000000, metrics.revenueClaimed))]}
                       onValueChange={(value) => {
-                        if (!isSignedIn) return;
                         const clampedValue = Math.max(5000000, Math.min(50000000, value[0]));
                         updateMetric('revenueClaimed', clampedValue);
                       }}
@@ -445,7 +444,6 @@ const CombinedCalculator = ({
                       max={50000000}
                       step={100000}
                       className="w-full"
-                      disabled={!isSignedIn}
                     />
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
@@ -455,7 +453,6 @@ const CombinedCalculator = ({
                         inputMode="numeric"
                         value={metrics.revenueClaimed === 0 ? '' : formatNumber(metrics.revenueClaimed)}
                         onChange={(e) => {
-                          if (!isSignedIn) return;
                           const rawValue = e.target.value.replace(/,/g, "");
                           if (rawValue === '') {
                             handleInputChange('revenueClaimed', '');
@@ -467,7 +464,6 @@ const CombinedCalculator = ({
                           }
                         }}
                         onBlur={(e) => {
-                          if (!isSignedIn) return;
                           const rawValue = e.target.value.replace(/,/g, "");
                           const numericValue = parseInt(rawValue) || 5000000;
                           const clampedValue = Math.max(5000000, Math.min(50000000, numericValue));
@@ -475,7 +471,6 @@ const CombinedCalculator = ({
                         }}
                         className="text-center text-lg font-semibold pl-8"
                         placeholder="Enter annual revenue (min $5M, max $50M)"
-                        disabled={!isSignedIn}
                       />
                   </div>
                 </div>
@@ -560,7 +555,7 @@ const CombinedCalculator = ({
                 </div>
 
                 <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
-                  <CollapsibleContent className={`space-y-6 ${!isSignedIn ? 'opacity-50 pointer-events-none' : ''}`}>
+                  <CollapsibleContent className="space-y-6">
                     <div ref={advancedRef} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {advancedInputs.map(({ key, label }) => (
                         <div key={key} className="space-y-2">
@@ -598,7 +593,7 @@ const CombinedCalculator = ({
                 </Collapsible>
 
                 <Collapsible open={showLevers} onOpenChange={setShowLevers}>
-                  <CollapsibleContent ref={leversRef} className={`mt-4 space-y-6 ${!isSignedIn ? 'opacity-50 pointer-events-none' : ''}`}>
+                  <CollapsibleContent ref={leversRef} className="mt-4 space-y-6">
                     <div className="text-sm text-muted-foreground">Configure assumptions and confidence levels to tune projected outcomes.</div>
                     
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -609,7 +604,7 @@ const CombinedCalculator = ({
                         <CardContent className="space-y-4">
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Coder Productivity</Label>
-                            <Select value={leverLevels.coderProductivity} onValueChange={(value) => isSignedIn && handleLeverLevelChange('coderProductivity', value)} disabled={!isSignedIn}>
+                            <Select value={leverLevels.coderProductivity} onValueChange={(value) => handleLeverLevelChange('coderProductivity', value)}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -627,7 +622,7 @@ const CombinedCalculator = ({
 
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Billing Automation</Label>
-                            <Select value={leverLevels.billingAutomation} onValueChange={(value) => isSignedIn && handleLeverLevelChange('billingAutomation', value)} disabled={!isSignedIn}>
+                            <Select value={leverLevels.billingAutomation} onValueChange={(value) => handleLeverLevelChange('billingAutomation', value)}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -645,7 +640,7 @@ const CombinedCalculator = ({
 
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Physician Time Saved</Label>
-                            <Select value={leverLevels.physicianTimeSaved} onValueChange={(value) => isSignedIn && handleLeverLevelChange('physicianTimeSaved', value)} disabled={!isSignedIn}>
+                            <Select value={leverLevels.physicianTimeSaved} onValueChange={(value) => handleLeverLevelChange('physicianTimeSaved', value)}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -670,7 +665,7 @@ const CombinedCalculator = ({
                         <CardContent className="space-y-4">
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Technology Cost Saved</Label>
-                            <Select value={leverLevels.technologyCostSaved} onValueChange={(value) => isSignedIn && handleLeverLevelChange('technologyCostSaved', value)} disabled={!isSignedIn}>
+                            <Select value={leverLevels.technologyCostSaved} onValueChange={(value) => handleLeverLevelChange('technologyCostSaved', value)}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -688,7 +683,7 @@ const CombinedCalculator = ({
 
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Claim Denial Reduction</Label>
-                            <Select value={leverLevels.claimDenialReduction} onValueChange={(value) => isSignedIn && handleLeverLevelChange('claimDenialReduction', value)} disabled={!isSignedIn}>
+                            <Select value={leverLevels.claimDenialReduction} onValueChange={(value) => handleLeverLevelChange('claimDenialReduction', value)}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -706,7 +701,7 @@ const CombinedCalculator = ({
 
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Coding Backlog Elimination</Label>
-                            <Select value={leverLevels.codingBacklogElimination} onValueChange={(value) => isSignedIn && handleLeverLevelChange('codingBacklogElimination', value)} disabled={!isSignedIn}>
+                            <Select value={leverLevels.codingBacklogElimination} onValueChange={(value) => handleLeverLevelChange('codingBacklogElimination', value)}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
