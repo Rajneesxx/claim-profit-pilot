@@ -50,8 +50,39 @@ export const Summary = ({ calculations, onCalculateROI, isSignedIn = true }: Sum
           </div>
         </div>
 
+        {/* Implementation Investment */}
+        <div className="bg-muted rounded-lg p-6 mb-6">
+          <h3 className="text-xl font-semibold text-foreground mb-4">Implementation Investment</h3>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-primary mb-2">
+              ${(calculations.totalOperationalCosts * 0.15).toLocaleString()}
+            </div>
+            <div className="text-foreground">One-time Setup Cost</div>
+            <div className="text-sm text-muted-foreground mt-2">
+              Includes training, integration, and first 30 days of support
+            </div>
+          </div>
+        </div>
+
+        {/* Get ROI Report Button */}
+        <div className="mb-8">
+          <Button 
+            onClick={onCalculateROI}
+            disabled={!isSignedIn}
+            className="w-full h-14 text-lg font-semibold rounded-xl bg-gradient-to-r from-primary to-primary-variant hover:from-primary-variant hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download className="h-5 w-5 mr-2" />
+            Get Detailed ROI Report
+          </Button>
+          {!isSignedIn && (
+            <p className="text-sm text-muted-foreground text-center mt-2">
+              Sign in required to generate detailed report
+            </p>
+          )}
+        </div>
+
         {/* Value Proposition */}
-        <div className="bg-muted rounded-lg p-6 mb-8">
+        <div className="bg-muted rounded-lg p-6">
           <h3 className="text-xl font-semibold text-foreground mb-4">Why Choose RapidClaims AI?</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
@@ -82,29 +113,6 @@ export const Summary = ({ calculations, onCalculateROI, isSignedIn = true }: Sum
                 <span className="text-foreground">Real-time Analytics</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* CTA Buttons */}
-        <div className="space-y-4">
-          <Button 
-            onClick={handleBookCall}
-            variant="outline"
-            className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground h-14 text-lg font-semibold rounded-xl"
-          >
-            <Calendar className="h-5 w-5 mr-2" />
-            Book a Call with RapidClaims
-          </Button>
-          
-          <div className="text-center">
-            <Button 
-              onClick={() => window.open('tel:+1-555-RAPID', '_blank')}
-              variant="ghost"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <Phone className="h-4 w-4 mr-2" />
-              Or call us directly: +1-555-RAPID
-            </Button>
           </div>
         </div>
       </CardContent>
