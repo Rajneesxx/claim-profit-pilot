@@ -936,40 +936,28 @@ const CombinedCalculator = ({
         <FAQ />
       </div>
       {/* RevenueBanner Section - White Card on Dark Footer */}
-      <section className="w-full bg-gray-50 py-12 px-4 md:px-8 relative z-30 mb-[-200px] md:mb-[-250px]">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-100 relative z-30">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-              {/* Left: Screenshot/Image */}
-              <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
-                <img
-                  src="/lovable-uploads/6b06aa54-46c8-4431-8420-0f0dc322af55.png"
-                  alt="RapidClaims Platform Screenshot"
-                  className="w-full h-auto object-contain rounded-xl shadow-xl"
-                />
-              </div>
-
-              {/* Right: Text and CTA */}
-              <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
-                <h2 className="text-[#232B36] text-3xl md:text-4xl font-semibold mb-5 leading-tight">
-                  Unlock every <span className="text-[#7828C8] font-bold">collectible</span> dollar
-                </h2>
-                <p className="text-[#4C4C4C] text-lg md:text-xl mb-6">
-                  Generate $5M in hidden revenue each year.<br />
-                  For every 500 beds.<br />
-                  Revenue uplift. Simplified
-                </p>
-                <a 
-                  href="https://www.rapidclaims.ai/get-in-touch"
-                  className="w-48 h-14 bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8] flex items-center justify-center transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-                >
-                  <span className="text-white text-lg font-semibold">Book a Demo</span>
-                </a>
-              </div>
-            </div>
+      <div className="flex items-center gap-20 max-w-[1440px] mx-auto my-0 px-[100px] py-20 max-md:flex-col max-md:gap-10 max-md:text-center">
+        <img
+          src="https://api.builder.io/api/v1/image/assets/TEMP/d6321efa1e6ceeefe2643911cfa0c4be5854f55c?width=1421"
+          alt="Rapid Codes"
+          className="w-[711px] h-[444px] object-cover rounded-[7px] max-md:w-full max-md:max-w-[600px] max-md:h-auto"
+        />
+        <div className="flex-1 flex flex-col items-center text-center">
+          <h2 className="text-gray-800 text-5xl font-semibold leading-[1.2] mb-6 max-sm:text-4xl">
+            Unlock every collectible dollar
+          </h2>
+          <div className="text-gray-500 text-lg leading-normal mb-8">
+            <p>Generate $5M in hidden revenue each year.</p>
+            <p>For every 500 beds.</p>
+            <p>Revenue uplift. Simplified</p>
           </div>
+          <button className="flex items-center justify-center w-[200px] h-[50px] cursor-pointer bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8]">
+            <span className="text-white text-base font-semibold">
+              Book a Demo
+            </span>
+          </button>
         </div>
-      </section>
+      </div>
 
       {/* Footer Section - Dark Background Matching Reference */}
       <div className="w-full bg-slate-900 pt-[300px] md:pt-[350px] relative z-10">
