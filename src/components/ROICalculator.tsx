@@ -280,29 +280,30 @@ export const ROICalculator = () => {
       <div className="bg-white border-b border-gray-200 relative z-10">
         <div className="w-full px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center">
+            {/* Logo and Navigation Links - Left Side */}
+            <div className="flex items-center gap-8">
+              {/* Logo */}
               <img 
                 src="/src/assets/rapidclaims-logo.png" 
                 alt="RapidClaims" 
                 className="h-8 w-auto"
               />
+              
+              {/* Navigation Links */}
+              <nav className="hidden md:flex items-center gap-6">
+                <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                  PRODUCTS
+                </a>
+                <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                  SOLUTIONS
+                </a>
+                <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                  RESOURCES
+                </a>
+              </nav>
             </div>
             
-            {/* Navigation Links */}
-            <nav className="flex items-center gap-8">
-              <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
-                PRODUCTS
-              </a>
-              <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
-                SOLUTIONS
-              </a>
-              <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
-                RESOURCES
-              </a>
-            </nav>
-            
-            {/* Book a Demo Button */}
+            {/* Book a Demo Button - Right Side */}
             <div className="flex items-center">
               <Button 
                 onClick={() => window.open('https://calendly.com/rapidclaims', '_blank')}
