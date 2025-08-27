@@ -542,8 +542,132 @@ export const CombinedCalculator = ({
                 </Collapsible>
 
                 <Collapsible open={showLevers} onOpenChange={setShowLevers}>
-                  <CollapsibleContent ref={leversRef} className="mt-4 space-y-4">
+                  <CollapsibleContent ref={leversRef} className="mt-4 space-y-6">
                     <div className="text-sm text-muted-foreground">Configure assumptions and confidence levels to tune projected outcomes.</div>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-lg">Operational Efficiency Levers</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-medium">Coder Productivity</Label>
+                            <Select value={leverLevels.coderProductivity} onValueChange={(value) => handleLeverLevelChange('coderProductivity', value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="low">Low (40% improvement)</SelectItem>
+                                <SelectItem value="medium">Medium (80% improvement)</SelectItem>
+                                <SelectItem value="high">High (300% improvement)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <div className="text-xs text-muted-foreground space-y-1">
+                              <p><strong>Features:</strong> Autonomous coding, user-friendly UI, easy code search</p>
+                              <p><strong>Case Study:</strong> Primary care center (90% improvement), RCM provider (120% improvement)</p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label className="text-sm font-medium">Billing Automation</Label>
+                            <Select value={leverLevels.billingAutomation} onValueChange={(value) => handleLeverLevelChange('billingAutomation', value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="low">Low (50% improvement)</SelectItem>
+                                <SelectItem value="medium">Medium (70% improvement)</SelectItem>
+                                <SelectItem value="high">High (120% improvement)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <div className="text-xs text-muted-foreground space-y-1">
+                              <p><strong>Features:</strong> AI charge-capture, e-claim builder, auto ERA posting</p>
+                              <p><strong>Case Study:</strong> Clinic reduced billing FTEs by 40% after replacing manual charge entry</p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label className="text-sm font-medium">Physician Time Saved</Label>
+                            <Select value={leverLevels.physicianTimeSaved} onValueChange={(value) => handleLeverLevelChange('physicianTimeSaved', value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="low">Low (30% improvement)</SelectItem>
+                                <SelectItem value="medium">Medium (50% improvement)</SelectItem>
+                                <SelectItem value="high">High (70% improvement)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <div className="text-xs text-muted-foreground space-y-1">
+                              <p><strong>Features:</strong> Inline AI code suggestions, one-click query approval, E/M prompts</p>
+                              <p><strong>Case Study:</strong> Clinic cut chart-related physician queries by 30% in 6 months</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-lg">Cost & Risk Reduction Levers</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-medium">Technology Cost Saved</Label>
+                            <Select value={leverLevels.technologyCostSaved} onValueChange={(value) => handleLeverLevelChange('technologyCostSaved', value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="low">Low (50% savings)</SelectItem>
+                                <SelectItem value="medium">Medium (70% savings)</SelectItem>
+                                <SelectItem value="high">High (100% savings)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <div className="text-xs text-muted-foreground space-y-1">
+                              <p><strong>Features:</strong> Single cloud platform, usage-based pricing</p>
+                              <p><strong>Case Study:</strong> Health system retired legacy encoder, removing $150k license cost</p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label className="text-sm font-medium">Claim Denial Reduction</Label>
+                            <Select value={leverLevels.claimDenialReduction} onValueChange={(value) => handleLeverLevelChange('claimDenialReduction', value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="low">Low (30% reduction)</SelectItem>
+                                <SelectItem value="medium">Medium (50% reduction)</SelectItem>
+                                <SelectItem value="high">High (70% reduction)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <div className="text-xs text-muted-foreground space-y-1">
+                              <p><strong>Features:</strong> NCCI edits check, MCD check, ICD conflict detection</p>
+                              <p><strong>Case Study:</strong> MSO managing primary care center achieved 15% reduction in claim denials</p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label className="text-sm font-medium">Coding Backlog Elimination</Label>
+                            <Select value={leverLevels.codingBacklogElimination} onValueChange={(value) => handleLeverLevelChange('codingBacklogElimination', value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="low">Low (60% reduction)</SelectItem>
+                                <SelectItem value="medium">Medium (80% reduction)</SelectItem>
+                                <SelectItem value="high">High (100% elimination)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <div className="text-xs text-muted-foreground space-y-1">
+                              <p><strong>Features:</strong> E2E connectivity with EHR platform, E2E connectivity with billing system</p>
+                              <p><strong>Case Study:</strong> ASC clinic eliminated coding backlog from 28% of charts (17-20 days) to 0%</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
                   </CollapsibleContent>
                 </Collapsible>
 
