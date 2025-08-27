@@ -432,7 +432,7 @@ export const CombinedCalculator = ({
               </div>
               <div className="space-y-6">
                 {/* Annual Revenue Claimed */}
-                <div className="p-6 bg-muted/30 rounded-lg border">
+                <div className="p-6 bg-muted/30 rounded-xl border">
                   <div className="flex items-center gap-2 mb-4">
                     <Label htmlFor="revenue" className="text-base font-medium">
                       Annual Revenue Claimed
@@ -754,17 +754,9 @@ export const CombinedCalculator = ({
 
                 <div className="space-y-4">
                   <Button 
-                    onClick={isSignedIn ? onCalculateROI : handleSignInClick} 
-                    className="w-full h-14 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={!isSignedIn}
-                  >
-                    <Download className="h-5 w-5 mr-2" />
-                    Get Detailed ROI Report
-                  </Button>
-                  <Button 
                     onClick={handleBookCall}
                     variant="outline"
-                    className="w-full h-14 text-lg font-semibold"
+                    className="w-full h-14 text-lg font-semibold rounded-xl"
                   >
                     <Calendar className="h-5 w-5 mr-2" />
                     Book a Call with RapidClaims
@@ -779,10 +771,10 @@ export const CombinedCalculator = ({
             <div className="h-fit relative">
               {/* Sign-in overlay - enhanced and more prominent */}
               {!isSignedIn && (
-                <div className="absolute inset-0 z-20 flex items-center justify-center rounded-3xl bg-black/20 backdrop-blur-sm">
-                  <div className="text-center bg-white/98 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-gray-200 max-w-sm mx-4 transform transition-all duration-300 hover:scale-105">
+                <div className="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/20 backdrop-blur-sm">
+                  <div className="text-center bg-white/98 backdrop-blur-md rounded-xl p-8 border border-gray-200 max-w-sm mx-4 transform transition-all duration-300 hover:scale-105">
                     <div className="mb-6">
-                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-purple-accent to-green-accent rounded-full flex items-center justify-center mx-auto mb-4">
                         <LogIn className="h-8 w-8 text-white" />
                       </div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -794,7 +786,7 @@ export const CombinedCalculator = ({
                     </div>
                     <Button 
                       onClick={handleSignInClick}
-                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transform transition-all duration-200 hover:shadow-xl"
+                      className="w-full bg-gradient-to-r from-purple-accent to-green-accent hover:from-purple-accent/90 hover:to-green-accent/90 text-white font-semibold py-3 px-6 rounded-xl transform transition-all duration-200"
                     >
                       <LogIn className="h-5 w-5 mr-2" />
                       Sign In to Access Full Features
@@ -807,10 +799,12 @@ export const CombinedCalculator = ({
               )}
               
               <div
-                className="relative h-[600px] overflow-y-auto rounded-3xl p-6 md:p-8 text-white shadow-xl ring-1 ring-white/20
-                           bg-gradient-to-br from-blue-600 via-purple-600 to-blue-200 transition-all duration-500"
+                className={`relative h-[600px] overflow-y-auto rounded-xl p-6 md:p-8 text-white ring-1 ring-white/20
+                           bg-gradient-to-br from-purple-accent via-green-accent to-purple-accent/80 transition-all duration-500 ${
+                  isSignedIn ? 'animate-white-glow' : ''
+                }`}
                 style={{
-                  filter: isSignedIn ? 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5))' : 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5)) blur(2px)',
+                  filter: isSignedIn ? 'none' : 'blur(2px)',
                   opacity: isSignedIn ? 1 : 0.7
                 }}
               >
@@ -820,19 +814,32 @@ export const CombinedCalculator = ({
                 <div className="text-5xl md:text-6xl font-bold tracking-tight mb-2">{formatCurrency(totalImpact)}</div>
                 <div className="text-xs text-white/70 mb-6">Updated {new Date().toLocaleDateString()}</div>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
-                    <span className="font-medium text-green-600">Cost Savings</span>
-                    <span className="font-semibold text-green-700">{formatCurrency(totalCostSavings)}</span>
+                  <div className="flex items-center justify-between rounded-xl bg-white px-4 py-3 border border-gray-200">
+                    <span className="font-medium text-green-accent">Cost Savings</span>
+                    <span className="font-semibold text-green-accent">{formatCurrency(totalCostSavings)}</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
-                    <span className="font-medium text-blue-600">Revenue Increase</span>
-                    <span className="font-semibold text-blue-700">{formatCurrency(totalRevenueIncrease)}</span>
+                  <div className="flex items-center justify-between rounded-xl bg-white px-4 py-3 border border-gray-200">
+                    <span className="font-medium text-purple-accent">Revenue Increase</span>
+                    <span className="font-semibold text-purple-accent">{formatCurrency(totalRevenueIncrease)}</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 border border-gray-200">
-                    <span className="font-medium text-purple-600">Risk Reduction</span>
-                    <span className="font-semibold text-purple-700">{formatCurrency(totalRiskReduction)}</span>
+                  <div className="flex items-center justify-between rounded-xl bg-white px-4 py-3 border border-gray-200">
+                    <span className="font-medium text-green-accent">Risk Reduction</span>
+                    <span className="font-semibold text-green-accent">{formatCurrency(totalRiskReduction)}</span>
                   </div>
                 </div>
+                
+                {/* Get Detailed ROI Report Button - moved here from Summary tab */}
+                {isSignedIn && (
+                  <div className="mt-6">
+                    <Button 
+                      onClick={onCalculateROI} 
+                      className="w-full bg-white hover:bg-white/90 text-purple-accent border-2 border-white h-14 text-lg font-semibold rounded-xl"
+                    >
+                      <Download className="h-5 w-5 mr-2" />
+                      Get Detailed ROI Report
+                    </Button>
+                  </div>
+                )}
                 <Collapsible className="mt-4" defaultOpen>
                   <CollapsibleTrigger asChild>
                     <button className="w-full text-left rounded-xl bg-white hover:bg-gray-100 px-4 py-3 border border-gray-300 text-black">

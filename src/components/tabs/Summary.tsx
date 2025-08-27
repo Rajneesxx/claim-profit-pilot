@@ -88,18 +88,9 @@ export const Summary = ({ calculations, onCalculateROI, isSignedIn = true }: Sum
         {/* CTA Buttons */}
         <div className="space-y-4">
           <Button 
-            onClick={isSignedIn ? onCalculateROI : undefined} 
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-14 text-lg font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!isSignedIn}
-          >
-            <Download className="h-5 w-5 mr-2" />
-            Get Detailed ROI Report
-          </Button>
-          
-          <Button 
             onClick={handleBookCall}
             variant="outline"
-            className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground h-14 text-lg font-semibold rounded-lg"
+            className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground h-14 text-lg font-semibold rounded-xl"
           >
             <Calendar className="h-5 w-5 mr-2" />
             Book a Call with RapidClaims

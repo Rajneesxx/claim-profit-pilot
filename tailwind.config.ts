@@ -64,6 +64,14 @@ export default {
 					DEFAULT: 'hsl(var(--info))',
 					foreground: 'hsl(var(--info-foreground))'
 				},
+				'purple-accent': {
+					DEFAULT: 'hsl(var(--purple-accent))',
+					foreground: 'hsl(var(--purple-accent-foreground))'
+				},
+				'green-accent': {
+					DEFAULT: 'hsl(var(--green-accent))',
+					foreground: 'hsl(var(--green-accent-foreground))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
