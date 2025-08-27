@@ -357,15 +357,19 @@ const CombinedCalculator = ({
   };
 
   const handleROIClick = () => {
-    console.log('=== ROI BUTTON CLICKED ===');
-    console.log('isSignedIn:', isSignedIn);
-    console.log('propOnCalculateROI exists:', !!propOnCalculateROI);
-    console.log('current showEmailDialog state:', showEmailDialog);
+    console.log('=== handleROIClick CALLED ===');
+    console.log('showEmailDialog before setState:', showEmailDialog);
     
     // Always show email dialog for "Get Detailed ROI Report" regardless of sign-in status
     // This is for generating and sending the detailed PDF report
-    console.log('Opening email dialog for detailed ROI report generation');
     setShowEmailDialog(true);
+    
+    console.log('setShowEmailDialog(true) called');
+    
+    // Force re-render check
+    setTimeout(() => {
+      console.log('showEmailDialog after timeout should be true');
+    }, 100);
   };
 
   const clearEditingValue = (key: keyof ROIMetrics) => {
@@ -844,7 +848,13 @@ const CombinedCalculator = ({
                 {/* Get Detailed ROI Report Button - always visible */}
                 <div className="mt-6">
                   <Button 
-                    onClick={handleROIClick} 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('=== CombinedCalculator ROI BUTTON CLICKED ===');
+                      console.log('showEmailDialog before:', showEmailDialog);
+                      handleROIClick();
+                    }} 
                     className="w-full bg-white hover:bg-white/90 text-purple-accent border-2 border-white h-14 text-lg font-semibold rounded-xl"
                   >
                     <Download className="h-5 w-5 mr-2" />
