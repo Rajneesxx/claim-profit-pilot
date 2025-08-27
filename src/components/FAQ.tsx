@@ -65,7 +65,7 @@ export const FAQ: React.FC = () => {
 
       {/* Contact Button */}
       <button 
-        onClick={() => window.open('tel:+1-555-RAPID', '_blank')}
+        onClick={() => window.open('https://www.rapidclaims.ai/get-in-touch', '_blank')
         className="flex items-center justify-center gap-3 w-full lg:w-auto px-8 py-4 bg-primary hover:bg-primary-variant text-white font-semibold text-lg rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
       >
         📞 Contact Us
