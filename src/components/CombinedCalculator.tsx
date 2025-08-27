@@ -956,17 +956,14 @@ const CombinedCalculator = ({
               Generate $5M in hidden revenue each year.<br />
               For every 500 beds.<br />
               Revenue uplift. Simplified
-            </p>
-            <a 
+            </p> <a 
               href="https://www.rapidclaims.ai/get-in-touch"
-              className="w-48 h-14 bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8] flex items-center justify-center transition-colors"
-            >
+              className="w-48 h-14 bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8] flex items-center justify-center transition-colors"  >
               <span className="text-white text-lg font-semibold">Book a Demo</span>
             </a>
           </div>
         </div>
       </section>
-
       {/* Footer Section with Overlapped Layout */}
       <div className="w-full pt-20 md:pt-32">
         <Footer />
