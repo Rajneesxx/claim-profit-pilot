@@ -768,30 +768,37 @@ export const CombinedCalculator = ({
 
           {/* Right Panel - Executive Summary */}
           <div className="space-y-6">
-            <div className="h-fit">
+            <div className="h-fit relative">
+              {/* Sign-in overlay - positioned above the blurred content */}
+              {!isSignedIn && (
+                <div className="absolute inset-0 z-20 flex items-center justify-center rounded-3xl">
+                  <div className="text-center bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-gray-200 max-w-sm mx-4">
+                    <LogIn className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      Unlock Full Analysis
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-6">
+                      Enter your email to access the complete ROI breakdown and enable calculator controls
+                    </p>
+                    <Button 
+                      onClick={handleSignInClick}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg"
+                    >
+                      <LogIn className="h-4 w-4 mr-2" />
+                      Sign In to Continue
+                    </Button>
+                  </div>
+                </div>
+              )}
+              
               <div
                 className="relative h-[600px] overflow-y-auto rounded-3xl p-6 md:p-8 text-white shadow-xl ring-1 ring-white/20
-                           bg-gradient-to-br from-blue-600 via-purple-600 to-blue-200"
+                           bg-gradient-to-br from-blue-600 via-purple-600 to-blue-200 transition-all duration-500"
                 style={{
-                  filter: isSignedIn ? 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5))' : 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5)) blur(8px)'
+                  filter: isSignedIn ? 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5))' : 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5)) blur(2px)',
+                  opacity: isSignedIn ? 1 : 0.7
                 }}
               >
-                {!isSignedIn && (
-                  <div className="absolute inset-0 bg-black/40 backdrop-blur-sm rounded-3xl flex items-center justify-center z-10">
-                    <div className="text-center">
-                      <Button 
-                        onClick={handleSignInClick}
-                        className="bg-white text-black hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-lg"
-                      >
-                        <LogIn className="h-5 w-5 mr-2" />
-                        Sign In to View Analysis
-                      </Button>
-                      <p className="text-white mt-4 text-sm">
-                        Enter your email to unlock the full ROI analysis
-                      </p>
-                    </div>
-                  </div>
-                )}
                 <button className="absolute right-4 top-4 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20">
                   Sign in
                 </button>
