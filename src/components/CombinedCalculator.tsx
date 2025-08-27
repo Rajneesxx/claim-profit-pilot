@@ -451,13 +451,6 @@ const CombinedCalculator = ({
   return (
     <div className="w-full space-y-6 px-4 sm:px-6 lg:px-8">
       <div className="w-full">
-        <div className="text-center py-4">
-          <div className="flex items-center justify-center gap-2 text-2xl font-semibold">
-            <Calculator className="h-6 w-6" />
-            ROI Calculator
-          </div>
-        </div>
-
         {/* Side-by-side layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Panel - Calculations */}
