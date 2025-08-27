@@ -935,40 +935,40 @@ const CombinedCalculator = ({
       <div className="w-full">
         <FAQ />
       </div>
-      {/* RevenueBanner Section */}
-  <section className="w-full bg-white py-14 px-4 md:px-16">
-    <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
-      {/* Left: Screenshot/Image */}
-      <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
-        <img
-          src="/lovable-uploads/6b06aa54-46c8-4431-8420-0f0dc322af55.png"
-          alt="RapidClaims Platform Screenshot"
-          className="w-full h-auto object-contain rounded-xl shadow-xl"
-        />
-      </div>
+      {/* RevenueBanner Section with Overlap Effect */}
+      <section className="w-full bg-white py-14 px-4 md:px-16 relative z-10 mb-[-5rem] md:mb-[-8rem]">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
+          {/* Left: Screenshot/Image */}
+          <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
+            <img
+              src="/lovable-uploads/6b06aa54-46c8-4431-8420-0f0dc322af55.png"
+              alt="RapidClaims Platform Screenshot"
+              className="w-full h-auto object-contain rounded-xl shadow-xl"
+            />
+          </div>
 
-      {/* Right: Text and CTA */}
-      <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
-        <h2 className="text-[#232B36] text-3xl md:text-4xl font-semibold mb-5 leading-tight">
-          Unlock every <span className="text-[#7828C8] font-bold">collectible</span> dollar
-        </h2>
-        <p className="text-[#4C4C4C] text-lg md:text-xl mb-6">
-          Generate $5M in hidden revenue each year.<br />
-          For every 500 beds.<br />
-          Revenue uplift. Simplified
-        </p>
-        <a 
-          href="https://www.rapidclaims.ai/get-in-touch"
-          className="w-48 h-14 bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8] flex items-center justify-center transition-colors"
-        >
-          <span className="text-white text-lg font-semibold">Book a Demo</span>
-        </a>
-      </div>
-    </div>
+          {/* Right: Text and CTA */}
+          <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+            <h2 className="text-[#232B36] text-3xl md:text-4xl font-semibold mb-5 leading-tight">
+              Unlock every <span className="text-[#7828C8] font-bold">collectible</span> dollar
+            </h2>
+            <p className="text-[#4C4C4C] text-lg md:text-xl mb-6">
+              Generate $5M in hidden revenue each year.<br />
+              For every 500 beds.<br />
+              Revenue uplift. Simplified
+            </p>
+            <a 
+              href="https://www.rapidclaims.ai/get-in-touch"
+              className="w-48 h-14 bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8] flex items-center justify-center transition-colors"
+            >
+              <span className="text-white text-lg font-semibold">Book a Demo</span>
+            </a>
+          </div>
+        </div>
       </section>
 
-      {/* Footer Section - Full Width */}
-      <div className="w-full">
+      {/* Footer Section with Overlapped Layout */}
+      <div className="w-full pt-20 md:pt-32">
         <Footer />
       </div>
 
