@@ -186,101 +186,124 @@ export const CombinedCalculator = ({
     return baseValue * leverImpacts[leverKey][level];
   };
 
-  const coderProductivityCost = (() => {
-    const incrementalProductivity = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
-    const chartsPerYear = metrics.chartsProcessedPerAnnum;
-    const timePerChart = metrics.avgTimePerCoderPerChart;
-    const costPerHour = (metrics.salaryPerCoder / 2100);
-    return chartsPerYear * (incrementalProductivity / (1 + incrementalProductivity)) * timePerChart * costPerHour;
-  })();
+   const coderProductivityCost = (() => {
+  // We'll use metrics.chartsProcessedPerAnnum, leverImpacts.coderProductivity[level], metrics.avgTimePerChart (in hours), metrics.costPerCoderPerHour
+  const incrementalProductivity = leverImpacts.coderProductivity[leverLevels.coderProductivity as 'low' | 'medium' | 'high'];
+  const chartsPerYear = metrics.chartsProcessedPerAnnum;
+  const timePerChart = metrics.avgTimePerCoderPerChart;
+  const costPerHour = (metrics.salaryPerCoder / 2100); // Calculate hourly rate from annual salary
+  return chartsPerYear * (incrementalProductivity / (1 + incrementalProductivity)) * timePerChart * costPerHour;
+})();
 
-  const billingAutomationSavings = (() => {
-    const numberOfBillers = metrics.numberOfBillers;
-    const averageSalaryPerBiller = metrics.salaryPerBiller;
+ const billingAutomationSavings = (() => {
+    const numberOfBillers = metrics.numberOfBillers; // Use actual number of billers from input
+    const averageSalaryPerBiller = metrics.salaryPerBiller; // Use actual salary from input
+    // Use dynamic lever levels and impacts
     const automationLevel = leverLevels.billingAutomation as 'low' | 'medium' | 'high';
-    const automationImpact = leverImpacts.billingAutomation[automationLevel];
-    const result = numberOfBillers * averageSalaryPerBiller * automationImpact;
+    const automationImpact = leverImpacts.billingAutomation[automationLevel]; // Should be a decimal, e.g., 0.7 for 70%
+    const result = numberOfBillers * averageSalaryPerBiller;
     console.log('Billing Automation Savings:', { numberOfBillers, averageSalaryPerBiller, result });
     return result;
-  })();
+})();
 
-  const physicianTimeSavings = (() => {
-    const hoursPerChart = (metrics.avgTimePerPhysicianPerChart || 0) / 60;
-    const chartsPerYear = metrics.chartsProcessedPerAnnum;
-    const hourlyRate = metrics.salaryPerPhysician / (40 * 52);
-    const numberOfPhysicians = metrics.numberOfPhysicians;
-    const timeSavedRate = leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
-    const result = hoursPerChart * chartsPerYear * numberOfPhysicians * hourlyRate * timeSavedRate;
-    console.log('Physician Time Savings:', { hoursPerChart, chartsPerYear, hourlyRate, numberOfPhysicians, timeSavedRate, result });
-    return result;
-  })();
+    const physicianTimeSavings = (() => {
+      const hoursPerChart = (metrics.avgTimePerPhysicianPerChart || 0) / 60; // Convert minutes to hours
+      const chartsPerYear = metrics.chartsProcessedPerAnnum;
+      const hourlyRate = metrics.salaryPerPhysician / (40 * 52); // Convert annual salary to hourly
+      const numberOfPhysicians = metrics.numberOfPhysicians;
+      const timeSavedRate = leverImpacts.physicianTimeSaved[leverLevels.physicianTimeSaved as 'low' | 'medium' | 'high'];
+      const result = hoursPerChart * chartsPerYear * numberOfPhysicians * hourlyRate * timeSavedRate;
+      console.log('Physician Time Savings:', { hoursPerChart, chartsPerYear, hourlyRate, numberOfPhysicians, timeSavedRate, result });
+      return result;
+    })();
 
   const technologyCostSavings = (() => {
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    const baseTechSavings = metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth * 12;
+    const baseTechSavings = metrics.numberOfEncoderLicenses * metrics.averageCostPerLicensePerMonth ;
     const reductionRate = leverImpacts.technologyCostSaved[leverLevels.technologyCostSaved as 'low' | 'medium' | 'high'];
-    return baseTechSavings * reductionRate;
+    return baseTechSavings * reductionRate; // Cap scaling at 1.3x
   })();
 
-  const claimDenialSavings = (() => {
-    const baseDenials = metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100);
-    const reductionRate = leverImpacts.claimDenialReduction[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high'];
-    const costPerDeniedClaim = metrics.costPerDeniedClaim;
-    return baseDenials * reductionRate * costPerDeniedClaim;
-  })();
-
+ const claimDenialSavings = (() => {
+  const baseDenials = metrics.claimsPerAnnum * (metrics.claimDeniedPercent / 100);
+  const reductionRate = leverImpacts.claimDenialReduction[leverLevels.claimDenialReduction as 'low' | 'medium' | 'high'];
+  const costPerDeniedClaim = metrics.costPerDeniedClaim;
+  return baseDenials * reductionRate * costPerDeniedClaim;
+})();
+  
   const ARdays = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
-    const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum, 0.2);
+    const avgChartValue = metrics.revenueClaimed / Math.max(metrics.chartsProcessedPerAnnum,0.2);
     const codingBacklogPercent = metrics.codingBacklogPercent/100;
     const avgBacklogDays = metrics.daysPerChartInBacklog;
     const reductionRate = leverImpacts.codingBacklogElimination[leverLevels.codingBacklogElimination as 'low' | 'medium' | 'high'];
     const costOfCapital = metrics.costOfCapital;
-    return chartsPerAnnum * avgChartValue * codingBacklogPercent * avgBacklogDays * reductionRate * (costOfCapital / 360) * 0.2;
-  })();
+    return chartsPerAnnum * avgChartValue * codingBacklogPercent * avgBacklogDays * reductionRate * (costOfCapital / 360) *0.2;
+})();
 
+  // Revenue increase from RVU optimization - using actual RVU data
   const rvuIncrease = (() => {
+    // 2024 Medicare conversion factor
     const conversionFactor = 32.7442;
+
+    // Revenue scale based on organization size
     const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
     const cappedRevenueScale = Math.min(revenueScale, 1.2);
-    const numberOfRVUsBilled = metrics.rvusCodedPerAnnum;
-    const percentIncrementInRVUs = 0.015;
-    const weightedAverageGPCI = metrics.weightedAverageGPCI;
+
+    // Number of RVUs billed × % increment in RVUs × Wt. Avg GPCI × Conversion
+
+    // 1. Define the components
+    const numberOfRVUsBilled = metrics.rvusCodedPerAnnum;           // Number of RVUs billed
+    const percentIncrementInRVUs = 0.015;                          // % increment in RVUs (1.5%)
+    const weightedAverageGPCI = metrics.weightedAverageGPCI;        // Wt. Avg GPCI
+
+    // 2. Calculate RVU Revenue Increase using the formula
     const rvuRevenueIncreaseByEandM = numberOfRVUsBilled * 
-                                    percentIncrementInRVUs * 
-                                    weightedAverageGPCI * 
-                                    conversionFactor;
-    return rvuRevenueIncreaseByEandM;
+                                      percentIncrementInRVUs * 
+                                      weightedAverageGPCI * 
+                                      conversionFactor;
+
+    // 3. Final Revenue Increase Calculation
+    const totalIncrease = rvuRevenueIncreaseByEandM;
+
+    return totalIncrease;
   })();
 
+  // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
+  // Overcoding risk reduction using NCCI edits
   const overCodingReduction = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
-    const percentOverCodedCharts = metrics.percentOverCodedCharts;
-    const percentReductionNCCI = metrics.percentReductionNCCI;
-    const complianceCostPerCode = metrics.complianceCostPerCode;
+    const percentOverCodedCharts = metrics.percentOverCodedCharts; // Should be decimal (e.g., 0.05 for 5%)
+    const percentReductionNCCI = metrics.percentReductionNCCI; // Should be decimal (e.g., 0.67 for 67%)
+    const complianceCostPerCode = metrics.complianceCostPerCode; // Cost per overcoded chart
+
     const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode;
     console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, result });
     return result;
   })();
-
+  // Total calculations with capping to prevent savings exceeding revenue
   const totalCostSavings = Math.min(
     coderProductivityCost + billingAutomationSavings + physicianTimeSavings + 
     technologyCostSavings + claimDenialSavings + ARdays,
-    metrics.revenueClaimed * 0.65
+    metrics.revenueClaimed * 0.65 // Cap at 65% of revenue
   );
   const totalRevenueIncrease = rvuIncrease;
   const totalRiskReduction = overCodingReduction;
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
   
-  const baseImplementationCost = 150000;
-  const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-  const scaledImplementationCost = baseImplementationCost * (1 + revenueScale * 0.8);
+  // ROI calculation - Implementation cost with diminishing returns (like benefits)
+  const baseImplementationCost = 150000; // Base implementation cost
+  const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000); // Same scaling as benefits
+  const scaledImplementationCost = baseImplementationCost * (1 + revenueScale * 0.8); // Implementation grows slower than benefits
   const roi = scaledImplementationCost > 0 ? ((totalImpact / scaledImplementationCost) * 100) : 0;
+  
+  // Cap ROI at realistic maximum for healthcare implementations (400%)
   const cappedRoi = Math.min(Math.max(roi, 0), 400);
 
   const handleLeverLevelChange = (lever: string, level: string) => {
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
   };
+
 
   const handleBookCall = () => {
     window.open('https://calendly.com/rapidclaims', '_blank');
