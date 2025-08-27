@@ -477,12 +477,6 @@ export const CombinedCalculator = ({
                         placeholder="Enter annual revenue (min $5M, max $50M)"
                         disabled={!isSignedIn}
                       />
-                    </div>
-                    <div className="text-center">
-                      <div className="text-sm text-muted-foreground">
-                        Revenue: {formatCurrency(metrics.revenueClaimed)}
-                      </div>
-                    </div>
                   </div>
                 </div>
                 
