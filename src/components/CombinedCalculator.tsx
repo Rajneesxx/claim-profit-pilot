@@ -935,17 +935,17 @@ const CombinedCalculator = ({
       <div className="w-full">
         <FAQ />
       </div>
-      {/* RevenueBanner Section with 50% Overlap Effect */}
-      <section className="w-full bg-gray-50 py-16 px-4 md:px-8 relative z-30 mb-[-200px] md:mb-[-250px]">
+      {/* RevenueBanner Section with 80% Overlap - No Background Panel */}
+      <section className="w-full bg-gray-50 py-8 px-4 md:px-8 relative z-30 mb-[-320px] md:mb-[-400px]">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-100 min-h-[400px] md:min-h-[500px] relative z-30">
+          <div className="min-h-[400px] md:min-h-[500px] relative z-30 py-8">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12 h-full">
               {/* Left: Screenshot/Image */}
               <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
                 <img
                   src="/lovable-uploads/6b06aa54-46c8-4431-8420-0f0dc322af55.png"
                   alt="RapidClaims Platform Screenshot"
-                  className="w-full h-auto object-contain rounded-xl shadow-xl"
+                  className="w-full h-auto object-contain rounded-xl shadow-2xl bg-white p-4"
                 />
               </div>
 
@@ -971,8 +971,8 @@ const CombinedCalculator = ({
         </div>
       </section>
 
-      {/* Footer Section - 50% Overlapped by Banner */}
-      <div className="w-full bg-slate-900 pt-[300px] md:pt-[350px] relative z-10">
+      {/* Footer Section - 80% Overlapped by Banner */}
+      <div className="w-full bg-slate-900 pt-[400px] md:pt-[500px] relative z-10">
         <Footer />
       </div>
 
