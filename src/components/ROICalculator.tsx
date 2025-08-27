@@ -277,25 +277,36 @@ export const ROICalculator = () => {
     <div className="min-h-screen bg-background relative overflow-hidden">
 
       {/* Header */}
-      <div className="bg-card backdrop-blur-sm border-b border-border relative z-10">
-        <div className="w-full px-6 py-6">
+      <div className="bg-white border-b border-gray-200 relative z-10">
+        <div className="w-full px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            {/* Logo */}
+            <div className="flex items-center">
               <img 
                 src="/src/assets/rapidclaims-logo.png" 
                 alt="RapidClaims" 
-                className="h-12 w-auto filter brightness-0 dark:filter-none"
+                className="h-8 w-auto"
               />
             </div>
-            <div className="flex items-center gap-3">
-              <Calculator className="h-8 w-8 text-foreground" />
-              <h1 className="text-2xl font-semibold text-foreground">RapidROI by RapidClaims</h1>
-            </div>
-            <div className="flex items-center gap-4">
+            
+            {/* Navigation Links */}
+            <nav className="flex items-center gap-8">
+              <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                PRODUCTS
+              </a>
+              <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                SOLUTIONS
+              </a>
+              <a href="#" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                RESOURCES
+              </a>
+            </nav>
+            
+            {/* Book a Demo Button */}
+            <div className="flex items-center">
               <Button 
                 onClick={() => window.open('https://calendly.com/rapidclaims', '_blank')}
-                variant="outline" 
-                className="border-border hover:bg-muted"
+                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded-lg"
               >
                 Book a Demo
               </Button>
