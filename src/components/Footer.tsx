@@ -9,9 +9,8 @@ export const Footer: React.FC = () => {
     setEmail('');
   };
 
-  return ( 
-    
- <footer className="bg-[#01101F] w-full">
+  return (
+    <footer className="bg-[#01101F] w-full">
   <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-12">
 
     {/* Top Row: Logo + Nav + Newsletter */}
