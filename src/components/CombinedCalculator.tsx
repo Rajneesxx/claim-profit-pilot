@@ -814,7 +814,6 @@ export const CombinedCalculator = ({
                       <span className="font-semibold text-green-accent">{formatCurrency(totalRiskReduction)}</span>
                     </div>
                   </div>
-                </div>
                 
                 {/* Get Detailed ROI Report Button - moved after Advanced Analysis */}
                 <Collapsible className="mt-4" defaultOpen>
