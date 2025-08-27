@@ -172,15 +172,15 @@ export const CombinedCalculator = ({
     codingBacklogElimination: 'medium'
   });
 
-  const leverImpacts = {
+ const leverImpacts = {
     coderProductivity: { low: 0.4, medium: 0.8, high: 1.0 },
     billingAutomation: { low: 0.5, medium: 0.7, high: 1.2 },
-    physicianTimeSaved: { low: 0.05, medium: 0.1, high: 0.15 },
+    physicianTimeSaved: { low: 0.05, medium: 0.1, high: 0.15 }, // Added meaningful values
     technologyCostSaved: { low: 1.0, medium: 1.0, high: 1.0 },
     claimDenialReduction: { low: 0.3, medium: 0.5, high: 0.7 },
     codingBacklogElimination: { low: 0.08, medium: 0.04, high: 0 }
   };
-
+  
   const calculateLeverImpact = (leverKey: keyof typeof leverImpacts, baseValue: number) => {
     const level = leverLevels[leverKey] as 'low' | 'medium' | 'high';
     return baseValue * leverImpacts[leverKey][level];
