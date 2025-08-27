@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ChevronDown, ChevronUp, Calculator, ExternalLink, Settings, Minus, Plus, Download, Calendar, LogIn } from "lucide-react";
 import { ModernEmailDialog } from './ModernEmailDialog';
+import { SignInDialog } from './SignInDialog';
 import { useToast } from "@/hooks/use-toast";
 import { ROIMetrics } from "@/types/roi";
 import { References } from "./tabs/References";
@@ -155,6 +156,7 @@ const CombinedCalculator = ({
   const [isSignedIn, setIsSignedIn] = useState(() => {
     return sessionStorage.getItem('rapidclaims_signed_in') === 'true';
   });
+  const [showSignInDialog, setShowSignInDialog] = useState(false);
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const { toast } = useToast();
@@ -316,12 +318,12 @@ const CombinedCalculator = ({
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
   };
 
-  const handleEmailSubmit = () => {
+  const handleSignInSubmit = () => {
     if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
       setIsSignedIn(true);
       sessionStorage.setItem('rapidclaims_signed_in', 'true');
       sessionStorage.setItem('rapidclaims_user_email', userEmail);
-      setShowEmailDialog(false);
+      setShowSignInDialog(false);
       toast({
         title: "Welcome!",
         description: "You now have full access to the ROI calculator.",
@@ -329,10 +331,38 @@ const CombinedCalculator = ({
     }
   };
 
-  const handleSignInClick = () => {
-    setShowEmailDialog(true);
+  const handleROIEmailSubmit = () => {
+    if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+      setShowEmailDialog(false);
+      if (propOnCalculateROI) {
+        propOnCalculateROI();
+      } else {
+        toast({
+          title: "🎉 Results Ready!",
+          description: "Your detailed ROI report is being generated.",
+        });
+      }
+    }
   };
 
+  const handleSignInClick = () => {
+    setShowSignInDialog(true);
+  };
+
+  const handleROIClick = () => {
+    if (isSignedIn) {
+      if (propOnCalculateROI) {
+        propOnCalculateROI();
+      } else {
+        toast({
+          title: "🎉 Results Ready!",
+          description: "Your detailed ROI report is being generated.",
+        });
+      }
+    } else {
+      setShowEmailDialog(true);
+    }
+  };
 
   const clearEditingValue = (key: keyof ROIMetrics) => {
     setEditingValues(prev => {
@@ -810,7 +840,7 @@ const CombinedCalculator = ({
                 {/* Get Detailed ROI Report Button - always visible */}
                 <div className="mt-6">
                   <Button 
-                    onClick={onCalculateROI} 
+                    onClick={handleROIClick} 
                     className="w-full bg-white hover:bg-white/90 text-purple-accent border-2 border-white h-14 text-lg font-semibold rounded-xl"
                   >
                     <Download className="h-5 w-5 mr-2" />
@@ -877,13 +907,22 @@ const CombinedCalculator = ({
         </DialogContent>
       </Dialog>
 
-      {/* Email Dialog */}
+      {/* Sign In Dialog */}
+      <SignInDialog
+        open={showSignInDialog}
+        onOpenChange={setShowSignInDialog}
+        userEmail={userEmail}
+        setUserEmail={setUserEmail}
+        onSubmit={handleSignInSubmit}
+      />
+
+      {/* Email Dialog for ROI Report */}
       <ModernEmailDialog
         open={showEmailDialog}
         onOpenChange={setShowEmailDialog}
         userEmail={userEmail}
         setUserEmail={setUserEmail}
-        onSubmit={handleEmailSubmit}
+        onSubmit={handleROIEmailSubmit}
       />
     </div>
   );
