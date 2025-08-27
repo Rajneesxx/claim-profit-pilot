@@ -799,9 +799,7 @@ export const CombinedCalculator = ({
                   opacity: isSignedIn ? 1 : 0.7
                 }}
               >
-                <button className="absolute right-4 top-4 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20">
-                  Sign in
-                </button>
+                
                 <div className="text-2xl font-semibold mb-2">Executive Summary</div>
                 <div className="text-sm text-white/80 mb-4">Estimated Annual Financial Impact</div>
                 <div className="text-5xl md:text-6xl font-bold tracking-tight mb-2">{formatCurrency(totalImpact)}</div>
