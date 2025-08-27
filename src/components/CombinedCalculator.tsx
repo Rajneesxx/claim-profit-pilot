@@ -935,8 +935,8 @@ const CombinedCalculator = ({
       <div className="w-full">
         <FAQ />
       </div>
-      {/* RevenueBanner Section with 80% Overlap - No Background Panel */}
-      <section className="w-full bg-gray-50 py-8 px-4 md:px-8 relative z-30 mb-[-320px] md:mb-[-400px]">
+      {/* RevenueBanner Section with 20% Overlap Effect */}
+      <section className="w-full bg-gray-50 py-12 px-4 md:px-8 relative z-30 mb-[-80px] md:mb-[-100px]">
         <div className="max-w-7xl mx-auto">
           <div className="min-h-[400px] md:min-h-[500px] relative z-30 py-8">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12 h-full">
@@ -971,8 +971,8 @@ const CombinedCalculator = ({
         </div>
       </section>
 
-      {/* Footer Section - 80% Overlapped by Banner */}
-      <div className="w-full bg-slate-900 pt-[400px] md:pt-[500px] relative z-10">
+      {/* Footer Section - 20% Overlapped by Banner */}
+      <div className="w-full bg-slate-900 pt-[120px] md:pt-[140px] relative z-10">
         <Footer />
       </div>
 
