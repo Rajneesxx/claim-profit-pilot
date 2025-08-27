@@ -63,6 +63,23 @@ export const Summary = ({ calculations, onCalculateROI, isSignedIn = true }: Sum
           </div>
         </div>
 
+        {/* Get ROI Report Button - moved to appear after Implementation Investment */}
+        <div className="mb-6">
+          <Button 
+            onClick={onCalculateROI}
+            disabled={!isSignedIn}
+            className="w-full h-14 text-lg font-semibold rounded-xl bg-gradient-to-r from-primary to-primary-variant hover:from-primary-variant hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download className="h-5 w-5 mr-2" />
+            Get Detailed ROI Report
+          </Button>
+          {!isSignedIn && (
+            <p className="text-sm text-muted-foreground text-center mt-2">
+              Sign in required to generate detailed report
+            </p>
+          )}
+        </div>
+
         {/* Value Proposition */}
         <div className="bg-muted rounded-lg p-6 mb-8">
           <h3 className="text-xl font-semibold text-foreground mb-4">Why Choose RapidClaims AI?</h3>
@@ -98,22 +115,6 @@ export const Summary = ({ calculations, onCalculateROI, isSignedIn = true }: Sum
           </div>
         </div>
 
-        {/* Get ROI Report Button - moved to bottom */}
-        <div>
-          <Button 
-            onClick={onCalculateROI}
-            disabled={!isSignedIn}
-            className="w-full h-14 text-lg font-semibold rounded-xl bg-gradient-to-r from-primary to-primary-variant hover:from-primary-variant hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Download className="h-5 w-5 mr-2" />
-            Get Detailed ROI Report
-          </Button>
-          {!isSignedIn && (
-            <p className="text-sm text-muted-foreground text-center mt-2">
-              Sign in required to generate detailed report
-            </p>
-          )}
-        </div>
 
       </CardContent>
     </>

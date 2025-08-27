@@ -157,8 +157,8 @@ export const CombinedCalculator = ({
   const [userEmail, setUserEmail] = useState('');
   const { toast } = useToast();
 
-  // Disable state for non-signed in users
-  const isDisabled = !isSignedIn;
+  // Only disable Executive Summary content for non-signed in users
+  const isExecutiveSummaryBlurred = !isSignedIn;
 
   useEffect(() => {
     if (showAdvanced && advancedRef.current) {
@@ -768,7 +768,7 @@ export const CombinedCalculator = ({
                         Unlock Your ROI Analysis
                       </h3>
                       <p className="text-gray-600 text-sm leading-relaxed">
-                        Sign in to access the complete financial breakdown, control all calculator settings, and generate detailed ROI reports
+                        Sign in to view the Executive Summary details and generate detailed ROI reports
                       </p>
                     </div>
                     <Button 
@@ -800,33 +800,23 @@ export const CombinedCalculator = ({
                 <div className="text-sm text-white/80 mb-4">Estimated Annual Financial Impact</div>
                 <div className="text-5xl md:text-6xl font-bold tracking-tight mb-2">{formatCurrency(totalImpact)}</div>
                 <div className="text-xs text-white/70 mb-6">Updated {new Date().toLocaleDateString()}</div>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between rounded-xl bg-white px-4 py-3 border border-gray-200">
-                    <span className="font-medium text-green-accent">Cost Savings</span>
-                    <span className="font-semibold text-green-accent">{formatCurrency(totalCostSavings)}</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl bg-white px-4 py-3 border border-gray-200">
-                    <span className="font-medium text-purple-accent">Revenue Increase</span>
-                    <span className="font-semibold text-purple-accent">{formatCurrency(totalRevenueIncrease)}</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl bg-white px-4 py-3 border border-gray-200">
-                    <span className="font-medium text-green-accent">Risk Reduction</span>
-                    <span className="font-semibold text-green-accent">{formatCurrency(totalRiskReduction)}</span>
+                  <div className="grid grid-cols-1 gap-3">
+                    <div className="flex items-center justify-between rounded-xl bg-white px-4 py-4 border border-gray-200 h-16">
+                      <span className="font-medium text-green-accent">Cost Savings</span>
+                      <span className="font-semibold text-green-accent">{formatCurrency(totalCostSavings)}</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-xl bg-white px-4 py-4 border border-gray-200 h-16">
+                      <span className="font-medium text-purple-accent">Revenue Increase</span>
+                      <span className="font-semibold text-purple-accent">{formatCurrency(totalRevenueIncrease)}</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-xl bg-white px-4 py-4 border border-gray-200 h-16">
+                      <span className="font-medium text-green-accent">Risk Reduction</span>
+                      <span className="font-semibold text-green-accent">{formatCurrency(totalRiskReduction)}</span>
+                    </div>
                   </div>
                 </div>
                 
-                {/* Get Detailed ROI Report Button - moved here from Summary tab */}
-                {isSignedIn && (
-                  <div className="mt-6">
-                    <Button 
-                      onClick={onCalculateROI} 
-                      className="w-full bg-white hover:bg-white/90 text-purple-accent border-2 border-white h-14 text-lg font-semibold rounded-xl"
-                    >
-                      <Download className="h-5 w-5 mr-2" />
-                      Get Detailed ROI Report
-                    </Button>
-                  </div>
-                )}
+                {/* Get Detailed ROI Report Button - moved after Advanced Analysis */}
                 <Collapsible className="mt-4" defaultOpen>
                   <CollapsibleTrigger asChild>
                     <button className="w-full text-left rounded-xl bg-white hover:bg-gray-100 px-4 py-3 border border-gray-300 text-black">
@@ -850,6 +840,20 @@ export const CombinedCalculator = ({
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
+                
+                {/* Get Detailed ROI Report Button - moved here after Advanced Analysis */}
+                {isSignedIn && (
+                  <div className="mt-6">
+                    <Button 
+                      onClick={onCalculateROI} 
+                      className="w-full bg-white hover:bg-white/90 text-purple-accent border-2 border-white h-14 text-lg font-semibold rounded-xl"
+                    >
+                      <Download className="h-5 w-5 mr-2" />
+                      Get Detailed ROI Report
+                    </Button>
+                  </div>
+                )}
+                
                 <div className="mt-6 text-white/80 text-sm">Implementation Investment: {formatCurrency(scaledImplementationCost)}</div>
               </div>
             </div>
@@ -877,16 +881,16 @@ export const CombinedCalculator = ({
       />
     </div>
   );
-
-  function getTooltipContent(key: keyof ROIMetrics): string {
-    const tooltips = {
-      numberOfCoders: "Full-time equivalent medical coders in your organization",
-      numberOfBillers: "Full-time equivalent billing staff members", 
-      numberOfPhysicians: "Total number of physicians generating coded encounters",
-      claimDeniedPercent: "Percentage of submitted claims that are initially denied",
-      revenueClaimed: "Total annual revenue from medical claims submitted"
-    };
-    return tooltips[key] || "";
-  }
 };
+
+function getTooltipContent(key: keyof ROIMetrics): string {
+  const tooltips = {
+    numberOfCoders: "Full-time equivalent medical coders in your organization",
+    numberOfBillers: "Full-time equivalent billing staff members", 
+    numberOfPhysicians: "Total number of physicians generating coded encounters",
+    claimDeniedPercent: "Percentage of submitted claims that are initially denied",
+    revenueClaimed: "Total annual revenue from medical claims submitted"
+  };
+  return tooltips[key] || "";
+}
 

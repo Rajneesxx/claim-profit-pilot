@@ -268,13 +268,6 @@ export const ROICalculator = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Floating Background Icons */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <Calculator className="absolute top-20 left-10 h-16 w-16 text-primary/10 animate-pulse" />
-        <Star className="absolute top-40 right-20 h-12 w-12 text-primary/10 animate-bounce" />
-        <Calculator className="absolute bottom-40 left-20 h-20 w-20 text-primary/10 animate-pulse" />
-        <Star className="absolute bottom-20 right-10 h-14 w-14 text-primary/10 animate-bounce" />
-      </div>
 
       {/* Header */}
       <div className="bg-card backdrop-blur-sm border-b border-border relative z-10">
