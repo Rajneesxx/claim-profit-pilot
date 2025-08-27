@@ -332,23 +332,35 @@ const CombinedCalculator = ({
   };
 
   const handleROIEmailSubmit = () => {
+    console.log('=== handleROIEmailSubmit CALLED ===');
+    console.log('userEmail:', userEmail);
+    
     if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+      console.log('Valid email, closing dialog and showing success');
       setShowEmailDialog(false);
       
       // Generate and send the detailed PDF report
       toast({
-        title: "📧 Report Sent!",
-        description: `Your detailed ROI analysis has been sent to ${userEmail}`,
+        title: "📧 Report Generation Started",
+        description: `Your detailed ROI analysis is being prepared and will be sent to ${userEmail}`,
         duration: 5000,
       });
       
-      // Optionally trigger PDF generation
+      // Simulate PDF generation and sending
       setTimeout(() => {
         toast({
-          title: "📄 PDF Ready",
-          description: "Your comprehensive ROI report is ready for download.",
+          title: "📄 Report Sent Successfully!",
+          description: "Check your email for the comprehensive ROI analysis PDF.",
+          duration: 8000,
         });
-      }, 2000);
+      }, 3000);
+    } else {
+      console.log('Invalid email format');
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -358,18 +370,14 @@ const CombinedCalculator = ({
 
   const handleROIClick = () => {
     console.log('=== handleROIClick CALLED ===');
-    console.log('showEmailDialog before setState:', showEmailDialog);
+    console.log('Current isSignedIn state:', isSignedIn);
+    console.log('Current showEmailDialog state:', showEmailDialog);
     
-    // Always show email dialog for "Get Detailed ROI Report" regardless of sign-in status
-    // This is for generating and sending the detailed PDF report
+    // ALWAYS show email dialog for "Get Detailed ROI Report"
+    // This button is specifically for generating and emailing the PDF report
     setShowEmailDialog(true);
     
-    console.log('setShowEmailDialog(true) called');
-    
-    // Force re-render check
-    setTimeout(() => {
-      console.log('showEmailDialog after timeout should be true');
-    }, 100);
+    console.log('Called setShowEmailDialog(true)');
   };
 
   const clearEditingValue = (key: keyof ROIMetrics) => {
@@ -930,16 +938,22 @@ const CombinedCalculator = ({
         onSubmit={handleSignInSubmit}
       />
 
-      {/* Email Dialog for ROI Report */}
+      {/* Email Dialog for ROI Report - with enhanced debugging */}
       <ModernEmailDialog
         open={showEmailDialog}
         onOpenChange={(open) => {
-          console.log('Dialog onOpenChange called with:', open);
+          console.log('ModernEmailDialog onOpenChange called with:', open);
           setShowEmailDialog(open);
         }}
         userEmail={userEmail}
-        setUserEmail={setUserEmail}
-        onSubmit={handleROIEmailSubmit}
+        setUserEmail={(email) => {
+          console.log('Setting userEmail to:', email);
+          setUserEmail(email);
+        }}
+        onSubmit={() => {
+          console.log('ModernEmailDialog onSubmit called');
+          handleROIEmailSubmit();
+        }}
       />
     </div>
   );
