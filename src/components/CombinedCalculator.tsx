@@ -336,9 +336,6 @@ export const CombinedCalculator = ({
     setShowEmailDialog(true);
   };
 
-  const handleBookCall = () => {
-    window.open('https://calendly.com/rapidclaims', '_blank');
-  };
 
   const clearEditingValue = (key: keyof ROIMetrics) => {
     setEditingValues(prev => {
@@ -752,16 +749,6 @@ export const CombinedCalculator = ({
                   </CollapsibleContent>
                 </Collapsible>
 
-                <div className="space-y-4">
-                  <Button 
-                    onClick={handleBookCall}
-                    variant="outline"
-                    className="w-full h-14 text-lg font-semibold rounded-xl"
-                  >
-                    <Calendar className="h-5 w-5 mr-2" />
-                    Book a Call with RapidClaims
-                  </Button>
-                </div>
               </div>
             </div>
           </div>

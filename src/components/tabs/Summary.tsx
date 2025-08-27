@@ -21,9 +21,6 @@ interface SummaryProps {
 }
 
 export const Summary = ({ calculations, onCalculateROI, isSignedIn = true }: SummaryProps) => {
-  const handleBookCall = () => {
-    window.open('https://calendly.com/rapidclaims', '_blank');
-  };
 
   return (
     <>
