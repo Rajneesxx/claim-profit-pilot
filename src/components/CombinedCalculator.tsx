@@ -7,7 +7,9 @@ import { Slider } from "@/components/ui/slider";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronDown, ChevronUp, Calculator, ExternalLink, Settings, Minus, Plus, Download, Calendar } from "lucide-react";
+import { ChevronDown, ChevronUp, Calculator, ExternalLink, Settings, Minus, Plus, Download, Calendar, LogIn } from "lucide-react";
+import { ModernEmailDialog } from './ModernEmailDialog';
+import { useToast } from "@/hooks/use-toast";
 import { ROIMetrics } from "@/types/roi";
 import { References } from "./tabs/References";
 import { ProductDescription } from "./ProductDescription";
@@ -146,6 +148,14 @@ export const CombinedCalculator = ({
   const advancedRef = useRef<HTMLDivElement | null>(null);
   const leversRef = useRef<HTMLDivElement | null>(null);
   const referencesRef = useRef<HTMLDivElement | null>(null);
+
+  // Authentication state
+  const [isSignedIn, setIsSignedIn] = useState(() => {
+    return sessionStorage.getItem('rapidclaims_signed_in') === 'true';
+  });
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const { toast } = useToast();
 
   useEffect(() => {
     if (showAdvanced && advancedRef.current) {
@@ -306,6 +316,22 @@ export const CombinedCalculator = ({
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
   };
 
+  const handleEmailSubmit = () => {
+    if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+      setIsSignedIn(true);
+      sessionStorage.setItem('rapidclaims_signed_in', 'true');
+      sessionStorage.setItem('rapidclaims_user_email', userEmail);
+      setShowEmailDialog(false);
+      toast({
+        title: "Welcome!",
+        description: "You now have full access to the ROI calculator.",
+      });
+    }
+  };
+
+  const handleSignInClick = () => {
+    setShowEmailDialog(true);
+  };
 
   const handleBookCall = () => {
     window.open('https://calendly.com/rapidclaims', '_blank');
@@ -414,6 +440,7 @@ export const CombinedCalculator = ({
                     <Slider
                       value={[Math.max(5000000, Math.min(50000000, metrics.revenueClaimed))]}
                       onValueChange={(value) => {
+                        if (!isSignedIn) return;
                         const clampedValue = Math.max(5000000, Math.min(50000000, value[0]));
                         updateMetric('revenueClaimed', clampedValue);
                       }}
@@ -421,6 +448,7 @@ export const CombinedCalculator = ({
                       max={50000000}
                       step={100000}
                       className="w-full"
+                      disabled={!isSignedIn}
                     />
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
@@ -469,8 +497,9 @@ export const CombinedCalculator = ({
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDecrement(key, step)}
+                          onClick={() => isSignedIn && handleDecrement(key, step)}
                           className="p-2 h-8 w-8"
+                          disabled={!isSignedIn}
                         >
                           <Minus className="h-3 w-3" />
                         </Button>
@@ -484,8 +513,9 @@ export const CombinedCalculator = ({
                                   ? String(metrics[key] ?? 0)
                                   : (metrics[key] === 0 ? '' : String(metrics[key])))
                           }
-                          onChange={(e) => handleInputChange(key, e.target.value)}
+                          onChange={(e) => isSignedIn && handleInputChange(key, e.target.value)}
                           onBlur={(e) => {
+                            if (!isSignedIn) return;
                             const raw = e.target.value.trim();
                             if (raw === '') {
                               return;
@@ -497,12 +527,14 @@ export const CombinedCalculator = ({
                             clearEditingValue(key);
                           }}
                           className="text-center"
+                          disabled={!isSignedIn}
                         />
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleIncrement(key, step)}
+                          onClick={() => isSignedIn && handleIncrement(key, step)}
                           className="p-2 h-8 w-8"
+                          disabled={!isSignedIn}
                         >
                           <Plus className="h-3 w-3" />
                         </Button>
@@ -510,10 +542,11 @@ export const CombinedCalculator = ({
                       {max && (
                         <Slider
                           value={[metrics[key]]}
-                          onValueChange={(value) => updateMetric(key, value[0])}
+                          onValueChange={(value) => isSignedIn && updateMetric(key, value[0])}
                           max={max}
                           step={step}
                           className="w-full"
+                          disabled={!isSignedIn}
                         />
                       )}
                     </div>
@@ -547,8 +580,9 @@ export const CombinedCalculator = ({
                                     ? String(metrics[key] ?? 0)
                                     : (metrics[key] === 0 ? '' : String(metrics[key])))
                             }
-                            onChange={(e) => handleInputChange(key, e.target.value)}
+                            onChange={(e) => isSignedIn && handleInputChange(key, e.target.value)}
                             onBlur={(e) => {
+                              if (!isSignedIn) return;
                               const raw = e.target.value.trim();
                               if (raw === '') {
                                 return;
@@ -559,6 +593,7 @@ export const CombinedCalculator = ({
                               }
                               clearEditingValue(key);
                             }}
+                            disabled={!isSignedIn}
                           />
                         </div>
                       ))}
@@ -578,7 +613,7 @@ export const CombinedCalculator = ({
                         <CardContent className="space-y-4">
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Coder Productivity</Label>
-                            <Select value={leverLevels.coderProductivity} onValueChange={(value) => handleLeverLevelChange('coderProductivity', value)}>
+                            <Select value={leverLevels.coderProductivity} onValueChange={(value) => isSignedIn && handleLeverLevelChange('coderProductivity', value)} disabled={!isSignedIn}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -596,7 +631,7 @@ export const CombinedCalculator = ({
 
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Billing Automation</Label>
-                            <Select value={leverLevels.billingAutomation} onValueChange={(value) => handleLeverLevelChange('billingAutomation', value)}>
+                            <Select value={leverLevels.billingAutomation} onValueChange={(value) => isSignedIn && handleLeverLevelChange('billingAutomation', value)} disabled={!isSignedIn}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -614,7 +649,7 @@ export const CombinedCalculator = ({
 
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Physician Time Saved</Label>
-                            <Select value={leverLevels.physicianTimeSaved} onValueChange={(value) => handleLeverLevelChange('physicianTimeSaved', value)}>
+                            <Select value={leverLevels.physicianTimeSaved} onValueChange={(value) => isSignedIn && handleLeverLevelChange('physicianTimeSaved', value)} disabled={!isSignedIn}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -639,7 +674,7 @@ export const CombinedCalculator = ({
                         <CardContent className="space-y-4">
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Technology Cost Saved</Label>
-                            <Select value={leverLevels.technologyCostSaved} onValueChange={(value) => handleLeverLevelChange('technologyCostSaved', value)}>
+                            <Select value={leverLevels.technologyCostSaved} onValueChange={(value) => isSignedIn && handleLeverLevelChange('technologyCostSaved', value)} disabled={!isSignedIn}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -657,7 +692,7 @@ export const CombinedCalculator = ({
 
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Claim Denial Reduction</Label>
-                            <Select value={leverLevels.claimDenialReduction} onValueChange={(value) => handleLeverLevelChange('claimDenialReduction', value)}>
+                            <Select value={leverLevels.claimDenialReduction} onValueChange={(value) => isSignedIn && handleLeverLevelChange('claimDenialReduction', value)} disabled={!isSignedIn}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -675,7 +710,7 @@ export const CombinedCalculator = ({
 
                           <div className="space-y-2">
                             <Label className="text-sm font-medium">Coding Backlog Elimination</Label>
-                            <Select value={leverLevels.codingBacklogElimination} onValueChange={(value) => handleLeverLevelChange('codingBacklogElimination', value)}>
+                            <Select value={leverLevels.codingBacklogElimination} onValueChange={(value) => isSignedIn && handleLeverLevelChange('codingBacklogElimination', value)} disabled={!isSignedIn}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
@@ -738,9 +773,25 @@ export const CombinedCalculator = ({
                 className="relative h-[600px] overflow-y-auto rounded-3xl p-6 md:p-8 text-white shadow-xl ring-1 ring-white/20
                            bg-gradient-to-br from-blue-600 via-purple-600 to-blue-200"
                 style={{
-                  filter: 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5))'
+                  filter: isSignedIn ? 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5))' : 'drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5)) blur(8px)'
                 }}
               >
+                {!isSignedIn && (
+                  <div className="absolute inset-0 bg-black/40 backdrop-blur-sm rounded-3xl flex items-center justify-center z-10">
+                    <div className="text-center">
+                      <Button 
+                        onClick={handleSignInClick}
+                        className="bg-white text-black hover:bg-gray-100 font-semibold px-8 py-3 text-lg rounded-lg"
+                      >
+                        <LogIn className="h-5 w-5 mr-2" />
+                        Sign In to View Analysis
+                      </Button>
+                      <p className="text-white mt-4 text-sm">
+                        Enter your email to unlock the full ROI analysis
+                      </p>
+                    </div>
+                  </div>
+                )}
                 <button className="absolute right-4 top-4 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20">
                   Sign in
                 </button>
@@ -801,6 +852,15 @@ export const CombinedCalculator = ({
       <div className="w-full">
         <Footer />
       </div>
+
+      {/* Email Dialog */}
+      <ModernEmailDialog
+        open={showEmailDialog}
+        onOpenChange={setShowEmailDialog}
+        userEmail={userEmail}
+        setUserEmail={setUserEmail}
+        onSubmit={handleEmailSubmit}
+      />
     </div>
   );
 
