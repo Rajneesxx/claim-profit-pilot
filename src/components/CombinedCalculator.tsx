@@ -941,7 +941,7 @@ const CombinedCalculator = ({
       {/* Left: Screenshot/Image */}
       <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
         <img
-          src="/path_to_banner_screenshot.jpg" // <-- use your actual screenshot image path here
+          src="/Screenshot 2025-08-27 at 5.50.03 PM" // <-- use your actual screenshot image path here
           alt="RapidClaims Platform Screenshot"
           className="w-full h-auto object-contain rounded-xl shadow-xl"
         />
