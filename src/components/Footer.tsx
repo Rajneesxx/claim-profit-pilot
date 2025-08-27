@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
 
   return (
   <footer className="bg-[#01101F] w-full">
-  <div className="flex flex-wrap lg:flex-nowrap items-center gap-10 max-w-[1200px] mx-auto px-6 py-14 lg:py-20">
+  <div className="flex flex-wrap lg:flex-nowrap items-center gap-10 w-full px-6 py-14 lg:py-20">
     <img
       src="https://api.builder.io/api/v1/image/assets/TEMP/d6321efa1e6ceeefe2643911cfa0c4be5854f55c?width=1421"
       alt="Rapid Codes"
@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
     </div>
   </div>
 
-  <div className="flex flex-wrap lg:flex-nowrap items-center gap-8 max-w-[1200px] mx-auto px-6 py-12">
+  <div className="flex flex-wrap lg:flex-nowrap items-center gap-8 w-full px-6 py-12">
     <div className="flex-1 min-w-[250px] mb-8 lg:mb-0">
       {/* SVG */}
       ...
@@ -50,7 +50,7 @@ export const Footer: React.FC = () => {
   </div>
 
   <div className="bg-[#01101F] pt-12 pb-8 px-6">
-    <div className="flex flex-wrap gap-10 max-w-[1200px] mx-auto">
+    <div className="flex flex-wrap gap-10 w-full px-6">
       <div className="shrink-0 mb-8 lg:mb-0">
         {/* SVG */}
       </div>
@@ -82,7 +82,7 @@ export const Footer: React.FC = () => {
       </div>
     </div>
 
-    <div className="flex flex-col lg:flex-row justify-between items-center border-t border-gray-700 max-w-[1200px] mx-auto py-5 mt-8 gap-4 text-center lg:text-left">
+    <div className="flex flex-col lg:flex-row justify-between items-center border-t border-gray-700 w-full px-6 py-5 mt-8 gap-4 text-center lg:text-left">
       <address className="text-[#A6A6A6] text-xs not-italic mb-4 lg:mb-0">
         <div>Address:</div>
         <div>100 Church Street Manhattan, New York 10007</div>
@@ -96,7 +96,7 @@ export const Footer: React.FC = () => {
       </div>
     </div>
 
-    <div className="flex flex-col lg:flex-row justify-between items-center border-t border-gray-700 max-w-[1200px] mx-auto pt-5 gap-4 text-center lg:text-left">
+    <div className="flex flex-col lg:flex-row justify-between items-center border-t border-gray-700 w-full px-6 pt-5 gap-4 text-center lg:text-left">
       <div className="text-gray-500 text-xs">© 2024 RapidClaims. All rights reserved.</div>
       <nav className="flex gap-6 justify-center lg:justify-end">
         <a href="#" className="text-gray-500 text-xs hover:text-gray-300">Terms of Service</a>

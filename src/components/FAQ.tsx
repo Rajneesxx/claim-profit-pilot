@@ -32,7 +32,7 @@ export const FAQ: React.FC = () => {
   };
 
   return (
-    <section className="flex flex-col items-center max-w-[1440px] relative mx-auto my-0 px-[100px] py-20 max-sm:px-5 max-sm:py-10">
+    <section className="flex flex-col items-center w-full relative px-[100px] py-20 max-sm:px-5 max-sm:py-10">
       <div className="flex items-center gap-4 relative z-10 mb-5">
         <svg 
           width="40" 
