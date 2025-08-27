@@ -941,7 +941,7 @@ const CombinedCalculator = ({
       {/* Left: Screenshot/Image */}
       <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
         <img
-          src="/https://drive.google.com/file/d/10UmgY_ZjVWz9ZP8a8FSuQ-nqKPET5aAX/view?usp=sharing" // <-- use your actual screenshot image path here
+          src="/lovable-uploads/6b06aa54-46c8-4431-8420-0f0dc322af55.png"
           alt="RapidClaims Platform Screenshot"
           className="w-full h-auto object-contain rounded-xl shadow-xl"
         />
