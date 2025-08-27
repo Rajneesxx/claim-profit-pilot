@@ -935,7 +935,7 @@ const CombinedCalculator = ({
       <div className="w-full">
         <FAQ />
       </div>
-      export const RevenueBanner: React.FC = () => (
+      {/* RevenueBanner Section */}
   <section className="w-full bg-white py-14 px-4 md:px-16">
     <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
       {/* Left: Screenshot/Image */}
@@ -965,8 +965,7 @@ const CombinedCalculator = ({
         </a>
       </div>
     </div>
-  </section>
-);
+      </section>
 
       {/* Footer Section - Full Width */}
       <div className="w-full">
