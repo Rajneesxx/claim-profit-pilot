@@ -81,7 +81,9 @@ export const CombinedCalculator = ({
     setLocalMetrics(prev => {
       const updated = { ...prev, [key]: value };
 
-      if (updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
+      // Only recalculate chartsPerCoderPerDay when specific fields change, not on every update
+      if ((key === 'chartsProcessedPerAnnum' || key === 'numberOfCoders' || key === 'claimsPerAnnum') && 
+          updated.chartsProcessedPerAnnum > 0 && updated.numberOfCoders > 0) {
         updated.chartsPerCoderPerDay = Math.round(updated.chartsProcessedPerAnnum / updated.numberOfCoders / 252);
       }
 
