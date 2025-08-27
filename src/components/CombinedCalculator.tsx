@@ -487,9 +487,8 @@ const CombinedCalculator = ({
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => isSignedIn && handleDecrement(key, step)}
+                          onClick={() => handleDecrement(key, step)}
                           className="p-2 h-8 w-8"
-                          disabled={!isSignedIn}
                         >
                           <Minus className="h-3 w-3" />
                         </Button>
@@ -503,9 +502,8 @@ const CombinedCalculator = ({
                                   ? String(metrics[key] ?? 0)
                                   : (metrics[key] === 0 ? '' : String(metrics[key])))
                           }
-                          onChange={(e) => isSignedIn && handleInputChange(key, e.target.value)}
+                          onChange={(e) => handleInputChange(key, e.target.value)}
                           onBlur={(e) => {
-                            if (!isSignedIn) return;
                             const raw = e.target.value.trim();
                             if (raw === '') {
                               return;
@@ -517,14 +515,12 @@ const CombinedCalculator = ({
                             clearEditingValue(key);
                           }}
                           className="text-center"
-                          disabled={!isSignedIn}
                         />
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => isSignedIn && handleIncrement(key, step)}
+                          onClick={() => handleIncrement(key, step)}
                           className="p-2 h-8 w-8"
-                          disabled={!isSignedIn}
                         >
                           <Plus className="h-3 w-3" />
                         </Button>
@@ -532,11 +528,10 @@ const CombinedCalculator = ({
                       {max && (
                         <Slider
                           value={[metrics[key]]}
-                          onValueChange={(value) => isSignedIn && updateMetric(key, value[0])}
+                          onValueChange={(value) => updateMetric(key, value[0])}
                           max={max}
                           step={step}
                           className="w-full"
-                          disabled={!isSignedIn}
                         />
                       )}
                     </div>
@@ -570,9 +565,8 @@ const CombinedCalculator = ({
                                     ? String(metrics[key] ?? 0)
                                     : (metrics[key] === 0 ? '' : String(metrics[key])))
                             }
-                            onChange={(e) => isSignedIn && handleInputChange(key, e.target.value)}
+                            onChange={(e) => handleInputChange(key, e.target.value)}
                             onBlur={(e) => {
-                              if (!isSignedIn) return;
                               const raw = e.target.value.trim();
                               if (raw === '') {
                                 return;
@@ -583,8 +577,6 @@ const CombinedCalculator = ({
                               }
                               clearEditingValue(key);
                             }}
-                            disabled={!isSignedIn}
-                            className={!isSignedIn ? 'cursor-not-allowed' : ''}
                           />
                         </div>
                       ))}
@@ -815,18 +807,21 @@ const CombinedCalculator = ({
                   </CollapsibleContent>
                 </Collapsible>
                 
-                {/* Get Detailed ROI Report Button - moved here after Advanced Analysis */}
-                {isSignedIn && (
-                  <div className="mt-6">
-                    <Button 
-                      onClick={onCalculateROI} 
-                      className="w-full bg-white hover:bg-white/90 text-purple-accent border-2 border-white h-14 text-lg font-semibold rounded-xl"
-                    >
-                      <Download className="h-5 w-5 mr-2" />
-                      Get Detailed ROI Report
-                    </Button>
-                  </div>
-                )}
+                {/* Get Detailed ROI Report Button - always visible */}
+                <div className="mt-6">
+                  <Button 
+                    onClick={onCalculateROI} 
+                    className="w-full bg-white hover:bg-white/90 text-purple-accent border-2 border-white h-14 text-lg font-semibold rounded-xl"
+                  >
+                    <Download className="h-5 w-5 mr-2" />
+                    Get Detailed ROI Report
+                  </Button>
+                  {!isSignedIn && (
+                    <p className="text-xs text-white/70 text-center mt-2">
+                      Sign in required to generate detailed report
+                    </p>
+                  )}
+                </div>
                 
                 <div className="mt-6 text-white/80 text-sm">Implementation Investment: {formatCurrency(scaledImplementationCost)}</div>
               </div>
