@@ -935,22 +935,22 @@ const CombinedCalculator = ({
       <div className="w-full">
         <FAQ />
       </div>
-      {/* RevenueBanner Section with 100% Overlap Effect */}
-      <section className="w-full bg-gray-50 py-12 px-4 md:px-8 relative z-30 mb-[-400px] md:mb-[-500px]">
+      {/* RevenueBanner Section - White Card on Dark Footer */}
+      <section className="w-full bg-gray-50 py-12 px-4 md:px-8 relative z-30 mb-[-200px] md:mb-[-250px]">
         <div className="max-w-7xl mx-auto">
-          <div className="min-h-[400px] md:min-h-[500px] relative z-30 py-8">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-12 h-full">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-100 relative z-30">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
               {/* Left: Screenshot/Image */}
               <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
                 <img
                   src="/lovable-uploads/6b06aa54-46c8-4431-8420-0f0dc322af55.png"
                   alt="RapidClaims Platform Screenshot"
-                  className="w-full h-auto object-contain rounded-xl shadow-2xl bg-white p-4"
+                  className="w-full h-auto object-contain rounded-xl shadow-xl"
                 />
               </div>
 
               {/* Right: Text and CTA */}
-              <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left justify-center">
+              <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
                 <h2 className="text-[#232B36] text-3xl md:text-4xl font-semibold mb-5 leading-tight">
                   Unlock every <span className="text-[#7828C8] font-bold">collectible</span> dollar
                 </h2>
@@ -971,8 +971,8 @@ const CombinedCalculator = ({
         </div>
       </section>
 
-      {/* Footer Section - 100% Overlapped by Banner */}
-      <div className="w-full bg-slate-900 pt-[450px] md:pt-[550px] relative z-10">
+      {/* Footer Section - Dark Background Matching Reference */}
+      <div className="w-full bg-slate-900 pt-[300px] md:pt-[350px] relative z-10">
         <Footer />
       </div>
 
