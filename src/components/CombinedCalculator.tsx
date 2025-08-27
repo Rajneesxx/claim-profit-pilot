@@ -356,11 +356,12 @@ const CombinedCalculator = ({
     console.log('current showEmailDialog state:', showEmailDialog);
     
     if (isSignedIn) {
+      console.log('User is signed in - should show results dialog');
       if (propOnCalculateROI) {
-        console.log('Calling parent onCalculateROI');
+        console.log('Calling parent onCalculateROI function');
         propOnCalculateROI();
       } else {
-        console.log('No parent function, showing local toast');
+        console.log('ERROR: No parent onCalculateROI function found!');
         toast({
           title: "🎉 Results Ready!",
           description: "Your detailed ROI report is being generated.",
@@ -370,10 +371,6 @@ const CombinedCalculator = ({
       console.log('Not signed in, setting showEmailDialog to TRUE');
       setShowEmailDialog(true);
       console.log('showEmailDialog after setState:', true);
-      // Force a re-render to make sure state change is applied
-      setTimeout(() => {
-        console.log('Dialog should be visible now, showEmailDialog:', showEmailDialog);
-      }, 100);
     }
   };
 
