@@ -71,35 +71,35 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Main Grid Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12 mb-16">
           {/* Logo (repeated) */}
-          <div>
+          <div className="flex justify-center lg:justify-start">
             <img 
               src="/src/assets/rapidclaims-logo.png" 
               alt="RapidClaims Logo" 
-              className="w-[140px] h-auto mb-8"
+              className="w-[140px] h-auto"
             />
           </div>
 
           {/* Products */}
-          <nav className="flex flex-col gap-4">
-            <h4 className="text-white text-sm font-bold tracking-wide uppercase mb-2">PRODUCTS</h4>
+          <nav className="flex flex-col gap-3">
+            <h4 className="text-white text-base font-extrabold tracking-wider uppercase mb-4">PRODUCTS</h4>
             <a href="https://www.rapidclaims.ai/products/rapid-code" className="text-gray-300 text-sm hover:text-white transition">RapidCode</a>
             <a href="https://www.rapidclaims.ai/products/rapid-scrub" className="text-gray-300 text-sm hover:text-white transition">RapidScrub</a>
             <a href="https://www.rapidclaims.ai/products/rapid-cdi" className="text-gray-300 text-sm hover:text-white transition">RapidCDI</a>
           </nav>
 
           {/* Solutions */}
-          <nav className="flex flex-col gap-4">
-            <h4 className="text-white text-sm font-bold tracking-wide uppercase mb-2">SOLUTIONS</h4>
+          <nav className="flex flex-col gap-3">
+            <h4 className="text-white text-base font-extrabold tracking-wider uppercase mb-4">SOLUTIONS</h4>
             <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of customers</a>
             <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of roles</a>
             <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of use cases</a>
           </nav>
 
           {/* Resources */}
-          <nav className="flex flex-col gap-4">
-            <h4 className="text-white text-sm font-bold tracking-wide uppercase mb-2">RESOURCES</h4>
+          <nav className="flex flex-col gap-3">
+            <h4 className="text-white text-base font-extrabold tracking-wider uppercase mb-4">RESOURCES</h4>
             <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">Blogs</a>
             <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">Case Studies</a>
             <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">News</a>
