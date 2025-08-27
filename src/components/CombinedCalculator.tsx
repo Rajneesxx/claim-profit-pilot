@@ -393,15 +393,15 @@ export const CombinedCalculator = ({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Panel - Calculations */}
           <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <div>
+              <div className="mb-6">
+                <div className="flex items-center gap-2 text-xl font-semibold mb-2">
                   <Calculator className="h-5 w-5" />
                   Key Input Parameters
                   <TooltipInfo content="Essential metrics that drive your ROI calculation. Adjust these to match your organization's profile." />
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
+                </div>
+              </div>
+              <div className="space-y-6">
                 {/* Annual Revenue Claimed */}
                 <div className="p-6 bg-muted/30 rounded-lg border">
                   <div className="flex items-center gap-2 mb-4">
@@ -727,13 +727,13 @@ export const CombinedCalculator = ({
                     Book a Call with RapidClaims
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
           {/* Right Panel - Executive Summary */}
           <div className="space-y-6">
-            <Card className="h-fit">
+            <div className="h-fit">
               <div
                 className="relative h-[600px] overflow-y-auto rounded-3xl p-6 md:p-8 text-white shadow-xl ring-1 ring-white/20
                            bg-gradient-to-br from-blue-600 via-purple-600 to-blue-200"
@@ -787,7 +787,7 @@ export const CombinedCalculator = ({
                 </Collapsible>
                 <div className="mt-6 text-white/80 text-sm">Implementation Investment: {formatCurrency(scaledImplementationCost)}</div>
               </div>
-            </Card>
+            </div>
           </div>
         </div>
       </div>
