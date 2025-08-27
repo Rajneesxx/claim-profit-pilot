@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import confetti from 'canvas-confetti';
 import { Calculator, Star, Download, FileText } from 'lucide-react';
-import { CombinedCalculator } from './CombinedCalculator';
+import CombinedCalculator from './CombinedCalculator';
 import { FloatingCTA } from './FloatingCTA';
 import { ModernEmailDialog } from './ModernEmailDialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";

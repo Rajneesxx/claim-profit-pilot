@@ -39,7 +39,7 @@ interface CombinedCalculatorProps {
   };
 }
 
-export const CombinedCalculator = ({ 
+const CombinedCalculator = ({ 
   metrics: propMetrics, 
   updateMetric: propUpdateMetric, 
   onCalculateROI: propOnCalculateROI, 
@@ -479,6 +479,7 @@ export const CombinedCalculator = ({
                       />
                   </div>
                 </div>
+                </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {basicInputs.map(({ key, label, max, step }) => (
@@ -908,3 +909,4 @@ function getTooltipContent(key: keyof ROIMetrics): string {
   return tooltips[key] || "";
 }
 
+export default CombinedCalculator;
