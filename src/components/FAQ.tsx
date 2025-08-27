@@ -41,14 +41,7 @@ export const FAQ: React.FC = () => {
       <div className="flex items-center gap-4 mb-6">
         <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center">
           {/* ICON */}
-          <svg 
-            width="24" 
-            height="24" 
-            viewBox="0 0 40 40"
-            className="w-6 h-6" 
-            xmlns="http://www.w3.org/2000/svg" 
-            fill="none"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator-icon lucide-calculator"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
             <path 
               d="M22.5 28.125C22.5 28.6195 22.3534 29.1028 22.0787 29.5139..." 
               fill="white"
