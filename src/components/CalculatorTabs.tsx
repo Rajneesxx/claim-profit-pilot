@@ -25,13 +25,15 @@ interface CalculatorTabsProps {
       totalImpact: number;
     };
   };
+  isSignedIn?: boolean;
 }
 
 export const CalculatorTabs = ({ 
   metrics, 
   updateMetric, 
   onCalculateROI, 
-  calculations 
+  calculations,
+  isSignedIn = true
 }: CalculatorTabsProps) => {
   const [activeTab, setActiveTab] = useState("calculations");
   const [activeCalculationTab, setActiveCalculationTab] = useState("calculator");
@@ -112,6 +114,7 @@ export const CalculatorTabs = ({
           <Summary 
             calculations={calculations}
             onCalculateROI={onCalculateROI}
+            isSignedIn={isSignedIn}
           />
         </TabsContent>
       </Tabs>

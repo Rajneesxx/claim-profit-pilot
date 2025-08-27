@@ -157,6 +157,9 @@ export const CombinedCalculator = ({
   const [userEmail, setUserEmail] = useState('');
   const { toast } = useToast();
 
+  // Disable state for non-signed in users
+  const isDisabled = !isSignedIn;
+
   useEffect(() => {
     if (showAdvanced && advancedRef.current) {
       advancedRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -415,6 +418,27 @@ export const CombinedCalculator = ({
           </div>
         </div>
 
+        {/* Sign-in Banner for non-authenticated users */}
+        {!isSignedIn && (
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <LogIn className="h-6 w-6 text-blue-600" />
+                <div>
+                  <h3 className="font-semibold text-blue-900">Sign in to unlock full access</h3>
+                  <p className="text-sm text-blue-700">Get complete control over advanced settings, benchmarks, and detailed reports</p>
+                </div>
+              </div>
+              <Button 
+                onClick={handleSignInClick}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium"
+              >
+                Sign In
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Side-by-side layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Panel - Calculations */}
@@ -458,6 +482,7 @@ export const CombinedCalculator = ({
                         inputMode="numeric"
                         value={metrics.revenueClaimed === 0 ? '' : formatNumber(metrics.revenueClaimed)}
                         onChange={(e) => {
+                          if (!isSignedIn) return;
                           const rawValue = e.target.value.replace(/,/g, "");
                           if (rawValue === '') {
                             handleInputChange('revenueClaimed', '');
@@ -469,6 +494,7 @@ export const CombinedCalculator = ({
                           }
                         }}
                         onBlur={(e) => {
+                          if (!isSignedIn) return;
                           const rawValue = e.target.value.replace(/,/g, "");
                           const numericValue = parseInt(rawValue) || 5000000;
                           const clampedValue = Math.max(5000000, Math.min(50000000, numericValue));
@@ -476,6 +502,7 @@ export const CombinedCalculator = ({
                         }}
                         className="text-center text-lg font-semibold pl-8"
                         placeholder="Enter annual revenue (min $5M, max $50M)"
+                        disabled={!isSignedIn}
                       />
                     </div>
                     <div className="text-center">
@@ -565,7 +592,7 @@ export const CombinedCalculator = ({
                 </div>
 
                 <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
-                  <CollapsibleContent className="space-y-6">
+                  <CollapsibleContent className={`space-y-6 ${!isSignedIn ? 'opacity-50 pointer-events-none' : ''}`}>
                     <div ref={advancedRef} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {advancedInputs.map(({ key, label }) => (
                         <div key={key} className="space-y-2">
@@ -594,6 +621,7 @@ export const CombinedCalculator = ({
                               clearEditingValue(key);
                             }}
                             disabled={!isSignedIn}
+                            className={!isSignedIn ? 'cursor-not-allowed' : ''}
                           />
                         </div>
                       ))}
@@ -602,7 +630,7 @@ export const CombinedCalculator = ({
                 </Collapsible>
 
                 <Collapsible open={showLevers} onOpenChange={setShowLevers}>
-                  <CollapsibleContent ref={leversRef} className="mt-4 space-y-6">
+                  <CollapsibleContent ref={leversRef} className={`mt-4 space-y-6 ${!isSignedIn ? 'opacity-50 pointer-events-none' : ''}`}>
                     <div className="text-sm text-muted-foreground">Configure assumptions and confidence levels to tune projected outcomes.</div>
                     
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -747,8 +775,9 @@ export const CombinedCalculator = ({
 
                 <div className="space-y-4">
                   <Button 
-                    onClick={onCalculateROI} 
-                    className="w-full h-14 text-lg font-semibold"
+                    onClick={isSignedIn ? onCalculateROI : handleSignInClick} 
+                    className="w-full h-14 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!isSignedIn}
                   >
                     <Download className="h-5 w-5 mr-2" />
                     Get Detailed ROI Report

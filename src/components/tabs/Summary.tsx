@@ -17,9 +17,10 @@ interface SummaryProps {
     };
   };
   onCalculateROI: () => void;
+  isSignedIn?: boolean;
 }
 
-export const Summary = ({ calculations, onCalculateROI }: SummaryProps) => {
+export const Summary = ({ calculations, onCalculateROI, isSignedIn = true }: SummaryProps) => {
   const handleBookCall = () => {
     window.open('https://calendly.com/rapidclaims', '_blank');
   };
@@ -87,8 +88,9 @@ export const Summary = ({ calculations, onCalculateROI }: SummaryProps) => {
         {/* CTA Buttons */}
         <div className="space-y-4">
           <Button 
-            onClick={onCalculateROI} 
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-14 text-lg font-semibold rounded-lg"
+            onClick={isSignedIn ? onCalculateROI : undefined} 
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-14 text-lg font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!isSignedIn}
           >
             <Download className="h-5 w-5 mr-2" />
             Get Detailed ROI Report
