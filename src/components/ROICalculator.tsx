@@ -283,11 +283,21 @@ export const ROICalculator = () => {
             {/* Logo and Navigation Links - Left Side */}
             <div className="flex items-center gap-8">
               {/* Logo */}
-              <img 
-                src="/src/assets/rapidclaims-logo.png" 
-                alt="RapidClaims" 
-                className="h-8 w-auto"
-              />
+              <svg width="160" height="45" viewBox="0 0 320 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-8 w-auto">
+                {/* Stylized "R" icon */}
+                <g>
+                  <polygon points="20,45 40,25 50,35 35,45 50,60 40,70" fill="#FF3B1F"/>
+                  <rect x="25" y="73" width="15" height="4" fill="#FF3B1F"/>
+                  <rect x="32" y="80" width="8" height="2.5" fill="#FF3B1F"/>
+                </g>
+                {/* RapidClaims text */}
+                <text x="65" y="60" fontFamily="'Inter', 'Arial', sans-serif" fontSize="40" fontWeight="700" fill="#111">
+                  Rapid
+                </text>
+                <text x="185" y="60" fontFamily="'Inter', 'Arial', sans-serif" fontSize="40" fontWeight="400" fill="#111">
+                  Claims
+                </text>
+              </svg>
               
               {/* Navigation Links */}
               <nav className="hidden md:flex items-center gap-6">
