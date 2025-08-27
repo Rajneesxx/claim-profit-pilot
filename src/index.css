@@ -48,6 +48,10 @@ All colors MUST be HSL.
     --info: 270 80% 60%;
     --info-foreground: 0 0% 100%;
 
+    --purple-green: 285 85% 50%; /* Purple-greenish mix */
+    --purple-green-foreground: 0 0% 100%;
+    --purple-green-hover: 275 75% 45%; /* Darker on hover */
+
     --gradient-primary: linear-gradient(135deg, hsl(270 80% 40%), hsl(260 70% 25%));
     --gradient-secondary: linear-gradient(135deg, hsl(260 25% 18%), hsl(270 30% 22%));
 

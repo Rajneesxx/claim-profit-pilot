@@ -60,7 +60,7 @@ export const CombinedCalculator = ({
     salaryPerPhysician: 350000,
     avgTimePerPhysicianPerChart: 15,
     avgTimePerCoderPerChart: 0.1333,
-    chartsPerCoderPerDay: 88,
+    chartsPerCoderPerDay: 44, // 33333 charts / 3 coders / 252 working days = ~44
     costPerDeniedClaim: 13,
     codingBacklogPercent: 20,
     daysPerChartInBacklog: 20,
@@ -519,11 +519,19 @@ export const CombinedCalculator = ({
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
-                  <Button variant="outline" className="w-full" onClick={() => setShowAdvanced((v) => !v)}>
+                  <Button 
+                    variant="outline" 
+                    className="w-full bg-gradient-to-r from-purple-600 to-emerald-500 text-white border-none hover:from-purple-700 hover:to-emerald-600 transition-all duration-300" 
+                    onClick={() => setShowAdvanced((v) => !v)}
+                  >
                     <Settings className="h-4 w-4 mr-2" />
                     Advanced Inputs {showAdvanced ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
                   </Button>
-                  <Button variant="outline" className="w-full" onClick={() => setShowLevers((v) => !v)}>
+                  <Button 
+                    variant="outline" 
+                    className="w-full bg-gradient-to-r from-purple-600 to-emerald-500 text-white border-none hover:from-purple-700 hover:to-emerald-600 transition-all duration-300" 
+                    onClick={() => setShowLevers((v) => !v)}
+                  >
                     <Settings className="h-4 w-4 mr-2" />
                     Benchmarks & Levers {showLevers ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
                   </Button>
@@ -698,7 +706,10 @@ export const CombinedCalculator = ({
 
                 <Collapsible open={showReferences} onOpenChange={setShowReferences}>
                   <CollapsibleTrigger asChild>
-                    <Button variant="outline" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      className="w-full bg-gradient-to-r from-purple-600 to-emerald-500 text-white border-none hover:from-purple-700 hover:to-emerald-600 transition-all duration-300"
+                    >
                       <ExternalLink className="h-4 w-4 mr-2" />
                       References {showReferences ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
                     </Button>
