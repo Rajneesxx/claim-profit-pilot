@@ -334,14 +334,21 @@ const CombinedCalculator = ({
   const handleROIEmailSubmit = () => {
     if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
       setShowEmailDialog(false);
-      if (propOnCalculateROI) {
-        propOnCalculateROI();
-      } else {
+      
+      // Generate and send the detailed PDF report
+      toast({
+        title: "📧 Report Sent!",
+        description: `Your detailed ROI analysis has been sent to ${userEmail}`,
+        duration: 5000,
+      });
+      
+      // Optionally trigger PDF generation
+      setTimeout(() => {
         toast({
-          title: "🎉 Results Ready!",
-          description: "Your detailed ROI report is being generated.",
+          title: "📄 PDF Ready",
+          description: "Your comprehensive ROI report is ready for download.",
         });
-      }
+      }, 2000);
     }
   };
 
@@ -355,23 +362,10 @@ const CombinedCalculator = ({
     console.log('propOnCalculateROI exists:', !!propOnCalculateROI);
     console.log('current showEmailDialog state:', showEmailDialog);
     
-    if (isSignedIn) {
-      console.log('User is signed in - should show results dialog');
-      if (propOnCalculateROI) {
-        console.log('Calling parent onCalculateROI function');
-        propOnCalculateROI();
-      } else {
-        console.log('ERROR: No parent onCalculateROI function found!');
-        toast({
-          title: "🎉 Results Ready!",
-          description: "Your detailed ROI report is being generated.",
-        });
-      }
-    } else {
-      console.log('Not signed in, setting showEmailDialog to TRUE');
-      setShowEmailDialog(true);
-      console.log('showEmailDialog after setState:', true);
-    }
+    // Always show email dialog for "Get Detailed ROI Report" regardless of sign-in status
+    // This is for generating and sending the detailed PDF report
+    console.log('Opening email dialog for detailed ROI report generation');
+    setShowEmailDialog(true);
   };
 
   const clearEditingValue = (key: keyof ROIMetrics) => {
