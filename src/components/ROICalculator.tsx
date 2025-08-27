@@ -278,7 +278,7 @@ export const ROICalculator = () => {
 
       {/* Header */}
       <div className="bg-card backdrop-blur-sm border-b border-border relative z-10">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="w-full px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img 
@@ -305,7 +305,7 @@ export const ROICalculator = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-6 py-8 relative z-10">
+      <div className="w-full px-6 py-8 relative z-10">
         <CombinedCalculator 
           metrics={metrics}
           updateMetric={updateMetric}
@@ -342,7 +342,7 @@ export const ROICalculator = () => {
       {/* Results Modal */}
       {showResults && (
         <Dialog open={showResults} onOpenChange={setShowResults}>
-          <DialogContent className="max-w-4xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20">
+          <DialogContent className="w-[95vw] max-w-7xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20">
             <DialogHeader>
               <DialogTitle className="text-2xl text-center text-primary">
                 🎉 Your RapidROI Analysis Results

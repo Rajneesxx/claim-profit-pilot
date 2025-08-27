@@ -29,7 +29,7 @@ export const ModernEmailDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-card border border-border max-w-md">
+      <DialogContent className="bg-card border border-border w-full max-w-lg mx-auto">
         <DialogHeader className="text-center space-y-4">
           <div className="mx-auto bg-primary w-16 h-16 rounded-full flex items-center justify-center">
             <Download className="h-8 w-8 text-primary-foreground" />

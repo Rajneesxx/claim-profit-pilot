@@ -15,7 +15,7 @@ export const Footer: React.FC = () => {
     <img
       src="https://api.builder.io/api/v1/image/assets/TEMP/d6321efa1e6ceeefe2643911cfa0c4be5854f55c?width=1421"
       alt="Rapid Codes"
-      className="w-full max-w-lg lg:w-[400px] lg:h-[250px] object-cover rounded-[7px] mb-8 lg:mb-0"
+      className="w-full lg:w-[400px] lg:h-[250px] object-cover rounded-[7px] mb-8 lg:mb-0"
     />
     <div className="flex-1 flex flex-col items-center text-center lg:items-start lg:text-left">
       <h2 className="text-gray-800 text-4xl lg:text-5xl font-semibold leading-snug mb-6">
@@ -58,7 +58,7 @@ export const Footer: React.FC = () => {
         {/* Navs */}
         ...
       </div>
-      <div className="flex-1 max-w-md mt-6 lg:mt-0">
+      <div className="flex-1 mt-6 lg:mt-0 lg:max-w-md">
         <h4 className="text-white text-lg font-semibold mb-3">Sign up for our newsletter</h4>
         <p className="text-[#A6A6A6] text-sm mb-5">
           Stay up to date with the roadmap progress, announcements and exclusive discounts. Sign up with your email.

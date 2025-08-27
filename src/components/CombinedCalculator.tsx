@@ -355,7 +355,7 @@ export const CombinedCalculator = ({
   ];
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6">
+    <div className="w-full space-y-6 px-4 sm:px-6 lg:px-8">
       <div className="w-full">
         <div className="text-center py-4">
           <div className="flex items-center justify-center gap-2 text-2xl font-semibold">

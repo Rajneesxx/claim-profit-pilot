@@ -52,7 +52,7 @@ export const FAQ: React.FC = () => {
         </h2>
       </div>
       
-      <p className="text-slate-700 text-xl font-semibold tracking-[0.1px] text-center max-w-[386px] relative z-10 mb-[30px] max-sm:text-lg">
+      <p className="text-slate-700 text-xl font-semibold tracking-[0.1px] text-center relative z-10 mb-[30px] max-sm:text-lg max-w-2xl mx-auto">
         Didn't find what you're looking for? Reach out to us anytime.
       </p>
       
@@ -77,7 +77,7 @@ export const FAQ: React.FC = () => {
         </span>
       </button>
 
-      <div className="max-w-[800px] w-full">
+      <div className="w-full max-w-4xl mx-auto">
         {faqData.map((item, index) => (
           <div key={index} className="border border-gray-200 overflow-hidden bg-white mb-4 rounded-xl">
             <button
