@@ -63,7 +63,9 @@ export const ROICalculator = () => {
   };
 
   const [metrics, setMetrics] = useState<ROIMetrics>(defaultMetrics);
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState(() => {
+    return sessionStorage.getItem('rapidclaims_user_email') || '';
+  });
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [rating, setRating] = useState(0);
@@ -212,9 +214,14 @@ export const ROICalculator = () => {
   };
 
   const handleCalculateROI = () => {
+    console.log('ROICalculator handleCalculateROI called, userEmail:', userEmail);
+    console.log('showEmailDialog state:', showEmailDialog);
+    
     if (!userEmail) {
+      console.log('No userEmail, setting showEmailDialog to true');
       setShowEmailDialog(true);
     } else {
+      console.log('UserEmail exists, showing results');
       setShowResults(true);
       triggerConfetti();
       toast({

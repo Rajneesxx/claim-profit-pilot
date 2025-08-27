@@ -350,16 +350,22 @@ const CombinedCalculator = ({
   };
 
   const handleROIClick = () => {
+    console.log('ROI button clicked, isSignedIn:', isSignedIn);
+    console.log('propOnCalculateROI exists:', !!propOnCalculateROI);
+    
     if (isSignedIn) {
       if (propOnCalculateROI) {
+        console.log('Calling parent onCalculateROI');
         propOnCalculateROI();
       } else {
+        console.log('No parent function, showing local toast');
         toast({
           title: "🎉 Results Ready!",
           description: "Your detailed ROI report is being generated.",
         });
       }
     } else {
+      console.log('Not signed in, showing email dialog');
       setShowEmailDialog(true);
     }
   };
