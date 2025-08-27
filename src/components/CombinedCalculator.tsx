@@ -935,10 +935,10 @@ const CombinedCalculator = ({
       <div className="w-full">
         <FAQ />
       </div>
-      {/* RevenueBanner Section with Layered Overlap Effect */}
-      <section className="w-full bg-gray-50 py-20 px-4 md:px-8 relative">
-        <div className="max-w-7xl mx-auto relative z-20">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-100 transform translate-y-16 md:translate-y-24">
+      {/* RevenueBanner Section with Full Overlap Effect */}
+      <section className="w-full relative z-30 px-4 md:px-8 -mb-20 md:-mb-32">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-100 relative z-30">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
               {/* Left: Screenshot/Image */}
               <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
@@ -971,8 +971,8 @@ const CombinedCalculator = ({
         </div>
       </section>
 
-      {/* Footer Section with Overlapped Content */}
-      <div className="w-full bg-slate-900 pt-32 md:pt-40 relative z-10">
+      {/* Footer Section - Starts Directly Behind Banner */}
+      <div className="w-full bg-slate-900 pt-32 md:pt-48 relative z-10">
         <Footer />
       </div>
 
