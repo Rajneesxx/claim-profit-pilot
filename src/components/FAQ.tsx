@@ -16,7 +16,7 @@ const faqData: FAQItem[] = [
   },
   {
     question: "How does the AI stay updated with the latest coding regulations and guidelines?",
-    answer: "The system is continuously trained and updated with the latest ICD, CPT, HCPCS, and payer-specific guidelines. Our compliance team works closely with coders and regulatory experts to integrate rule changes in real time, ensuring that every claim aligns with current requirements. This proactive updating helps clients stay compliant, reduce audit risks, and capture full reimbursement." are these ans correct?."
+    answer: "The system is continuously trained and updated with the latest ICD, CPT, HCPCS, and payer-specific guidelines. Our compliance team works closely with coders and regulatory experts to integrate rule changes in real time, ensuring that every claim aligns with current requirements. This proactive updating helps clients stay compliant, reduce audit risks, and capture full reimbursement. are these ans correct?."
   }
 ];
 
