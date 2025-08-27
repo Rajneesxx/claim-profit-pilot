@@ -7,6 +7,7 @@ import { Slider } from "@/components/ui/slider";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ChevronDown, ChevronUp, Calculator, ExternalLink, Settings, Minus, Plus, Download, Calendar, LogIn } from "lucide-react";
 import { ModernEmailDialog } from './ModernEmailDialog';
 import { useToast } from "@/hooks/use-toast";
@@ -142,12 +143,13 @@ export const CombinedCalculator = ({
 
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showAssumptions, setShowAssumptions] = useState(false);
-  const [showReferences, setShowReferences] = useState(false);
+  
   const [editingValues, setEditingValues] = useState<Partial<Record<keyof ROIMetrics, string>>>({});
   const [showLevers, setShowLevers] = useState(false);
+  const [showReferencesModal, setShowReferencesModal] = useState(false);
   const advancedRef = useRef<HTMLDivElement | null>(null);
   const leversRef = useRef<HTMLDivElement | null>(null);
-  const referencesRef = useRef<HTMLDivElement | null>(null);
+  
 
   // Authentication state
   const [isSignedIn, setIsSignedIn] = useState(() => {
@@ -172,11 +174,6 @@ export const CombinedCalculator = ({
     }
   }, [showLevers]);
 
-  useEffect(() => {
-    if (showReferences && referencesRef.current) {
-      referencesRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [showReferences]);
   
   const [leverLevels, setLeverLevels] = useState({
     coderProductivity: 'medium',
@@ -735,19 +732,6 @@ export const CombinedCalculator = ({
                   </CollapsibleContent>
                 </Collapsible>
 
-                <Separator className="my-8" />
-
-                <Collapsible open={showReferences} onOpenChange={setShowReferences}>
-                  <CollapsibleTrigger asChild>
-                    <Button variant="outline" className="w-full">
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      References {showReferences ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
-                    </Button>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent ref={referencesRef} className="mt-4 space-y-4">
-                    <References />
-                  </CollapsibleContent>
-                </Collapsible>
 
               </div>
             </div>
@@ -860,6 +844,30 @@ export const CombinedCalculator = ({
         </div>
       </div>
       
+      {/* References Footer Section - Full Width */}
+      <div className="w-full bg-background py-16">
+        <div className="max-w-4xl mx-auto text-center px-6">
+          <h2 className="text-3xl font-bold text-foreground mb-8">
+            Explore the verified sources behind these projections
+          </h2>
+          
+          <div className="mb-6">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowReferencesModal(true)}
+              className="inline-flex items-center gap-2 px-6 py-3 text-lg font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+            >
+              <ExternalLink className="h-5 w-5" />
+              References
+            </Button>
+          </div>
+          
+          <p className="text-purple-600 text-sm font-medium max-w-2xl mx-auto">
+            All estimates are projections based on your inputs and past customer outcomes. Actual results vary and are not guaranteed.
+          </p>
+        </div>
+      </div>
+
       {/* FAQ Section - Full Width */}
       <div className="w-full">
         <FAQ />
@@ -869,6 +877,19 @@ export const CombinedCalculator = ({
       <div className="w-full">
         <Footer />
       </div>
+
+      {/* References Modal */}
+      <Dialog open={showReferencesModal} onOpenChange={setShowReferencesModal}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <ExternalLink className="h-5 w-5" />
+              Industry References
+            </DialogTitle>
+          </DialogHeader>
+          <References />
+        </DialogContent>
+      </Dialog>
 
       {/* Email Dialog */}
       <ModernEmailDialog
