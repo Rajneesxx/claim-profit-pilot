@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
 
           {/* Products */}
           <nav className="flex flex-col gap-3">
-            <h4 className="text-white text-base font-extrabold tracking-wider uppercase mb-4">PRODUCTS</h4>
+            <h4 className="text-white text-lg font-black tracking-wider uppercase mb-4">PRODUCTS</h4>
             <a href="https://www.rapidclaims.ai/products/rapid-code" className="text-gray-300 text-sm hover:text-white transition">RapidCode</a>
             <a href="https://www.rapidclaims.ai/products/rapid-scrub" className="text-gray-300 text-sm hover:text-white transition">RapidScrub</a>
             <a href="https://www.rapidclaims.ai/products/rapid-cdi" className="text-gray-300 text-sm hover:text-white transition">RapidCDI</a>
@@ -91,7 +91,7 @@ export const Footer: React.FC = () => {
 
           {/* Solutions */}
           <nav className="flex flex-col gap-3">
-            <h4 className="text-white text-base font-extrabold tracking-wider uppercase mb-4">SOLUTIONS</h4>
+            <h4 className="text-white text-lg font-black tracking-wider uppercase mb-4">SOLUTIONS</h4>
             <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of customers</a>
             <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of roles</a>
             <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of use cases</a>
@@ -99,7 +99,7 @@ export const Footer: React.FC = () => {
 
           {/* Resources */}
           <nav className="flex flex-col gap-3">
-            <h4 className="text-white text-base font-extrabold tracking-wider uppercase mb-4">RESOURCES</h4>
+            <h4 className="text-white text-lg font-black tracking-wider uppercase mb-4">RESOURCES</h4>
             <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">Blogs</a>
             <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">Case Studies</a>
             <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">News</a>
