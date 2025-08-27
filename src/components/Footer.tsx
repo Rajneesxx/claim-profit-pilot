@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
               height="25" 
               viewBox="0 0 25 25" 
               fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.rapidclaims.ai/get-in-touch"
               className="w-6 h-6"
             >
               <path 
