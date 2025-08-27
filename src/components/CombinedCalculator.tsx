@@ -456,17 +456,35 @@ const CombinedCalculator = ({
           {/* Left Panel - Calculations */}
           <div className="space-y-6">
             {/* Introduction Text Block */}
-            <div className="text-center space-y-2 mb-8">
-              <h2 className="text-lg font-bold text-gray-900">
-                Replace guesswork with real insights.
-              </h2>
-              <p className="text-base text-purple-700 flex items-center justify-center gap-2">
-                📊 RapidROI by RapidClaims
-              </p>
-              <p className="text-sm text-gray-600 italic">
-                Presenting RapidROI, your no-cost, enterprise-grade RevOps Agent.
-              </p>
-            </div>
+           <div className="text-left mb-8 space-y-2">
+  <p className="text-lg text-purple-600 font-normal">
+    Replace guesswork with real insights.
+  </p>
+  <h2 className="text-3xl font-bold flex items-center gap-3 text-gray-800">
+    {/* Calculator Icon SVG */}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-8 h-8"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" />
+      <circle cx="8" cy="8" r="1" fill="currentColor" />
+      <circle cx="12" cy="8" r="1" fill="currentColor" />
+      <circle cx="16" cy="8" r="1" fill="currentColor" />
+      <circle cx="8" cy="12" r="1" fill="currentColor" />
+      <circle cx="12" cy="12" r="1" fill="currentColor" />
+      <circle cx="16" cy="12" r="1" fill="currentColor" />
+      <rect x="7" y="16" width="10" height="2" rx="1" fill="currentColor" />
+    </svg>
+    RapidROI by RapidClaims
+  </h2>
+  <p className="text-base text-gray-700 mt-2">
+    Presenting RapidROI, your no-cost, enterprise-grade RevOps Agent.
+  </p>
+</div>
 
             <div>
               <div className="mb-6">
