@@ -27,9 +27,9 @@ export const Footer: React.FC = () => {
         <p>For every 500 beds.</p>
         <p>Revenue uplift. Simplified</p>
       </div>
-      <button className="w-44 h-12 bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8] flex items-center justify-center">
+      <a href="https://www.rapidclaims.ai/get-in-touch" className="w-44 h-12 bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8] flex items-center justify-center">
         <span className="text-white text-base font-semibold">Book a Demo</span>
-      </button>
+      </a>
     </div>
   </div>
 
@@ -158,13 +158,13 @@ export const Footer: React.FC = () => {
               <h4 className="text-[#A6A6A6] text-xs font-bold uppercase tracking-[-0.45px]">
                 PRODUCTS
               </h4>
-              <a href="#" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
+              <a href="https://www.rapidclaims.ai/products/rapid-code" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
                 RapidCode
               </a>
-              <a href="#" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
-                RapidAudit
+              <a href="https://www.rapidclaims.ai/products/rapid-scrub" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
+                Rapid Scrub
               </a>
-              <a href="#" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
+              <a href="https://www.rapidclaims.ai/products/rapid-cdi" className="text-white text-[11px] font-normal cursor-pointer transition-[color] duration-[0.2s] ease-[ease] hover:text-gray-300">
                 RapidCDI
               </a>
             </nav>
