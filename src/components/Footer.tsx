@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -10,103 +11,174 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#01101F] w-full">
-  <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-12">
-
-    {/* Top Row: Logo + Nav + Newsletter */}
-    <div className="flex flex-col md:flex-row gap-10 md:gap-20 text-white">
-
-      {/* RapidClaims Logo */}
-      <div className="flex-shrink-0 mb-6 md:mb-0">
-        <img 
-          src="/path_to_uploaded_logo/RC-horizontal-2.jpg" 
-          alt="RapidClaims Logo" 
-          className="w-[160px] h-auto"
-        />
+    <footer className="bg-[#01101F] w-full relative overflow-hidden">
+      {/* Radiating lines background pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            white 2px,
+            white 3px
+          ), repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 2px,
+            white 2px,
+            white 3px
+          )`
+        }} />
       </div>
+      
+      <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-16 relative z-10">
+        {/* Top Section: Logo + Main Headline + CTAs */}
+        <div className="flex flex-col lg:flex-row items-start gap-12 mb-16">
+          {/* Left: Logo */}
+          <div className="flex-shrink-0">
+            <img 
+              src="/src/assets/rapidclaims-logo.png" 
+              alt="RapidClaims Logo" 
+              className="w-[160px] h-auto"
+            />
+          </div>
 
-      {/* Navigation */}
-      <div className="flex flex-1 flex-wrap gap-10 md:gap-20">
+          {/* Center: Main Headline */}
+          <div className="flex-1 text-center lg:text-left">
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4 leading-tight">
+              Transform Your Revenue Cycle in 30 Days or Less
+            </h2>
+            <p className="text-gray-300 text-lg">
+              Join leading healthcare organizations already seeing results with RapidClaims.
+            </p>
+          </div>
 
-        {/* Products */}
-        <nav className="flex flex-col gap-4 min-w-[140px] uppercase">
-          <h4 className="text-[#A6A6A6] text-xs font-bold tracking-wide">PRODUCTS</h4>
-          <a href="https://www.rapidclaims.ai/products/rapid-code" className="text-white text-[12px] hover:text-gray-300 transition">RapidCode</a>
-          <a href="https://www.rapidclaims.ai/products/rapid-scrub" className="text-white text-[12px] hover:text-gray-300 transition">Rapid Scrub</a>
-          <a href="https://www.rapidclaims.ai/products/rapid-cdi" className="text-white text-[12px] hover:text-gray-300 transition">RapidCDI</a>
-        </nav>
+          {/* Right: CTA Links */}
+          <div className="flex flex-col gap-4 min-w-[280px]">
+            <a href="#" className="flex items-center justify-between p-4 border-b border-gray-600 text-white hover:text-gray-300 transition group">
+              <span className="text-lg">Request ROI Analysis</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a href="#" className="flex items-center justify-between p-4 border-b border-gray-600 text-white hover:text-gray-300 transition group">
+              <span className="text-lg">Calculate your savings</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a href="#" className="flex items-center justify-between p-4 text-white hover:text-gray-300 transition group">
+              <span className="text-lg">Schedule a demo</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </div>
+        </div>
 
-        {/* Solutions */}
-        <nav className="flex flex-col gap-4 min-w-[140px] uppercase">
-          <h4 className="text-[#A6A6A6] text-xs font-bold tracking-wide">SOLUTIONS</h4>
-          <a href="https://www.rapidclaims.ai/solutions" className="text-white text-[12px] hover:text-gray-300 transition">Types of Outcomes</a>
-          <a href="https://www.rapidclaims.ai/solutions" className="text-white text-[12px] hover:text-gray-300 transition">Types of Organizations</a>
-          <a href="https://www.rapidclaims.ai/solutions" className="text-white text-[12px] hover:text-gray-300 transition">Types of Use Cases</a>
-        </nav>
+        {/* Main Grid Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-12">
+          {/* Logo (repeated) */}
+          <div>
+            <img 
+              src="/src/assets/rapidclaims-logo.png" 
+              alt="RapidClaims Logo" 
+              className="w-[140px] h-auto mb-8"
+            />
+          </div>
 
-        {/* Resources */}
-        <nav className="flex flex-col gap-4 min-w-[140px] uppercase">
-          <h4 className="text-[#A6A6A6] text-xs font-bold tracking-wide">RESOURCES</h4>
-          <a href="https://www.rapidclaims.ai/resources/blogs" className="text-white text-[12px] hover:text-gray-300 transition">Blog</a>
-          <a href="https://www.rapidclaims.ai/resources/blogs" className="text-white text-[12px] hover:text-gray-300 transition">Case Studies</a>
-          <a href="https://www.rapidclaims.ai/resources/blogs" className="text-white text-[12px] hover:text-gray-300 transition">News</a>
-        </nav>
-      </div>
+          {/* Products */}
+          <nav className="flex flex-col gap-4">
+            <h4 className="text-white text-sm font-bold tracking-wide uppercase mb-2">PRODUCTS</h4>
+            <a href="https://www.rapidclaims.ai/products/rapid-code" className="text-gray-300 text-sm hover:text-white transition">RapidCode</a>
+            <a href="https://www.rapidclaims.ai/products/rapid-scrub" className="text-gray-300 text-sm hover:text-white transition">RapidScrub</a>
+            <a href="https://www.rapidclaims.ai/products/rapid-cdi" className="text-gray-300 text-sm hover:text-white transition">RapidCDI</a>
+          </nav>
 
-      {/* Newsletter Signup */}
-      <div className="flex-1 max-w-sm">
-        <h4 className="text-white text-lg font-semibold mb-3">
-          Sign up for our newsletter
-        </h4>
-        <p className="text-[#A6A6A6] text-sm mb-5 leading-relaxed">
-          Stay up to date with roadmap progress, announcements, and exclusive discounts.
-        </p>
-        <form onSubmit={handleSubmit} className="flex gap-3">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 h-11 border border-gray-700 text-white text-sm px-4 py-0 rounded-md bg-transparent placeholder-gray-400"
-            required
-          />
-          <button
-            type="submit"
-            className="h-11 bg-[#7828C8] hover:bg-[#6a1fb8] rounded-md px-5 py-0 text-white font-semibold transition"
-          >
-            Subscribe
-          </button>
-        </form>
-      </div>
-    </div>
+          {/* Solutions */}
+          <nav className="flex flex-col gap-4">
+            <h4 className="text-white text-sm font-bold tracking-wide uppercase mb-2">SOLUTIONS</h4>
+            <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of customers</a>
+            <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of roles</a>
+            <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of use cases</a>
+          </nav>
 
-    {/* Bottom Row - Address & Recognized By */}
-    <div className="flex flex-col md:flex-row items-center justify-between border-t border-gray-700 mt-12 pt-6 gap-6 md:gap-0 text-center md:text-left text-[#A6A6A6] text-xs">
-      <address className="not-italic">
-        100 Church Street Manhattan, New York 10007
-      </address>
+          {/* Resources */}
+          <nav className="flex flex-col gap-4">
+            <h4 className="text-white text-sm font-bold tracking-wide uppercase mb-2">RESOURCES</h4>
+            <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">Blogs</a>
+            <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">Case Studies</a>
+            <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">News</a>
+          </nav>
+        </div>
 
-      {/* Recognized by logos */}
-      <div>
-        <div className="text-xs font-bold uppercase mb-2">RECOGNIZED BY</div>
-        <div className="flex gap-2 justify-center md:justify-start">
-          <div className="w-8 h-8 rounded bg-gray-700" />
-          <div className="w-8 h-8 rounded bg-gray-700" />
+        {/* Newsletter and Recognition Section */}
+        <div className="flex flex-col lg:flex-row gap-12 mb-12">
+          {/* Left side - empty space or additional content */}
+          <div className="flex-1"></div>
+
+          {/* Right side - Newsletter and Recognition */}
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
+            {/* Recognized By */}
+            <div className="text-center lg:text-left">
+              <div className="text-gray-400 text-xs font-bold uppercase tracking-wide mb-4">RECOGNISED BY :</div>
+              <div className="flex gap-4 justify-center lg:justify-start">
+                <div className="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center">
+                  <span className="text-black text-xs font-bold">BADGE</span>
+                </div>
+                <div className="w-12 h-12 rounded bg-blue-600 flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">CERT</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Newsletter Signup */}
+            <div className="min-w-[300px]">
+              <h4 className="text-white text-lg font-semibold mb-3">
+                Sign up for our newsletter
+              </h4>
+              <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
+                <input
+                  type="email"
+                  placeholder="Enter email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 h-11 border border-gray-600 text-white text-sm px-4 rounded-md bg-transparent placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="h-11 bg-red-600 hover:bg-red-700 rounded-md px-4 text-white font-semibold transition flex items-center"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+              <div className="text-gray-400 text-sm">
+                <div className="font-semibold mb-1">Address</div>
+                <div>605W, 42nd Street, Manhattan, New York 10036</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="flex flex-col md:flex-row items-center justify-between border-t border-gray-700 pt-6 gap-4 text-gray-400 text-sm">
+          {/* Left: Email and Copyright */}
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+            <div>Email sales@rapidclaims.ai</div>
+            <div>© 2025 RapidClaims. All rights reserved.</div>
+          </div>
+
+          {/* Center: Legal Links */}
+          <nav className="flex gap-6">
+            <a href="#" className="hover:text-white transition">Terms of Service</a>
+            <a href="#" className="hover:text-white transition">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition">Cookie Policy</a>
+          </nav>
+
+          {/* Right: Social Links */}
+          <div className="flex gap-4">
+            <a href="#" className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center hover:bg-gray-600 transition">
+              <span className="text-white text-xs font-bold">in</span>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-
-    {/* Bottom copyright */}
-    <div className="flex flex-col md:flex-row items-center justify-between border-t border-gray-700 mt-8 pt-4 text-gray-500 text-xs gap-4 md:gap-0">
-      <div>© 2024 RapidClaims. All rights reserved.</div>
-      <nav className="flex gap-6 justify-center md:justify-end">
-        <a href="#" className="hover:text-gray-300">Terms of Service</a>
-        <a href="#" className="hover:text-gray-300">Privacy Policy</a>
-        <a href="#" className="hover:text-gray-300">Contact Info</a>
-      </nav>
-    </div>
-  </div>
-</footer>
+    </footer>
 
  );
 };
