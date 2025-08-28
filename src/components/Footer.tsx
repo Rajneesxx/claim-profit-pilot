@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-   <footer className="bg-[#01101F] w-screen relative overflow-hidden m-0 pt-0 mt-0 left-0 right-0">
+   <footer>
      <section class="section_home_roi">
         <div class="padding_global">
           <div class="main_container">
