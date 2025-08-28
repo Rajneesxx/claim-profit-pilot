@@ -18,6 +18,7 @@ import { ProductDescription } from "./ProductDescription";
 import { MetricsExpandedView } from "./MetricsExpandedView";
 import { TooltipInfo } from "./TooltipInfo";
 import { formatCurrency, formatNumber } from "@/utils/formatters";
+import { sendSlackMessage, buildSignInBlocks } from "@/utils/slack";
 import { FAQ } from "./FAQ";
 import { Footer } from "./Footer";
 
@@ -335,18 +336,30 @@ const CombinedCalculator = ({
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
   };
 
-  const handleSignInSubmit = () => {
-    if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
-      setIsSignedIn(true);
-      sessionStorage.setItem('rapidclaims_signed_in', 'true');
-      sessionStorage.setItem('rapidclaims_user_email', userEmail);
-      setShowSignInDialog(false);
-      toast({
-        title: "Welcome!",
-        description: "You now have full access to the ROI calculator.",
+const handleSignInSubmit = () => {
+  if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+    setIsSignedIn(true);
+    sessionStorage.setItem('rapidclaims_signed_in', 'true');
+    sessionStorage.setItem('rapidclaims_user_email', userEmail);
+    setShowSignInDialog(false);
+    toast({
+      title: "Welcome!",
+      description: "You now have full access to the ROI calculator.",
+    });
+
+    // Send Slack notification (frontend-only). Configure your webhook URL via:
+    // localStorage.setItem('slack_webhook_url', 'https://hooks.slack.com/services/XXX/YYY/ZZZ')
+    const ts = new Date();
+    const text = `User Signed In: ${userEmail} at ${ts.toISOString()}`;
+    sendSlackMessage(text, buildSignInBlocks(userEmail, ts.toLocaleString()))
+      .then((res) => {
+        console.info('Slack notification result:', res);
+      })
+      .catch((err) => {
+        console.error('Slack notification error:', err);
       });
-    }
-  };
+  }
+};
 
   const handleROIEmailSubmit = () => {
     console.log('=== handleROIEmailSubmit CALLED ===');
