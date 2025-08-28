@@ -918,28 +918,30 @@ const CombinedCalculator = ({
       </div>
       
       {/* References Footer Section - Full Width */}
-      <div className="w-full bg-background py-16">
-        <div className="max-w-4xl mx-auto text-center px-6">
-          <h2 className="text-3xl font-normal text-foreground mb-8">
-            Explore the verified sources behind these projections
-          </h2>
-          
-          <div className="mb-6">
-            <Button 
-              variant="outline" 
-              onClick={() => setShowReferencesModal(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 text-lg font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-            >
-              <ExternalLink className="h-5 w-5" />
-              References
-            </Button>
-          </div>
-          
-          <p className="text-purple-600 text-sm font-medium max-w-2xl mx-auto">
-            All estimates are projections based on your inputs and past customer outcomes. Actual results vary and are not guaranteed.
-          </p>
-        </div>
-      </div>
+<div className="w-full bg-background py-16">
+  <div className="max-w-[1240px] mx-auto flex flex-col items-center text-center px-6">
+    <h2 className="text-3xl font-normal text-foreground mb-8">
+      Explore the verified sources behind these projections
+    </h2>
+
+    <div className="mb-6">
+      <Button
+        variant="outline"
+        onClick={() => setShowReferencesModal(true)}
+        className="inline-flex items-center gap-2 px-6 py-3 text-lg font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+      >
+        <ExternalLink className="h-5 w-5" />
+        References
+      </Button>
+    </div>
+
+    <p className="text-purple-600 text-sm font-medium max-w-2xl">
+      All estimates are projections based on your inputs and past customer outcomes. 
+      Actual results vary and are not guaranteed.
+    </p>
+  </div>
+</div>
+
 
       {/* FAQ Section - Full Width */}
       <div className="w-full">
