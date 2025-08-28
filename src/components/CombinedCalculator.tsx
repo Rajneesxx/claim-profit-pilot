@@ -159,8 +159,19 @@ const CombinedCalculator = ({
   });
   const [showSignInDialog, setShowSignInDialog] = useState(false);
   const [showPDFPreview, setShowPDFPreview] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState(() => {
+    return sessionStorage.getItem('rapidclaims_user_email') || '';
+  });
   const { toast } = useToast();
+
+  // Debug effect to track authentication state
+  useEffect(() => {
+    console.log('=== AUTH STATE CHANGE ===');
+    console.log('isSignedIn:', isSignedIn);
+    console.log('userEmail:', userEmail);
+    console.log('sessionStorage signed_in:', sessionStorage.getItem('rapidclaims_signed_in'));
+    console.log('sessionStorage user_email:', sessionStorage.getItem('rapidclaims_user_email'));
+  }, [isSignedIn, userEmail]);
 
   // Only disable Executive Summary content for non-signed in users
   const isExecutiveSummaryBlurred = !isSignedIn;
