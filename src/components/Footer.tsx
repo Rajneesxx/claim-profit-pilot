@@ -11,28 +11,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#01101F] w-screen relative overflow-hidden">
-      {/* Radiating lines background pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 2px,
-            white 2px,
-            white 3px
-          ), repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 2px,
-            white 2px,
-            white 3px
-          )`
-        }} />
-      </div>
-      
-        <div className="w-full px-6 md:px-12 pb-16 relative z-10">
-
+    <footer className="bg-[#01101F] w-screen relative overflow-hidden m-0">
         {/* Top Section: Logo + Main Headline + CTAs */}
         <div className="flex flex-col lg:flex-row items-start gap-12 mb-16">
           {/* Left: Logo */}
