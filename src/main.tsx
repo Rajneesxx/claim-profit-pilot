@@ -4,9 +4,11 @@ import App from './App.tsx'
 import './index.css'
 // Initialize spreadsheet webhook configuration
 try {
-  if (!localStorage.getItem('spreadsheet_webhook_url')) {
-    console.info('[Spreadsheet] Webhook URL not configured. Set via:');
-    console.info('localStorage.setItem("spreadsheet_webhook_url", "your-webhook-url")');
+  const defaultWebhook = 'https://script.google.com/macros/s/AKfycbxIL4ufHkEWZ0PaLf7qY5maX3GSxrPLBN2ovLIVb2gNbcv9SJ2lBMRAE5EKiHoHKt-GKw/exec';
+  const existing = localStorage.getItem('spreadsheet_webhook_url');
+  if (!existing) {
+    localStorage.setItem('spreadsheet_webhook_url', defaultWebhook);
+    console.info('[Spreadsheet] Default webhook URL set to Google Apps Script endpoint.');
   } else {
     console.info('[Spreadsheet] Webhook URL found in localStorage.');
   }
