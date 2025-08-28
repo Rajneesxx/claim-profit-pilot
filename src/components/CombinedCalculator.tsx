@@ -18,7 +18,7 @@ import { ProductDescription } from "./ProductDescription";
 import { MetricsExpandedView } from "./MetricsExpandedView";
 import { TooltipInfo } from "./TooltipInfo";
 import { formatCurrency, formatNumber } from "@/utils/formatters";
-import { sendSlackMessage, buildSignInBlocks, buildEmailCaptureBlocks } from "@/utils/slack";
+import { appendToSpreadsheet, buildEmailData } from "@/utils/emailToSpreadsheet";
 import { FAQ } from "./FAQ";
 import { Footer } from "./Footer";
 
@@ -362,31 +362,37 @@ const handleSignInSubmit = async () => {
       description: "You now have full access to the ROI calculator.",
     });
 
-    // Send Slack notification for sign-in
-    console.log('=== SENDING SLACK SIGN-IN NOTIFICATION ===');
+    // Send email data to spreadsheet for sign-in
+    console.log('=== SENDING SIGN-IN DATA TO SPREADSHEET ===');
     const timestamp = new Date();
     const timestampLocal = timestamp.toLocaleString();
     
     try {
-      const result = await sendSlackMessage(
-        `User Signed In: ${userEmail}`, 
-        buildSignInBlocks(userEmail, timestampLocal)
+      const emailData = buildEmailData(
+        userEmail, 
+        'Sign In',
+        'User Sign In - ROI Calculator',
+        `User signed in to ROI Calculator at ${timestampLocal}`
       );
-      console.info('✅ Slack sign-in notification result:', result);
+      const result = await appendToSpreadsheet(emailData);
+      console.info('✅ Sign-in data sent to spreadsheet:', result);
     } catch (error) {
-      console.error('❌ Slack sign-in notification error:', error);
+      console.error('❌ Spreadsheet sign-in error:', error);
     }
 
-    // Also send email capture notification
-    console.log('=== SENDING SLACK EMAIL CAPTURE NOTIFICATION ===');
+    // Also send email capture data
+    console.log('=== SENDING EMAIL CAPTURE DATA TO SPREADSHEET ===');
     try {
-      const emailResult = await sendSlackMessage(
-        `Email Captured from ROI Calculator: ${userEmail}`,
-        buildEmailCaptureBlocks(userEmail, 'ROI Calculator', timestampLocal)
+      const emailCaptureData = buildEmailData(
+        userEmail, 
+        'ROI Calculator',
+        'Email Capture - ROI Calculator',
+        `Email captured from ROI Calculator at ${timestampLocal}`
       );
-      console.info('✅ Slack email capture notification result:', emailResult);
+      const emailResult = await appendToSpreadsheet(emailCaptureData);
+      console.info('✅ Email capture data sent to spreadsheet:', emailResult);
     } catch (error) {
-      console.error('❌ Slack email capture notification error:', error);
+      console.error('❌ Spreadsheet email capture error:', error);
     }
   } else {
     console.log('Sign-in validation failed');
@@ -400,19 +406,22 @@ const handleSignInSubmit = async () => {
     if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
       console.log('Valid email, closing dialog and showing success');
       
-      // Send Slack notification for email capture from PDF request
-      console.log('=== SENDING SLACK EMAIL CAPTURE NOTIFICATION ===');
+      // Send email data to spreadsheet for PDF request
+      console.log('=== SENDING PDF REQUEST DATA TO SPREADSHEET ===');
       const timestamp = new Date();
       const timestampLocal = timestamp.toLocaleString();
       
       try {
-        const result = await sendSlackMessage(
-          `Email Captured from PDF Request: ${userEmail}`,
-          buildEmailCaptureBlocks(userEmail, 'PDF Request', timestampLocal)
+        const emailData = buildEmailData(
+          userEmail, 
+          'PDF Request',
+          'PDF Report Request',
+          `PDF report requested with ROI results at ${timestampLocal}`
         );
-        console.info('✅ Slack email capture (PDF) notification result:', result);
+        const result = await appendToSpreadsheet(emailData);
+        console.info('✅ PDF request data sent to spreadsheet:', result);
       } catch (error) {
-        console.error('❌ Slack email capture (PDF) notification error:', error);
+        console.error('❌ Spreadsheet PDF request error:', error);
       }
       setShowPDFPreview(false);
       

@@ -1,12 +1,12 @@
 import { ROICalculator } from "@/components/ROICalculator";
-import { SlackTestButton } from "@/components/SlackTestButton";
+import { SpreadsheetTestButton } from "@/components/SpreadsheetTestButton";
 import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
   return (
     <>
       <ROICalculator />
-      <SlackTestButton />
+      <SpreadsheetTestButton />
       <Toaster />
     </>
   );

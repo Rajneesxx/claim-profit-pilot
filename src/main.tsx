@@ -2,27 +2,16 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { getSlackBotToken, setSlackChannel } from './utils/slack';
-
-// Initialize Slack bot configuration in localStorage for frontend usage
+// Initialize spreadsheet webhook configuration
 try {
-  const botToken = getSlackBotToken();
-  
-  if (!botToken) {
-    console.info('[Slack] Bot token not configured. Set via:');
-    console.info('localStorage.setItem("slack_bot_token", "xoxb-your-bot-token")');
-    console.info('localStorage.setItem("slack_channel", "#your-channel")');
+  if (!localStorage.getItem('spreadsheet_webhook_url')) {
+    console.info('[Spreadsheet] Webhook URL not configured. Set via:');
+    console.info('localStorage.setItem("spreadsheet_webhook_url", "your-webhook-url")');
   } else {
-    console.info('[Slack] Bot token found in localStorage.');
-  }
-  
-  // Set default channel if not configured
-  if (!localStorage.getItem('slack_channel')) {
-    setSlackChannel('#general');
-    console.info('[Slack] Default channel set to #general.');
+    console.info('[Spreadsheet] Webhook URL found in localStorage.');
   }
 } catch (e) {
-  console.warn('[Slack] Unable to access localStorage to configure bot settings.', e);
+  console.warn('[Spreadsheet] Unable to access localStorage to configure webhook settings.', e);
 }
 
 createRoot(document.getElementById("root")!).render(

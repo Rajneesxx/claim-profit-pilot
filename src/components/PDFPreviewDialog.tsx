@@ -7,7 +7,7 @@ import { Download, Mail, FileText, CheckCircle, AlertCircle, Loader2, Eye } from
 import { generatePDFReport, generatePDFBlob } from "@/utils/pdfExport";
 import { ROIMetrics } from '@/types/roi';
 import { useToast } from "@/hooks/use-toast";
-import { sendSlackMessage, buildEmailCaptureBlocks } from "@/utils/slack";
+import { appendToSpreadsheet, buildEmailData } from "@/utils/emailToSpreadsheet";
 interface PDFPreviewDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -134,14 +134,16 @@ export const PDFPreviewDialog = ({
           description: `PDF downloaded automatically. Email ${emailAddress} has been captured for follow-up.`,
         });
 
-        // Slack: notify PDF email capture
-        const ts = new Date();
-        sendSlackMessage(
-          `PDF Report requested by ${emailAddress} at ${ts.toISOString()}`,
-          buildEmailCaptureBlocks(emailAddress, 'PDF Request', ts.toLocaleString())
-        )
-          .then((res) => console.info('Slack PDF-email result:', res))
-          .catch((err) => console.error('Slack PDF-email error:', err));
+        // Send email data to spreadsheet for PDF email capture
+        const emailData = buildEmailData(
+          emailAddress, 
+          'PDF Request',
+          'PDF Email Capture',
+          `PDF requested via email: ${emailAddress}`
+        );
+        appendToSpreadsheet(emailData)
+          .then((res) => console.info('Spreadsheet PDF-email result:', res))
+          .catch((err) => console.error('Spreadsheet PDF-email error:', err));
       };
       
       reader.readAsDataURL(pdfBlob);
