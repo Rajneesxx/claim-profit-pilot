@@ -337,6 +337,10 @@ const CombinedCalculator = ({
   };
 
 const handleSignInSubmit = () => {
+  console.log('=== SIGN IN SUBMIT CALLED ===');
+  console.log('userEmail:', userEmail);
+  console.log('Email valid:', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail));
+  
   if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
     setIsSignedIn(true);
     sessionStorage.setItem('rapidclaims_signed_in', 'true');
@@ -347,17 +351,22 @@ const handleSignInSubmit = () => {
       description: "You now have full access to the ROI calculator.",
     });
 
-    // Send Slack notification. Webhook auto-configured in main.tsx; override with:
-    // localStorage.setItem('slack_webhook_url', 'https://hooks.slack.com/services/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')
+    // Send Slack notification with debugging
+    console.log('=== SENDING SLACK NOTIFICATION ===');
     const ts = new Date();
     const text = `User Signed In: ${userEmail} at ${ts.toISOString()}`;
+    console.log('Slack message text:', text);
+    console.log('Slack webhook URL:', localStorage.getItem('slack_webhook_url'));
+    
     sendSlackMessage(text, buildSignInBlocks(userEmail, ts.toLocaleString()))
       .then((res) => {
-        console.info('Slack notification result:', res);
+        console.info('✅ Slack notification SUCCESS:', res);
       })
       .catch((err) => {
-        console.error('Slack notification error:', err);
+        console.error('❌ Slack notification ERROR:', err);
       });
+  } else {
+    console.log('Sign-in validation failed');
   }
 };
 
