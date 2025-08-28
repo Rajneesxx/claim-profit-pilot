@@ -12,6 +12,8 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-[#01101F] w-screen relative overflow-hidden m-0">
+      <div className="w-full px-6 md:px-12 pb-16 relative z-10">
+
         {/* Top Section: Logo + Main Headline + CTAs */}
         <div className="flex flex-col lg:flex-row items-start gap-12 mb-16">
           {/* Left: Logo */}
@@ -155,9 +157,7 @@ export const Footer: React.FC = () => {
               <span className="text-white text-xs font-bold">in</span>
             </a>
           </div>
-        </div>
       </div>
     </footer>
-
  );
 };
