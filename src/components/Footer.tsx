@@ -37,8 +37,8 @@ export const Footer: React.FC = () => {
           {/* Left: Logo */}
           <div className="flex-shrink-0">
             <img 
-              src="/src/assets/rapidclaims-logo.png" 
-              alt="RapidClaims Logo" 
+              src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png" 
+              alt="Company Logo" 
               className="w-[160px] h-auto"
             />
           </div>
@@ -75,8 +75,8 @@ export const Footer: React.FC = () => {
           {/* Logo (repeated) */}
           <div className="flex justify-center lg:justify-start">
             <img 
-              src="/src/assets/rapidclaims-logo.png" 
-              alt="RapidClaims Logo" 
+              src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png" 
+              alt="Company Logo" 
               className="w-[140px] h-auto"
             />
           </div>
