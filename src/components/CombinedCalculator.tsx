@@ -817,7 +817,7 @@ const CombinedCalculator = ({
                       Sign In to Access Full Features
                     </Button>
                     <p className="text-xs text-gray-500 mt-3">
-                      Free access • No payment required
+                     * Free access *
                     </p>
                   </div>
                 </div>
