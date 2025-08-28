@@ -183,7 +183,10 @@ const CombinedCalculator = ({
     physicianTimeSaved: 'medium',
     technologyCostSaved: 'medium',
     claimDenialReduction: 'medium',
-    codingBacklogElimination: 'medium'
+    codingBacklogElimination: 'medium',
+    rvuIncreaseEM: 'medium',
+    overCodingReduction: 'medium',
+    underCodingReduction: 'medium'
   });
 
  const leverImpacts = {
@@ -192,7 +195,10 @@ const CombinedCalculator = ({
     physicianTimeSaved: { low: 0.05, medium: 0.1, high: 0.15 }, // Added meaningful values
     technologyCostSaved: { low: 1.0, medium: 1.0, high: 1.0 },
     claimDenialReduction: { low: 0.3, medium: 0.5, high: 0.7 },
-    codingBacklogElimination: { low: 0.08, medium: 0.04, high: 0 }
+    codingBacklogElimination: { low: 0.08, medium: 0.04, high: 0 },
+    rvuIncreaseEM: { low: 0.001, medium: 0.005, high: 0.015 }, // 0.1%, 0.5%, 1.5%
+    overCodingReduction: { low: 0.5, medium: 0.8, high: 1.0 }, // 50%, 80%, 100%
+    underCodingReduction: { low: 0.5, medium: 0.8, high: 1.0 } // 50%, 80%, 100%
   };
   
   const calculateLeverImpact = (leverKey: keyof typeof leverImpacts, baseValue: number) => {
@@ -255,20 +261,16 @@ const CombinedCalculator = ({
     return chartsPerAnnum * avgChartValue * codingBacklogPercent * avgBacklogDays * reductionRate * (costOfCapital / 360) *0.2;
 })();
 
-  // Revenue increase from RVU optimization - using actual RVU data
+  // Revenue increase from RVU optimization - using actual RVU data and new lever
   const rvuIncrease = (() => {
     // 2024 Medicare conversion factor
     const conversionFactor = 32.7442;
-
-    // Revenue scale based on organization size
-    const revenueScale = Math.sqrt(metrics.revenueClaimed / 1000000);
-    const cappedRevenueScale = Math.min(revenueScale, 1.2);
 
     // Number of RVUs billed × % increment in RVUs × Wt. Avg GPCI × Conversion
 
     // 1. Define the components
     const numberOfRVUsBilled = metrics.rvusCodedPerAnnum;           // Number of RVUs billed
-    const percentIncrementInRVUs = 0.015;                          // % increment in RVUs (1.5%)
+    const percentIncrementInRVUs = leverImpacts.rvuIncreaseEM[leverLevels.rvuIncreaseEM as 'low' | 'medium' | 'high']; // Use lever value
     const weightedAverageGPCI = metrics.weightedAverageGPCI;        // Wt. Avg GPCI
 
     // 2. Calculate RVU Revenue Increase using the formula
@@ -283,16 +285,31 @@ const CombinedCalculator = ({
     return totalIncrease;
   })();
 
-  // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
+  // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data and new levers
   // Overcoding risk reduction using NCCI edits
   const overCodingReduction = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
     const percentOverCodedCharts = metrics.percentOverCodedCharts; // Should be decimal (e.g., 0.05 for 5%)
     const percentReductionNCCI = metrics.percentReductionNCCI; // Should be decimal (e.g., 0.67 for 67%)
     const complianceCostPerCode = metrics.complianceCostPerCode; // Cost per overcoded chart
+    const leverMultiplier = leverImpacts.overCodingReduction[leverLevels.overCodingReduction as 'low' | 'medium' | 'high'];
 
-    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode;
-    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, result });
+    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode * leverMultiplier;
+    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, leverMultiplier, result });
+    return result;
+  })();
+
+  // Under coding reduction (additional revenue capture)
+  const underCodingReduction = (() => {
+    const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
+    const percentUnderCodedCharts = metrics.underCodingPercent / 100; // Convert percentage to decimal
+    const avgRevenuePerChart = metrics.revenueClaimed / chartsPerAnnum;
+    const leverMultiplier = leverImpacts.underCodingReduction[leverLevels.underCodingReduction as 'low' | 'medium' | 'high'];
+    
+    // Assume under coding results in ~10% revenue loss per affected chart
+    const revenueRecaptureRate = 0.1;
+    const result = chartsPerAnnum * percentUnderCodedCharts * avgRevenuePerChart * revenueRecaptureRate * leverMultiplier;
+    
     return result;
   })();
   // Total calculations with capping to prevent savings exceeding revenue
@@ -301,7 +318,7 @@ const CombinedCalculator = ({
     technologyCostSavings + claimDenialSavings + ARdays,
     metrics.revenueClaimed * 0.65 // Cap at 65% of revenue
   );
-  const totalRevenueIncrease = rvuIncrease;
+  const totalRevenueIncrease = rvuIncrease + underCodingReduction;
   const totalRiskReduction = overCodingReduction;
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
   
@@ -782,6 +799,82 @@ const CombinedCalculator = ({
                           </div>
                         </CardContent>
                       </Card>
+                    </div>
+
+                    {/* Advanced Impact Levers Section */}
+                    <div className="mt-8 space-y-4">
+                      <h4 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+                        Advanced Impact Levers
+                      </h4>
+                      
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-lg">Revenue Enhancement</CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            <div className="space-y-2">
+                              <Label className="text-sm font-medium">Increase in RVUs</Label>
+                              <Select value={leverLevels.rvuIncreaseEM} onValueChange={(value) => handleLeverLevelChange('rvuIncreaseEM', value)}>
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="low">Low (0.1% improvement)</SelectItem>
+                                  <SelectItem value="medium">Medium (0.5% improvement)</SelectItem>
+                                  <SelectItem value="high">High (1.5% improvement)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <div className="text-xs text-muted-foreground space-y-1">
+                                <p><strong>Case 1:</strong> Nephrology center identifies incremental opportunity with &gt; 95% of level 3s to be identified as level 4s</p>
+                                <p><strong>Features:</strong> E&M scoring module</p>
+                              </div>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label className="text-sm font-medium">% charts with under coding issues</Label>
+                              <Select value={leverLevels.underCodingReduction} onValueChange={(value) => handleLeverLevelChange('underCodingReduction', value)}>
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="low">Low (50% improvement)</SelectItem>
+                                  <SelectItem value="medium">Medium (80% improvement)</SelectItem>
+                                  <SelectItem value="high">High (100% improvement)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <div className="text-xs text-muted-foreground space-y-1">
+                                <p><strong>Features:</strong> Under coding scan</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-lg">Compliance & Risk</CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            <div className="space-y-2">
+                              <Label className="text-sm font-medium">% charts with over coding issues</Label>
+                              <Select value={leverLevels.overCodingReduction} onValueChange={(value) => handleLeverLevelChange('overCodingReduction', value)}>
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="low">Low (50% improvement)</SelectItem>
+                                  <SelectItem value="medium">Medium (80% improvement)</SelectItem>
+                                  <SelectItem value="high">High (100% improvement)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <div className="text-xs text-muted-foreground space-y-1">
+                                <p><strong>Case 1:</strong> Primary care center identified and reduced overcoding and undercoding issues by 70%</p>
+                                <p><strong>Features:</strong> Over coding check</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
                     </div>
                   </CollapsibleContent>
                 </Collapsible>
