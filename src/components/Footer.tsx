@@ -117,12 +117,11 @@ export const Footer: React.FC = () => {
             <div className="text-center lg:text-left">
               <div className="text-gray-400 text-xs font-bold uppercase tracking-wide mb-4">RECOGNISED BY :</div>
               <div className="flex gap-4 justify-center lg:justify-start">
-                <div className="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center">
-                  <span className="text-black text-xs font-bold">BADGE</span>
-                </div>
-                <div className="w-12 h-12 rounded bg-blue-600 flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">CERT</span>
-                </div>
+                <img 
+                  src="/lovable-uploads/08acfdc3-be82-42d9-933b-c43aa8105f8c.png" 
+                  alt="Recognition badges" 
+                  className="h-12 w-auto"
+                />
               </div>
             </div>
 
