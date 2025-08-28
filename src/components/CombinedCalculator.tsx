@@ -969,7 +969,7 @@ const CombinedCalculator = ({
       </div>
 
       {/* Footer Section - Dark Background Matching Reference */}
-      <div className="w-full bg-slate-900 pt-[300px] md:pt-[350px] relative z-10">
+      <div className="w-full bg-slate-900 relative z-10">
         <Footer />
       </div>
 
