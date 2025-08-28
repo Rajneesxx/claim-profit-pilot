@@ -970,10 +970,11 @@ const CombinedCalculator = ({
 
       {/* Footer Section - Dark Background Matching Reference */}
      <div className="w-full bg-slate-900 relative z-10">
-  <div className="max-w-[1240px] mx-auto px-6 md:px-12">
+  <div className="max-w-[1240px] mx-auto w-full px-0 md:px-6">
     <Footer />
   </div>
 </div>
+
       {/* References Modal */}
       <Dialog open={showReferencesModal} onOpenChange={setShowReferencesModal}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
