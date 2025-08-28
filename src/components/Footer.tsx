@@ -31,7 +31,8 @@ export const Footer: React.FC = () => {
         }} />
       </div>
       
-     <div className="max-w-[1240px] mx-auto px-6 md:px-12 pb-16 relative z-10">
+        <div className="w-full px-6 md:px-12 pb-16 relative z-10">
+
         {/* Top Section: Logo + Main Headline + CTAs */}
         <div className="flex flex-col lg:flex-row items-start gap-12 mb-16">
           {/* Left: Logo */}
