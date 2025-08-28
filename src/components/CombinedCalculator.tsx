@@ -917,8 +917,7 @@ const CombinedCalculator = ({
         </div>
       </div>
       
-      {/* References Footer Section - Full Width */}
-{/* References Footer Section - Full Width */}
+    {/* References Footer Section - Full Width */}
 <div className="w-full bg-background py-16">
   <div className="max-w-[1240px] mx-auto flex flex-col items-center text-center px-6">
     <h2 className="text-3xl font-normal text-foreground mb-8">
@@ -928,7 +927,7 @@ const CombinedCalculator = ({
     <Button
       variant="outline"
       onClick={() => setShowReferencesModal(true)}
-      className="mb-6 inline-flex items-center gap-2 px-6 py-3 text-lg font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+      className="mb-6 w-64 justify-center inline-flex items-center gap-2 px-6 py-4 text-lg font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
     >
       <ExternalLink className="h-5 w-5" />
       References
@@ -940,6 +939,7 @@ const CombinedCalculator = ({
     </p>
   </div>
 </div>
+
 
 
 
