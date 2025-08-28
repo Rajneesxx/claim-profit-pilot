@@ -184,7 +184,7 @@ const CombinedCalculator = ({
     technologyCostSaved: 'medium',
     claimDenialReduction: 'medium',
     codingBacklogElimination: 'medium',
-    rvuIncreaseEM: 'medium',
+    rvuIncreaseEM: 'high',
     overCodingReduction: 'medium',
     underCodingReduction: 'medium'
   });
