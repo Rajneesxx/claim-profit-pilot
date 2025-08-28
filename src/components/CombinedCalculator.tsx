@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ChevronDown, ChevronUp, Calculator, ExternalLink, Settings, Minus, Plus, Download, Calendar, LogIn } from "lucide-react";
-import { ModernEmailDialog } from './ModernEmailDialog';
+import { PDFPreviewDialog } from './PDFPreviewDialog';
 import { SignInDialog } from './SignInDialog';
 import { useToast } from "@/hooks/use-toast";
 import { ROIMetrics } from "@/types/roi";
@@ -157,7 +157,7 @@ const CombinedCalculator = ({
     return sessionStorage.getItem('rapidclaims_signed_in') === 'true';
   });
   const [showSignInDialog, setShowSignInDialog] = useState(false);
-  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showPDFPreview, setShowPDFPreview] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const { toast } = useToast();
 
@@ -337,7 +337,7 @@ const CombinedCalculator = ({
     
     if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
       console.log('Valid email, closing dialog and showing success');
-      setShowEmailDialog(false);
+      setShowPDFPreview(false);
       
       // Generate and send the detailed PDF report
       toast({
@@ -371,13 +371,14 @@ const CombinedCalculator = ({
   const handleROIClick = () => {
     console.log('=== handleROIClick CALLED ===');
     console.log('Current isSignedIn state:', isSignedIn);
-    console.log('Current showEmailDialog state:', showEmailDialog);
     
-    // ALWAYS show email dialog for "Get Detailed ROI Report"
-    // This button is specifically for generating and emailing the PDF report
-    setShowEmailDialog(true);
+    if (!isSignedIn) {
+      setShowSignInDialog(true);
+      return;
+    }
     
-    console.log('Called setShowEmailDialog(true)');
+    // Show PDF preview dialog for signed-in users
+    setShowPDFPreview(true);
   };
 
   const clearEditingValue = (key: keyof ROIMetrics) => {
@@ -894,7 +895,7 @@ const CombinedCalculator = ({
                       e.preventDefault();
                       e.stopPropagation();
                       console.log('=== CombinedCalculator ROI BUTTON CLICKED ===');
-                      console.log('showEmailDialog before:', showEmailDialog);
+                      handleROIClick();
                       handleROIClick();
                     }} 
                     className="w-full bg-white hover:bg-white/90 text-purple-accent border-2 border-white h-14 text-lg font-semibold rounded-xl"
@@ -997,21 +998,21 @@ const CombinedCalculator = ({
         onSubmit={handleSignInSubmit}
       />
 
-      {/* Email Dialog for ROI Report - with enhanced debugging */}
-      <ModernEmailDialog
-        open={showEmailDialog}
-        onOpenChange={(open) => {
-          console.log('ModernEmailDialog onOpenChange called with:', open);
-          setShowEmailDialog(open);
-        }}
-        userEmail={userEmail}
-        setUserEmail={(email) => {
-          console.log('Setting userEmail to:', email);
-          setUserEmail(email);
-        }}
-        onSubmit={() => {
-          console.log('ModernEmailDialog onSubmit called');
-          handleROIEmailSubmit();
+      {/* PDF Preview Dialog */}
+      <PDFPreviewDialog
+        open={showPDFPreview}
+        onOpenChange={setShowPDFPreview}
+        data={{
+          metrics,
+          calculations: {
+            totalCostSavings,
+            totalRevenueIncrease,
+            totalRiskReduction,
+            totalImpact,
+            implementationCost: scaledImplementationCost,
+            roi: ((totalImpact - scaledImplementationCost) / scaledImplementationCost) * 100
+          },
+          userEmail
         }}
       />
     </div>

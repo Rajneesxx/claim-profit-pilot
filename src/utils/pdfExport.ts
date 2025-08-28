@@ -77,8 +77,20 @@ const createChart = (canvas: HTMLCanvasElement, width: number, height: number, d
   });
 };
 
+export const generatePDFBlob = async (data: ExportData): Promise<Blob> => {
+  const doc = new jsPDF();
+  await createPDFContent(doc, data);
+  return doc.output('blob');
+};
+
 export const generatePDFReport = async (data: ExportData): Promise<void> => {
   const doc = new jsPDF();
+  await createPDFContent(doc, data);
+  const fileName = `rapidroi-analysis-${new Date().toISOString().split('T')[0]}.pdf`;
+  doc.save(fileName);
+};
+
+const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => {
   const pageWidth = doc.internal.pageSize.width;
   const pageHeight = doc.internal.pageSize.height;
   const margin = 20;
@@ -332,10 +344,6 @@ export const generatePDFReport = async (data: ExportData): Promise<void> => {
   doc.setTextColor(100, 100, 100);
   doc.text('RapidClaims AI-Powered Medical Coding Solutions', pageWidth / 2, footerY - 3, { align: 'center' });
   doc.text('For consultation: info@rapidclaims.com | rapidclaims.com', pageWidth / 2, footerY + 3, { align: 'center' });
-
-  // Save the PDF
-  const fileName = `rapidroi-analysis-${new Date().toISOString().split('T')[0]}.pdf`;
-  doc.save(fileName);
 };
 
 // Helper function to convert hex to RGB
