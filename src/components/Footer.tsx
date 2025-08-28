@@ -55,15 +55,15 @@ export const Footer: React.FC = () => {
 
           {/* Right: CTA Links */}
           <div className="flex flex-col gap-4 min-w-[280px]">
-            <a href="https://www.rapidclaims.ai/get-in-touch" className="flex items-center justify-between p-4 border-b border-gray-600 text-white hover:text-gray-300 transition group">
+            <a href="https://www.rapidclaims.ai/get-in-touch" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 border-b border-gray-600 text-white hover:text-gray-300 transition group">
               <span className="text-lg">Request ROI Analysis</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="https://www.rapidclaims.ai/get-in-touch" className="flex items-center justify-between p-4 border-b border-gray-600 text-white hover:text-gray-300 transition group">
+            <a href="https://www.rapidclaims.ai/get-in-touch" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 border-b border-gray-600 text-white hover:text-gray-300 transition group">
               <span className="text-lg">Calculate your savings</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="https://www.rapidclaims.ai/get-in-touch" className="flex items-center justify-between p-4 text-white hover:text-gray-300 transition group">
+            <a href="https://www.rapidclaims.ai/get-in-touch" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 text-white hover:text-gray-300 transition group">
               <span className="text-lg">Schedule a demo</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
@@ -84,25 +84,25 @@ export const Footer: React.FC = () => {
           {/* Products */}
           <nav className="flex flex-col gap-3">
             <h4 className="text-white text-xl font-black tracking-wider uppercase mb-5">PRODUCTS</h4>
-            <a href="https://www.rapidclaims.ai/products/rapid-code" className="text-gray-300 text-sm hover:text-white transition">RapidCode</a>
-            <a href="https://www.rapidclaims.ai/products/rapid-scrub" className="text-gray-300 text-sm hover:text-white transition">RapidScrub</a>
-            <a href="https://www.rapidclaims.ai/products/rapid-cdi" className="text-gray-300 text-sm hover:text-white transition">RapidCDI</a>
+            <a href="https://www.rapidclaims.ai/products/rapid-code" target="_blank" rel="noopener noreferrer" className="text-gray-300 text-sm hover:text-white transition">RapidCode</a>
+            <a href="https://www.rapidclaims.ai/products/rapid-scrub" target="_blank" rel="noopener noreferrer" className="text-gray-300 text-sm hover:text-white transition">RapidScrub</a>
+            <a href="https://www.rapidclaims.ai/products/rapid-cdi" target="_blank" rel="noopener noreferrer" className="text-gray-300 text-sm hover:text-white transition">RapidCDI</a>
           </nav>
 
           {/* Solutions */}
           <nav className="flex flex-col gap-3">
             <h4 className="text-white text-xl font-black tracking-wider uppercase mb-5">SOLUTIONS</h4>
-            <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of customers</a>
-            <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of roles</a>
-            <a href="https://www.rapidclaims.ai/solutions" className="text-gray-300 text-sm hover:text-white transition">For types of use cases</a>
+            <a href="https://www.rapidclaims.ai/solutions" target="_blank" rel="noopener noreferrer" className="text-gray-300 text-sm hover:text-white transition">For types of customers</a>
+            <a href="https://www.rapidclaims.ai/solutions" target="_blank" rel="noopener noreferrer" className="text-gray-300 text-sm hover:text-white transition">For types of roles</a>
+            <a href="https://www.rapidclaims.ai/solutions" target="_blank" rel="noopener noreferrer" className="text-gray-300 text-sm hover:text-white transition">For types of use cases</a>
           </nav>
 
           {/* Resources */}
           <nav className="flex flex-col gap-3">
             <h4 className="text-white text-xl font-black tracking-wider uppercase mb-5">RESOURCES</h4>
-            <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">Blogs</a>
-            <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">Case Studies</a>
-            <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-300 text-sm hover:text-white transition">News</a>
+            <a href="https://www.rapidclaims.ai/resources/blogs" target="_blank" rel="noopener noreferrer" className="text-gray-300 text-sm hover:text-white transition">Blogs</a>
+            <a href="https://www.rapidclaims.ai/resources/blogs" target="_blank" rel="noopener noreferrer" className="text-gray-300 text-sm hover:text-white transition">Case Studies</a>
+            <a href="https://www.rapidclaims.ai/resources/blogs" target="_blank" rel="noopener noreferrer" className="text-gray-300 text-sm hover:text-white transition">News</a>
           </nav>
         </div>
 
@@ -165,9 +165,9 @@ export const Footer: React.FC = () => {
 
           {/* Center: Legal Links */}
           <nav className="flex gap-6">
-            <a href="https://www.rapidclaims.ai/terms-of-service" className="hover:text-white transition">Terms of Service</a>
-            <a href="https://www.rapidclaims.ai/privacy-policy" className="hover:text-white transition">Privacy Policy</a>
-            <a href="https://www.rapidclaims.ai/cookie-policy" className="hover:text-white transition">Cookie Policy</a>
+            <a href="https://www.rapidclaims.ai/terms-of-service" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Terms of Service</a>
+            <a href="https://www.rapidclaims.ai/privacy-policy" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Privacy Policy</a>
+            <a href="https://www.rapidclaims.ai/cookie-policy" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Cookie Policy</a>
           </nav>
 
           {/* Right: Social Links */}
