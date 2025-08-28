@@ -112,41 +112,36 @@ export const PDFPreviewDialog = ({
         const base64data = reader.result as string;
         const base64PDF = base64data.split(',')[1]; // Remove data:application/pdf;base64, prefix
         
-        // Send email via API (you'll need to implement this endpoint)
-        const response = await fetch('/api/send-pdf-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: emailAddress,
-            pdfData: base64PDF,
-            reportData: {
-              totalImpact: data.calculations.totalImpact,
-              organizationName: data.userEmail.split('@')[1] || 'Your Organization',
-              generatedDate: new Date().toLocaleDateString()
-            }
-          }),
+        // Since this is a frontend-only app, we'll simulate email sending
+        // and focus on the PDF download functionality instead
+        console.log('PDF Email simulation for:', emailAddress);
+        console.log('PDF Data size:', base64PDF.length);
+        
+        // Simulate email sending delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // For now, automatically download the PDF since actual email sending requires backend
+        const link = document.createElement('a');
+        link.href = `data:application/pdf;base64,${base64PDF}`;
+        link.download = `ROI-Report-${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        setEmailSent(true);
+        toast({
+          title: "PDF Downloaded & Email Captured",
+          description: `PDF downloaded automatically. Email ${emailAddress} has been captured for follow-up.`,
         });
 
-        if (response.ok) {
-          setEmailSent(true);
-          toast({
-            title: "Email Sent Successfully",
-            description: `Your ROI report has been sent to ${emailAddress}`,
-          });
-
-          // Slack: notify PDF email sent
-          const ts = new Date();
-          sendSlackMessage(
-            `PDF Report emailed to ${emailAddress} at ${ts.toISOString()}`,
-            buildEmailCaptureBlocks(emailAddress, 'PDF Request', ts.toLocaleString())
-          )
-            .then((res) => console.info('Slack PDF-email result:', res))
-            .catch((err) => console.error('Slack PDF-email error:', err));
-        } else {
-          throw new Error('Email sending failed');
-        }
+        // Slack: notify PDF email capture
+        const ts = new Date();
+        sendSlackMessage(
+          `PDF Report requested by ${emailAddress} at ${ts.toISOString()}`,
+          buildEmailCaptureBlocks(emailAddress, 'PDF Request', ts.toLocaleString())
+        )
+          .then((res) => console.info('Slack PDF-email result:', res))
+          .catch((err) => console.error('Slack PDF-email error:', err));
       };
       
       reader.readAsDataURL(pdfBlob);
