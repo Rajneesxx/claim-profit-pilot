@@ -5,7 +5,7 @@ import { Calculator, Star, Download, FileText } from 'lucide-react';
 import CombinedCalculator from './CombinedCalculator';
 import { FloatingCTA } from './FloatingCTA';
 import { ModernEmailDialog } from './ModernEmailDialog';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ROIMetrics } from '../types/roi';
 import { generatePDFReport } from '@/utils/pdfExport';
@@ -364,7 +364,9 @@ export const ROICalculator = () => {
       {/* Results Modal */}
       {showResults && (
         <Dialog open={showResults} onOpenChange={setShowResults}>
-          <DialogContent className="w-[95vw] max-w-7xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20">
+          <DialogPortal>
+            <DialogOverlay />
+            <DialogContent className="w-[95vw] max-w-7xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20">
             <DialogHeader>
               <DialogTitle className="text-2xl text-center text-primary">
                 🎉 Your RapidROI Analysis Results
@@ -464,7 +466,8 @@ export const ROICalculator = () => {
                 Close
               </Button>
             </DialogFooter>
-          </DialogContent>
+            </DialogContent>
+          </DialogPortal>
         </Dialog>
       )}
     </div>

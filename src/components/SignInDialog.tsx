@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,7 +28,9 @@ export const SignInDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-background border border-border w-full max-w-md mx-auto rounded-2xl">
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent className="bg-background border border-border w-full max-w-md mx-auto rounded-2xl">
         <DialogHeader className="text-center space-y-6 pb-2">
           <DialogTitle className="text-2xl font-semibold text-foreground">
             Find Out How Much You Could Recover
@@ -58,7 +60,8 @@ export const SignInDialog = ({
             View Results
           </Button>
         </div>
-      </DialogContent>
+        </DialogContent>
+      </DialogPortal>
     </Dialog>
   );
 };
