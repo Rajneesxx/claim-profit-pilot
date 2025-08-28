@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#01101F] w-full relative overflow-hidden">
+    <footer className="bg-[#01101F] w-screen relative overflow-hidden">
       {/* Radiating lines background pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -31,7 +31,7 @@ export const Footer: React.FC = () => {
         }} />
       </div>
       
-      <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-16 relative z-10">
+     <div className="max-w-[1240px] mx-auto px-6 md:px-12 pb-16 relative z-10">
         {/* Top Section: Logo + Main Headline + CTAs */}
         <div className="flex flex-col lg:flex-row items-start gap-12 mb-16">
           {/* Left: Logo */}
