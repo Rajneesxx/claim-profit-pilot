@@ -1,49 +1,80 @@
-// Lightweight Slack webhook utilities for frontend-only usage
+// Slack bot token utilities for frontend-only usage
 // Note: For secure production use, prefer server-side/Edge Function with a secret.
 
-export type SlackPayload = {
+export type SlackMessage = {
+  channel: string;
   text: string;
   blocks?: any[];
 };
 
-export const getSlackWebhookUrl = (): string => {
+export const getSlackBotToken = (): string => {
   try {
-    return localStorage.getItem('slack_webhook_url') || '';
+    return localStorage.getItem('slack_bot_token') || '';
   } catch {
     return '';
   }
 };
 
-export const setSlackWebhookUrl = (url: string) => {
+export const setSlackBotToken = (token: string) => {
   try {
-    localStorage.setItem('slack_webhook_url', url);
+    localStorage.setItem('slack_bot_token', token);
   } catch (e) {
-    console.error('Failed to save Slack webhook URL to localStorage', e);
+    console.error('Failed to save Slack bot token to localStorage', e);
+  }
+};
+
+export const getSlackChannel = (): string => {
+  try {
+    return localStorage.getItem('slack_channel') || '#general';
+  } catch {
+    return '#general';
+  }
+};
+
+export const setSlackChannel = (channel: string) => {
+  try {
+    localStorage.setItem('slack_channel', channel);
+  } catch (e) {
+    console.error('Failed to save Slack channel to localStorage', e);
   }
 };
 
 export async function sendSlackMessage(message: string, blocks?: any[]) {
-  const webhookUrl = getSlackWebhookUrl();
-  if (!webhookUrl) {
-    console.warn('Slack webhook URL not set. Set via localStorage.setItem("slack_webhook_url", "https://hooks.slack.com/services/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")');
-    return { ok: false, reason: 'missing_webhook_url' } as const;
+  const botToken = getSlackBotToken();
+  const channel = getSlackChannel();
+  
+  if (!botToken) {
+    console.warn('Slack bot token not set. Set via localStorage.setItem("slack_bot_token", "xoxb-your-bot-token") and localStorage.setItem("slack_channel", "#your-channel")');
+    return { ok: false, reason: 'missing_bot_token' } as const;
   }
 
-  const payload: SlackPayload = blocks ? { text: message, blocks } : { text: message };
+  const payload: SlackMessage = {
+    channel,
+    text: message,
+    ...(blocks && { blocks })
+  };
 
   try {
-    // Use no-cors and omit non-safelisted headers to avoid preflight; Slack will still parse JSON body
-    await fetch(webhookUrl, {
+    const response = await fetch('https://slack.com/api/chat.postMessage', {
       method: 'POST',
-      mode: 'no-cors',
+      headers: {
+        'Authorization': `Bearer ${botToken}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(payload),
     });
 
-    // With no-cors, we can't read status. Log as best-effort sent.
-    console.info('Slack message sent (best-effort, no-cors).');
-    return { ok: true } as const;
+    const result = await response.json();
+    
+    if (result.ok) {
+      console.info('✅ Slack message sent successfully:', result);
+      return { ok: true, result } as const;
+    } else {
+      console.error('❌ Slack API error:', result);
+      return { ok: false, error: result.error } as const;
+    }
   } catch (error) {
-    console.error('Error sending Slack message:', error);
+    console.error('❌ Error sending Slack message:', error);
     return { ok: false, error } as const;
   }
 }

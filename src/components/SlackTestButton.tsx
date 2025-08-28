@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { sendSlackMessage, buildSignInBlocks, buildEmailCaptureBlocks } from "@/utils/slack";
+import { sendSlackMessage, buildSignInBlocks, buildEmailCaptureBlocks, getSlackBotToken, getSlackChannel } from "@/utils/slack";
 import { useToast } from "@/hooks/use-toast";
 
 export const SlackTestButton = () => {
@@ -9,8 +9,9 @@ export const SlackTestButton = () => {
     const testEmail = 'test@example.com';
     const ts = new Date();
     
-    console.log('=== TESTING SLACK CONNECTION ===');
-    console.log('Webhook URL:', localStorage.getItem('slack_webhook_url'));
+    console.log('=== TESTING SLACK BOT CONNECTION ===');
+    console.log('Bot Token:', getSlackBotToken() ? 'Found' : 'Not configured');
+    console.log('Channel:', getSlackChannel());
     
     try {
       // Test basic message
@@ -32,13 +33,13 @@ export const SlackTestButton = () => {
       console.log('Email capture test result:', result3);
       
       toast({
-        title: "Slack Test Completed",
+        title: "Slack Bot Test Completed",
         description: "Check console logs and Slack channel for results",
       });
     } catch (error) {
       console.error('Slack test error:', error);
       toast({
-        title: "Slack Test Failed",
+        title: "Slack Bot Test Failed",
         description: "Check console for error details",
         variant: "destructive",
       });
