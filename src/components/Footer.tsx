@@ -157,7 +157,8 @@ export const Footer: React.FC = () => {
               <span className="text-white text-xs font-bold">in</span>
             </a>
           </div>
+        </div>
       </div>
     </footer>
- );
+  );
 };
