@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { setWebhookUrl, getWebhookUrl } from "@/utils/emailToSpreadsheet";
+import { setWebhookUrl, getWebhookUrl, setWebhookToken, getWebhookToken } from "@/utils/emailToSpreadsheet";
 import { useToast } from "@/hooks/use-toast";
 
 export const SpreadsheetSetupGuide = () => {
   const [webhookUrl, setWebhookUrlState] = useState(getWebhookUrl());
+  const [token, setTokenState] = useState(getWebhookToken());
   const { toast } = useToast();
 
   const handleSaveWebhook = () => {
@@ -18,6 +19,14 @@ export const SpreadsheetSetupGuide = () => {
         description: "Your spreadsheet webhook URL has been saved successfully.",
       });
     }
+  };
+
+  const handleSaveToken = () => {
+    setWebhookToken(token || '');
+    toast({
+      title: "Token Saved",
+      description: "Shared-secret token saved to localStorage.",
+    });
   };
 
   return (
@@ -52,10 +61,26 @@ export const SpreadsheetSetupGuide = () => {
           </div>
         </div>
 
+        <div className="space-y-2">
+          <Label htmlFor="webhook-token">Shared-secret Token (optional)</Label>
+          <div className="flex gap-2">
+            <Input
+              id="webhook-token"
+              type="text"
+              placeholder="Enter the same token set in your Apps Script"
+              value={token}
+              onChange={(e) => setTokenState(e.target.value)}
+            />
+            <Button onClick={handleSaveToken}>
+              Save Token
+            </Button>
+          </div>
+        </div>
+
         <div className="p-3 bg-blue-50 rounded-lg">
           <p className="text-sm text-blue-800">
-            <strong>Zapier Example:</strong> Create a new Zap with "Webhook by Zapier" trigger → 
-            "Google Sheets" action to append new rows with the email data.
+            <strong>Zapier/Apps Script:</strong> Use a shared-secret token to block unauthorized writes.
+            Set the same token in your Google Apps Script and here. Our requests include it automatically.
           </p>
         </div>
       </CardContent>

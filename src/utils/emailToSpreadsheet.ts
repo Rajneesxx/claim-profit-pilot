@@ -26,8 +26,25 @@ export const setWebhookUrl = (url: string) => {
   }
 };
 
+export const getWebhookToken = (): string => {
+  try {
+    return localStorage.getItem('spreadsheet_webhook_token') || '';
+  } catch {
+    return '';
+  }
+};
+
+export const setWebhookToken = (token: string) => {
+  try {
+    localStorage.setItem('spreadsheet_webhook_token', token);
+  } catch (e) {
+    console.error('Failed to save webhook token to localStorage', e);
+  }
+};
+
 export async function appendToSpreadsheet(emailData: EmailData) {
   const webhookUrl = getWebhookUrl();
+  const token = getWebhookToken();
   
   if (!webhookUrl) {
     console.warn('Spreadsheet webhook URL not set. Set via localStorage.setItem("spreadsheet_webhook_url", "your-webhook-url")');
@@ -35,16 +52,20 @@ export async function appendToSpreadsheet(emailData: EmailData) {
   }
 
   try {
-    const response = await fetch(webhookUrl, {
+    const payload: Record<string, any> = {
+      ...emailData,
+      triggered_from: window.location.origin,
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
+    };
+    if (token) payload.token = token;
+
+    await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       mode: 'no-cors',
-      body: JSON.stringify({
-        ...emailData,
-        triggered_from: window.location.origin,
-      }),
+      body: JSON.stringify(payload),
     });
 
     // Since we're using no-cors, we can't read the response
