@@ -1118,11 +1118,6 @@ const handleSignInSubmit = async () => {
           <h2 className="text-gray-800 text-5xl font-semibold leading-[1.2] mb-6 max-sm:text-4xl">
             Unlock every collectible dollar
           </h2>
-          <div className="text-gray-500 text-lg leading-normal mb-8">
-            <p>Generate $5M in hidden revenue each year.</p>
-            <p>For every 500 beds.</p>
-            <p>Revenue uplift. Simplified</p>
-          </div>
           <button className="flex items-center justify-center w-[200px] h-[50px] cursor-pointer bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8]">
             <span className="text-white text-base font-semibold">
               Book a Demo
