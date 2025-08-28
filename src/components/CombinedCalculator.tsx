@@ -347,8 +347,8 @@ const handleSignInSubmit = () => {
       description: "You now have full access to the ROI calculator.",
     });
 
-    // Send Slack notification (frontend-only). Configure your webhook URL via:
-    // localStorage.setItem('slack_webhook_url', 'https://hooks.slack.com/services/XXX/YYY/ZZZ')
+    // Send Slack notification. Webhook auto-configured in main.tsx; override with:
+    // localStorage.setItem('slack_webhook_url', 'https://hooks.slack.com/services/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')
     const ts = new Date();
     const text = `User Signed In: ${userEmail} at ${ts.toISOString()}`;
     sendSlackMessage(text, buildSignInBlocks(userEmail, ts.toLocaleString()))
