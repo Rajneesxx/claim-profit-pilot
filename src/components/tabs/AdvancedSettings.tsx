@@ -214,9 +214,39 @@ export const AdvancedSettings = ({ metrics, updateMetric }: AdvancedSettingsProp
               <h4 className="font-semibold text-foreground mb-3">Increase in RVUs</h4>
               <div className="space-y-2 text-sm">
                 <p className="text-muted-foreground">Case 1: Nephrology center identifies incremental opportunity with &gt; 95% of level 3s to be identified as level 4s</p>
-                <p className="text-muted-foreground">1. E&M scoring module</p>
+                <p className="text-muted-foreground">E&M scoring module</p>
                 <div className="mt-2">
                   <span className="text-primary font-medium">0.1% - 0.5% - 1.5% improvement range</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* New Advanced Levers Section */}
+          <div className="mt-8 space-y-4">
+            <h4 className="text-lg font-semibold text-foreground border-b border-border pb-2">
+              Advanced Impact Levers
+            </h4>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-muted p-4 rounded-lg">
+                <h4 className="font-semibold text-foreground mb-3">% charts with over coding issues</h4>
+                <div className="space-y-2 text-sm">
+                  <p className="text-muted-foreground">Case 1: Primary care center identified and reduced overcoding and undercoding issues by 70%</p>
+                  <p className="text-muted-foreground">Over coding check</p>
+                  <div className="mt-2">
+                    <span className="text-primary font-medium">50% - 80% - 100% improvement range</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-muted p-4 rounded-lg">
+                <h4 className="font-semibold text-foreground mb-3">% charts with under coding issues</h4>
+                <div className="space-y-2 text-sm">
+                  <p className="text-muted-foreground">Under coding scan</p>
+                  <div className="mt-2">
+                    <span className="text-primary font-medium">50% - 80% - 100% improvement range</span>
+                  </div>
                 </div>
               </div>
             </div>
