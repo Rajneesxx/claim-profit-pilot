@@ -11,8 +11,8 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#01101F] w-screen relative overflow-hidden m-0">
-      <div className="w-full px-6 md:px-12 pb-16 relative z-10">
+   <footer className="bg-[#01101F] w-screen relative overflow-hidden m-0 pt-0 mt-0 left-0 right-0">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-12 pt-0 pb-16 relative z-10">
 
         {/* Top Section: Logo + Main Headline + CTAs */}
         <div className="flex flex-col lg:flex-row items-start gap-12 mb-16">
