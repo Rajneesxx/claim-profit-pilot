@@ -94,168 +94,297 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   const pageWidth = doc.internal.pageSize.width;
   const pageHeight = doc.internal.pageSize.height;
   const margin = 20;
-  let yPosition = 20;
 
-  // ================== HEADER SECTION ==================
-  doc.setFillColor(59, 130, 246);
-  doc.rect(0, 0, pageWidth, 40, 'F');
+  // ================== COVER PAGE ==================
+  // Purple to teal gradient background effect
+  doc.setFillColor(139, 92, 246); // Purple
+  doc.rect(0, 0, pageWidth, pageHeight, 'F');
   
+  // Gradient overlay simulation with multiple rectangles
+  for (let i = 0; i < 20; i++) {
+    const alpha = i / 20;
+    const red = Math.round(139 + (45 - 139) * alpha);
+    const green = Math.round(92 + (212 - 92) * alpha);
+    const blue = Math.round(246 + (183 - 246) * alpha);
+    doc.setFillColor(red, green, blue);
+    doc.rect(0, pageHeight * i / 20, pageWidth, pageHeight / 20, 'F');
+  }
+
+  // Cover text
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(22);
+  doc.setFontSize(36);
   doc.setFont('helvetica', 'bold');
-  doc.text('RapidROI by RapidClaims', pageWidth / 2, 18, { align: 'center' });
+  doc.text('Your Personalized', pageWidth / 2, pageHeight / 2 - 20, { align: 'center' });
+  doc.text('ROI Blueprint', pageWidth / 2, pageHeight / 2 + 10, { align: 'center' });
   
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
-  doc.text('AI-Powered Medical Coding ROI Analysis Report', pageWidth / 2, 28, { align: 'center' });
-  
-  doc.setFontSize(9);
-  doc.text(`Generated: ${new Date().toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric'
-  })} | Report for: ${data.userEmail}`, pageWidth / 2, 36, { align: 'center' });
-  
-  yPosition = 55;
-
-  // ================== EXECUTIVE SUMMARY ==================
-  doc.setTextColor(0, 0, 0);
-  doc.setFillColor(240, 248, 255);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 35, 'F');
-  doc.setDrawColor(59, 130, 246);
-  doc.setLineWidth(1);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 35, 'S');
-  
-  yPosition += 8;
   doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(59, 130, 246);
-  doc.text('Executive Summary', margin + 8, yPosition);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Prepared for:', pageWidth / 2, pageHeight / 2 + 40, { align: 'center' });
+  doc.text('[Client Company Name]', pageWidth / 2, pageHeight / 2 + 55, { align: 'center' });
   
-  yPosition += 12;
+  // RapidClaims logo text
+  doc.setFontSize(24);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(255, 69, 58); // Red for "Rapid"
+  doc.text('Rapid', pageWidth / 2 - 25, pageHeight - 50, { align: 'center' });
+  doc.setTextColor(255, 255, 255);
+  doc.text('Claims', pageWidth / 2 + 5, pageHeight - 50, { align: 'center' });
+
+  // ================== PAGE 2: EXECUTIVE SUMMARY ==================
+  doc.addPage();
+  
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, pageWidth, pageHeight, 'F');
+  
+  let yPosition = 30;
+  
+  // Header
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(24);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Your Financial Future at a Glance', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 25;
+  
+  // Executive Summary section
+  doc.setTextColor(139, 92, 246); // Purple
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Executive Summary', margin, yPosition);
+  
+  yPosition += 10;
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(11);
-  
-  // Two-column layout for key metrics
-  const leftCol = margin + 8;
-  const rightCol = pageWidth / 2 + 5;
-  
-  // Left column
   doc.setFont('helvetica', 'normal');
-  doc.text('Total Annual Impact:', leftCol, yPosition);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(16, 185, 129);
-  doc.text(formatCurrency(data.calculations.totalImpact), leftCol + 45 , yPosition);
+  doc.text('This ROI analysis models the financial impact of adopting RapidClaims\' AI-powered', margin, yPosition);
+  yPosition += 6;
+  doc.text('medical coding solutions, using your organization\'s operational data.', margin, yPosition);
   
-  // Right column
+  yPosition += 20;
+  
+  // Large financial impact number
   doc.setTextColor(0, 0, 0);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Implementation Cost:', rightCol, yPosition);
+  doc.setFontSize(36);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(239, 68, 68);
-  doc.text(formatCurrency(data.calculations.implementationCost), rightCol + 45, yPosition);
+  doc.text(formatCurrency(data.calculations.totalImpact), margin, yPosition);
   
-  yPosition += 8;
-  
-  // Second row
-  doc.setTextColor(0, 0, 0);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Payback Period:', leftCol, yPosition);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(139, 92, 246);
-  const paybackMonths = (data.calculations.implementationCost / (data.calculations.totalImpact / 12)).toFixed(1);
-  doc.text(`${paybackMonths} months`, leftCol + 45, yPosition);
-  
-  doc.setTextColor(0, 0, 0);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Annual Revenue:', rightCol, yPosition);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(59, 130, 246);
-  doc.text(formatCurrency(data.metrics.revenueClaimed), rightCol + 45, yPosition);
-  
-  yPosition += 15;
-
-  // ================== IMPACT BREAKDOWN CHART ==================
-  doc.setTextColor(0, 0, 0);
+  yPosition += 10;
   doc.setFontSize(14);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Estimated Annual Financial Impact', margin, yPosition);
+  
+  yPosition += 20;
+  
+  // Three metric boxes
+  const boxWidth = (pageWidth - 2 * margin - 20) / 3;
+  const boxHeight = 30;
+  const boxY = yPosition;
+  
+  // Cost Savings box
+  doc.setFillColor(240, 248, 255);
+  doc.rect(margin, boxY, boxWidth, boxHeight, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(margin, boxY, boxWidth, boxHeight, 'S');
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text(formatCurrency(data.calculations.totalCostSavings), margin + boxWidth/2, boxY + 12, { align: 'center' });
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('in Cost Savings', margin + boxWidth/2, boxY + 22, { align: 'center' });
+  
+  // Revenue Uplift box
+  const box2X = margin + boxWidth + 10;
+  doc.setFillColor(240, 248, 255);
+  doc.rect(box2X, boxY, boxWidth, boxHeight, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(box2X, boxY, boxWidth, boxHeight, 'S');
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text(formatCurrency(data.calculations.totalRevenueIncrease), box2X + boxWidth/2, boxY + 12, { align: 'center' });
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('in Revenue Uplift', box2X + boxWidth/2, boxY + 22, { align: 'center' });
+  
+  // Risk Reduction box
+  const box3X = margin + 2 * boxWidth + 20;
+  doc.setFillColor(240, 248, 255);
+  doc.rect(box3X, boxY, boxWidth, boxHeight, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(box3X, boxY, boxWidth, boxHeight, 'S');
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text(formatCurrency(data.calculations.totalRiskReduction), box3X + boxWidth/2, boxY + 12, { align: 'center' });
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('in Risk Reduction', box3X + boxWidth/2, boxY + 22, { align: 'center' });
+  
+  yPosition += 50;
+  
+  // Analysis text
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('The analysis shows a compelling return on investment, with strong cost reductions', margin, yPosition);
+  yPosition += 6;
+  doc.text('supported by compliance improvements and modest revenue uplift.', margin, yPosition);
+  
+  yPosition += 25;
+  
+  // The Story Behind the Numbers
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('The Story Behind the Numbers', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 20;
+  
+  // Financial Impact Breakdown
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.text('Financial Impact Breakdown', margin, yPosition);
   
-  yPosition += 10;
+  yPosition += 15;
   
-  // Create and add chart
+  // Create pie chart
   const canvas = document.createElement('canvas');
-  canvas.width = 280;
-  canvas.height = 160;
+  canvas.width = 200;
+  canvas.height = 200;
+  
+  const total = data.calculations.totalImpact;
+  const costSavingsPercent = Math.round((data.calculations.totalCostSavings / total) * 100);
+  const revenuePercent = Math.round((data.calculations.totalRevenueIncrease / total) * 100);
+  const riskPercent = Math.round((data.calculations.totalRiskReduction / total) * 100);
   
   const chartData = [
-    { label: 'Cost Savings', value: data.calculations.totalCostSavings },
-    { label: 'Revenue Increase', value: data.calculations.totalRevenueIncrease },
-    { label: 'Risk Reduction', value: data.calculations.totalRiskReduction }
+    { label: `${costSavingsPercent}%`, value: data.calculations.totalCostSavings },
+    { label: `${revenuePercent}%`, value: data.calculations.totalRevenueIncrease },
+    { label: `${riskPercent}%`, value: data.calculations.totalRiskReduction }
   ];
   
-  const chartColors = ['#10b981', '#3b82f6', '#8b5cf6'];
-  createChart(canvas, 280, 160, chartData, chartColors);
+  const chartColors = ['#8b5cf6', '#10b981', '#e5e7eb']; // Purple, Green, Light Gray
+  createChart(canvas, 200, 200, chartData, chartColors);
 
   try {
     const chartDataUrl = canvas.toDataURL('image/png');
-    doc.addImage(chartDataUrl, 'PNG', margin, yPosition, 70, 45);
-    
-    // Chart legend - properly aligned
-    const legendX = margin + 80;
-    let legendY = yPosition + 8;
-    
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Impact Categories:', legendX, legendY);
-    
-    legendY += 6;
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    
-    chartData.forEach((item, index) => {
-      doc.setFillColor(...hexToRgb(chartColors[index]));
-      doc.circle(legendX + 3, legendY - 1, 2, 'F');
-      doc.setTextColor(0, 0, 0);
-      doc.text(`${item.label}:`, legendX + 10, legendY);
-      doc.setFont('helvetica', 'bold');
-      doc.text(formatCurrency(item.value), legendX + 60, legendY);
-      doc.setFont('helvetica', 'normal');
-      legendY += 6;
-    });
+    doc.addImage(chartDataUrl, 'PNG', pageWidth - margin - 80, yPosition - 10, 60, 60);
   } catch (error) {
     console.warn('Chart generation failed:', error);
   }
-
-  yPosition += 55;
-
-  // ================== DETAILED ANALYSIS ==================
-  doc.setFillColor(248, 250, 252);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 55, 'F');
-  doc.setDrawColor(148, 163, 184);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 55, 'S');
   
-  yPosition += 8;
+  // Left side breakdown text
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Detailed Financial Analysis', margin + 8, yPosition);
-  
-  yPosition += 10;
+  doc.text(`${costSavingsPercent}% Cost Savings`, margin, yPosition);
+  yPosition += 8;
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
+  doc.text('Driven by AI automation that boosts coder', margin, yPosition);
+  yPosition += 5;
+  doc.text('productivity and eliminates manual tasks.', margin, yPosition);
   
-  // Organized in a table format
+  yPosition += 15;
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`${revenuePercent}% Revenue Increase`, margin, yPosition);
+  yPosition += 8;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Driven by improved coding accuracy that', margin, yPosition);
+  yPosition += 5;
+  doc.text('captures missed reimbursements.', margin, yPosition);
+  
+  yPosition += 15;
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`${riskPercent}% Risk Reduction`, margin, yPosition);
+  yPosition += 8;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Driven by enhanced compliance,', margin, yPosition);
+  yPosition += 5;
+  doc.text('reducing audit and penalty exposure.', margin, yPosition);
+  
+  // Legend on the right
+  const legendX = pageWidth - margin - 120;
+  let legendY = yPosition + 20;
+  
+  // Legend items
+  const legendItems = [
+    { color: '#8b5cf6', label: 'Cost Savings:', value: formatCurrency(data.calculations.totalCostSavings) },
+    { color: '#10b981', label: 'Revenue Increase:', value: formatCurrency(data.calculations.totalRevenueIncrease) },
+    { color: '#e5e7eb', label: 'Risk Reduction:', value: formatCurrency(data.calculations.totalRiskReduction) }
+  ];
+  
+  legendItems.forEach((item, index) => {
+    // Color dot
+    doc.setFillColor(...hexToRgb(item.color));
+    doc.circle(legendX, legendY - 2, 3, 'F');
+    
+    // Label and value
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(item.label, legendX + 8, legendY);
+    doc.setFont('helvetica', 'bold');
+    doc.text(item.value, legendX + 45, legendY);
+    
+    legendY += 8;
+  });
+  
+  // Quote at bottom
+  yPosition = pageHeight - 50;
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'italic');
+  doc.text('"Imagine recovering every collectible dollar, automatically."', pageWidth / 2, yPosition, { align: 'center' });
+  
+  // RapidClaims footer
+  doc.setTextColor(255, 69, 58);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Rapid', pageWidth - margin - 35, pageHeight - 20);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Claims', pageWidth - margin - 5, pageHeight - 20);
+
+  // ================== PAGE 3: DETAILED ANALYSIS ==================
+  doc.addPage();
+  
+  yPosition = 30;
+  
+  // Detailed Financial Analysis
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Detailed Financial Analysis', margin, yPosition);
+  
+  yPosition += 20;
+  
+  // Analysis table
+  doc.setFillColor(248, 250, 252);
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 80, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 80, 'S');
+  
+  yPosition += 15;
+  
   const tableData = [
     ['Category', 'Annual Value', 'Description'],
-    ['Cost Savings', formatCurrency(data.calculations.totalCostSavings), 'Operational efficiency gains'],
-    ['Revenue Enhanced', formatCurrency(data.calculations.totalRevenueIncrease), 'Improved coding accuracy'],
-    ['Risk Mitigation', formatCurrency(data.calculations.totalRiskReduction), 'Compliance protection'],
-    ['Total Benefit', formatCurrency(data.calculations.totalImpact), 'Combined annual impact']
+    ['Cost Savings', formatCurrency(data.calculations.totalCostSavings), 'Operational efficiency gains from autonomous coding and reduced manual work.'],
+    ['Revenue Enhanced', formatCurrency(data.calculations.totalRevenueIncrease), 'Improved claim accuracy, fewer denials, increased approved reimbursements.'],
+    ['Risk Mitigation', formatCurrency(data.calculations.totalRiskReduction), 'Compliance protection, reduced penalties, lower audit exposure.'],
+    ['Total Benefit', formatCurrency(data.calculations.totalImpact), 'Combined annual financial impact']
   ];
 
-  const colWidths = [36, 45, 70];
-  const startX = margin + 9;
+  const colWidths = [40, 35, 90];
+  const startX = margin + 10;
 
   tableData.forEach((row, index) => {
     let xPos = startX;
@@ -263,87 +392,311 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
     if (index === 0) {
       // Header row
       doc.setFont('helvetica', 'bold');
-      doc.setTextColor(59, 130, 246);
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(11);
     } else if (index === tableData.length - 1) {
       // Total row
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(0, 0, 0);
+      doc.setFontSize(11);
     } else {
       // Data rows
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(0, 0, 0);
+      doc.setFontSize(10);
     }
     
     row.forEach((cell, colIndex) => {
-      doc.text(cell, xPos, yPosition);
+      if (colIndex === 2) {
+        // Description column - wrap text
+        const lines = doc.splitTextToSize(cell, colWidths[colIndex] - 5);
+        doc.text(lines, xPos, yPosition);
+      } else {
+        doc.text(cell, xPos, yPosition);
+      }
       xPos += colWidths[colIndex];
     });
     
-    yPosition += 6;
+    yPosition += index === 0 ? 8 : 12;
   });
 
-  yPosition += 15;
+  yPosition += 25;
 
-  // ================== ORGANIZATION PARAMETERS ==================
-  doc.setFontSize(14);
+  // Organization Parameters
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(0, 0, 0);
   doc.text('Organization Parameters', margin, yPosition);
   
-  yPosition += 8;
+  yPosition += 10;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('The ROI model uses your organizational inputs:', margin, yPosition);
+  
+  yPosition += 15;
+  
+  // Parameters list
+  const params = [
+    `• Annual Revenue Claimed: ${formatCurrency(data.metrics.revenueClaimed)}`,
+    `• Number of Claims Per Year: ~${formatNumber(data.metrics.claimsPerAnnum)}`,
+    '• Average Cost per Claim: Derived from revenue and claim data.',
+    '• Baseline Denial Rate & Backlog: Applied as per inputs.'
+  ];
+  
   doc.setFontSize(10);
-  
-  // Two-column parameter layout
-  const paramLeftCol = margin;
-  const paramRightCol = pageWidth / 2;
-  let leftY = yPosition;
-  let rightY = yPosition;
-  
-  // Left column parameters
-  const leftParams = [
-    ['Annual Revenue Claimed:', formatCurrency(data.metrics.revenueClaimed)],
-    ['Number of Coders:', formatNumber(data.metrics.numberOfCoders)],
-    ['Number of Billers:', formatNumber(data.metrics.numberOfBillers)],
-    ['Claims Per Year:', formatNumber(data.metrics.claimsPerAnnum)]
-  ];
-  
-  // Right column parameters
-  const rightParams = [
-    ['Number of Physicians:', formatNumber(data.metrics.numberOfPhysicians)],
-    ['Claims Denied Rate:', `${data.metrics.claimDeniedPercent}%`],
-    ['Coding Backlog:', `${data.metrics.codingBacklogPercent}%`],
-    ['Avg Cost/Claim:', formatCurrency(data.metrics.averageCostPerClaim)]
-  ];
-  
-  // Render left column
-  leftParams.forEach(([label, value]) => {
-    doc.setFont('helvetica', 'normal');
-    doc.text(label, paramLeftCol, leftY);
-    doc.setFont('helvetica', 'bold');
-    doc.text(value, paramLeftCol + 60, leftY);
-    leftY += 6;
+  params.forEach(param => {
+    doc.text(param, margin, yPosition);
+    yPosition += 8;
   });
   
-  // Render right column
-  rightParams.forEach(([label, value]) => {
-    doc.setFont('helvetica', 'normal');
-    doc.text(label, paramRightCol, rightY);
-    doc.setFont('helvetica', 'bold');
-    doc.text(value, paramRightCol + 60, rightY);
-    rightY += 6;
+  yPosition += 10;
+  doc.text('These assumptions create the baseline for measuring cost savings, revenue enhancement,', margin, yPosition);
+  yPosition += 6;
+  doc.text('and risk reduction.', margin, yPosition);
+  
+  yPosition += 25;
+  
+  // Conclusion
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Conclusion', margin, yPosition);
+  
+  yPosition += 15;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('The model demonstrates a positive ROI, delivering:', margin, yPosition);
+  
+  yPosition += 12;
+  const conclusions = [
+    `• ${formatCurrency(data.calculations.totalImpact)} annual benefit, driven primarily by cost savings.`,
+    '• Reduced operational strain, freeing coders and physicians from manual tasks.',
+    '• Compliance confidence, reducing the risk of costly penalties and audits.'
+  ];
+  
+  doc.setFontSize(10);
+  conclusions.forEach(conclusion => {
+    doc.text(conclusion, margin, yPosition);
+    yPosition += 8;
   });
+  
+  yPosition += 10;
+  doc.setFont('helvetica', 'bold');
+  doc.text('Recommendation: ', margin, yPosition);
+  doc.setFont('helvetica', 'normal');
+  const recommendationText = 'Adoption of RapidClaims\' AI solutions provides a sustainable and scalable path to reduce costs, increase revenue capture, and improve compliance simultaneously.';
+  const lines = doc.splitTextToSize(recommendationText, pageWidth - 2 * margin - 30);
+  doc.text(lines, margin + 30, yPosition);
 
-  // ================== FOOTER ==================
-  const footerY = pageHeight - 20;
-  doc.setDrawColor(59, 130, 246);
-  doc.setLineWidth(0.5);
-  doc.line(margin, footerY - 8, pageWidth - margin, footerY - 8);
+  // ================== PAGE 4: FOUR PILLARS ==================
+  doc.addPage();
   
-  doc.setFontSize(8);
+  yPosition = 30;
+  
+  // Four Pillars header
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'normal');
+  doc.text('The Four Pillars of Your Success', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 15;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('The Levers Driving Your ROI', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 25;
+  
+  // Four boxes in a 2x2 grid
+  const boxWidth2 = (pageWidth - 2 * margin - 15) / 2;
+  const boxHeight2 = 35;
+  
+  // Box 1: Coder Productivity
+  doc.setFillColor(240, 248, 255);
+  doc.rect(margin, yPosition, boxWidth2, boxHeight2, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(margin, yPosition, boxWidth2, boxHeight2, 'S');
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Coder Productivity', margin + 10, yPosition + 12);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('AI reduces time per chart by up to 100%.', margin + 10, yPosition + 25);
+  
+  // Box 2: Billing Automation
+  const box2X2 = margin + boxWidth2 + 15;
+  doc.setFillColor(240, 248, 255);
+  doc.rect(box2X2, yPosition, boxWidth2, boxHeight2, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(box2X2, yPosition, boxWidth2, boxHeight2, 'S');
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Billing Automation', box2X2 + 10, yPosition + 12);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('40% fewer denials and faster turnaround.', box2X2 + 10, yPosition + 25);
+  
+  yPosition += 45;
+  
+  // Box 3: Physician Time Saved
+  doc.setFillColor(240, 248, 255);
+  doc.rect(margin, yPosition, boxWidth2, boxHeight2, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(margin, yPosition, boxWidth2, boxHeight2, 'S');
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Physician Time Saved', margin + 10, yPosition + 12);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Fewer queries and documentation bottlenecks.', margin + 10, yPosition + 25);
+  
+  // Box 4: Tech Cost Optimization
+  doc.setFillColor(240, 248, 255);
+  doc.rect(box2X2, yPosition, boxWidth2, boxHeight2, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(box2X2, yPosition, boxWidth2, boxHeight2, 'S');
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Tech Cost Optimization', box2X2 + 10, yPosition + 12);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Replace legacy systems and reduce IT overhead.', box2X2 + 10, yPosition + 25);
+  
+  yPosition += 55;
+  
+  // Quote
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'italic');
-  doc.setTextColor(100, 100, 100);
-  doc.text('RapidClaims AI-Powered Medical Coding Solutions', pageWidth / 2, footerY - 3, { align: 'center' });
-  doc.text('For consultation: info@rapidclaims.com | rapidclaims.com', pageWidth / 2, footerY + 3, { align: 'center' });
+  doc.text('"Free your team to focus on what matters most: patient care and complex cases."', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 35;
+  
+  // Your Path Forward
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Your Path Forward', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 15;
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Your Implementation Journey', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 25;
+  
+  // Implementation header
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Implementation | Seamless Deployment in 8 Weeks', margin, yPosition);
+  
+  yPosition += 10;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Accelerate implementation with structured AI integration, real-time automation, and ongoing', margin, yPosition);
+  yPosition += 6;
+  doc.text('enhancements to maximize accuracy, compliance, and financial impact.', margin, yPosition);
+
+  // ================== PAGE 5: GROWTH CHART ==================
+  doc.addPage();
+  
+  yPosition = 30;
+  
+  // Header
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Consistently delivering > 6x ROI?', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 35;
+  
+  // What makes us different
+  doc.setFontSize(20);
+  doc.text('What makes us different?', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 15;
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Clear ROI, seamless integration, and best-in-class automation: a system that pays for', pageWidth / 2, yPosition, { align: 'center' });
+  yPosition += 6;
+  doc.text('itself in less than 3 months.', pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 30;
+  
+  // Comparison table header
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('What makes RapidClaims Unique?', margin, yPosition);
+  
+  doc.setTextColor(255, 69, 58);
+  doc.text('RapidClaims', pageWidth / 2 - 20, yPosition);
+  
+  doc.setTextColor(0, 0, 0);
+  doc.text('The Rest', pageWidth - margin - 40, yPosition);
+  
+  yPosition += 15;
+  
+  // Comparison rows
+  const comparisons = [
+    ['Customizations', 'Fully configurable workflows, minimal dev required', 'Limited or require engineering effort'],
+    ['Time to go-live', '6-8 weeks', '2-6 months'],
+    ['Minimum Charts Required for Go-Live', '500-1000 Charts Per Site', '20,000 - 50,000 Charts'],
+    ['Integration time', 'API & FHIR-based plug-ins, < 1 month; RPA', 'Long IT onboarding'],
+    ['Specialty coverage', 'Built for multi-specialty including complex care', 'Often limited to primary specialties'],
+    ['Documentation improvement', 'Smart query module suggests clarifications in real time', 'Manual follow-up by coders'],
+    ['Code Audits', 'Built-in pre-submit audits with real-time flags', 'Post-submission audits'],
+    ['Team collaboration', 'Shared queues, in-app notes & escalation paths', 'Disjointed workflows'],
+    ['Analytics', 'Real-time dashboards, ROI tracking, denial trends', 'Limited to basic reporting'],
+    ['Care gap detection', 'AI flags missed opportunities during coding', 'Not typically supported']
+  ];
+  
+  doc.setFontSize(9);
+  comparisons.forEach(([feature, rapidclaims, rest]) => {
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(0, 0, 0);
+    doc.text(feature, margin, yPosition);
+    
+    doc.setTextColor(255, 69, 58);
+    const rapidLines = doc.splitTextToSize(rapidclaims, 60);
+    doc.text(rapidLines, pageWidth / 2 - 20, yPosition);
+    
+    doc.setTextColor(0, 0, 0);
+    const restLines = doc.splitTextToSize(rest, 60);
+    doc.text(restLines, pageWidth - margin - 50, yPosition);
+    
+    yPosition += Math.max(rapidLines.length, restLines.length) * 4 + 3;
+  });
+  
+  yPosition += 20;
+  
+  // Ready to Unlock Your ROI
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(24);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Ready to Unlock Your ROI?', pageWidth / 2, yPosition, { align: 'center' });
+  
+  // Final RapidClaims logo
+  yPosition = pageHeight - 40;
+  doc.setTextColor(255, 69, 58);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Rapid', pageWidth / 2 - 20, yPosition, { align: 'center' });
+  doc.setTextColor(0, 0, 0);
+  doc.text('Claims', pageWidth / 2 + 10, yPosition, { align: 'center' });
 };
 
 // Helper function to convert hex to RGB
