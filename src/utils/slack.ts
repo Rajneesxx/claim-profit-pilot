@@ -32,10 +32,10 @@ export async function sendSlackMessage(message: string, blocks?: any[]) {
   const payload: SlackPayload = blocks ? { text: message, blocks } : { text: message };
 
   try {
-    const res = await fetch(webhookUrl, {
+    // Use no-cors and omit non-safelisted headers to avoid preflight; Slack will still parse JSON body
+    await fetch(webhookUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      mode: 'no-cors', // Slack doesn't send CORS headers; no-cors avoids browser blocking
+      mode: 'no-cors',
       body: JSON.stringify(payload),
     });
 
@@ -58,6 +58,27 @@ export function buildSignInBlocks(email: string, timestampLocal: string) {
       type: 'section',
       fields: [
         { type: 'mrkdwn', text: `*Email:*\n${email}` },
+        { type: 'mrkdwn', text: `*Time:*\n${timestampLocal}` },
+      ],
+    },
+  ];
+}
+
+export function buildEmailCaptureBlocks(
+  email: string,
+  source: 'ROI Calculator' | 'PDF Request' | 'Other' = 'ROI Calculator',
+  timestampLocal: string = new Date().toLocaleString()
+) {
+  return [
+    {
+      type: 'section',
+      text: { type: 'mrkdwn', text: ':incoming_envelope: *Email Captured*' },
+    },
+    {
+      type: 'section',
+      fields: [
+        { type: 'mrkdwn', text: `*Email:*\n${email}` },
+        { type: 'mrkdwn', text: `*Source:*\n${source}` },
         { type: 'mrkdwn', text: `*Time:*\n${timestampLocal}` },
       ],
     },

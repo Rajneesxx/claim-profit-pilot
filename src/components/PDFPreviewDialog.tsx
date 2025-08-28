@@ -7,7 +7,7 @@ import { Download, Mail, FileText, CheckCircle, AlertCircle, Loader2, Eye } from
 import { generatePDFReport, generatePDFBlob } from "@/utils/pdfExport";
 import { ROIMetrics } from '@/types/roi';
 import { useToast } from "@/hooks/use-toast";
-
+import { sendSlackMessage, buildEmailCaptureBlocks } from "@/utils/slack";
 interface PDFPreviewDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -135,6 +135,15 @@ export const PDFPreviewDialog = ({
             title: "Email Sent Successfully",
             description: `Your ROI report has been sent to ${emailAddress}`,
           });
+
+          // Slack: notify PDF email sent
+          const ts = new Date();
+          sendSlackMessage(
+            `PDF Report emailed to ${emailAddress} at ${ts.toISOString()}`,
+            buildEmailCaptureBlocks(emailAddress, 'PDF Request', ts.toLocaleString())
+          )
+            .then((res) => console.info('Slack PDF-email result:', res))
+            .catch((err) => console.error('Slack PDF-email error:', err));
         } else {
           throw new Error('Email sending failed');
         }

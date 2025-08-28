@@ -12,7 +12,7 @@ import { generatePDFReport } from '@/utils/pdfExport';
 import { formatCurrency } from '@/utils/formatters';
 import { FAQ } from '@/components/FAQ';
 import { Footer } from '@/components/Footer';
-
+import { sendSlackMessage, buildEmailCaptureBlocks } from '@/utils/slack';
 
 export const ROICalculator = () => {
   const { toast } = useToast();
@@ -233,6 +233,15 @@ export const ROICalculator = () => {
 
   const handleEmailSubmit = () => {
     if (userEmail) {
+      // Slack: notify email capture
+      const ts = new Date();
+      sendSlackMessage(
+        `Email Captured: ${userEmail} at ${ts.toISOString()}`,
+        buildEmailCaptureBlocks(userEmail, 'ROI Calculator', ts.toLocaleString())
+      )
+        .then((res) => console.info('Slack email-capture result:', res))
+        .catch((err) => console.error('Slack email-capture error:', err));
+
       setShowEmailDialog(false);
       setShowResults(true);
       triggerConfetti();
