@@ -839,15 +839,24 @@ const CombinedCalculator = ({
                 <div className="text-xs text-white/70 mb-6">Updated {new Date().toLocaleDateString()}</div>
                   <div className="grid grid-cols-1 gap-3">
                     <div className="flex items-center justify-between rounded-xl bg-white px-4 py-4 border border-gray-200 h-16">
-                      <span className="font-medium text-green-accent">Cost Savings</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-green-accent">Cost Savings</span>
+                        <TooltipInfo content="Total cost reduction from improved operational efficiency, including reduced manual work, automated billing processes, and technology savings" />
+                      </div>
                       <span className="font-semibold text-green-accent">{formatCurrency(totalCostSavings)}</span>
                     </div>
                     <div className="flex items-center justify-between rounded-xl bg-white px-4 py-4 border border-gray-200 h-16">
-                      <span className="font-medium text-purple-accent">Revenue Increase</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-purple-accent">Revenue Increase</span>
+                        <TooltipInfo content="Additional revenue generated through improved claim capture, faster processing, enhanced RVU optimization, and reduced denial rates" />
+                      </div>
                       <span className="font-semibold text-purple-accent">{formatCurrency(totalRevenueIncrease)}</span>
                     </div>
                     <div className="flex items-center justify-between rounded-xl bg-white px-4 py-4 border border-gray-200 h-16">
-                      <span className="font-medium text-green-accent">Risk Reduction</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-green-accent">Risk Reduction</span>
+                        <TooltipInfo content="Value of compliance risk mitigation through improved coding accuracy, reduced overcoding potential, and enhanced audit protection" />
+                      </div>
                       <span className="font-semibold text-green-accent">{formatCurrency(totalRiskReduction)}</span>
                     </div>
                   </div>

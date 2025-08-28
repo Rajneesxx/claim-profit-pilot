@@ -278,12 +278,12 @@ export const ROICalculator = () => {
 
       {/* Header */}
       <div className="bg-white border-b border-gray-200 relative z-10">
-        <div className="w-full px-6 py-4">
+        <div className="w-full px-6 py-6">{/* Increased padding from py-4 to py-6 */}
           <div className="flex items-center justify-between">
             {/* Logo and Navigation Links - Left Side */}
             <div className="flex items-center gap-8">
               {/* Logo */}
-              <svg width="160" height="45" viewBox="0 0 320 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-8 w-auto">
+              <svg width="180" height="50" viewBox="0 0 320 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-10 w-auto">{/* Increased size */}
                 {/* Stylized "R" icon */}
                 <g>
                   <polygon points="20,45 40,25 50,35 35,45 50,60 40,70" fill="#FF3B1F"/>
@@ -300,14 +300,14 @@ export const ROICalculator = () => {
               </svg>
               
               {/* Navigation Links */}
-              <nav className="hidden md:flex items-center gap-6">
-                <a href="https://www.rapidclaims.ai/" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+              <nav className="hidden md:flex items-center gap-8">{/* Increased gap from 6 to 8 */}
+                <a href="https://www.rapidclaims.ai/" className="text-gray-900 font-bold text-lg hover:text-purple-600 transition-colors">{/* Increased font size and weight */}
                   PRODUCTS
                 </a>
-                <a href="https://www.rapidclaims.ai/solutions" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                <a href="https://www.rapidclaims.ai/solutions" className="text-gray-900 font-bold text-lg hover:text-purple-600 transition-colors">
                   SOLUTIONS
                 </a>
-                <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-900 font-semibold hover:text-purple-600 transition-colors">
+                <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-900 font-bold text-lg hover:text-purple-600 transition-colors">
                   RESOURCES
                 </a>
               </nav>
@@ -317,7 +317,7 @@ export const ROICalculator = () => {
             <div className="flex items-center">
               <Button 
                 onClick={() => window.open('https://www.rapidclaims.ai/get-in-touch', '_self')}
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded-lg"
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 text-lg rounded-lg"
               >
                 Book a Demo
               </Button>
