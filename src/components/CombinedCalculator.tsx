@@ -1016,7 +1016,6 @@ const handleSignInSubmit = () => {
                   )}
                 </div>
                 
-                <div className="mt-6 text-white/80 text-sm">Implementation Investment: {formatCurrency(scaledImplementationCost)}</div>
               </div>
             </div>
           </div>
