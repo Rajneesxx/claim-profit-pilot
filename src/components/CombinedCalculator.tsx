@@ -18,7 +18,7 @@ import { ProductDescription } from "./ProductDescription";
 import { MetricsExpandedView } from "./MetricsExpandedView";
 import { TooltipInfo } from "./TooltipInfo";
 import { formatCurrency, formatNumber } from "@/utils/formatters";
-import { sendSlackMessage, buildSignInBlocks } from "@/utils/slack";
+import { sendSlackMessage, buildSignInBlocks, buildEmailCaptureBlocks } from "@/utils/slack";
 import { FAQ } from "./FAQ";
 import { Footer } from "./Footer";
 
@@ -347,7 +347,7 @@ const CombinedCalculator = ({
     setLeverLevels(prev => ({ ...prev, [lever]: level }));
   };
 
-const handleSignInSubmit = () => {
+const handleSignInSubmit = async () => {
   console.log('=== SIGN IN SUBMIT CALLED ===');
   console.log('userEmail:', userEmail);
   console.log('Email valid:', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail));
@@ -362,31 +362,58 @@ const handleSignInSubmit = () => {
       description: "You now have full access to the ROI calculator.",
     });
 
-    // Send Slack notification with debugging
-    console.log('=== SENDING SLACK NOTIFICATION ===');
-    const ts = new Date();
-    const text = `User Signed In: ${userEmail} at ${ts.toISOString()}`;
-    console.log('Slack message text:', text);
-    console.log('Slack webhook URL:', localStorage.getItem('slack_webhook_url'));
+    // Send Slack notification for sign-in
+    console.log('=== SENDING SLACK SIGN-IN NOTIFICATION ===');
+    const timestamp = new Date();
+    const timestampLocal = timestamp.toLocaleString();
     
-    sendSlackMessage(text, buildSignInBlocks(userEmail, ts.toLocaleString()))
-      .then((res) => {
-        console.info('✅ Slack notification SUCCESS:', res);
-      })
-      .catch((err) => {
-        console.error('❌ Slack notification ERROR:', err);
-      });
+    try {
+      const result = await sendSlackMessage(
+        `User Signed In: ${userEmail}`, 
+        buildSignInBlocks(userEmail, timestampLocal)
+      );
+      console.info('✅ Slack sign-in notification result:', result);
+    } catch (error) {
+      console.error('❌ Slack sign-in notification error:', error);
+    }
+
+    // Also send email capture notification
+    console.log('=== SENDING SLACK EMAIL CAPTURE NOTIFICATION ===');
+    try {
+      const emailResult = await sendSlackMessage(
+        `Email Captured from ROI Calculator: ${userEmail}`,
+        buildEmailCaptureBlocks(userEmail, 'ROI Calculator', timestampLocal)
+      );
+      console.info('✅ Slack email capture notification result:', emailResult);
+    } catch (error) {
+      console.error('❌ Slack email capture notification error:', error);
+    }
   } else {
     console.log('Sign-in validation failed');
   }
 };
 
-  const handleROIEmailSubmit = () => {
+  const handleROIEmailSubmit = async () => {
     console.log('=== handleROIEmailSubmit CALLED ===');
     console.log('userEmail:', userEmail);
     
     if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
       console.log('Valid email, closing dialog and showing success');
+      
+      // Send Slack notification for email capture from PDF request
+      console.log('=== SENDING SLACK EMAIL CAPTURE NOTIFICATION ===');
+      const timestamp = new Date();
+      const timestampLocal = timestamp.toLocaleString();
+      
+      try {
+        const result = await sendSlackMessage(
+          `Email Captured from PDF Request: ${userEmail}`,
+          buildEmailCaptureBlocks(userEmail, 'PDF Request', timestampLocal)
+        );
+        console.info('✅ Slack email capture (PDF) notification result:', result);
+      } catch (error) {
+        console.error('❌ Slack email capture (PDF) notification error:', error);
+      }
       setShowPDFPreview(false);
       
       // Generate and send the detailed PDF report

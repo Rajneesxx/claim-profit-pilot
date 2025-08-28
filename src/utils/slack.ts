@@ -25,7 +25,7 @@ export const setSlackWebhookUrl = (url: string) => {
 export async function sendSlackMessage(message: string, blocks?: any[]) {
   const webhookUrl = getSlackWebhookUrl();
   if (!webhookUrl) {
-    console.warn('Slack webhook URL not set. Set via localStorage.setItem("slack_webhook_url", "curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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")');
+    console.warn('Slack webhook URL not set. Set via localStorage.setItem("slack_webhook_url", "https://hooks.slack.com/services/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")');
     return { ok: false, reason: 'missing_webhook_url' } as const;
   }
 
