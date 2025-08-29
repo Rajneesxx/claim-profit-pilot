@@ -30,8 +30,8 @@ export const SignInDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogPortal>
         <DialogOverlay />
-        <DialogOverlay className="bg-gray-500 bg-opacity-75 fixed inset-0" />
-        <DialogContent className="bg-background border border-border w-full max-w-md mx-auto rounded-2xl">
+         <DialogOverlay className="bg-black bg-opacity-75 fixed inset-0" />
+          <DialogContent className="bg-background border border-border w-full max-w-md mx-auto rounded-2xl">
         <DialogHeader className="text-center space-y-6 pb-2">
           <DialogTitle className="text-2xl font-semibold text-foreground">
             Find Out How Much You Could Recover
