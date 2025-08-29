@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -165,24 +164,7 @@ const CombinedCalculator = ({
   });
   const { toast } = useToast();
 
-  // Initialize Google Apps Script webhook URL
-  useEffect(() => {
-    try {
-      const defaultWebhook = 'https://script.google.com/macros/s/AKfycbwj6L69uCXMkw_xpO3m-J4rILcLHxXupZosiIRiDaA_mwvQMhq_FISd2wy4tMmZZC5SFA/exec';
-      const existing = localStorage.getItem('spreadsheet_webhook_url');
-      if (!existing) {
-        localStorage.setItem('spreadsheet_webhook_url', defaultWebhook);
-        console.info('[Spreadsheet] Webhook URL not configured. To enable spreadsheet integration:');
-        console.info('[Spreadsheet] 1. Set up a Google Apps Script webhook or Zapier webhook');
-        console.info('[Spreadsheet] 2. Run: localStorage.setItem("spreadsheet_webhook_url", "your-webhook-url")');
-        console.info('[Spreadsheet] 3. Refresh the page');
-      } else if (existing) {
-        console.info('[Spreadsheet] Webhook URL found in localStorage.');
-      }
-    } catch (e) {
-      console.warn('[Spreadsheet] Unable to access localStorage to configure webhook settings.', e);
-    }
-  }, []);
+  // (Removed) Webhook initialization for cleaner UI
 
   // Debug effect to track authentication state
   useEffect(() => {
@@ -1171,42 +1153,7 @@ const handleSignInSubmit = async () => {
         <Footer />
       </div>
 
-      {/* Webhook Configuration Helper */}
-      <div className="w-full bg-gray-50 border-t border-gray-200 py-4 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-sm text-gray-600 mb-2">
-            To enable spreadsheet integration for email capture, configure your webhook URL:
-          </p>
-          <div className="flex flex-col sm:flex-row gap-2 justify-center items-center">
-            <input
-              type="text"
-              placeholder="Enter your webhook URL (Google Apps Script, Zapier, etc.)"
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm w-full max-w-md"
-              id="webhook-url-input"
-            />
-            <button
-              onClick={() => {
-                const input = document.getElementById('webhook-url-input') as HTMLInputElement;
-                const url = input.value.trim();
-                if (url) {
-                  localStorage.setItem('spreadsheet_webhook_url', url);
-                  toast({
-                    title: "✅ Webhook Configured",
-                    description: "Webhook URL saved. Refresh the page to test integration.",
-                  });
-                  input.value = '';
-                }
-              }}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition-colors"
-            >
-              Configure
-            </button>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">
-            Current webhook: {localStorage.getItem('spreadsheet_webhook_url') || 'Not configured'}
-          </p>
-        </div>
-      </div>
+      {/* (Removed) Webhook Configuration Helper for cleaner UI */}
 
       {/* References Modal */}
       <Dialog open={showReferencesModal} onOpenChange={setShowReferencesModal}>
@@ -1263,3 +1210,4 @@ function getTooltipContent(key: keyof ROIMetrics): string {
 }
 
 export default CombinedCalculator;
+
