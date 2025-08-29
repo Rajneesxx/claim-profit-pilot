@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SpreadsheetDebugger } from "./SpreadsheetDebugger";
 import { SpreadsheetSetupGuide } from "./SpreadsheetSetupGuide";
 import { SpreadsheetTestButton } from "./SpreadsheetTestButton";
+import { SpreadsheetSetupHelper } from "./SpreadsheetSetupHelper";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Settings, Bug, TestTube, Trash2 } from "lucide-react";
@@ -76,15 +77,19 @@ export const AdminPanel = () => {
         </div>
         
         <div className="p-6">
-          <Tabs defaultValue="debugger" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+          <Tabs defaultValue="setup" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="setup" className="flex items-center gap-2">
+                <Settings className="h-4 w-4" />
+                Quick Setup
+              </TabsTrigger>
               <TabsTrigger value="debugger" className="flex items-center gap-2">
                 <Bug className="h-4 w-4" />
                 Debugger
               </TabsTrigger>
-              <TabsTrigger value="setup" className="flex items-center gap-2">
+              <TabsTrigger value="guide" className="flex items-center gap-2">
                 <Settings className="h-4 w-4" />
-                Setup
+                Guide
               </TabsTrigger>
               <TabsTrigger value="test" className="flex items-center gap-2">
                 <TestTube className="h-4 w-4" />
@@ -92,11 +97,15 @@ export const AdminPanel = () => {
               </TabsTrigger>
             </TabsList>
             
+            <TabsContent value="setup" className="mt-6">
+              <SpreadsheetSetupHelper />
+            </TabsContent>
+            
             <TabsContent value="debugger" className="mt-6">
               <SpreadsheetDebugger />
             </TabsContent>
             
-            <TabsContent value="setup" className="mt-6">
+            <TabsContent value="guide" className="mt-6">
               <SpreadsheetSetupGuide />
             </TabsContent>
             
