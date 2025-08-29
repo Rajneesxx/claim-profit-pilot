@@ -59,19 +59,69 @@ export async function appendToSpreadsheet(emailData: EmailData) {
     };
     if (token) payload.token = token;
 
-    await fetch(webhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      mode: 'no-cors',
-      body: JSON.stringify(payload),
-    });
+    // 1) Prefer URL-encoded form (easiest for Apps Script to parse into e.parameter.sender)
+    try {
+      const formData = new URLSearchParams();
+      // Explicit flat string fields for maximum compatibility
+      formData.append('sender', String(payload.sender || ''));
+      formData.append('email', String(payload.sender || ''));
+      formData.append('subject', String(payload.subject || ''));
+      formData.append('source', String(payload.source || ''));
+      formData.append('body', String(payload.body || ''));
+      formData.append('date', String(payload.date || ''));
+      formData.append('timestamp', String(payload.timestamp || ''));
+      formData.append('triggered_from', String(payload.triggered_from || ''));
+      formData.append('userAgent', String(payload.userAgent || ''));
+      if (token) formData.append('token', String(token));
 
-    // Since we're using no-cors, we can't read the response
-    // but the request should have been sent
-    console.info('✅ Email data sent to spreadsheet successfully');
-    return { ok: true } as const;
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+        mode: 'no-cors',
+        body: formData.toString(),
+      });
+
+      console.info('✅ Email data sent via application/x-www-form-urlencoded');
+      return { ok: true } as const;
+    } catch (e) {
+      console.warn('Form-encoded POST failed, trying sendBeacon/JSON', e);
+    }
+
+    // 2) Try navigator.sendBeacon with application/json
+    try {
+      if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
+        const beaconBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+        const beaconOk = (navigator as any).sendBeacon(webhookUrl, beaconBlob);
+        if (beaconOk) {
+          console.info('✅ Email data sent via sendBeacon');
+          return { ok: true } as const;
+        }
+      }
+    } catch (e) {
+      console.warn('sendBeacon failed, falling back to JSON fetch', e);
+    }
+
+    // 3) Fallback to JSON POST
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'no-cors',
+        body: JSON.stringify(payload),
+      });
+
+      console.info('✅ Email data sent via JSON');
+      return { ok: true } as const;
+    } catch (e) {
+      console.error('JSON POST failed', e);
+    }
+
+    // If all strategies failed
+    return { ok: false, reason: 'all_strategies_failed' } as const;
   } catch (error) {
     console.error('❌ Error sending email data to spreadsheet:', error);
     return { ok: false, error } as const;
