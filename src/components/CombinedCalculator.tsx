@@ -314,32 +314,16 @@ const CombinedCalculator = ({
     return totalIncrease;
   })();
 
-  // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data and key impact levers
+  // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
   // Overcoding risk reduction using NCCI edits
   const overCodingReduction = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
     const percentOverCodedCharts = metrics.percentOverCodedCharts; // Should be decimal (e.g., 0.05 for 5%)
     const percentReductionNCCI = metrics.percentReductionNCCI; // Should be decimal (e.g., 0.67 for 67%)
     const complianceCostPerCode = metrics.complianceCostPerCode; // Cost per overcoded chart
-    const leverMultiplier = leverImpacts.overCodingReduction[leverLevels.overCodingReduction as 'low' | 'medium' | 'high'];
 
-    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode * leverMultiplier;
-    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, leverMultiplier, result });
-    return result;
-  })();
-
-  // Under coding reduction (additional revenue capture)
-  const underCodingReduction = (() => {
-    const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
-    const percentUnderCodedCharts = metrics.underCodingPercent / 100; // Convert percentage to decimal
-    const avgRevenuePerChart = metrics.revenueClaimed / chartsPerAnnum;
-    const leverMultiplier = leverImpacts.underCodingReduction[leverLevels.underCodingReduction as 'low' | 'medium' | 'high'];
-    
-    // Assume under coding results in ~10% revenue loss per affected chart
-    const revenueRecaptureRate = 0.1;
-    const result = chartsPerAnnum * percentUnderCodedCharts * avgRevenuePerChart * revenueRecaptureRate * leverMultiplier;
-    console.log('Under Coding Reduction:', { chartsPerAnnum, percentUnderCodedCharts, avgRevenuePerChart, revenueRecaptureRate, leverMultiplier, result });
-    
+    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode;
+    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, result });
     return result;
   })();
   // Total calculations with capping to prevent savings exceeding revenue
@@ -348,7 +332,7 @@ const CombinedCalculator = ({
     technologyCostSavings + claimDenialSavings + ARdays,
     metrics.revenueClaimed * 0.65 // Cap at 65% of revenue
   );
-  const totalRevenueIncrease = rvuIncrease + underCodingReduction;
+  const totalRevenueIncrease = rvuIncrease;
   const totalRiskReduction = overCodingReduction;
   const totalImpact = totalCostSavings + totalRevenueIncrease + totalRiskReduction;
   
