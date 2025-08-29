@@ -314,7 +314,7 @@ const CombinedCalculator = ({
     return totalIncrease;
   })();
 
-  / Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
+  // Over/Under coding reduction (risk mitigation) - using actual coding accuracy data
   // Overcoding risk reduction using NCCI edits
   const overCodingReduction = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
