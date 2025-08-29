@@ -1143,11 +1143,9 @@ const handleSignInSubmit = async () => {
       </div>
 
       {/* Footer Section - Dark Background Matching Reference */}
-     <div className="w-full bg-slate-900 relative z-10">
-  <div className="max-w-[1240px] mx-auto w-full px-0 md:px-6">
-    <Footer />
-  </div>
-</div>
+     <div className="w-full relative z-10">
+        <Footer />
+      </div>
 
       {/* References Modal */}
       <Dialog open={showReferencesModal} onOpenChange={setShowReferencesModal}>
