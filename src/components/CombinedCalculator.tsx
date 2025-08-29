@@ -323,7 +323,6 @@ const CombinedCalculator = ({
     const complianceCostPerCode = metrics.complianceCostPerCode; // Cost per overcoded chart
     const leverMultiplier = leverImpacts.overCodingReduction[leverLevels.overCodingReduction as 'low' | 'medium' | 'high'];
     const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode * leverMultiplier;
-    console.log('Over Coding Reduction:', { chartsPerAnnum, percentOverCodedCharts, percentReductionNCCI, complianceCostPerCode, result });
     return result;
   })();
   // Total calculations with capping to prevent savings exceeding revenue
