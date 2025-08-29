@@ -77,7 +77,7 @@ const CombinedCalculator = ({
     underCodingPercent: 5,
     avgBillableCodesPerChart: 5,
     percentOverCodedCharts: 0.05,
-    percentReductionNCCI: 1,
+    percentReductionNCCI: 0.67,
     complianceCostPerCode: 1.3
   });
 
@@ -319,10 +319,8 @@ const CombinedCalculator = ({
   const overCodingReduction = (() => {
     const chartsPerAnnum = metrics.chartsProcessedPerAnnum;
     const percentOverCodedCharts = metrics.percentOverCodedCharts; // Should be decimal (e.g., 0.05 for 5%)
-    const percentReductionNCCI = metrics.percentReductionNCCI; // Should be decimal 
     const complianceCostPerCode = metrics.complianceCostPerCode; // Cost per overcoded chart
-    const leverMultiplier = leverImpacts.overCodingReduction[leverLevels.overCodingReduction as 'low' | 'medium' | 'high'];
-    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode * leverMultiplier;
+    const result = chartsPerAnnum * percentOverCodedCharts * percentReductionNCCI * complianceCostPerCode ;
     return result;
   })();
   // Total calculations with capping to prevent savings exceeding revenue
