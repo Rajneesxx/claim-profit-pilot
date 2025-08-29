@@ -21,6 +21,7 @@ import { formatCurrency, formatNumber } from "@/utils/formatters";
 import { appendToSpreadsheet, buildEmailData } from "@/utils/emailToSpreadsheet";
 import { FAQ } from "./FAQ";
 import { Footer } from "./Footer";
+import { AdminPanel } from "./AdminPanel";
 
 interface CombinedCalculatorProps {
   metrics?: ROIMetrics;
@@ -164,7 +165,21 @@ const CombinedCalculator = ({
   });
   const { toast } = useToast();
 
-  // (Removed) Webhook initialization for cleaner UI
+  // Initialize webhook URL on component mount
+  useEffect(() => {
+    try {
+      const currentUrl = localStorage.getItem('spreadsheet_webhook_url');
+      if (!currentUrl) {
+        console.info('🔧 Setting default webhook URL from environment...');
+        localStorage.setItem('spreadsheet_webhook_url', 'https://script.google.com/macros/s/AKfycbxIL4ufHkEWZ0PaLf7qY5maX3GSxrPLBN2ovLIVb2gNbcv9SJ2lBMRAE5EKiHoHKt-GKw/exec');
+        console.info('✅ Default webhook URL configured');
+      } else {
+        console.info('✅ Webhook URL already configured:', currentUrl.substring(0, 50) + '...');
+      }
+    } catch (error) {
+      console.error('❌ Failed to initialize webhook URL:', error);
+    }
+  }, []);
 
   // Debug effect to track authentication state
   useEffect(() => {
@@ -353,6 +368,7 @@ const handleSignInSubmit = async () => {
   console.log('=== SIGN IN SUBMIT CALLED ===');
   console.log('userEmail:', userEmail);
   console.log('Email valid:', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail));
+  console.log('Current webhook URL:', localStorage.getItem('spreadsheet_webhook_url') ? 'Configured' : 'NOT CONFIGURED');
   
   if (userEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
     setIsSignedIn(true);
@@ -376,25 +392,35 @@ const handleSignInSubmit = async () => {
         'User Sign In - ROI Calculator',
         `User signed in to ROI Calculator at ${timestampLocal}`
       );
+      
+      console.log('📤 Attempting to send sign-in data:', emailData);
       const result = await appendToSpreadsheet(emailData);
+      console.log('📥 Spreadsheet response:', result);
+      
       if (result.ok) {
-        console.info('✅ Sign-in data sent to spreadsheet:', result);
+        console.info('✅ Sign-in data sent to spreadsheet successfully');
         toast({
           title: "📊 Data Captured",
           description: "Your sign-in data has been recorded for analysis.",
         });
       } else {
-        console.warn('⚠️ Spreadsheet not configured:', result.reason);
+        console.warn('⚠️ Spreadsheet operation failed:', result);
+        const errorMsg = result.reason === 'missing_webhook_url' 
+          ? "Webhook URL not configured in localStorage" 
+          : `Failed: ${result.reason}`;
+        
         toast({
-          title: "📝 Local Storage",
-          description: "Email captured locally. Contact admin to configure spreadsheet integration.",
+          title: "⚠️ Spreadsheet Issue",
+          description: errorMsg,
+          variant: "destructive"
         });
       }
     } catch (error) {
       console.error('❌ Spreadsheet sign-in error:', error);
       toast({
-        title: "📝 Local Storage",
-        description: "Email captured locally. Contact admin to configure spreadsheet integration.",
+        title: "❌ Connection Error",
+        description: "Failed to connect to spreadsheet webhook",
+        variant: "destructive"
       });
     }
 
@@ -407,17 +433,26 @@ const handleSignInSubmit = async () => {
         'Email Capture - ROI Calculator',
         `Email captured from ROI Calculator at ${timestampLocal}`
       );
+      
+      console.log('📤 Attempting to send email capture data:', emailCaptureData);
       const emailResult = await appendToSpreadsheet(emailCaptureData);
+      console.log('📥 Email capture response:', emailResult);
+      
       if (emailResult.ok) {
-        console.info('✅ Email capture data sent to spreadsheet:', emailResult);
+        console.info('✅ Email capture data sent to spreadsheet successfully');
       } else {
-        console.warn('⚠️ Email capture spreadsheet not configured:', emailResult.reason);
+        console.warn('⚠️ Email capture failed:', emailResult);
       }
     } catch (error) {
-      console.error('❌ Spreadsheet email capture error:', error);
+      console.error('❌ Email capture error:', error);
     }
   } else {
-    console.log('Sign-in validation failed');
+    console.log('❌ Sign-in validation failed - invalid email format');
+    toast({
+      title: "❌ Invalid Email",
+      description: "Please enter a valid email address",
+      variant: "destructive"
+    });
   }
 };
 
@@ -1194,6 +1229,8 @@ const handleSignInSubmit = async () => {
           userEmail
         }}
       />
+      
+      <AdminPanel />
     </div>
   );
 };
