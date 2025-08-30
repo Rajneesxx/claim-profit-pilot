@@ -308,6 +308,12 @@ doc.text('The Story Behind the Numbers', pageWidth / 2, yPosition, { align: 'cen
 
 yPosition += 15;
 
+// Calculate percentages first
+const total = data.calculations.totalImpact;
+const costSavingsPercent = Math.round((data.calculations.totalCostSavings / total) * 100);
+const revenuePercent = Math.round((data.calculations.totalRevenueIncrease / total) * 100);
+const riskPercent = Math.round((data.calculations.totalRiskReduction / total) * 100);
+
 // Financial Impact Breakdown on the left
 doc.setTextColor(139, 92, 246);
 doc.setFontSize(14);
@@ -353,11 +359,6 @@ doc.text('reducing audit and penalty exposure.', margin, yPosition);
 const canvas = document.createElement('canvas');
 canvas.width = 150;
 canvas.height = 150;
-
-const total = data.calculations.totalImpact;
-const costSavingsPercent = Math.round((data.calculations.totalCostSavings / total) * 100);
-const revenuePercent = Math.round((data.calculations.totalRevenueIncrease / total) * 100);
-const riskPercent = Math.round((data.calculations.totalRiskReduction / total) * 100);
 
 const chartData = [
   { label: `${costSavingsPercent}%`, value: data.calculations.totalCostSavings },
