@@ -210,31 +210,31 @@ doc.addPage();
   doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
   
-  let yPosition = 30;
+  let yPosition = 20;
   
-  // Header
+  // Header - minimized
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(22);
+  doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
   doc.text('Your Financial Future at a Glance', pageWidth / 2, yPosition, { align: 'center' });
   
-  yPosition += 25;
+  yPosition += 18;
   
-  // Executive Summary section
-  doc.setTextColor(139, 92, 246); // Purple
-  doc.setFontSize(16);
+  // Executive Summary section - minimized
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.text('Executive Summary', margin, yPosition);
   
-  yPosition += 10;
+  yPosition += 8;
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(10);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.text('This ROI analysis models the financial impact of adopting RapidClaims\' AI-powered', margin, yPosition);
-  yPosition += 5;
+  yPosition += 4;
   doc.text('medical coding solutions, using your organization\'s operational data.', margin, yPosition);
   
-  yPosition += 15;
+  yPosition += 12;
   
   // Calculate total from specified values
   const costSavings = 231811;
@@ -242,115 +242,115 @@ doc.addPage();
   const riskReduction = 16750;
   const totalImpact = costSavings + revenueIncrease + riskReduction;
   
-  // Large financial impact number
+  // Large financial impact number - slightly smaller
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(32);
+  doc.setFontSize(28);
   doc.setFont('helvetica', 'bold');
   doc.text('$' + totalImpact.toLocaleString(), margin, yPosition);
   
   yPosition += 8;
-  doc.setFontSize(12);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.text('Estimated Annual Financial Impact', margin, yPosition);
   
-  yPosition += 18;
+  yPosition += 15;
   
-  // Three metric boxes - smaller height to save space
-  const boxWidth = (pageWidth - 2 * margin - 20) / 3;
-  const boxHeight = 35;
+  // Three metric boxes - much smaller
+  const boxWidth = (pageWidth - 2 * margin - 16) / 3;
+  const boxHeight = 28;
   const boxY = yPosition;
   
   // Cost Savings box
   doc.setFillColor(248, 250, 252);
-  doc.roundedRect(margin, boxY, boxWidth, boxHeight, 3, 3, 'F');
+  doc.roundedRect(margin, boxY, boxWidth, boxHeight, 2, 2, 'F');
   doc.setDrawColor(229, 231, 235);
-  doc.roundedRect(margin, boxY, boxWidth, boxHeight, 3, 3, 'S');
+  doc.roundedRect(margin, boxY, boxWidth, boxHeight, 2, 2, 'S');
   
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(16);
+  doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
-  doc.text('$231,811', margin + boxWidth/2, boxY + 14, { align: 'center' });
-  doc.setFontSize(10);
+  doc.text('$231,811', margin + boxWidth/2, boxY + 11, { align: 'center' });
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
-  doc.text('in Cost Savings', margin + boxWidth/2, boxY + 25, { align: 'center' });
+  doc.text('in Cost Savings', margin + boxWidth/2, boxY + 20, { align: 'center' });
   
   // Revenue Uplift box
-  const box2X = margin + boxWidth + 10;
+  const box2X = margin + boxWidth + 8;
   doc.setFillColor(248, 250, 252);
-  doc.roundedRect(box2X, boxY, boxWidth, boxHeight, 3, 3, 'F');
+  doc.roundedRect(box2X, boxY, boxWidth, boxHeight, 2, 2, 'F');
   doc.setDrawColor(229, 231, 235);
-  doc.roundedRect(box2X, boxY, boxWidth, boxHeight, 3, 3, 'S');
+  doc.roundedRect(box2X, boxY, boxWidth, boxHeight, 2, 2, 'S');
   
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(16);
+  doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
-  doc.text('$79,047', box2X + boxWidth/2, boxY + 14, { align: 'center' });
-  doc.setFontSize(10);
+  doc.text('$79,047', box2X + boxWidth/2, boxY + 11, { align: 'center' });
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
-  doc.text('in Revenue Uplift', box2X + boxWidth/2, boxY + 25, { align: 'center' });
+  doc.text('in Revenue Uplift', box2X + boxWidth/2, boxY + 20, { align: 'center' });
   
   // Risk Reduction box
-  const box3X = margin + 2 * boxWidth + 20;
+  const box3X = margin + 2 * boxWidth + 16;
   doc.setFillColor(248, 250, 252);
-  doc.roundedRect(box3X, boxY, boxWidth, boxHeight, 3, 3, 'F');
+  doc.roundedRect(box3X, boxY, boxWidth, boxHeight, 2, 2, 'F');
   doc.setDrawColor(229, 231, 235);
-  doc.roundedRect(box3X, boxY, boxWidth, boxHeight, 3, 3, 'S');
+  doc.roundedRect(box3X, boxY, boxWidth, boxHeight, 2, 2, 'S');
   
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(16);
+  doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
-  doc.text('$16,750', box3X + boxWidth/2, boxY + 14, { align: 'center' });
-  doc.setFontSize(10);
+  doc.text('$16,750', box3X + boxWidth/2, boxY + 11, { align: 'center' });
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
-  doc.text('in Risk Reduction', box3X + boxWidth/2, boxY + 25, { align: 'center' });
+  doc.text('in Risk Reduction', box3X + boxWidth/2, boxY + 20, { align: 'center' });
   
-  yPosition += 45;
+  yPosition += 35;
   
-  // Analysis text
+  // Analysis text - smaller
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(10);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.text('The analysis shows a compelling return on investment, with strong cost reductions', margin, yPosition);
-  yPosition += 5;
+  yPosition += 4;
   doc.text('supported by compliance improvements and modest revenue uplift.', margin, yPosition);
   
-  yPosition += 20;
+  yPosition += 15;
   
-  // The Story Behind the Numbers
+  // The Story Behind the Numbers - smaller
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(18);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.text('The Story Behind the Numbers', pageWidth / 2, yPosition, { align: 'center' });
   
-  yPosition += 18;
+  yPosition += 15;
   
   // Financial Impact Breakdown
   doc.setTextColor(139, 92, 246);
-  doc.setFontSize(14);
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.text('Financial Impact Breakdown', margin, yPosition);
   
-  yPosition += 15;
+  yPosition += 12;
   
   const costSavingsPercent = Math.round((costSavings / totalImpact) * 100);
   const revenuePercent = Math.round((revenueIncrease / totalImpact) * 100);
   const riskPercent = Math.round((riskReduction / totalImpact) * 100);
   
-  // Create pie chart with proper dimensions and positioning
+  // Create smaller pie chart
   const canvas = document.createElement('canvas');
-  canvas.width = 140;
-  canvas.height = 140;
+  canvas.width = 120;
+  canvas.height = 120;
   const ctx = canvas.getContext('2d');
   
   // Clear canvas background
   ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 140, 140);
+  ctx.fillRect(0, 0, 120, 120);
   
   // Draw pie chart
-  const centerX = 70;
-  const centerY = 70;
-  const radius = 50;
-  let currentAngle = -Math.PI / 2; // Start from top
+  const centerX = 60;
+  const centerY = 60;
+  const radius = 45;
+  let currentAngle = -Math.PI / 2;
   
   const segments = [
     { value: costSavings, color: '#8b5cf6', percent: costSavingsPercent },
@@ -369,32 +369,34 @@ doc.addPage();
     ctx.closePath();
     ctx.fill();
     
-    // Add percentage label on slice
-    const labelAngle = currentAngle + sliceAngle / 2;
-    const labelX = centerX + Math.cos(labelAngle) * (radius * 0.6);
-    const labelY = centerY + Math.sin(labelAngle) * (radius * 0.6);
-    
-    ctx.fillStyle = '#000000';
-    ctx.font = 'bold 11px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(segment.percent + '%', labelX, labelY);
+    // Add percentage label
+    if (sliceAngle > 0.2) { // Only show label if slice is big enough
+      const labelAngle = currentAngle + sliceAngle / 2;
+      const labelX = centerX + Math.cos(labelAngle) * (radius * 0.65);
+      const labelY = centerY + Math.sin(labelAngle) * (radius * 0.65);
+      
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 10px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(segment.percent + '%', labelX, labelY);
+    }
     
     currentAngle += sliceAngle;
   });
 
   try {
     const chartDataUrl = canvas.toDataURL('image/png');
-    // Position chart on the right side
-    const chartX = pageWidth - margin - 85;
+    // Position smaller chart on the right
+    const chartX = pageWidth - margin - 70;
     const chartY = yPosition - 5;
-    doc.addImage(chartDataUrl, 'PNG', chartX, chartY, 70, 70);
+    doc.addImage(chartDataUrl, 'PNG', chartX, chartY, 60, 60);
     
-    // Legend positioned below the chart
-    const legendX = chartX;
-    let legendY = chartY + 80;
+    // Legend positioned below the chart with compact spacing
+    const legendX = chartX - 10;
+    let legendY = chartY + 70;
     
-    // Legend items with specified values
+    // Legend items
     const legendItems = [
       { color: '#8b5cf6', label: 'Cost Savings:', value: '$231,811' },
       { color: '#10b981', label: 'Revenue Increase:', value: '$79,047' },
@@ -404,24 +406,96 @@ doc.addPage();
     legendItems.forEach((item, index) => {
       // Color circle
       doc.setFillColor(...hexToRgb(item.color));
-      doc.circle(legendX + 5, legendY - 1, 2.5, 'F');
+      doc.circle(legendX, legendY - 1, 2, 'F');
       
       // Label and value
       doc.setTextColor(0, 0, 0);
-      doc.setFontSize(9);
+      doc.setFontSize(8);
       doc.setFont('helvetica', 'normal');
-      doc.text(item.label, legendX + 12, legendY);
+      doc.text(item.label, legendX + 8, legendY);
       doc.setFont('helvetica', 'bold');
-      doc.text(item.value, legendX + 45, legendY);
+      doc.text(item.value, legendX + 38, legendY);
       
-      legendY += 8;
+      legendY += 7;
     });
     
   } catch (error) {
     console.warn('Chart generation failed:', error);
   }
+  
+  // Left side breakdown text - more compact
+  const breakdownY = yPosition;
+  
+  // Cost Savings
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`${costSavingsPercent}% Cost Savings`, margin, breakdownY);
+  yPosition = breakdownY + 6;
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Driven by AI automation that boosts coder', margin, yPosition);
+  yPosition += 4;
+  doc.text('productivity and eliminates manual tasks.', margin, yPosition);
+  
+  yPosition += 10;
+  
+  // Revenue Increase
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`${revenuePercent}% Revenue Increase`, margin, yPosition);
+  yPosition += 6;
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Driven by improved coding accuracy that', margin, yPosition);
+  yPosition += 4;
+  doc.text('captures missed reimbursements.', margin, yPosition);
+  
+  yPosition += 10;
+  
+  // Risk Reduction
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`${riskPercent}% Risk Reduction`, margin, yPosition);
+  yPosition += 6;
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Driven by enhanced compliance,', margin, yPosition);
+  yPosition += 4;
+  doc.text('reducing audit and penalty exposure.', margin, yPosition);
+  
+  // Quote section - minimized and repositioned
+  yPosition = pageHeight - 45;
+  
+  // Quote background box - smaller
+  doc.setFillColor(248, 250, 252);
+  doc.roundedRect(margin, yPosition - 6, pageWidth - 2 * margin, 20, 2, 2, 'F');
+  doc.setDrawColor(229, 231, 235);
+  doc.roundedRect(margin, yPosition - 6, pageWidth - 2 * margin, 20, 2, 2, 'S');
+  
+  doc.setTextColor(139, 92, 246);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'italic');
+  doc.text('"Imagine recovering every collectible dollar, automatically."', pageWidth / 2, yPosition + 3, { align: 'center' });
+  
+  // RapidClaims footer - minimized
+  const footerY = pageHeight - 15;
+  doc.setTextColor(255, 69, 58);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Rapid', pageWidth - margin - 35, footerY);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Claims', pageWidth - margin - 10, footerY);
 
-
+// Helper function for hex to RGB conversion
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? [
+    parseInt(result[1], 16),
+    parseInt(result[2], 16),
+    parseInt(result[3], 16)
+  ] : [0, 0, 0];
+}
   
   // ================== PAGE 3: DETAILED ANALYSIS ==================
   doc.addPage();
