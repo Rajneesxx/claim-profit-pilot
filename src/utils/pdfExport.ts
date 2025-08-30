@@ -26,7 +26,7 @@ const createChart = (canvas: HTMLCanvasElement, width: number, height: number, d
   // Draw pie chart
   const centerX = width / 2;
   const centerY = height / 2;
-  const radius = Math.min(width, height) * 0.3;
+  const radius = Math.min(width, height) * 0.35;
   
   const total = data.reduce((sum, item) => sum + item.value, 0);
   let currentAngle = -Math.PI / 2;
@@ -41,39 +41,110 @@ const createChart = (canvas: HTMLCanvasElement, width: number, height: number, d
     ctx.fillStyle = colors[index % colors.length];
     ctx.fill();
     ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.stroke();
     
-    // Draw label with better positioning and formatting
+    // Draw speech bubble labels
     const labelAngle = currentAngle + sliceAngle / 2;
-    const labelRadius = radius + 30;
+    const labelRadius = radius + 45;
     const labelX = centerX + Math.cos(labelAngle) * labelRadius;
     const labelY = centerY + Math.sin(labelAngle) * labelRadius;
     
-    // Determine text alignment based on position
-    let textAlign: CanvasTextAlign = 'center';
-    if (labelX < centerX - radius * 0.5) textAlign = 'right';
-    else if (labelX > centerX + radius * 0.5) textAlign = 'left';
+    // Speech bubble dimensions
+    const bubbleWidth = 35;
+    const bubbleHeight = 20;
+    const cornerRadius = 10;
     
-    // Draw white background for better readability
-    ctx.font = 'bold 11px Arial';
-    ctx.textAlign = textAlign;
-    const textMetrics = ctx.measureText(item.label);
-    const textWidth = textMetrics.width;
-    const textHeight = 12;
+    // Draw black rounded speech bubble
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.roundRect(labelX - bubbleWidth/2, labelY - bubbleHeight/2, bubbleWidth, bubbleHeight, cornerRadius);
+    ctx.fill();
     
-    let bgX = labelX;
-    if (textAlign === 'right') bgX -= textWidth;
-    else if (textAlign === 'center') bgX -= textWidth / 2;
+    // Draw pointer triangle
+    const triangleSize = 6;
+    const triangleX = centerX + Math.cos(labelAngle) * (radius + 25);
+    const triangleY = centerY + Math.sin(labelAngle) * (radius + 25);
     
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    ctx.fillRect(bgX - 3, labelY - textHeight, textWidth + 6, textHeight + 4);
+    ctx.beginPath();
+    ctx.moveTo(triangleX, triangleY);
+    ctx.lineTo(labelX - Math.cos(labelAngle) * triangleSize, labelY - Math.sin(labelAngle) * triangleSize);
+    ctx.lineTo(labelX + Math.cos(labelAngle + Math.PI/3) * triangleSize, labelY + Math.sin(labelAngle + Math.PI/3) * triangleSize);
+    ctx.closePath();
+    ctx.fill();
     
-    // Draw text with dark color
-    ctx.fillStyle = '#1a1a1a';
+    // Draw white percentage text
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 12px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     ctx.fillText(item.label, labelX, labelY);
     
     currentAngle += sliceAngle;
+  });
+};
+
+const createGrowthChart = (canvas: HTMLCanvasElement, width: number, height: number) => {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  ctx.clearRect(0, 0, width, height);
+  
+  // Create gradient background
+  const gradient = ctx.createLinearGradient(0, 0, width, 0);
+  gradient.addColorStop(0, '#8b5cf6'); // Purple
+  gradient.addColorStop(1, '#10b981'); // Green
+  
+  // Draw rounded background
+  const cornerRadius = 20;
+  ctx.fillStyle = gradient;
+  ctx.beginPath();
+  ctx.roundRect(20, 20, width - 40, height - 40, cornerRadius);
+  ctx.fill();
+  
+  // Milestone data
+  const milestones = [
+    { x: 60, y: height - 60, label: 'Apr \'24', desc: 'Onboarded\nfirst client' },
+    { x: 120, y: height - 80, label: 'Aug \'24', desc: 'On-boarded one\nof the largest\nFQHCs in USA' },
+    { x: 180, y: height - 100, label: 'Dec \'24', desc: '$1M CARR\nSeries A backed by Accel' },
+    { x: 240, y: height - 120, label: 'Apr \'25', desc: '$2.7M CARR\n200 high velocity pipeline' },
+    { x: 300, y: height - 140, label: 'Aug \'25', desc: '$5M CARR' },
+    { x: 360, y: height - 160, label: 'Dec \'25', desc: '$10M CARR' }
+  ];
+  
+  // Draw curve connecting milestones
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  milestones.forEach((milestone, index) => {
+    if (index === 0) {
+      ctx.moveTo(milestone.x, milestone.y);
+    } else {
+      ctx.lineTo(milestone.x, milestone.y);
+    }
+  });
+  ctx.stroke();
+  
+  // Draw milestone dots and labels
+  milestones.forEach((milestone, index) => {
+    // Draw white dot
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(milestone.x, milestone.y, 6, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Draw timeline label
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 10px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(milestone.label, milestone.x, milestone.y + 20);
+    
+    // Draw description
+    ctx.font = '8px Arial';
+    const lines = milestone.desc.split('\n');
+    lines.forEach((line, lineIndex) => {
+      ctx.fillText(line, milestone.x, milestone.y - 20 - (lines.length - lineIndex - 1) * 10);
+    });
   });
 };
 
@@ -268,7 +339,7 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
     { label: `${riskPercent}%`, value: data.calculations.totalRiskReduction }
   ];
   
-  const chartColors = ['#8b5cf6', '#10b981', '#e5e7eb']; // Purple, Green, Light Gray
+  const chartColors = ['#8b5cf6', '#10b981', '#e9d5ff']; // Purple, Green, Light Purple
   createChart(canvas, 200, 200, chartData, chartColors);
 
   try {
@@ -320,7 +391,7 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   const legendItems = [
     { color: '#8b5cf6', label: 'Cost Savings:', value: formatCurrency(data.calculations.totalCostSavings) },
     { color: '#10b981', label: 'Revenue Increase:', value: formatCurrency(data.calculations.totalRevenueIncrease) },
-    { color: '#e5e7eb', label: 'Risk Reduction:', value: formatCurrency(data.calculations.totalRiskReduction) }
+    { color: '#e9d5ff', label: 'Risk Reduction:', value: formatCurrency(data.calculations.totalRiskReduction) }
   ];
   
   legendItems.forEach((item, index) => {
@@ -507,72 +578,57 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   doc.setFont('helvetica', 'bold');
   doc.text('The Levers Driving Your ROI', pageWidth / 2, yPosition, { align: 'center' });
   
-  yPosition += 25;
+  yPosition += 30;
   
-  // Four boxes in a 2x2 grid
-  const boxWidth2 = (pageWidth - 2 * margin - 15) / 2;
-  const boxHeight2 = 35;
+  // Four pillars in a single row
+  const pillarWidth = (pageWidth - 2 * margin - 30) / 4;
+  const pillarHeight = 50;
+  const pillarY = yPosition;
   
-  // Box 1: Coder Productivity
-  doc.setFillColor(240, 248, 255);
-  doc.rect(margin, yPosition, boxWidth2, boxHeight2, 'F');
-  doc.setDrawColor(200, 200, 200);
-  doc.rect(margin, yPosition, boxWidth2, boxHeight2, 'S');
+  const pillars = [
+    { title: 'Coder\nProductivity', desc: 'AI reduces time per\nchart by up to 100%.' },
+    { title: 'Billing\nAutomation', desc: '40% fewer denials\nand faster\nturnaround.' },
+    { title: 'Physician Time\nSaved', desc: 'Fewer queries and\ndocumentation\nbottlenecks.' },
+    { title: 'Tech Cost\nOptimization', desc: 'Replace legacy\nsystems and reduce\nIT overhead.' }
+  ];
   
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Coder Productivity', margin + 10, yPosition + 12);
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('AI reduces time per chart by up to 100%.', margin + 10, yPosition + 25);
+  pillars.forEach((pillar, index) => {
+    const pillarX = margin + index * (pillarWidth + 10);
+    
+    // Draw pillar box with purple accent
+    doc.setFillColor(248, 250, 252);
+    doc.rect(pillarX, pillarY, pillarWidth, pillarHeight, 'F');
+    doc.setDrawColor(139, 92, 246);
+    doc.setLineWidth(0.5);
+    doc.rect(pillarX, pillarY, pillarWidth, pillarHeight, 'S');
+    
+    // Add purple accent line at top
+    doc.setFillColor(139, 92, 246);
+    doc.rect(pillarX, pillarY, pillarWidth, 3, 'F');
+    
+    // Add icon placeholder (simple geometric shape)
+    doc.setFillColor(139, 92, 246);
+    doc.circle(pillarX + pillarWidth/2, pillarY + 12, 4, 'F');
+    
+    // Title
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    const titleLines = pillar.title.split('\n');
+    titleLines.forEach((line, lineIndex) => {
+      doc.text(line, pillarX + pillarWidth/2, pillarY + 22 + lineIndex * 5, { align: 'center' });
+    });
+    
+    // Description
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    const descLines = pillar.desc.split('\n');
+    descLines.forEach((line, lineIndex) => {
+      doc.text(line, pillarX + pillarWidth/2, pillarY + 35 + lineIndex * 4, { align: 'center' });
+    });
+  });
   
-  // Box 2: Billing Automation
-  const box2X2 = margin + boxWidth2 + 15;
-  doc.setFillColor(240, 248, 255);
-  doc.rect(box2X2, yPosition, boxWidth2, boxHeight2, 'F');
-  doc.setDrawColor(200, 200, 200);
-  doc.rect(box2X2, yPosition, boxWidth2, boxHeight2, 'S');
-  
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Billing Automation', box2X2 + 10, yPosition + 12);
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('40% fewer denials and faster turnaround.', box2X2 + 10, yPosition + 25);
-  
-  yPosition += 45;
-  
-  // Box 3: Physician Time Saved
-  doc.setFillColor(240, 248, 255);
-  doc.rect(margin, yPosition, boxWidth2, boxHeight2, 'F');
-  doc.setDrawColor(200, 200, 200);
-  doc.rect(margin, yPosition, boxWidth2, boxHeight2, 'S');
-  
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Physician Time Saved', margin + 10, yPosition + 12);
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Fewer queries and documentation bottlenecks.', margin + 10, yPosition + 25);
-  
-  // Box 4: Tech Cost Optimization
-  doc.setFillColor(240, 248, 255);
-  doc.rect(box2X2, yPosition, boxWidth2, boxHeight2, 'F');
-  doc.setDrawColor(200, 200, 200);
-  doc.rect(box2X2, yPosition, boxWidth2, boxHeight2, 'S');
-  
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Tech Cost Optimization', box2X2 + 10, yPosition + 12);
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Replace legacy systems and reduce IT overhead.', box2X2 + 10, yPosition + 25);
-  
-  yPosition += 55;
+  yPosition += 70;
   
   // Quote
   doc.setTextColor(139, 92, 246);
@@ -609,6 +665,95 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   doc.text('Accelerate implementation with structured AI integration, real-time automation, and ongoing', margin, yPosition);
   yPosition += 6;
   doc.text('enhancements to maximize accuracy, compliance, and financial impact.', margin, yPosition);
+  
+  yPosition += 25;
+  
+  // Proposed Approach header
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Proposed Approach', margin, yPosition);
+  
+  yPosition += 15;
+  
+  // Implementation table
+  const tableHeaders = ['Overview', 'Baseline Setup\n& Data Integration', 'AI Model Customization\n& Parallel Testing', 'Pilot Deployment & CDI\nWorkflow Optimization', 'Full-Scale Go-Live &\nWorkflow Integration', 'Continuous\nOptimization', 'Measure\nand Adapt'];
+  const tableRows = [
+    ['2 weeks', '2 weeks', '2 weeks', '2 weeks', '', ''],
+    ['Establish seamless\nintegration with EMR, RCM,\nand claims systems.\nIngesting historical data to\ntrain AI models with venue-\nspecific rules.\nSpecify workflows, and\ncompliance settings to align\nAI recommendations with\nservice-specific needs.', 'Fine-tune AI models using\nreal-world data, with coding\npatterns while running\nalongside human coders\nover initial data.\nEnable 24/7 monitoring to\ncontinually assess flags\nMonitor AI-generated coding\ndata vs recommendations\nThresholds.', 'Deploy AI-powered CDI and\nautonomous coding in a\ncontrolled environment.\nOptimize workflow paths,\nadjust automation levels and\nimprove coding efficiency.', 'Transition to full-scale\ndeployment with AI\nintegration, real-time\ncoding, documentation\nimprovements, and\nmaximal revenue with\noptimal automation,\nFinalize billing integration.\nTrain coders and providers on\nworkflow optimizations,\nmaximize revenue cycle\nworkflows for\nsustained accuracy,\ncompliance, and financial\nefficiency.', 'With full automation in place,\nthe focus shifts to\ncontinuous monitoring,\nexpanding AI-driven\nautomation across\nadditional workflows and\nrevenue cycle workflows for\nsustained accuracy,\ncompliance, and financial\nefficiency.', 'AI continuously adapts to\nreal-world workflow patterns\nand incorporates ongoing\ndocumentation workflows,\nand incorporating new\nperformance assessments.\nHeart sustained automation\nefficiency, regulatory\ncompliance, and financial\noptimization.']
+  ];
+  
+  const colWidth = (pageWidth - 2 * margin) / 6;
+  
+  // Draw table headers
+  doc.setFillColor(248, 250, 252);
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 20, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(margin, yPosition, pageWidth - 2 * margin, 20, 'S');
+  
+  // Last column (Measure and Adapt) with purple background
+  doc.setFillColor(139, 92, 246);
+  doc.rect(margin + 5 * colWidth, yPosition, colWidth, 20, 'F');
+  
+  tableHeaders.forEach((header, index) => {
+    const x = margin + index * colWidth + colWidth/2;
+    doc.setTextColor(index === 6 ? 255 : 0, index === 6 ? 255 : 0, index === 6 ? 255 : 0);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    const lines = header.split('\n');
+    lines.forEach((line, lineIndex) => {
+      doc.text(line, x, yPosition + 8 + lineIndex * 4, { align: 'center' });
+    });
+  });
+  
+  yPosition += 25;
+  
+  // Draw table rows
+  tableRows.forEach((row, rowIndex) => {
+    const rowHeight = rowIndex === 0 ? 15 : 45;
+    
+    doc.setFillColor(255, 255, 255);
+    doc.rect(margin, yPosition, pageWidth - 2 * margin, rowHeight, 'F');
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(margin, yPosition, pageWidth - 2 * margin, rowHeight, 'S');
+    
+    if (rowIndex === 0) {
+      // Timeline row
+      doc.setTextColor(139, 92, 246);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      row.forEach((cell, colIndex) => {
+        if (cell) {
+          const x = margin + colIndex * colWidth + colWidth/2;
+          doc.text(cell, x, yPosition + 10, { align: 'center' });
+        }
+      });
+    } else {
+      // Content row
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'normal');
+      row.forEach((cell, colIndex) => {
+        const x = margin + colIndex * colWidth + 2;
+        const lines = doc.splitTextToSize(cell, colWidth - 4);
+        doc.text(lines, x, yPosition + 8);
+      });
+    }
+    
+    yPosition += rowHeight;
+  });
+  
+  yPosition += 10;
+  
+  // Next Steps
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Next Steps: ', margin, yPosition);
+  doc.setFont('helvetica', 'normal');
+  const nextStepsText = 'Finalize integration requirements, provide historical data for AI benchmarking, and align on performance goals to initiate seamless deployment and optimization process.';
+  const nextStepsLines = doc.splitTextToSize(nextStepsText, pageWidth - 2 * margin - 25);
+  doc.text(nextStepsLines, margin + 25, yPosition);
 
   // ================== PAGE 5: GROWTH CHART ==================
   doc.addPage();
@@ -621,7 +766,22 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   doc.setFont('helvetica', 'bold');
   doc.text('Consistently delivering > 6x ROI?', pageWidth / 2, yPosition, { align: 'center' });
   
-  yPosition += 35;
+  yPosition += 20;
+  
+  // Create and add growth chart
+  const growthCanvas = document.createElement('canvas');
+  growthCanvas.width = 400;
+  growthCanvas.height = 120;
+  createGrowthChart(growthCanvas, 400, 120);
+  
+  try {
+    const growthChartDataUrl = growthCanvas.toDataURL('image/png');
+    doc.addImage(growthChartDataUrl, 'PNG', margin, yPosition, pageWidth - 2 * margin, 30);
+  } catch (error) {
+    console.warn('Growth chart generation failed:', error);
+  }
+  
+  yPosition += 45;
   
   // What makes us different
   doc.setFontSize(20);
@@ -634,7 +794,7 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   yPosition += 6;
   doc.text('itself in less than 3 months.', pageWidth / 2, yPosition, { align: 'center' });
   
-  yPosition += 30;
+  yPosition += 20;
   
   // Comparison table header
   doc.setTextColor(139, 92, 246);
