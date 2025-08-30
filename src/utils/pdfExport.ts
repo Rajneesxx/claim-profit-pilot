@@ -168,41 +168,52 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
 
   // ================== COVER PAGE ==================
   // Purple to teal gradient background effect
-  doc.setFillColor(139, 92, 246); // Purple
-  doc.rect(0, 0, pageWidth, pageHeight, 'F');
-  
-  // Gradient overlay simulation with multiple rectangles
-  for (let i = 0; i < 20; i++) {
-    const alpha = i / 20;
-    const red = Math.round(139 + (45 - 139) * alpha);
-    const green = Math.round(92 + (212 - 92) * alpha);
-    const blue = Math.round(246 + (183 - 246) * alpha);
-    doc.setFillColor(red, green, blue);
-    doc.rect(0, pageHeight * i / 20, pageWidth, pageHeight / 20, 'F');
-  }
+ // ✅ Make sure gradient comes first
+for (let i = 0; i < 30; i++) {
+  const alpha = i / 30;
+  const r = Math.round(0x82 + (0x06 - 0x82) * alpha);
+  const g = Math.round(0x0C + (0x5D - 0x0C) * alpha);
+  const b = Math.round(0xC7 + (0x3F - 0xC7) * alpha);
+  doc.setFillColor(r, g, b);
+  doc.rect(0, (pageHeight / 30) * i, pageWidth, pageHeight / 30, 'F');
+}
 
-  // Cover text
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(36);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Your Personalized', pageWidth / 2, pageHeight / 2 - 20, { align: 'center' });
-  doc.text('ROI Blueprint', pageWidth / 2, pageHeight / 2 + 10, { align: 'center' });
-  
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Prepared for:', pageWidth / 2, pageHeight / 2 + 40, { align: 'center' });
-  doc.text('[Client Company Name]', pageWidth / 2, pageHeight / 2 + 55, { align: 'center' });
-  
-  // RapidClaims logo text
-  doc.setFontSize(24);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255, 69, 58); // Red for "Rapid"
-  doc.text('Rapid', pageWidth / 2 - 25, pageHeight - 50, { align: 'center' });
-  doc.setTextColor(255, 255, 255);
-  doc.text('Claims', pageWidth / 2 + 5, pageHeight - 50, { align: 'center' });
+// ✅ Titles
+// Assuming pageHeight = doc.internal.pageSize.getHeight()
 
-  
-  
+// --- Title block ~70% down
+let titleY = pageHeight * 0.69;
+doc.setFontSize(32);
+doc.setFont('helvetica', 'bold');
+doc.setTextColor(255, 255, 255);
+doc.text('Your Personalized',24, titleY);
+doc.text('ROI Blueprint', 24, titleY +18);
+
+// --- Client info ~82% down
+let clientY = pageHeight * 0.82;
+doc.setFontSize(18);
+doc.setFont('helvetica', 'bold');
+doc.text('Prepared for:', 24, clientY);
+doc.setFont('helvetica', 'normal');
+doc.text('[Client Company Name]', 24, clientY + 8);
+
+// --- RapidClaims footer ~91% down
+let footerY = pageHeight * 0.91;
+const logoSize = 14;
+
+let logoOffset = 24;
+doc.setFontSize(20);
+doc.setFont('helvetica', 'bold');
+doc.setTextColor(255, 69, 58); 
+doc.text('Rapid', logoOffset, footerY);
+let rapidWidth = doc.getTextWidth('Rapid ');
+doc.setTextColor(255, 255, 255);
+doc.text('Claims', logoOffset + 20, footerY);
+
+
+
+
+
   // ================== PAGE 2: EXECUTIVE SUMMARY ==================
    doc.addPage();
 
@@ -245,52 +256,52 @@ doc.text('Estimated Annual Financial Impact', margin, yPosition);
 
 yPosition += 15;
 
-const boxWidth = (pageWidth - 2 * margin - 20) / 3;
-const boxHeight = 25;
-const boxY = yPosition;
+/* === ONE PURPLE TAB WITH DIVIDERS (instead of 3 small boxes) === */
+const tabY = yPosition;
+const tabHeight = 30;
+const tabX = margin;
+const tabW = pageWidth - 2 * margin;
 
-doc.setFillColor(240, 248, 255);
-doc.rect(margin, boxY, boxWidth, boxHeight, 'F');
-doc.setDrawColor(200, 200, 200);
-doc.rect(margin, boxY, boxWidth, boxHeight, 'S');
+// Draw background tab
+doc.setFillColor(230, 214, 252); // #E6D6FC
+doc.roundedRect(tabX, tabY, tabW, tabHeight, 4, 4, 'F');
 
+// Divide into 3 equal sections
+const sectionWidth = tabW / 3;
+
+// Draw vertical dividers
+doc.setDrawColor(200, 200, 200); // light gray
+doc.setLineWidth(0.2);
+doc.line(tabX + sectionWidth, tabY, tabX + sectionWidth, tabY + tabHeight);
+doc.line(tabX + 2 * sectionWidth, tabY, tabX + 2 * sectionWidth, tabY + tabHeight);
+
+// 1. Cost Savings
 doc.setTextColor(0, 0, 0);
-doc.setFontSize(16);
+doc.setFontSize(14);
 doc.setFont('helvetica', 'bold');
-doc.text(formatCurrency(data.calculations.totalCostSavings), margin + boxWidth/2, boxY + 10, { align: 'center' });
+doc.text(formatCurrency(data.calculations.totalCostSavings), tabX + sectionWidth / 2, tabY + 12, { align: 'center' });
 doc.setFontSize(9);
 doc.setFont('helvetica', 'normal');
-doc.text('in Cost Savings', margin + boxWidth/2, boxY + 19, { align: 'center' });
+doc.text('in Cost Savings', tabX + sectionWidth / 2, tabY + 22, { align: 'center' });
 
-const box2X = margin + boxWidth + 10;
-doc.setFillColor(240, 248, 255);
-doc.rect(box2X, boxY, boxWidth, boxHeight, 'F');
-doc.setDrawColor(200, 200, 200);
-doc.rect(box2X, boxY, boxWidth, boxHeight, 'S');
-
-doc.setTextColor(0, 0, 0);
-doc.setFontSize(16);
+// 2. Revenue Uplift
+doc.setFontSize(14);
 doc.setFont('helvetica', 'bold');
-doc.text(formatCurrency(data.calculations.totalRevenueIncrease), box2X + boxWidth/2, boxY + 10, { align: 'center' });
+doc.text(formatCurrency(data.calculations.totalRevenueIncrease), tabX + sectionWidth + sectionWidth / 2, tabY + 12, { align: 'center' });
 doc.setFontSize(9);
 doc.setFont('helvetica', 'normal');
-doc.text('in Revenue Uplift', box2X + boxWidth/2, boxY + 19, { align: 'center' });
+doc.text('in Revenue Uplift', tabX + sectionWidth + sectionWidth / 2, tabY + 22, { align: 'center' });
 
-const box3X = margin + 2 * boxWidth + 20;
-doc.setFillColor(240, 248, 255);
-doc.rect(box3X, boxY, boxWidth, boxHeight, 'F');
-doc.setDrawColor(200, 200, 200);
-doc.rect(box3X, boxY, boxWidth, boxHeight, 'S');
-
-doc.setTextColor(0, 0, 0);
-doc.setFontSize(16);
+// 3. Risk Reduction
+doc.setFontSize(14);
 doc.setFont('helvetica', 'bold');
-doc.text(formatCurrency(data.calculations.totalRiskReduction), box3X + boxWidth/2, boxY + 10, { align: 'center' });
+doc.text(formatCurrency(data.calculations.totalRiskReduction), tabX + 2 * sectionWidth + sectionWidth / 2, tabY + 12, { align: 'center' });
 doc.setFontSize(9);
 doc.setFont('helvetica', 'normal');
-doc.text('in Risk Reduction', box3X + boxWidth/2, boxY + 19, { align: 'center' });
+doc.text('in Risk Reduction', tabX + 2 * sectionWidth + sectionWidth / 2, tabY + 22, { align: 'center' });
 
-yPosition += 35;
+yPosition += tabHeight + 15;
+/* === END ONE PURPLE TAB === */
 
 doc.setTextColor(0, 0, 0);
 doc.setFontSize(10);
@@ -315,6 +326,7 @@ const revenuePercent = Math.round((data.calculations.totalRevenueIncrease / tota
 const riskPercent = Math.round((data.calculations.totalRiskReduction / total) * 100);
 
 // Financial Impact Breakdown on the left
+const breakdownStartY = yPosition;
 doc.setTextColor(139, 92, 246);
 doc.setFontSize(14);
 doc.setFont('helvetica', 'bold');
@@ -355,30 +367,34 @@ doc.text('Driven by enhanced compliance,', margin, yPosition);
 yPosition += 4;
 doc.text('reducing audit and penalty exposure.', margin, yPosition);
 
-// Create pie chart on the right
+// Create pie chart on the right side
 const canvas = document.createElement('canvas');
 canvas.width = 150;
 canvas.height = 150;
 
 const chartData = [
-  { label: `${costSavingsPercent}%`, value: data.calculations.totalCostSavings },
-  { label: `${revenuePercent}%`, value: data.calculations.totalRevenueIncrease },
-  { label: `${riskPercent}%`, value: data.calculations.totalRiskReduction }
+  { label: '', value: data.calculations.totalCostSavings },
+  { label: '', value: data.calculations.totalRevenueIncrease },
+  { label: '', value: data.calculations.totalRiskReduction }
 ];
 
 const chartColors = ['#8b5cf6', '#10b981', '#e9d5ff'];
 createChart(canvas, 150, 150, chartData, chartColors);
 
+// Position pie chart
+const chartX = pageWidth - margin - 60;
+const chartY = breakdownStartY - 5;
+
 try {
   const chartDataUrl = canvas.toDataURL('image/png');
-  doc.addImage(chartDataUrl, 'PNG', pageWidth - margin - 60, yPosition - 65, 50, 50); // Adjusted to align with breakdown text
+  doc.addImage(chartDataUrl, 'PNG', chartX, chartY, 50, 50);
 } catch (error) {
   console.warn('Chart generation failed:', error);
 }
 
-// Legend below the pie chart
-const legendX = pageWidth - margin - 100;
-let legendY = yPosition - 65 + 55; // Position directly below pie chart (chart y + height + small gap)
+// Legend below chart
+const legendX = chartX + 25;
+let legendY = chartY + 50;
 
 const legendItems = [
   { color: '#8b5cf6', label: 'Cost Savings:', value: formatCurrency(data.calculations.totalCostSavings) },
@@ -386,32 +402,49 @@ const legendItems = [
   { color: '#e9d5ff', label: 'Risk Reduction:', value: formatCurrency(data.calculations.totalRiskReduction) }
 ];
 
-legendItems.forEach((item, index) => {
+legendItems.forEach((item) => {
   doc.setFillColor(...hexToRgb(item.color));
-  doc.circle(legendX, legendY - 2, 2.5, 'F');
+  doc.circle(legendX - 15, legendY - 2, 2.5, 'F');
 
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text(item.label, legendX + 7, legendY);
+  doc.text(item.label, legendX - 8, legendY);
   doc.setFont('helvetica', 'bold');
-  doc.text(item.value, legendX + 40, legendY);
+  doc.text(item.value, legendX + 25, legendY);
 
   legendY += 7;
 });
 
-yPosition = pageHeight - 40;
+// Quote at bottom
+const quoteY = pageHeight - 40;
+const quoteText = '"Imagine recovering every collectible dollar, automatically."';
+
+doc.setFontSize(12);
+doc.setFont('helvetica', 'italic');
+const textWidth = doc.getTextWidth(quoteText);
+const tabPadding = 10;
+const tabWidth = textWidth + (tabPadding * 2);
+const tabHeightQ = 8;
+const tabXQ = (pageWidth / 2) - (tabWidth / 2);
+
+doc.setFillColor(230, 214, 252); // Light purple background
+doc.roundedRect(tabXQ, quoteY - 6, tabWidth, tabHeightQ, 2, 2, 'F');
+
 doc.setTextColor(139, 92, 246);
 doc.setFontSize(12);
 doc.setFont('helvetica', 'italic');
-doc.text('"Imagine recovering every collectible dollar, automatically."', pageWidth / 2, yPosition, { align: 'center' });
+doc.text(quoteText, pageWidth / 2, quoteY, { align: 'center' });
 
+// Company name
 doc.setTextColor(255, 69, 58);
 doc.setFontSize(14);
 doc.setFont('helvetica', 'bold');
 doc.text('Rapid', pageWidth - margin - 35, pageHeight - 15);
 doc.setTextColor(0, 0, 0);
-doc.text('Claims', pageWidth - margin - 5, pageHeight - 15);
+doc.text('Claims', pageWidth - margin - 35, pageHeight - 15 +32);
+
+
   // ================== PAGE 3: DETAILED ANALYSIS ==================
   doc.addPage();
   
