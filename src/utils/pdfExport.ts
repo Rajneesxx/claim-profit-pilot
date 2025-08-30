@@ -204,7 +204,7 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   
   
   // ================== PAGE 2: EXECUTIVE SUMMARY ==================
- doc.addPage();
+   doc.addPage();
 
 doc.setFillColor(255, 255, 255);
 doc.rect(0, 0, pageWidth, pageHeight, 'F');
@@ -308,37 +308,13 @@ doc.text('The Story Behind the Numbers', pageWidth / 2, yPosition, { align: 'cen
 
 yPosition += 15;
 
+// Financial Impact Breakdown on the left
 doc.setTextColor(139, 92, 246);
 doc.setFontSize(14);
 doc.setFont('helvetica', 'bold');
 doc.text('Financial Impact Breakdown', margin, yPosition);
 
 yPosition += 10;
-
-const canvas = document.createElement('canvas');
-canvas.width = 150;
-canvas.height = 150;
-
-const total = data.calculations.totalImpact;
-const costSavingsPercent = Math.round((data.calculations.totalCostSavings / total) * 100);
-const revenuePercent = Math.round((data.calculations.totalRevenueIncrease / total) * 100);
-const riskPercent = Math.round((data.calculations.totalRiskReduction / total) * 100);
-
-const chartData = [
-  { label: `${costSavingsPercent}%`, value: data.calculations.totalCostSavings },
-  { label: `${revenuePercent}%`, value: data.calculations.totalRevenueIncrease },
-  { label: `${riskPercent}%`, value: data.calculations.totalRiskReduction }
-];
-
-const chartColors = ['#8b5cf6', '#10b981', '#e9d5ff'];
-createChart(canvas, 150, 150, chartData, chartColors);
-
-try {
-  const chartDataUrl = canvas.toDataURL('image/png');
-  doc.addImage(chartDataUrl, 'PNG', pageWidth - margin - 60, yPosition - 5, 50, 50);
-} catch (error) {
-  console.warn('Chart generation failed:', error);
-}
 
 doc.setTextColor(0, 0, 0);
 doc.setFontSize(12);
@@ -373,11 +349,35 @@ doc.text('Driven by enhanced compliance,', margin, yPosition);
 yPosition += 4;
 doc.text('reducing audit and penalty exposure.', margin, yPosition);
 
-yPosition += 10; // Add space before legend
+// Create pie chart on the right
+const canvas = document.createElement('canvas');
+canvas.width = 150;
+canvas.height = 150;
+
+const total = data.calculations.totalImpact;
+const costSavingsPercent = Math.round((data.calculations.totalCostSavings / total) * 100);
+const revenuePercent = Math.round((data.calculations.totalRevenueIncrease / total) * 100);
+const riskPercent = Math.round((data.calculations.totalRiskReduction / total) * 100);
+
+const chartData = [
+  { label: `${costSavingsPercent}%`, value: data.calculations.totalCostSavings },
+  { label: `${revenuePercent}%`, value: data.calculations.totalRevenueIncrease },
+  { label: `${riskPercent}%`, value: data.calculations.totalRiskReduction }
+];
+
+const chartColors = ['#8b5cf6', '#10b981', '#e9d5ff'];
+createChart(canvas, 150, 150, chartData, chartColors);
+
+try {
+  const chartDataUrl = canvas.toDataURL('image/png');
+  doc.addImage(chartDataUrl, 'PNG', pageWidth - margin - 60, yPosition - 65, 50, 50); // Adjusted to align with breakdown text
+} catch (error) {
+  console.warn('Chart generation failed:', error);
+}
 
 // Legend below the pie chart
 const legendX = pageWidth - margin - 100;
-let legendY = yPosition; // Position legend below the chart
+let legendY = yPosition - 65 + 55; // Position directly below pie chart (chart y + height + small gap)
 
 const legendItems = [
   { color: '#8b5cf6', label: 'Cost Savings:', value: formatCurrency(data.calculations.totalCostSavings) },
