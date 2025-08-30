@@ -50,12 +50,18 @@ export const PDFPreviewDialog = ({
       const url = URL.createObjectURL(pdfBlob);
       setPdfUrl(url);
       
-      // Open in new tab for preview
-      window.open(url, '_blank');
+      // Create a downloadable link instead of popup
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
       
       toast({
         title: "PDF Preview Ready",
-        description: "Your ROI report has been opened in a new tab.",
+        description: "Your ROI report is being opened.",
       });
     } catch (error) {
       console.error('PDF preview failed:', error);
