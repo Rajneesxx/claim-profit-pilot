@@ -204,8 +204,7 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   
   
   // ================== PAGE 2: EXECUTIVE SUMMARY ==================
-  
-doc.addPage();
+     doc.addPage();
   
   doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
