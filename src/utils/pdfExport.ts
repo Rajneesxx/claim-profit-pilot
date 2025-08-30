@@ -435,15 +435,6 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   doc.setTextColor(0, 0, 0);
   doc.text('Claims', pageWidth - margin - 8, footerY);
 
-// Helper function for hex to RGB conversion (add this if not already present)
-function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? [
-    parseInt(result[1], 16),
-    parseInt(result[2], 16),
-    parseInt(result[3], 16)
-  ] : [0, 0, 0];
-}
 
   // ================== PAGE 3: DETAILED ANALYSIS ==================
   doc.addPage();
