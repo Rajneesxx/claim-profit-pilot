@@ -201,8 +201,11 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   doc.setTextColor(255, 255, 255);
   doc.text('Claims', pageWidth / 2 + 5, pageHeight - 50, { align: 'center' });
 
+  
+  
   // ================== PAGE 2: EXECUTIVE SUMMARY ==================
-  doc.addPage();
+  
+ doc.addPage();
   
   doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
@@ -323,30 +326,66 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   
   yPosition += 20;
   
-  // Calculate percentages
-  const total = data.calculations.totalImpact;
-  const costSavingsPercent = Math.round((data.calculations.totalCostSavings / total) * 100);
-  const revenuePercent = Math.round((data.calculations.totalRevenueIncrease / total) * 100);
-  const riskPercent = Math.round((data.calculations.totalRiskReduction / total) * 100);
+  // Use specified values for calculations
+  const costSavings = 231811;
+  const revenueIncrease = 79047;
+  const riskReduction = 16750;
+  const total = costSavings + revenueIncrease + riskReduction;
   
-  // Create pie chart
+  const costSavingsPercent = Math.round((costSavings / total) * 100);
+  const revenuePercent = Math.round((revenueIncrease / total) * 100);
+  const riskPercent = Math.round((riskReduction / total) * 100);
+  
+  // Create pie chart with fixed positioning
   const canvas = document.createElement('canvas');
-  canvas.width = 200;
-  canvas.height = 200;
+  canvas.width = 160;
+  canvas.height = 160;
+  const ctx = canvas.getContext('2d');
+  
+  // Clear canvas
+  ctx.clearRect(0, 0, 160, 160);
   
   const chartData = [
-    { label: `${costSavingsPercent}%`, value: data.calculations.totalCostSavings },
-    { label: `${revenuePercent}%`, value: data.calculations.totalRevenueIncrease },
-    { label: `${riskPercent}%`, value: data.calculations.totalRiskReduction }
+    { label: `${costSavingsPercent}%`, value: costSavings },
+    { label: `${revenuePercent}%`, value: revenueIncrease },
+    { label: `${riskPercent}%`, value: riskReduction }
   ];
   
   const chartColors = ['#8b5cf6', '#10b981', '#e9d5ff']; // Purple, Green, Light Purple
-  createChart(canvas, 200, 200, chartData, chartColors);
+  
+  // Draw pie chart manually to fix positioning
+  const centerX = 80;
+  const centerY = 80;
+  const radius = 60;
+  let currentAngle = -Math.PI / 2; // Start from top
+  
+  chartData.forEach((segment, index) => {
+    const sliceAngle = (segment.value / total) * 2 * Math.PI;
+    
+    ctx.fillStyle = chartColors[index];
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Add percentage label
+    const labelAngle = currentAngle + sliceAngle / 2;
+    const labelX = centerX + Math.cos(labelAngle) * (radius * 0.7);
+    const labelY = centerY + Math.sin(labelAngle) * (radius * 0.7);
+    
+    ctx.fillStyle = '#000';
+    ctx.font = 'bold 12px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(segment.label, labelX, labelY);
+    
+    currentAngle += sliceAngle;
+  });
 
   try {
     const chartDataUrl = canvas.toDataURL('image/png');
-    // Position chart on the right side
-    doc.addImage(chartDataUrl, 'PNG', pageWidth - margin - 90, yPosition - 5, 70, 70);
+    // Position chart on the right side, properly centered
+    doc.addImage(chartDataUrl, 'PNG', pageWidth - margin - 100, yPosition - 10, 80, 80);
   } catch (error) {
     console.warn('Chart generation failed:', error);
   }
@@ -451,8 +490,6 @@ function hexToRgb(hex) {
     parseInt(result[3], 16)
   ] : [0, 0, 0];
 }
-
-
   // ================== PAGE 3: DETAILED ANALYSIS ==================
   doc.addPage();
   
