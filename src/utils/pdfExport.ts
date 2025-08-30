@@ -204,284 +204,245 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   
   
   // ================== PAGE 2: EXECUTIVE SUMMARY ==================
-     doc.addPage();
+doc.addPage();
   
   doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
   
-  let yPosition = 15;
+  let yPosition = 40;
   
-  // Header - very compact
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Your Financial Future at a Glance', pageWidth / 2, yPosition, { align: 'center' });
-  
-  yPosition += 15;
-  
-  // Executive Summary section - very compact
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Executive Summary', margin, yPosition);
-  
-  yPosition += 6;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'normal');
-  doc.text('This ROI analysis models the financial impact of adopting RapidClaims\' AI-powered medical coding solutions.', margin, yPosition);
-  
-  yPosition += 10;
-  
-  // Calculate total from specified values
-  const costSavings = 231811;
-  const revenueIncrease = 79047;
-  const riskReduction = 16750;
-  const totalImpact = costSavings + revenueIncrease + riskReduction;
-  
-  // Large financial impact number - smaller
+  // Header
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(24);
   doc.setFont('helvetica', 'bold');
-  doc.text('$' + totalImpact.toLocaleString(), margin, yPosition);
+  doc.text('Your Financial Future at a Glance', pageWidth / 2, yPosition, { align: 'center' });
   
+  yPosition += 40;
+  
+  // Executive Summary section
+  doc.setTextColor(139, 92, 246); // Purple
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Executive Summary', margin, yPosition);
+  
+  yPosition += 15;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('This ROI analysis models the financial impact of adopting RapidClaims\' AI-powered', margin, yPosition);
   yPosition += 6;
-  doc.setFontSize(9);
+  doc.text('medical coding solutions, using your organization\'s operational data.', margin, yPosition);
+  
+  yPosition += 25;
+  
+  // Large financial impact number
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(36);
+  doc.setFont('helvetica', 'bold');
+  doc.text(formatCurrency(data.calculations.totalImpact), margin, yPosition);
+  
+  yPosition += 12;
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'normal');
   doc.text('Estimated Annual Financial Impact', margin, yPosition);
   
-  yPosition += 12;
+  yPosition += 25;
   
-  // Three metric boxes - very small
-  const boxWidth = (pageWidth - 2 * margin - 12) / 3;
-  const boxHeight = 22;
+  // Three metric boxes - rounded corners style
+  const boxWidth = (pageWidth - 2 * margin - 20) / 3;
+  const boxHeight = 40;
   const boxY = yPosition;
   
   // Cost Savings box
-  doc.setFillColor(248, 250, 252);
-  doc.rect(margin, boxY, boxWidth, boxHeight, 'F');
+  doc.setFillColor(248, 250, 252); // Light gray background
+  doc.roundedRect(margin, boxY, boxWidth, boxHeight, 3, 3, 'F');
   doc.setDrawColor(229, 231, 235);
-  doc.rect(margin, boxY, boxWidth, boxHeight, 'S');
+  doc.roundedRect(margin, boxY, boxWidth, boxHeight, 3, 3, 'S');
   
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(11);
+  doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.text('$231,811', margin + boxWidth/2, boxY + 8, { align: 'center' });
-  doc.setFontSize(7);
+  doc.text(formatCurrency(data.calculations.totalCostSavings), margin + boxWidth/2, boxY + 16, { align: 'center' });
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  doc.text('in Cost Savings', margin + boxWidth/2, boxY + 16, { align: 'center' });
+  doc.text('in Cost Savings', margin + boxWidth/2, boxY + 28, { align: 'center' });
   
   // Revenue Uplift box
-  const box2X = margin + boxWidth + 6;
+  const box2X = margin + boxWidth + 10;
   doc.setFillColor(248, 250, 252);
-  doc.rect(box2X, boxY, boxWidth, boxHeight, 'F');
+  doc.roundedRect(box2X, boxY, boxWidth, boxHeight, 3, 3, 'F');
   doc.setDrawColor(229, 231, 235);
-  doc.rect(box2X, boxY, boxWidth, boxHeight, 'S');
+  doc.roundedRect(box2X, boxY, boxWidth, boxHeight, 3, 3, 'S');
   
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(11);
+  doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.text('$79,047', box2X + boxWidth/2, boxY + 8, { align: 'center' });
-  doc.setFontSize(7);
+  doc.text(formatCurrency(data.calculations.totalRevenueIncrease), box2X + boxWidth/2, boxY + 16, { align: 'center' });
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  doc.text('in Revenue Uplift', box2X + boxWidth/2, boxY + 16, { align: 'center' });
+  doc.text('in Revenue Uplift', box2X + boxWidth/2, boxY + 28, { align: 'center' });
   
   // Risk Reduction box
-  const box3X = margin + 2 * boxWidth + 12;
+  const box3X = margin + 2 * boxWidth + 20;
   doc.setFillColor(248, 250, 252);
-  doc.rect(box3X, boxY, boxWidth, boxHeight, 'F');
+  doc.roundedRect(box3X, boxY, boxWidth, boxHeight, 3, 3, 'F');
   doc.setDrawColor(229, 231, 235);
-  doc.rect(box3X, boxY, boxWidth, boxHeight, 'S');
+  doc.roundedRect(box3X, boxY, boxWidth, boxHeight, 3, 3, 'S');
   
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text(formatCurrency(data.calculations.totalRiskReduction), box3X + boxWidth/2, boxY + 16, { align: 'center' });
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('in Risk Reduction', box3X + boxWidth/2, boxY + 28, { align: 'center' });
+  
+  yPosition += 55;
+  
+  // Analysis text
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('$16,750', box3X + boxWidth/2, boxY + 8, { align: 'center' });
-  doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text('in Risk Reduction', box3X + boxWidth/2, boxY + 16, { align: 'center' });
+  doc.text('The analysis shows a compelling return on investment, with strong cost reductions', margin, yPosition);
+  yPosition += 6;
+  doc.text('supported by compliance improvements and modest revenue uplift.', margin, yPosition);
   
-  yPosition += 28;
+  yPosition += 35;
   
-  // Analysis text - very compact
+  // The Story Behind the Numbers
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'normal');
-  doc.text('The analysis shows a compelling return on investment, with strong cost reductions supported by compliance improvements.', margin, yPosition);
-  
-  yPosition += 12;
-  
-  // The Story Behind the Numbers - compact
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
+  doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
   doc.text('The Story Behind the Numbers', pageWidth / 2, yPosition, { align: 'center' });
   
-  yPosition += 12;
+  yPosition += 25;
   
   // Financial Impact Breakdown
   doc.setTextColor(139, 92, 246);
-  doc.setFontSize(11);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.text('Financial Impact Breakdown', margin, yPosition);
   
-  yPosition += 10;
+  yPosition += 20;
   
-  const costSavingsPercent = Math.round((costSavings / totalImpact) * 100);
-  const revenuePercent = Math.round((revenueIncrease / totalImpact) * 100);
-  const riskPercent = Math.round((riskReduction / totalImpact) * 100);
+  // Calculate percentages
+  const total = data.calculations.totalImpact;
+  const costSavingsPercent = Math.round((data.calculations.totalCostSavings / total) * 100);
+  const revenuePercent = Math.round((data.calculations.totalRevenueIncrease / total) * 100);
+  const riskPercent = Math.round((data.calculations.totalRiskReduction / total) * 100);
   
-  // Create very small pie chart
+  // Create pie chart
   const canvas = document.createElement('canvas');
-  canvas.width = 100;
-  canvas.height = 100;
-  const ctx = canvas.getContext('2d');
+  canvas.width = 200;
+  canvas.height = 200;
   
-  // Clear canvas
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 100, 100);
-  
-  // Draw compact pie chart
-  const centerX = 50;
-  const centerY = 50;
-  const radius = 35;
-  let currentAngle = -Math.PI / 2;
-  
-  const segments = [
-    { value: costSavings, color: '#8b5cf6', percent: costSavingsPercent },
-    { value: revenueIncrease, color: '#10b981', percent: revenuePercent },
-    { value: riskReduction, color: '#e9d5ff', percent: riskPercent }
+  const chartData = [
+    { label: `${costSavingsPercent}%`, value: data.calculations.totalCostSavings },
+    { label: `${revenuePercent}%`, value: data.calculations.totalRevenueIncrease },
+    { label: `${riskPercent}%`, value: data.calculations.totalRiskReduction }
   ];
   
-  segments.forEach((segment, index) => {
-    const sliceAngle = (segment.value / totalImpact) * 2 * Math.PI;
-    
-    // Draw slice
-    ctx.fillStyle = segment.color;
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
-    ctx.closePath();
-    ctx.fill();
-    
-    // Add percentage label only for larger slices
-    if (segment.percent > 10) {
-      const labelAngle = currentAngle + sliceAngle / 2;
-      const labelX = centerX + Math.cos(labelAngle) * (radius * 0.6);
-      const labelY = centerY + Math.sin(labelAngle) * (radius * 0.6);
-      
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 9px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(segment.percent + '%', labelX, labelY);
-    }
-    
-    currentAngle += sliceAngle;
-  });
+  const chartColors = ['#8b5cf6', '#10b981', '#e9d5ff']; // Purple, Green, Light Purple
+  createChart(canvas, 200, 200, chartData, chartColors);
 
   try {
     const chartDataUrl = canvas.toDataURL('image/png');
-    // Position very small chart
-    const chartX = pageWidth - margin - 60;
-    const chartY = yPosition;
-    doc.addImage(chartDataUrl, 'PNG', chartX, chartY, 50, 50);
-    
-    // Legend positioned below the chart - very compact
-    const legendX = chartX - 15;
-    let legendY = chartY + 60;
-    
-    // Legend items
-    const legendItems = [
-      { color: '#8b5cf6', label: 'Cost Savings:', value: '$231,811' },
-      { color: '#10b981', label: 'Revenue Increase:', value: '$79,047' },
-      { color: '#e9d5ff', label: 'Risk Reduction:', value: '$16,750' }
-    ];
-    
-    legendItems.forEach((item, index) => {
-      // Color circle
-      doc.setFillColor(...hexToRgb(item.color));
-      doc.circle(legendX, legendY - 1, 1.5, 'F');
-      
-      // Label and value
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(7);
-      doc.setFont('helvetica', 'normal');
-      doc.text(item.label, legendX + 6, legendY);
-      doc.setFont('helvetica', 'bold');
-      doc.text(item.value, legendX + 32, legendY);
-      
-      legendY += 6;
-    });
-    
+    // Position chart on the right side
+    doc.addImage(chartDataUrl, 'PNG', pageWidth - margin - 90, yPosition - 5, 70, 70);
   } catch (error) {
     console.warn('Chart generation failed:', error);
   }
   
-  // Left side breakdown text - very compact
+  // Left side breakdown text
   const breakdownY = yPosition;
-  let leftY = breakdownY;
   
   // Cost Savings
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(10);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(`${costSavingsPercent}% Cost Savings`, margin, leftY);
-  leftY += 5;
-  doc.setFontSize(8);
+  doc.text(`${costSavingsPercent}% Cost Savings`, margin, yPosition);
+  yPosition += 8;
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text('Driven by AI automation that boosts coder productivity', margin, leftY);
-  leftY += 4;
-  doc.text('and eliminates manual tasks.', margin, leftY);
+  doc.text('Driven by AI automation that boosts coder', margin, yPosition);
+  yPosition += 5;
+  doc.text('productivity and eliminates manual tasks.', margin, yPosition);
   
-  leftY += 8;
+  yPosition += 15;
   
   // Revenue Increase
-  doc.setFontSize(10);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(`${revenuePercent}% Revenue Increase`, margin, leftY);
-  leftY += 5;
-  doc.setFontSize(8);
+  doc.text(`${revenuePercent}% Revenue Increase`, margin, yPosition);
+  yPosition += 8;
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text('Driven by improved coding accuracy that captures', margin, leftY);
-  leftY += 4;
-  doc.text('missed reimbursements.', margin, leftY);
+  doc.text('Driven by improved coding accuracy that', margin, yPosition);
+  yPosition += 5;
+  doc.text('captures missed reimbursements.', margin, yPosition);
   
-  leftY += 8;
+  yPosition += 15;
   
   // Risk Reduction
-  doc.setFontSize(10);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text(`${riskPercent}% Risk Reduction`, margin, leftY);
-  leftY += 5;
-  doc.setFontSize(8);
+  doc.text(`${riskPercent}% Risk Reduction`, margin, yPosition);
+  yPosition += 8;
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text('Driven by enhanced compliance, reducing audit', margin, leftY);
-  leftY += 4;
-  doc.text('and penalty exposure.', margin, leftY);
+  doc.text('Driven by enhanced compliance,', margin, yPosition);
+  yPosition += 5;
+  doc.text('reducing audit and penalty exposure.', margin, yPosition);
   
-  // Quote section - very minimized
-  yPosition = pageHeight - 35;
+  // Legend positioned on the right, below the chart
+  const legendX = pageWidth - margin - 120;
+  let legendY = breakdownY + 80;
   
-  // Quote background box - smallest possible
+  // Legend items
+  const legendItems = [
+    { color: '#8b5cf6', label: 'Cost Savings:', value: formatCurrency(data.calculations.totalCostSavings) },
+    { color: '#10b981', label: 'Revenue Increase:', value: formatCurrency(data.calculations.totalRevenueIncrease) },
+    { color: '#e9d5ff', label: 'Risk Reduction:', value: formatCurrency(data.calculations.totalRiskReduction) }
+  ];
+  
+  legendItems.forEach((item, index) => {
+    // Color circle
+    doc.setFillColor(...hexToRgb(item.color));
+    doc.circle(legendX, legendY - 1, 3, 'F');
+    
+    // Label and value
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(item.label, legendX + 10, legendY);
+    doc.setFont('helvetica', 'bold');
+    doc.text(item.value, legendX + 50, legendY);
+    
+    legendY += 10;
+  });
+  
+  // Quote section with background
+  yPosition = pageHeight - 80;
+  
+  // Quote background box
   doc.setFillColor(248, 250, 252);
-  doc.rect(margin, yPosition - 4, pageWidth - 2 * margin, 15, 'F');
+  doc.roundedRect(margin, yPosition - 10, pageWidth - 2 * margin, 30, 5, 5, 'F');
   doc.setDrawColor(229, 231, 235);
-  doc.rect(margin, yPosition - 4, pageWidth - 2 * margin, 15, 'S');
+  doc.roundedRect(margin, yPosition - 10, pageWidth - 2 * margin, 30, 5, 5, 'S');
   
   doc.setTextColor(139, 92, 246);
-  doc.setFontSize(9);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'italic');
-  doc.text('"Imagine recovering every collectible dollar, automatically."', pageWidth / 2, yPosition + 2, { align: 'center' });
+  doc.text('"Imagine recovering every collectible dollar, automatically."', pageWidth / 2, yPosition + 5, { align: 'center' });
   
-  // RapidClaims footer - very small
-  const footerY = pageHeight - 10;
+  // RapidClaims footer
+  const footerY = pageHeight - 25;
   doc.setTextColor(255, 69, 58);
-  doc.setFontSize(10);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text('Rapid', pageWidth - margin - 30, footerY);
+  doc.text('Rapid', pageWidth - margin - 50, footerY);
   doc.setTextColor(0, 0, 0);
-  doc.text('Claims', pageWidth - margin - 8, footerY);
+  doc.text('Claims', pageWidth - margin - 15, footerY);
 
 // Helper function for hex to RGB conversion
 function hexToRgb(hex) {
