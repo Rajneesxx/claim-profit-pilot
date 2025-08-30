@@ -207,48 +207,48 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, pageWidth, pageHeight, 'F');
   
-  let yPosition = 30;
+  let yPosition = 25;
   
   // Header
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(24);
+  doc.setFontSize(22);
   doc.setFont('helvetica', 'bold');
   doc.text('Your Financial Future at a Glance', pageWidth / 2, yPosition, { align: 'center' });
   
-  yPosition += 25;
+  yPosition += 20;
   
   // Executive Summary section
   doc.setTextColor(139, 92, 246); // Purple
-  doc.setFontSize(18);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.text('Executive Summary', margin, yPosition);
   
-  yPosition += 10;
+  yPosition += 8;
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(11);
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.text('This ROI analysis models the financial impact of adopting RapidClaims\' AI-powered', margin, yPosition);
-  yPosition += 6;
+  yPosition += 5;
   doc.text('medical coding solutions, using your organization\'s operational data.', margin, yPosition);
   
-  yPosition += 20;
+  yPosition += 15;
   
   // Large financial impact number
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(36);
+  doc.setFontSize(32);
   doc.setFont('helvetica', 'bold');
   doc.text(formatCurrency(data.calculations.totalImpact), margin, yPosition);
   
-  yPosition += 10;
-  doc.setFontSize(14);
+  yPosition += 8;
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
   doc.text('Estimated Annual Financial Impact', margin, yPosition);
   
-  yPosition += 20;
+  yPosition += 18;
   
-  // Three metric boxes
+  // Three metric boxes - reduced height and optimized spacing
   const boxWidth = (pageWidth - 2 * margin - 20) / 3;
-  const boxHeight = 30;
+  const boxHeight = 25;
   const boxY = yPosition;
   
   // Cost Savings box
@@ -258,12 +258,12 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   doc.rect(margin, boxY, boxWidth, boxHeight, 'S');
   
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(18);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text(formatCurrency(data.calculations.totalCostSavings), margin + boxWidth/2, boxY + 12, { align: 'center' });
-  doc.setFontSize(10);
+  doc.text(formatCurrency(data.calculations.totalCostSavings), margin + boxWidth/2, boxY + 10, { align: 'center' });
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text('in Cost Savings', margin + boxWidth/2, boxY + 22, { align: 'center' });
+  doc.text('in Cost Savings', margin + boxWidth/2, boxY + 19, { align: 'center' });
   
   // Revenue Uplift box
   const box2X = margin + boxWidth + 10;
@@ -273,12 +273,12 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   doc.rect(box2X, boxY, boxWidth, boxHeight, 'S');
   
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(18);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text(formatCurrency(data.calculations.totalRevenueIncrease), box2X + boxWidth/2, boxY + 12, { align: 'center' });
-  doc.setFontSize(10);
+  doc.text(formatCurrency(data.calculations.totalRevenueIncrease), box2X + boxWidth/2, boxY + 10, { align: 'center' });
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text('in Revenue Uplift', box2X + boxWidth/2, boxY + 22, { align: 'center' });
+  doc.text('in Revenue Uplift', box2X + boxWidth/2, boxY + 19, { align: 'center' });
   
   // Risk Reduction box
   const box3X = margin + 2 * boxWidth + 20;
@@ -288,45 +288,45 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   doc.rect(box3X, boxY, boxWidth, boxHeight, 'S');
   
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(18);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text(formatCurrency(data.calculations.totalRiskReduction), box3X + boxWidth/2, boxY + 12, { align: 'center' });
-  doc.setFontSize(10);
+  doc.text(formatCurrency(data.calculations.totalRiskReduction), box3X + boxWidth/2, boxY + 10, { align: 'center' });
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text('in Risk Reduction', box3X + boxWidth/2, boxY + 22, { align: 'center' });
+  doc.text('in Risk Reduction', box3X + boxWidth/2, boxY + 19, { align: 'center' });
   
-  yPosition += 50;
+  yPosition += 35;
   
   // Analysis text
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(11);
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.text('The analysis shows a compelling return on investment, with strong cost reductions', margin, yPosition);
-  yPosition += 6;
+  yPosition += 5;
   doc.text('supported by compliance improvements and modest revenue uplift.', margin, yPosition);
   
-  yPosition += 25;
+  yPosition += 18;
   
   // The Story Behind the Numbers
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(20);
+  doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
   doc.text('The Story Behind the Numbers', pageWidth / 2, yPosition, { align: 'center' });
   
-  yPosition += 20;
+  yPosition += 15;
   
   // Financial Impact Breakdown
   doc.setTextColor(139, 92, 246);
-  doc.setFontSize(16);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.text('Financial Impact Breakdown', margin, yPosition);
   
-  yPosition += 15;
+  yPosition += 12;
   
-  // Create pie chart
+  // Create pie chart - smaller size and better positioning
   const canvas = document.createElement('canvas');
-  canvas.width = 200;
-  canvas.height = 200;
+  canvas.width = 160;
+  canvas.height = 160;
   
   const total = data.calculations.totalImpact;
   const costSavingsPercent = Math.round((data.calculations.totalCostSavings / total) * 100);
@@ -340,54 +340,63 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   ];
   
   const chartColors = ['#8b5cf6', '#10b981', '#e9d5ff']; // Purple, Green, Light Purple
-  createChart(canvas, 200, 200, chartData, chartColors);
+  createChart(canvas, 160, 160, chartData, chartColors);
 
   try {
     const chartDataUrl = canvas.toDataURL('image/png');
-    doc.addImage(chartDataUrl, 'PNG', pageWidth - margin - 80, yPosition - 10, 60, 60);
+    doc.addImage(chartDataUrl, 'PNG', pageWidth - margin - 70, yPosition - 5, 50, 50);
   } catch (error) {
     console.warn('Chart generation failed:', error);
   }
   
-  // Left side breakdown text
+  // Left side breakdown text - improved spacing
+  const breakdownStartY = yPosition;
+  
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(14);
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.text(`${costSavingsPercent}% Cost Savings`, margin, yPosition);
-  yPosition += 8;
-  doc.setFontSize(10);
+  yPosition += 6;
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.text('Driven by AI automation that boosts coder', margin, yPosition);
-  yPosition += 5;
+  yPosition += 4;
   doc.text('productivity and eliminates manual tasks.', margin, yPosition);
   
-  yPosition += 15;
-  doc.setFontSize(14);
+  yPosition += 12;
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.text(`${revenuePercent}% Revenue Increase`, margin, yPosition);
-  yPosition += 8;
-  doc.setFontSize(10);
+  yPosition += 6;
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.text('Driven by improved coding accuracy that', margin, yPosition);
-  yPosition += 5;
+  yPosition += 4;
   doc.text('captures missed reimbursements.', margin, yPosition);
   
-  yPosition += 15;
-  doc.setFontSize(14);
+  yPosition += 12;
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.text(`${riskPercent}% Risk Reduction`, margin, yPosition);
-  yPosition += 8;
-  doc.setFontSize(10);
+  yPosition += 6;
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.text('Driven by enhanced compliance,', margin, yPosition);
-  yPosition += 5;
+  yPosition += 4;
   doc.text('reducing audit and penalty exposure.', margin, yPosition);
   
-  // Legend on the right
+  // Legend positioned better - moved to right side, lower position
   const legendX = pageWidth - margin - 120;
-  let legendY = yPosition + 20;
+  let legendY = breakdownStartY + 55;
   
-  // Legend items
+  // Legend title
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Financial Breakdown', legendX, legendY);
+  legendY += 8;
+  
+  // Legend items with better spacing
   const legendItems = [
     { color: '#8b5cf6', label: 'Cost Savings:', value: formatCurrency(data.calculations.totalCostSavings) },
     { color: '#10b981', label: 'Revenue Increase:', value: formatCurrency(data.calculations.totalRevenueIncrease) },
@@ -397,33 +406,44 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
   legendItems.forEach((item, index) => {
     // Color dot
     doc.setFillColor(...hexToRgb(item.color));
-    doc.circle(legendX, legendY - 2, 3, 'F');
+    doc.circle(legendX, legendY - 1, 2.5, 'F');
     
     // Label and value
     doc.setTextColor(0, 0, 0);
-    doc.setFontSize(10);
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.text(item.label, legendX + 8, legendY);
     doc.setFont('helvetica', 'bold');
-    doc.text(item.value, legendX + 45, legendY);
+    doc.text(item.value, legendX + 38, legendY);
     
-    legendY += 8;
+    legendY += 7;
   });
   
-  // Quote at bottom
-  yPosition = pageHeight - 50;
+  // Quote - positioned with more space from bottom
+  yPosition = pageHeight - 40;
   doc.setTextColor(139, 92, 246);
-  doc.setFontSize(14);
+  doc.setFontSize(13);
   doc.setFont('helvetica', 'italic');
   doc.text('"Imagine recovering every collectible dollar, automatically."', pageWidth / 2, yPosition, { align: 'center' });
   
-  // RapidClaims footer
+  // RapidClaims footer - better positioned
+  const footerY = pageHeight - 15;
   doc.setTextColor(255, 69, 58);
-  doc.setFontSize(16);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Rapid', pageWidth - margin - 35, pageHeight - 20);
+  doc.text('Rapid', pageWidth - margin - 35, footerY);
   doc.setTextColor(0, 0, 0);
-  doc.text('Claims', pageWidth - margin - 5, pageHeight - 20);
+  doc.text('Claims', pageWidth - margin - 8, footerY);
+
+// Helper function for hex to RGB conversion (add this if not already present)
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? [
+    parseInt(result[1], 16),
+    parseInt(result[2], 16),
+    parseInt(result[3], 16)
+  ] : [0, 0, 0];
+}
 
   // ================== PAGE 3: DETAILED ANALYSIS ==================
   doc.addPage();
