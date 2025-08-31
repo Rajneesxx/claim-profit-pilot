@@ -552,7 +552,7 @@ doc.text('Conclusion', margin, yPosition);
 
 yPosition += 10;
 doc.setTextColor(0, 0, 0);
-doc.setFontSize(10);
+doc.setFontSize(12);
 doc.setFont('helvetica', 'normal');
 doc.text('The model demonstrates a positive ROI, delivering:', margin, yPosition);
 
