@@ -541,7 +541,7 @@ paramLabels.forEach((label, index) => {
   doc.setFont('helvetica', 'normal');
   doc.text(paramValues[index], margin + 70, yPosition); // Adjust margin offset as needed
 
-  yPosition += 7;
+  yPosition += 12;
 });
 
 // Section: Conclusion
