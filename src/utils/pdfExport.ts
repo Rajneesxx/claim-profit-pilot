@@ -484,10 +484,10 @@ tableData.forEach((row, index) => {
 
   if (index === 0 || index === tableData.length - 1) {
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
+    doc.setFontSize(11);
   } else {
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
+    doc.setFontSize(10);
   }
 
   doc.setTextColor(0, 0, 0);
@@ -513,7 +513,7 @@ yPosition += 18;
   doc.text('Organization Parameters', margin, yPosition);
   yPosition += 8; 
   doc.setTextColor(0, 0, 0);
-  doc.setFontSize(10); 
+  doc.setFontSize(12); 
   doc.setFont('helvetica', 'normal'); 
   doc.text('The ROI model uses your organizational inputs:', margin, yPosition);
   yPosition += 12;
