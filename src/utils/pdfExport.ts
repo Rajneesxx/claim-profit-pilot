@@ -460,12 +460,12 @@ yPosition += 16;
 
 // Sleek Rounded Tab Container
 const tabRadius = 4;
-const tabHeightPage3 =48;
+const tabHeightPage3 = 40;
 doc.setFillColor(230, 214, 252); // Light fill
 doc.setDrawColor(220, 220, 220); // Soft border
 doc.roundedRect(margin, yPosition, pageWidth - 2 * margin, tabHeightPage3, tabRadius, tabRadius, 'FD');
 
-yPosition += 10;
+yPosition += 6;
 
 // Table Data
 const tableData = [
@@ -476,25 +476,25 @@ const tableData = [
   ['Total Benefit', formatCurrency(data.calculations.totalImpact), 'Combined annual financial impact']
 ];
 
-const colWidths = [45, 40, 85];
-const startX = margin + 10;
+const colWidths = [42, 38, 80];
+const startX = margin + 8;
 
 tableData.forEach((row, index) => {
   let xPos = startX;
 
   if (index === 0 || index === tableData.length - 1) {
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
+    doc.setFontSize(8.5);
   } else {
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
   }
 
   doc.setTextColor(0, 0, 0);
 
   row.forEach((cell, colIndex) => {
     if (colIndex === 2) {
-      const lines = doc.splitTextToSize(cell, colWidths[colIndex] - 5);
+      const lines = doc.splitTextToSize(cell, colWidths[colIndex] - 4);
       doc.text(lines, xPos, yPosition);
     } else {
       doc.text(cell, xPos, yPosition);
@@ -502,7 +502,7 @@ tableData.forEach((row, index) => {
     xPos += colWidths[colIndex];
   });
 
-  yPosition += index === 0 ? 6 : 9;
+  yPosition += index === 0 ? 5 : 7;
 });
 
 yPosition += 18;
