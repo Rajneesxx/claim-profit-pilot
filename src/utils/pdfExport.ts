@@ -459,12 +459,13 @@ doc.text('Detailed Financial Analysis', margin, yPosition);
 yPosition += 16;
 
 // Sleek Rounded Tab Container
-const tabRadius = 6;
+const tabRadius = 4;
+const tabHeightPage3 = 18;
 doc.setFillColor(248, 250, 252); // Light fill
 doc.setDrawColor(220, 220, 220); // Soft border
-doc.roundedRect(margin, yPosition, pageWidth - 2 * margin, tabHeight, tabRadius, tabRadius, 'FD');
+doc.roundedRect(margin, yPosition, pageWidth - 2 * margin, tabHeightPage3, tabRadius, tabRadius, 'FD');
 
-yPosition += 12;
+yPosition += 8;
 
 // Table Data
 const tableData = [
