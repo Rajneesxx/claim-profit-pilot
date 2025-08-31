@@ -465,7 +465,7 @@ doc.setFillColor(230, 214, 252); // Light fill
 doc.setDrawColor(220, 220, 220); // Soft border
 doc.roundedRect(margin, yPosition, pageWidth - 2 * margin, tabHeightPage3, tabRadius, tabRadius, 'FD');
 
-yPosition += 8;
+yPosition += 10;
 
 // Table Data
 const tableData = [
