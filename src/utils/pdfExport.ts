@@ -592,7 +592,7 @@ doc.text(lines, margin, yPosition);
   // Helper to render the first page of a PDF asset to an image data URL
   async function renderPdfFirstPageToDataUrl(pdfUrl: string): Promise<string> {
     // Configure PDF.js worker with CDN URL
-    GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf.worker.min.mjs';
     const task = getDocument(pdfUrl);
     const pdf = await task.promise;
     const page = await pdf.getPage(1);
@@ -602,30 +602,42 @@ doc.text(lines, margin, yPosition);
     if (!ctx2d) throw new Error('Canvas 2D context not available');
     canvasEl.width = viewport.width;
     canvasEl.height = viewport.height;
-    await page.render({ canvas: canvasEl, viewport }).promise;
+    await page.render({ canvasContext: ctx2d, viewport }).promise;
     return canvasEl.toDataURL('image/png');
   }
 
-  // Resolve asset URLs for Page 4 and Page 5 PDFs
-  const PAGE4_PDF_URL = new URL('../assets/Page4.pdf', import.meta.url).toString();
-  const PAGE5_PDF_URL = new URL('../assets/Page5.pdf', import.meta.url).toString();
+  // Resolve asset URLs for Page 4 and Page 5 PDFs - use public folder paths
+  const PAGE4_PDF_URL = '/src/assets/Page4.pdf';
+  const PAGE5_PDF_URL = '/src/assets/Page5.pdf';
 
   // Page 4 (from uploaded PDF)
   doc.addPage();
   try {
+    console.log('Attempting to load Page4.pdf from:', PAGE4_PDF_URL);
     const img4 = await renderPdfFirstPageToDataUrl(PAGE4_PDF_URL);
     doc.addImage(img4, 'PNG', 0, 0, pageWidth, pageHeight);
+    console.log('Successfully embedded Page4.pdf');
   } catch (e) {
-    console.warn('Failed to render Page4.pdf into report:', e);
+    console.error('Failed to render Page4.pdf into report:', e);
+    // Add fallback content
+    doc.setTextColor(139, 92, 246);
+    doc.setFontSize(16);
+    doc.text('Page 4 Content (PDF Loading Failed)', pageWidth / 2, pageHeight / 2, { align: 'center' });
   }
 
   // Page 5 (from uploaded PDF)
   doc.addPage();
   try {
+    console.log('Attempting to load Page5.pdf from:', PAGE5_PDF_URL);
     const img5 = await renderPdfFirstPageToDataUrl(PAGE5_PDF_URL);
     doc.addImage(img5, 'PNG', 0, 0, pageWidth, pageHeight);
+    console.log('Successfully embedded Page5.pdf');
   } catch (e) {
-    console.warn('Failed to render Page5.pdf into report:', e);
+    console.error('Failed to render Page5.pdf into report:', e);
+    // Add fallback content
+    doc.setTextColor(139, 92, 246);
+    doc.setFontSize(16);
+    doc.text('Page 5 Content (PDF Loading Failed)', pageWidth / 2, pageHeight / 2, { align: 'center' });
   }
 
 };
