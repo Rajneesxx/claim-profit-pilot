@@ -507,6 +507,16 @@ tableData.forEach((row, index) => {
 
 yPosition += 18;
 
+  doc.setTextColor(139, 92, 246); 
+  doc.setFontSize(14); 
+  doc.setFont('helvetica', 'bold'); 
+  doc.text('Organization Parameters', margin, yPosition);
+  yPosition += 8; 
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(10); 
+  doc.setFont('helvetica', 'normal'); 
+  doc.text('The ROI model uses your organizational inputs:', margin, yPosition);
+  yPosition += 12;
 // Section: Organization Parameters
 const paramLabels = [
   '• Annual Revenue Claimed:',
