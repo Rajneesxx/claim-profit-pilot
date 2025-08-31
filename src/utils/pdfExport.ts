@@ -2,6 +2,8 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { ROIMetrics } from '@/types/roi';
 import { formatCurrency, formatNumber } from './formatters';
+import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.js?url';
 
 interface ExportData {
   metrics: ROIMetrics;
@@ -587,90 +589,46 @@ doc.text(lines, margin, yPosition);
   
   
 
-  // ================== PAGE 4: FOUR PILLARS ==================
-  doc.addPage();
-  
-  yPosition = 30;
-  
-  // Four Pillars header
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'normal');
-  doc.text('The Four Pillars of Your Success', pageWidth / 2, yPosition, { align: 'center' });
-  
-  yPosition += 15;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(20);
-  doc.setFont('helvetica', 'bold');
-  doc.text('The Levers Driving Your ROI', pageWidth / 2, yPosition, { align: 'center' });
-  
-  yPosition += 30;
-  
-  // Four pillars in a single row
-  const pillarWidth = (pageWidth - 2 * margin - 30) / 4;
-  const pillarHeight = 50;
-  const pillarY = yPosition;
-  
-  const pillars = [
-    { title: 'Coder\nProductivity', desc: 'AI reduces time per\nchart by up to 100%.' },
-    { title: 'Billing\nAutomation', desc: '40% fewer denials\nand faster\nturnaround.' },
-    { title: 'Physician Time\nSaved', desc: 'Fewer queries and\ndocumentation\nbottlenecks.' },
-    { title: 'Tech Cost\nOptimization', desc: 'Replace legacy\nsystems and reduce\nIT overhead.' }
-  ];
-  
-  pillars.forEach((pillar, index) => {
-    const pillarX = margin + index * (pillarWidth + 10);
-    
-    // Draw pillar box with purple accent
-    doc.setFillColor(248, 250, 252);
-    doc.rect(pillarX, pillarY, pillarWidth, pillarHeight, 'F');
-    doc.setDrawColor(139, 92, 246);
-    doc.setLineWidth(0.5);
-    doc.rect(pillarX, pillarY, pillarWidth, pillarHeight, 'S');
-    
-    // Add purple accent line at top
-    doc.setFillColor(139, 92, 246);
-    doc.rect(pillarX, pillarY, pillarWidth, 3, 'F');
-    
-    // Add icon placeholder (simple geometric shape)
-    doc.setFillColor(139, 92, 246);
-    doc.circle(pillarX + pillarWidth/2, pillarY + 12, 4, 'F');
-    
-    // Title
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    const titleLines = pillar.title.split('\n');
-    titleLines.forEach((line, lineIndex) => {
-      doc.text(line, pillarX + pillarWidth/2, pillarY + 22 + lineIndex * 5, { align: 'center' });
-    });
-    
-    // Description
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    const descLines = pillar.desc.split('\n');
-    descLines.forEach((line, lineIndex) => {
-      doc.text(line, pillarX + pillarWidth/2, pillarY + 35 + lineIndex * 4, { align: 'center' });
-    });
-  });
-  
-  yPosition += 70;
-  
-  // Quote
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'italic');
-  doc.text('"Free your team to focus on what matters most: patient care and complex cases."', pageWidth / 2, yPosition, { align: 'center' });
-  
-  yPosition += 35;
-  
-  // ================== PAGE 4: PLACEHOLDER FOR YOUR CONTENT ==================
-  doc.addPage();
-  // Content for page 4 has been removed - ready for your replacement content
+  // ================== PAGES 4 & 5: EXTERNAL PDF PAGES ==================
+  // Helper to render the first page of a PDF asset to an image data URL
+  async function renderPdfFirstPageToDataUrl(pdfUrl: string): Promise<string> {
+    // Configure PDF.js worker
+    GlobalWorkerOptions.workerSrc = pdfjsWorker as any;
+    const task = getDocument(pdfUrl);
+    const pdf = await task.promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 2 });
+    const canvasEl = document.createElement('canvas');
+    const ctx2d = canvasEl.getContext('2d');
+    if (!ctx2d) throw new Error('Canvas 2D context not available');
+    canvasEl.width = viewport.width;
+    canvasEl.height = viewport.height;
+    await page.render({ canvas: canvasEl, viewport }).promise;
+    return canvasEl.toDataURL('image/png');
+  }
 
-  // ================== PAGE 5: PLACEHOLDER FOR YOUR CONTENT ==================
+  // Resolve asset URLs for Page 4 and Page 5 PDFs
+  const PAGE4_PDF_URL = new URL('../assets/Page4.pdf', import.meta.url).toString();
+  const PAGE5_PDF_URL = new URL('../assets/Page5.pdf', import.meta.url).toString();
+
+  // Page 4 (from uploaded PDF)
   doc.addPage();
-  // Content for page 5 has been removed - ready for your replacement content
+  try {
+    const img4 = await renderPdfFirstPageToDataUrl(PAGE4_PDF_URL);
+    doc.addImage(img4, 'PNG', 0, 0, pageWidth, pageHeight);
+  } catch (e) {
+    console.warn('Failed to render Page4.pdf into report:', e);
+  }
+
+  // Page 5 (from uploaded PDF)
+  doc.addPage();
+  try {
+    const img5 = await renderPdfFirstPageToDataUrl(PAGE5_PDF_URL);
+    doc.addImage(img5, 'PNG', 0, 0, pageWidth, pageHeight);
+  } catch (e) {
+    console.warn('Failed to render Page5.pdf into report:', e);
+  }
+
 };
 
 // Helper function to convert hex to RGB
