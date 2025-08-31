@@ -446,140 +446,137 @@ doc.text('Claims', pageWidth - margin - 35, pageHeight - 15 +32);
 
 
   // ================== PAGE 3: DETAILED ANALYSIS ==================
+   
   doc.addPage();
-  
-  yPosition = 30;
-  
-  // Detailed Financial Analysis
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Detailed Financial Analysis', margin, yPosition);
-  
-  yPosition += 20;
-  
-  // Analysis table
-  doc.setFillColor(248, 250, 252);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 80, 'F');
-  doc.setDrawColor(200, 200, 200);
-  doc.rect(margin, yPosition, pageWidth - 2 * margin, 80, 'S');
-  
-  yPosition += 15;
-  
-  const tableData = [
-    ['Category', 'Annual Value', 'Description'],
-    ['Cost Savings', formatCurrency(data.calculations.totalCostSavings), 'Operational efficiency gains from autonomous coding and reduced manual work.'],
-    ['Revenue Enhanced', formatCurrency(data.calculations.totalRevenueIncrease), 'Improved claim accuracy, fewer denials, increased approved reimbursements.'],
-    ['Risk Mitigation', formatCurrency(data.calculations.totalRiskReduction), 'Compliance protection, reduced penalties, lower audit exposure.'],
-    ['Total Benefit', formatCurrency(data.calculations.totalImpact), 'Combined annual financial impact']
-  ];
+yPosition = 30;
 
-  const colWidths = [40, 35, 90];
-  const startX = margin + 10;
+// Section: Detailed Financial Analysis
+doc.setTextColor(139, 92, 246);
+doc.setFontSize(16);
+doc.setFont('helvetica', 'bold');
+doc.text('Detailed Financial Analysis', margin, yPosition);
 
-  tableData.forEach((row, index) => {
-    let xPos = startX;
-    
-    if (index === 0) {
-      // Header row
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(11);
-    } else if (index === tableData.length - 1) {
-      // Total row
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(11);
+yPosition += 16;
+
+// Sleek Rounded Tab Container
+const tabRadius = 6;
+const tabHeight = 30;
+doc.setFillColor(248, 250, 252); // Light fill
+doc.setDrawColor(220, 220, 220); // Soft border
+doc.roundedRect(margin, yPosition, pageWidth - 2 * margin, tabHeight, tabRadius, tabRadius, 'FD');
+
+yPosition += 12;
+
+// Table Data
+const tableData = [
+  ['Category', 'Annual Value', 'Description'],
+  ['Cost Savings', formatCurrency(data.calculations.totalCostSavings), 'Efficiency gains from autonomous coding and reduced manual work.'],
+  ['Revenue Enhanced', formatCurrency(data.calculations.totalRevenueIncrease), 'Improved claim accuracy, fewer denials, increased approved reimbursements.'],
+  ['Risk Mitigation', formatCurrency(data.calculations.totalRiskReduction), 'Compliance protection, reduced penalties, lower audit exposure.'],
+  ['Total Benefit', formatCurrency(data.calculations.totalImpact), 'Combined annual financial impact']
+];
+
+const colWidths = [45, 40, 85];
+const startX = margin + 10;
+
+tableData.forEach((row, index) => {
+  let xPos = startX;
+
+  if (index === 0 || index === tableData.length - 1) {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+  } else {
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+  }
+
+  doc.setTextColor(0, 0, 0);
+
+  row.forEach((cell, colIndex) => {
+    if (colIndex === 2) {
+      const lines = doc.splitTextToSize(cell, colWidths[colIndex] - 5);
+      doc.text(lines, xPos, yPosition);
     } else {
-      // Data rows
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(10);
+      doc.text(cell, xPos, yPosition);
     }
-    
-    row.forEach((cell, colIndex) => {
-      if (colIndex === 2) {
-        // Description column - wrap text
-        const lines = doc.splitTextToSize(cell, colWidths[colIndex] - 5);
-        doc.text(lines, xPos, yPosition);
-      } else {
-        doc.text(cell, xPos, yPosition);
-      }
-      xPos += colWidths[colIndex];
-    });
-    
-    yPosition += index === 0 ? 8 : 12;
+    xPos += colWidths[colIndex];
   });
 
-  yPosition += 25;
+  yPosition += index === 0 ? 6 : 9;
+});
 
-  // Organization Parameters
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Organization Parameters', margin, yPosition);
+yPosition += 18;
+
+// Section: Organization Parameters
+doc.setTextColor(139, 92, 246);
+doc.setFontSize(14);
+doc.setFont('helvetica', 'bold');
+doc.text('Organization Parameters', margin, yPosition);
+
+yPosition += 8;
+doc.setTextColor(0, 0, 0);
+doc.setFontSize(10);
+doc.setFont('helvetica', 'normal');
+doc.text('The ROI model uses your organizational inputs:', margin, yPosition);
+
+yPosition += 12;
+
+const params = [
+  `• Annual Revenue Claimed: ${formatCurrency(data.metrics.revenueClaimed)}`,
+  `• Number of Claims Per Year: ~${formatNumber(data.metrics.claimsPerAnnum)}`,
+  '• Average Cost per Claim: Derived from revenue and claim data.',
+  '• Baseline Denial Rate & Backlog: Applied as per inputs.'
+];
+
+params.forEach(param => {
+  doc.text(param, margin, yPosition);
+  yPosition += 7;
+});
+
+yPosition += 8;
+doc.text('These assumptions create the baseline for measuring cost savings, revenue enhancement,', margin, yPosition);
+yPosition += 6;
+doc.text('and risk reduction.', margin, yPosition);
+
+yPosition += 18;
+
+// Section: Conclusion
+doc.setTextColor(139, 92, 246);
+doc.setFontSize(14);
+doc.setFont('helvetica', 'bold');
+doc.text('Conclusion', margin, yPosition);
+
+yPosition += 10;
+doc.setTextColor(0, 0, 0);
+doc.setFontSize(10);
+doc.setFont('helvetica', 'normal');
+doc.text('The model demonstrates a positive ROI, delivering:', margin, yPosition);
+
+yPosition += 10;
+
+const conclusions = [
+  `• ${formatCurrency(data.calculations.totalImpact)} annual benefit, driven primarily by cost savings.`,
+  '• Reduced operational strain, freeing coders and physicians from manual tasks.',
+  '• Compliance confidence, reducing the risk of costly penalties and audits.'
+];
+
+conclusions.forEach(conclusion => {
+  doc.text(conclusion, margin, yPosition);
+  yPosition += 7;
+});
+
+yPosition += 8;
+doc.setFont('helvetica', 'bold');
+doc.text('Recommendation:', margin, yPosition);
+
+doc.setFont('helvetica', 'normal');
+const recommendationText = 'Adoption of RapidClaims\' AI solutions provides a sustainable and scalable path to reduce costs, increase revenue capture, and improve compliance simultaneously.';
+const lines = doc.splitTextToSize(recommendationText, pageWidth - 2 * margin - 40);
+doc.text(lines, margin + 20, yPosition);
+
   
-  yPosition += 10;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
-  doc.text('The ROI model uses your organizational inputs:', margin, yPosition);
   
-  yPosition += 15;
   
-  // Parameters list
-  const params = [
-    `• Annual Revenue Claimed: ${formatCurrency(data.metrics.revenueClaimed)}`,
-    `• Number of Claims Per Year: ~${formatNumber(data.metrics.claimsPerAnnum)}`,
-    '• Average Cost per Claim: Derived from revenue and claim data.',
-    '• Baseline Denial Rate & Backlog: Applied as per inputs.'
-  ];
-  
-  doc.setFontSize(10);
-  params.forEach(param => {
-    doc.text(param, margin, yPosition);
-    yPosition += 8;
-  });
-  
-  yPosition += 10;
-  doc.text('These assumptions create the baseline for measuring cost savings, revenue enhancement,', margin, yPosition);
-  yPosition += 6;
-  doc.text('and risk reduction.', margin, yPosition);
-  
-  yPosition += 25;
-  
-  // Conclusion
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Conclusion', margin, yPosition);
-  
-  yPosition += 15;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
-  doc.text('The model demonstrates a positive ROI, delivering:', margin, yPosition);
-  
-  yPosition += 12;
-  const conclusions = [
-    `• ${formatCurrency(data.calculations.totalImpact)} annual benefit, driven primarily by cost savings.`,
-    '• Reduced operational strain, freeing coders and physicians from manual tasks.',
-    '• Compliance confidence, reducing the risk of costly penalties and audits.'
-  ];
-  
-  doc.setFontSize(10);
-  conclusions.forEach(conclusion => {
-    doc.text(conclusion, margin, yPosition);
-    yPosition += 8;
-  });
-  
-  yPosition += 10;
-  doc.setFont('helvetica', 'bold');
-  doc.text('Recommendation: ', margin, yPosition);
-  doc.setFont('helvetica', 'normal');
-  const recommendationText = 'Adoption of RapidClaims\' AI solutions provides a sustainable and scalable path to reduce costs, increase revenue capture, and improve compliance simultaneously.';
-  const lines = doc.splitTextToSize(recommendationText, pageWidth - 2 * margin - 30);
-  doc.text(lines, margin + 30, yPosition);
 
   // ================== PAGE 4: FOUR PILLARS ==================
   doc.addPage();
