@@ -2,6 +2,9 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { ROIMetrics } from '@/types/roi';
 import { formatCurrency, formatNumber } from './formatters';
+import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
+import page4PdfUrl from '@/assets/Page4.pdf?url';
+import page5PdfUrl from '@/assets/Page5.pdf?url';
 
 
 interface ExportData {
@@ -588,97 +591,57 @@ doc.text(lines, margin, yPosition);
   
   
 
-  // ================== PAGE 4: ADDITIONAL CONTENT ==================
+  // ================== PAGES 4 & 5: EXTERNAL PDF PAGES ==================
+  // Helper to render the first page of a PDF asset to an image data URL
+  async function renderPdfFirstPageToDataUrl(pdfUrl: string): Promise<string> {
+    // Configure PDF.js worker with CDN URL
+    GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf.worker.min.mjs';
+    const task = getDocument(pdfUrl);
+    const pdf = await task.promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 2 });
+    const canvasEl = document.createElement('canvas');
+    const ctx2d = canvasEl.getContext('2d');
+    if (!ctx2d) throw new Error('Canvas 2D context not available');
+    canvasEl.width = viewport.width;
+    canvasEl.height = viewport.height;
+    await page.render({ canvasContext: ctx2d, viewport }).promise;
+    return canvasEl.toDataURL('image/png');
+  }
+
+  // Resolve asset URLs for Page 4 and Page 5 PDFs - use public folder paths
+  const PAGE4_PDF_URL = page4PdfUrl as string;
+  const PAGE5_PDF_URL = page5PdfUrl as string;
+
+  // Page 4 (from uploaded PDF)
   doc.addPage();
-  
-  yPosition = 40;
-  
-  // Page 4 header
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Implementation Roadmap & Success Metrics', pageWidth / 2, yPosition, { align: 'center' });
-  
-  yPosition += 20;
-  
-  // Note about additional content
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.text('This page contains detailed implementation guidance and success metrics.', margin, yPosition);
-  yPosition += 8;
-  doc.text('Please refer to the separate Page4.pdf document for comprehensive details.', margin, yPosition);
-  
-  yPosition += 30;
-  
-  // Quick summary content
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Key Implementation Phases:', margin, yPosition);
-  
-  yPosition += 15;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
-  
-  const phases = [
-    '1. Assessment & Planning (Month 1)',
-    '2. System Integration & Training (Month 2-3)',
-    '3. Pilot Launch & Testing (Month 4)',
-    '4. Full Deployment & Optimization (Month 5-6)'
-  ];
-  
-  phases.forEach(phase => {
-    doc.text(phase, margin, yPosition);
-    yPosition += 12;
-  });
-  
-  // ================== PAGE 5: ADDITIONAL CONTENT ==================
+  try {
+    console.log('Attempting to load Page4.pdf from:', PAGE4_PDF_URL);
+    const img4 = await renderPdfFirstPageToDataUrl(PAGE4_PDF_URL);
+    doc.addImage(img4, 'PNG', 0, 0, pageWidth, pageHeight);
+    console.log('Successfully embedded Page4.pdf');
+  } catch (e) {
+    console.error('Failed to render Page4.pdf into report:', e);
+    // Add fallback content
+    doc.setTextColor(139, 92, 246);
+    doc.setFontSize(16);
+    doc.text('Page 4 Content (PDF Loading Failed)', pageWidth / 2, pageHeight / 2, { align: 'center' });
+  }
+
+  // Page 5 (from uploaded PDF)
   doc.addPage();
-  
-  yPosition = 40;
-  
-  // Page 5 header
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Technical Specifications & Integration Guide', pageWidth / 2, yPosition, { align: 'center' });
-  
-  yPosition += 20;
-  
-  // Note about additional content
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.text('This page contains technical specifications and integration details.', margin, yPosition);
-  yPosition += 8;
-  doc.text('Please refer to the separate Page5.pdf document for comprehensive details.', margin, yPosition);
-  
-  yPosition += 30;
-  
-  // Quick summary content
-  doc.setTextColor(139, 92, 246);
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.text('System Requirements:', margin, yPosition);
-  
-  yPosition += 15;
-  doc.setTextColor(0, 0, 0);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'normal');
-  
-  const requirements = [
-    '• Cloud-based deployment with 99.9% uptime guarantee',
-    '• HIPAA-compliant data security and encryption',
-    '• API integration with existing EHR systems',
-    '• Real-time processing capabilities'
-  ];
-  
-  requirements.forEach(req => {
-    doc.text(req, margin, yPosition);
-    yPosition += 12;
-  });
+  try {
+    console.log('Attempting to load Page5.pdf from:', PAGE5_PDF_URL);
+    const img5 = await renderPdfFirstPageToDataUrl(PAGE5_PDF_URL);
+    doc.addImage(img5, 'PNG', 0, 0, pageWidth, pageHeight);
+    console.log('Successfully embedded Page5.pdf');
+  } catch (e) {
+    console.error('Failed to render Page5.pdf into report:', e);
+    // Add fallback content
+    doc.setTextColor(139, 92, 246);
+    doc.setFontSize(16);
+    doc.text('Page 5 Content (PDF Loading Failed)', pageWidth / 2, pageHeight / 2, { align: 'center' });
+  }
 
 };
 
