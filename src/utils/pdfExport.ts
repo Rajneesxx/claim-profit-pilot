@@ -456,7 +456,7 @@ doc.setFontSize(16);
 doc.setFont('helvetica', 'bold');
 doc.text('Detailed Financial Analysis', margin, yPosition);
 
-yPosition += 16;
+yPosition += 10;
 
 // Sleek Rounded Tab Container
 const tabRadius = 4;
