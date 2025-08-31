@@ -460,7 +460,7 @@ yPosition += 16;
 
 // Sleek Rounded Tab Container
 const tabRadius = 4;
-const tabHeightPage3 = 18;
+const tabHeightPage3 =30;
 doc.setFillColor(248, 250, 252); // Light fill
 doc.setDrawColor(220, 220, 220); // Soft border
 doc.roundedRect(margin, yPosition, pageWidth - 2 * margin, tabHeightPage3, tabRadius, tabRadius, 'FD');
