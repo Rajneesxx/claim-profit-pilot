@@ -3,6 +3,9 @@ import html2canvas from 'html2canvas';
 import { ROIMetrics } from '@/types/roi';
 import { formatCurrency, formatNumber } from './formatters';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
+import page4PdfUrl from '@/assets/Page4.pdf?url';
+import page5PdfUrl from '@/assets/Page5.pdf?url';
+
 
 interface ExportData {
   metrics: ROIMetrics;
@@ -607,8 +610,8 @@ doc.text(lines, margin, yPosition);
   }
 
   // Resolve asset URLs for Page 4 and Page 5 PDFs - use public folder paths
-  const PAGE4_PDF_URL = '/src/assets/Page4.pdf';
-  const PAGE5_PDF_URL = '/src/assets/Page5.pdf';
+  const PAGE4_PDF_URL = page4PdfUrl as string;
+  const PAGE5_PDF_URL = page5PdfUrl as string;
 
   // Page 4 (from uploaded PDF)
   doc.addPage();
