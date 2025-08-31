@@ -3,7 +3,6 @@ import html2canvas from 'html2canvas';
 import { ROIMetrics } from '@/types/roi';
 import { formatCurrency, formatNumber } from './formatters';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.js?url';
 
 interface ExportData {
   metrics: ROIMetrics;
@@ -592,8 +591,8 @@ doc.text(lines, margin, yPosition);
   // ================== PAGES 4 & 5: EXTERNAL PDF PAGES ==================
   // Helper to render the first page of a PDF asset to an image data URL
   async function renderPdfFirstPageToDataUrl(pdfUrl: string): Promise<string> {
-    // Configure PDF.js worker
-    GlobalWorkerOptions.workerSrc = pdfjsWorker as any;
+    // Configure PDF.js worker with CDN URL
+    GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     const task = getDocument(pdfUrl);
     const pdf = await task.promise;
     const page = await pdf.getPage(1);
