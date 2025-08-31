@@ -508,37 +508,31 @@ tableData.forEach((row, index) => {
 yPosition += 18;
 
 // Section: Organization Parameters
-doc.setTextColor(139, 92, 246);
-doc.setFontSize(14);
-doc.setFont('helvetica', 'bold');
-doc.text('Organization Parameters', margin, yPosition);
-
-yPosition += 8;
-doc.setTextColor(0, 0, 0);
-doc.setFontSize(10);
-doc.setFont('helvetica', 'normal');
-doc.text('The ROI model uses your organizational inputs:', margin, yPosition);
-
-yPosition += 12;
-
-const params = [
-  `• Annual Revenue Claimed: ${formatCurrency(data.metrics.revenueClaimed)}`,
-  `• Number of Claims Per Year: ~${formatNumber(data.metrics.claimsPerAnnum)}`,
-  '• Average Cost per Claim: Derived from revenue and claim data.',
-  '• Baseline Denial Rate & Backlog: Applied as per inputs.'
+const paramLabels = [
+  '• Annual Revenue Claimed:',
+  '• Number of Claims Per Year:',
+  '• Average Cost per Claim:',
+  '• Baseline Denial Rate & Backlog:'
 ];
 
-params.forEach(param => {
-  doc.text(param, margin, yPosition);
+const paramValues = [
+  formatCurrency(data.metrics.revenueClaimed),
+  formatNumber(data.metrics.claimsPerAnnum),
+  'Derived from revenue and claim data.',
+  'Applied as per inputs.'
+];
+
+paramLabels.forEach((label, index) => {
+  // Bold label
+  doc.setFont('helvetica', 'bold');
+  doc.text(label, margin, yPosition);
+
+  // Normal value (indented slightly to align nicely)
+  doc.setFont('helvetica', 'normal');
+  doc.text(paramValues[index], margin + 70, yPosition); // Adjust margin offset as needed
+
   yPosition += 7;
 });
-
-yPosition += 8;
-doc.text('These assumptions create the baseline for measuring cost savings, revenue enhancement,', margin, yPosition);
-yPosition += 6;
-doc.text('and risk reduction.', margin, yPosition);
-
-yPosition += 18;
 
 // Section: Conclusion
 doc.setTextColor(139, 92, 246);
