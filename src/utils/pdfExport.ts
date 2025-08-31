@@ -577,7 +577,7 @@ doc.text('Recommendation:', margin, yPosition);
 
 yPosition += 8;
 doc.setTextColor(0, 0, 0);
-doc.setFontSize(11);
+doc.setFontSize(12);
 doc.setFont('helvetica', 'normal');
 const recommendationText = 'Adoption of RapidClaims\' AI solutions provides a sustainable and scalable path to reduce costs, increase revenue capture, and improve compliance simultaneously.';
 const lines = doc.splitTextToSize(recommendationText, pageWidth - 2 * margin);
