@@ -484,10 +484,10 @@ tableData.forEach((row, index) => {
 
   if (index === 0 || index === tableData.length - 1) {
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
+    doc.setFontSize(10);
   } else {
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
+    doc.setFontSize(9);
   }
 
   doc.setTextColor(0, 0, 0);
