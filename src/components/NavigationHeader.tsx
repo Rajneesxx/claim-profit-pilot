@@ -16,7 +16,7 @@ export const NavigationHeader = () => {
           <img 
             src="/lovable-uploads/f375585e-a028-4771-aeca-4d548db422ca.png" 
             alt="RapidClaims Logo" 
-            className="h-8 w-auto"
+            className="h-8"
           />
         </div>
 
