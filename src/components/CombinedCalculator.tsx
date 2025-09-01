@@ -1052,7 +1052,7 @@ const handleSignInSubmit = async () => {
               
               <div
                 className={`relative h-[600px] overflow-y-auto rounded-xl p-6 md:p-8 text-white ring-1 ring-white/20
-                           bg-gradient-to-br from-purple-accent via-green-accent to-purple-accent/80 transition-all duration-500 ${
+                           bg-gradient-to-br from-purple-accent/70 via-green-accent/60 to-purple-accent/50 transition-all duration-500 ${
                   isSignedIn ? 'animate-white-glow' : ''
                 }`}
                 style={{
