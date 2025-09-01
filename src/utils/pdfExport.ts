@@ -172,28 +172,27 @@ const createPDFContent = async (doc: jsPDF, data: ExportData): Promise<void> => 
 
   // ================== COVER PAGE ==================
   // Purple to teal gradient background effect
- // ✅ Make sure gradient comes first
-for (let i = 0; i < 30; i++) {
-  const alpha = i / 30;
-  const r = Math.round(0x82 + (0x06 - 0x82) * alpha);
+  // ✅ Smooth Gradient Background
+// Increase slices from 30 → 200 for smoother effect
+for (let i = 0; i < 200; i++) {
+  const alpha = i / 200;
+  const r = Math.round(0x82 + (0x06 - 0x82) * alpha); // purple-ish to dark
   const g = Math.round(0x0C + (0x5D - 0x0C) * alpha);
   const b = Math.round(0xC7 + (0x3F - 0xC7) * alpha);
+
   doc.setFillColor(r, g, b);
-  doc.rect(0, (pageHeight / 30) * i, pageWidth, pageHeight / 30, 'F');
+  doc.rect(0, (pageHeight / 200) * i, pageWidth, pageHeight / 200, 'F');
 }
 
-// ✅ Titles
-// Assuming pageHeight = doc.internal.pageSize.getHeight()
-
-// --- Title block ~70% down
+// ✅ Titles (pageHeight already defined)
 let titleY = pageHeight * 0.69;
 doc.setFontSize(32);
 doc.setFont('helvetica', 'bold');
 doc.setTextColor(255, 255, 255);
-doc.text('Your Personalized',24, titleY);
-doc.text('ROI Blueprint', 24, titleY +18);
+doc.text('Your Personalized', 24, titleY);
+doc.text('ROI Blueprint', 24, titleY + 18);
 
-// --- Client info ~82% down
+// ✅ Client info ~82% down
 let clientY = pageHeight * 0.82;
 doc.setFontSize(18);
 doc.setFont('helvetica', 'bold');
@@ -201,18 +200,20 @@ doc.text('Prepared for:', 24, clientY);
 doc.setFont('helvetica', 'normal');
 doc.text('[Client Company Name]', 24, clientY + 8);
 
-// --- RapidClaims footer ~91% down
+// ✅ RapidClaims footer ~91% down
 let footerY = pageHeight * 0.91;
-const logoSize = 14;
-
 let logoOffset = 24;
+
 doc.setFontSize(20);
 doc.setFont('helvetica', 'bold');
-doc.setTextColor(255, 69, 58); 
+
+// "Rapid" in red
+doc.setTextColor(255, 69, 58);
 doc.text('Rapid', logoOffset, footerY);
-let rapidWidth = doc.getTextWidth('Rapid ');
+
+// "Claims" in white
 doc.setTextColor(255, 255, 255);
-doc.text('Claims', logoOffset + 20, footerY);
+doc.text('Claims', logoOffset + 45, footerY);
 
 
 
