@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
 
-export const Footer: React.FC = () => {
+export default function Footer() {
   const [email, setEmail] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -35,18 +35,18 @@ export const Footer: React.FC = () => {
       <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-16 relative z-10 flex-1 flex flex-col justify-center">
         {/* Top Section */}
         <div className="flex flex-col lg:flex-row items-start justify-between gap-12 mb-20">
-          {/* Left: Logo + Text - Centered Left Layout */}
-          <div className="flex items-center gap-6 lg:w-1/2">
+          {/* Left: Logo Above Text - Vertical Layout */}
+          <div className="flex flex-col items-start lg:w-1/2">
             <img
               src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
               alt="Company Logo"
-              className="w-[60px] h-auto flex-shrink-0"
+              className="w-[60px] h-auto mb-6"
             />
-            <div className="flex-1">
-              <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-3">
+            <div>
+              <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-3">
                 Transform Your Revenue Cycle in<br />30 Days or Less
               </h2>
-              <p className="text-gray-300 text-base lg:text-lg">
+              <p className="text-gray-300 text-sm lg:text-base">
                 Join leading healthcare organizations already seeing results with RapidClaims.
               </p>
             </div>
@@ -123,7 +123,7 @@ export const Footer: React.FC = () => {
                 <a
                   href="https://www.rapidclaims.ai/products/rapid-cdi"
                   target="_blank"
-                  className="text-gray-content"
+                  className="text-gray-300 text-sm hover:text-white"
                 >
                   RapidCDI
                 </a>
@@ -223,7 +223,7 @@ export const Footer: React.FC = () => {
             <div className="text-gray-400 text-sm mb-3 font-medium">
               Sign up for our newsletter
             </div>
-            <form onSubmit={handleSubmit} className="flex mb-6">
+            <div className="flex mb-6">
               <input
                 type="email"
                 placeholder="Enter email address"
@@ -233,12 +233,13 @@ export const Footer: React.FC = () => {
                 required
               />
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit}
                 className="h-12 bg-red-600 hover:bg-red-700 rounded-r-md px-5 text-white flex items-center justify-center transition-colors"
               >
                 <ArrowRight className="w-4 h-4" />
               </button>
-            </form>
+            </div>
             <div className="text-gray-400 text-sm">
               <div className="font-semibold mb-1">Address</div>
               <div>605W, 42nd Street, Manhattan, New York 10036</div>
@@ -299,4 +300,4 @@ export const Footer: React.FC = () => {
       </div>
     </footer>
   );
-};
+}
