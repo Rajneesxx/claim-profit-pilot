@@ -385,10 +385,7 @@ const handleSignInSubmit = async () => {
       
       if (result.ok) {
         console.info('✅ Sign-in data sent to spreadsheet successfully');
-        toast({
-          title: "📊 Data Captured",
-          description: "Your sign-in data has been recorded for analysis.",
-        });
+        
       } else {
         console.warn('⚠️ Spreadsheet operation failed:', result);
         const errorMsg = result.reason === 'missing_webhook_url' 
