@@ -55,7 +55,7 @@ export default function Footer() {
   </div>
 
   {/* Right: CTA Links (slightly lower) */}
-  <div className="flex flex-col w-full lg:w-[380px] lg:ml-auto mt-6 lg:mt-12">
+  <div className="flex flex-col w-full lg:w-[380px] lg:ml-auto mt-6 lg:mt-15">
     <a
       href="https://www.rapidclaims.ai/get-in-touch"
       target="_blank"
