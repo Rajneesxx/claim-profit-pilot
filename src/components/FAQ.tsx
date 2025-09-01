@@ -98,17 +98,23 @@ export const FAQ: React.FC = () => {
         {faqData.map((item, index) => (
           <div key={index} className={`border-b border-gray-200 last:border-b-0 ${openItems.includes(index) ? 'bg-purple-50' : ''}`}>
             <button
-              onClick={() => toggleItem(index)}
-              className={`flex items-center justify-between cursor-pointer w-full text-left p-6 hover:bg-gray-50 transition-colors ${
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('FAQ button clicked:', index);
+                toggleItem(index);
+              }}
+              className={`flex items-center justify-between cursor-pointer w-full text-left p-6 hover:bg-gray-50 transition-colors relative z-10 ${
                 openItems.includes(index) ? 'bg-purple-50 hover:bg-purple-50' : ''
               }`}
             >
-              <span className={`text-base font-semibold pr-4 ${
+              <span className={`text-base font-semibold pr-4 pointer-events-none ${
                 openItems.includes(index) ? 'text-primary' : 'text-gray-800'
               }`}>
                 {item.question}
               </span>
-              <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold ${
+              <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold pointer-events-none ${
                 openItems.includes(index) 
                   ? 'bg-primary text-white' 
                   : 'bg-gray-200 text-gray-600'
