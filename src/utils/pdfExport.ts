@@ -213,7 +213,7 @@ doc.text('Rapid', logoOffset, footerY);
 
 // "Claims" in white
 doc.setTextColor(255, 255, 255);
-doc.text('Claims', logoOffset +30, footerY);
+doc.text('Claims', logoOffset +20, footerY);
 
 
 
