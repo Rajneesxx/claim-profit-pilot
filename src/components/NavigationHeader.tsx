@@ -9,7 +9,7 @@ import {
 
 export const NavigationHeader = () => {
   return (
-            <header className="bg-slate-900 fixed top-4 left-1/2 -translate-x-1/2 z-50 shadow-lg w-[75vw] max-w-7xl rounded-lg">
+            <header className="bg-slate-900 fixed top-2 left-1/2 -translate-x-1/2 z-50 shadow-lg w-[75vw] max-w-7xl rounded-lg">
       <div className="flex items-center justify-between h-14 px-8">
         {/* Logo and Navigation - Left Side */}
         <div className="flex items-center">
