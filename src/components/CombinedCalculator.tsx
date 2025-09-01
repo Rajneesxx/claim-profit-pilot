@@ -17,7 +17,7 @@ import { References } from "./tabs/References";
 import { ProductDescription } from "./ProductDescription";
 import { MetricsExpandedView } from "./MetricsExpandedView";
 import { TooltipInfo } from "./TooltipInfo";
-import { formatCurrency, formatNumber } from "@/utils/formatters";
+import { formatCurrency, formatNumber, formatNumberWithCommas } from "@/utils/formatters";
 import { appendToSpreadsheet, buildEmailData } from "@/utils/emailToSpreadsheet";
 import { FAQ } from "./FAQ";
 import Footer from "./Footer";

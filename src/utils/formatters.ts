@@ -10,6 +10,11 @@ export const formatNumber = (num: number): string => {
   return new Intl.NumberFormat('en-US').format(num);
 };
 
+// Add the missing function that was referenced
+export const formatNumberWithCommas = (num: number): string => {
+  return new Intl.NumberFormat('en-US').format(num);
+};
+
 export const formatPercentage = (num: number): string => {
   return `${num.toFixed(1)}%`;
 };
