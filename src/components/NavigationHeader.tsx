@@ -21,7 +21,7 @@ export const NavigationHeader = () => {
         </div>
 
         {/* Navigation Links */}
-        <nav className="hidden md:flex items-center space-x-0 ml-2">
+        <nav className="hidden md:flex items-center space-x-4 ml-2">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center space-x-1 text-white font-bold text-sm hover:text-gray-300 transition-colors bg-transparent border-none">
               <span>PRODUCTS</span>
