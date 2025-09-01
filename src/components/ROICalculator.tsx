@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import confetti from 'canvas-confetti';
 import { Calculator, Star, Download, FileText } from 'lucide-react';
 import CombinedCalculator from './CombinedCalculator';
+import { NavigationHeader } from './NavigationHeader';
 
 import { ModernEmailDialog } from './ModernEmailDialog';
 import { Dialog, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -286,49 +287,10 @@ export const ROICalculator = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-
-      {/* Fixed Header */}
-      <div className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50 shadow-sm">
-        <div className="w-full px-6 py-6">{/* Increased padding from py-4 to py-6 */}
-          <div className="flex items-center justify-between">
-            {/* Logo and Navigation Links - Left Side */}
-            <div className="flex items-center gap-8">
-              {/* Logo */}
-              <img 
-                src="/lovable-uploads/6549e296-472c-4a56-bd4f-8786e0a7978c.png" 
-                alt="RapidClaims" 
-                className="h-7 w-auto" 
-              />
-              
-              {/* Navigation Links */}
-              <nav className="hidden md:flex items-center gap-8">{/* Increased gap from 6 to 8 */}
-                <a href="https://www.rapidclaims.ai/" className="text-gray-900 font-bold text-lg hover:text-purple-600 transition-colors">{/* Increased font size and weight */}
-                  PRODUCTS
-                </a>
-                <a href="https://www.rapidclaims.ai/solutions" className="text-gray-900 font-bold text-lg hover:text-purple-600 transition-colors">
-                  SOLUTIONS
-                </a>
-                <a href="https://www.rapidclaims.ai/resources/blogs" className="text-gray-900 font-bold text-lg hover:text-purple-600 transition-colors">
-                  RESOURCES
-                </a>
-              </nav>
-            </div>
-            
-            {/* Book a Demo Button - Right Side */}
-            <div className="flex items-center">
-              <Button 
-                onClick={() => window.open('https://www.rapidclaims.ai/get-in-touch', '_self')}
-                className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 text-lg rounded-lg"
-              >
-                Book a Demo
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <NavigationHeader />
 
       {/* Main Content with top padding to account for fixed header */}
-      <div className="w-full px-6 py-8 relative z-10 pt-24">{/* Added pt-24 for header spacing */}
+      <div className="w-full px-6 py-8 relative z-10 pt-20">{/* Adjusted padding for new header height */}
         <CombinedCalculator 
           metrics={metrics}
           updateMetric={updateMetric}
