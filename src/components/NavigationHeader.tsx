@@ -10,18 +10,19 @@ import {
 export const NavigationHeader = () => {
   return (
             <header className="bg-slate-900 fixed top-4 left-1/2 -translate-x-1/2 z-50 shadow-lg w-[75vw] max-w-7xl rounded-lg">
-              <div className="flex items-center justify-between h-14 px-8">
-        {/* Logo */}
-        <div className="flex-shrink-0">
-          <img 
-            src="/lovable-uploads/f375585e-a028-4771-aeca-4d548db422ca.png" 
-            alt="RapidClaims Logo" 
-            className="h-8"
-          />
-        </div>
+      <div className="flex items-center justify-between h-14 px-8">
+        {/* Logo and Navigation - Left Side */}
+        <div className="flex items-center">
+          <div className="flex-shrink-0">
+            <img 
+              src="/lovable-uploads/f375585e-a028-4771-aeca-4d548db422ca.png" 
+              alt="RapidClaims Logo" 
+              className="h-8"
+            />
+          </div>
 
-        {/* Navigation Links */}
-        <nav className="hidden md:flex items-center space-x-4">
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center space-x-4 ml-8">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center space-x-1 text-white font-bold text-sm hover:text-gray-300 transition-colors bg-transparent border-none">
               <span>PRODUCTS</span>
@@ -66,7 +67,8 @@ export const NavigationHeader = () => {
           >
             RESOURCES
           </a>
-        </nav>
+          </nav>
+        </div>
 
         {/* Right Side - CTA */}
         <div className="flex items-center">
