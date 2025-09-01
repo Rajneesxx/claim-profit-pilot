@@ -243,9 +243,9 @@ export default function Footer() {
 </div>
 </div>
       {/* Bottom Row */}
-<div className="flex flex-col items-center text-center border-t border-gray-700 pt-6 gap-4 text-gray-400 text-sm mt-auto">
-  {/* Email + Copyright */}
-  <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+<div className="flex flex-col md:flex-row justify-between items-center border-t border-gray-700 pt-6 text-gray-400 text-sm mt-auto gap-6">
+  {/* Left - Email */}
+  <div className="flex justify-start w-full md:w-auto">
     <span>
       Email{" "}
       <a
@@ -255,43 +255,48 @@ export default function Footer() {
         sales@rapidclaims.ai
       </a>
     </span>
+  </div>
+
+  {/* Center - Copyright + Policy Links */}
+  <div className="flex flex-col items-center text-center gap-2">
     <span>© 2025 RapidClaims. All rights reserved.</span>
+    <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+      <a
+        href="https://www.rapidclaims.ai/terms-of-service"
+        target="_blank"
+        className="hover:text-white transition-colors"
+      >
+        Terms of Service
+      </a>
+      <a
+        href="https://www.rapidclaims.ai/privacy-policy"
+        target="_blank"
+        className="hover:text-white transition-colors"
+      >
+        Privacy Policy
+      </a>
+      <a
+        href="https://www.rapidclaims.ai/cookie-policy"
+        target="_blank"
+        className="hover:text-white transition-colors"
+      >
+        Cookie Policy
+      </a>
+    </div>
   </div>
 
-  {/* Policy Links */}
-  <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+  {/* Right - LinkedIn */}
+  <div className="flex justify-end w-full md:w-auto">
     <a
-      href="https://www.rapidclaims.ai/terms-of-service"
+      href="https://www.linkedin.com/company/rapidclaims-ai/posts/?feedView=all"
       target="_blank"
-      className="hover:text-white transition-colors"
+      className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center hover:bg-gray-600 transition-colors"
     >
-      Terms of Service
-    </a>
-    <a
-      href="https://www.rapidclaims.ai/privacy-policy"
-      target="_blank"
-      className="hover:text-white transition-colors"
-    >
-      Privacy Policy
-    </a>
-    <a
-      href="https://www.rapidclaims.ai/cookie-policy"
-      target="_blank"
-      className="hover:text-white transition-colors"
-    >
-      Cookie Policy
+      <span className="text-white text-xs font-bold">in</span>
     </a>
   </div>
-
-  {/* LinkedIn */}
-  <a
-    href="https://www.linkedin.com/company/rapidclaims-ai/posts/?feedView=all"
-    target="_blank"
-    className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center hover:bg-gray-600 transition-colors"
-  >
-    <span className="text-white text-xs font-bold">in</span>
-  </a>
 </div>
+
 
     </footer>
   );
