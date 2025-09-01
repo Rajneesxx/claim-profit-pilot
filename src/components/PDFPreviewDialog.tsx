@@ -32,6 +32,7 @@ export const PDFPreviewDialog = ({
 }: PDFPreviewDialogProps) => {
   const [emailAddress, setEmailAddress] = useState(data.userEmail || '');
   const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isEmailing, setIsEmailing] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -45,7 +46,7 @@ export const PDFPreviewDialog = ({
 
   const handlePreviewPDF = async () => {
     try {
-      setIsDownloading(true);
+      setIsPreviewing(true);
       const pdfBlob = await generatePDFBlob(data);
       const url = URL.createObjectURL(pdfBlob);
       setPdfUrl(url);
@@ -71,7 +72,7 @@ export const PDFPreviewDialog = ({
         variant: "destructive",
       });
     } finally {
-      setIsDownloading(false);
+      setIsPreviewing(false);
     }
   };
 
@@ -233,11 +234,11 @@ export const PDFPreviewDialog = ({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Button
                 onClick={handlePreviewPDF}
-                disabled={isDownloading}
+                disabled={isPreviewing}
                 variant="outline"
                 className="h-12 border-primary/20 hover:bg-primary/5"
               >
-                {isDownloading ? (
+                {isPreviewing ? (
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 ) : (
                   <Eye className="h-4 w-4 mr-2" />
