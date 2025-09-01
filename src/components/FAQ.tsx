@@ -33,6 +33,13 @@ export const FAQ: React.FC = () => {
 
   return (
     <section className="w-full relative px-[100px] py-20 max-sm:px-5 max-sm:py-10">
+      {/* Blurred background gradient */}
+      <div 
+        className="absolute inset-0 opacity-20 blur-3xl"
+        style={{
+          background: `radial-gradient(ellipse at center, #7E22CE 0%, #065D3F 70%, transparent 100%)`
+        }}
+      />
   <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
     
     {/* LEFT COLUMN: 4/12 width (~33%) */}
