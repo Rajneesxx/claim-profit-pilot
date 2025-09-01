@@ -473,6 +473,35 @@ export const ROICalculator = () => {
       {/* FAQ Section */}
       <FAQ />
 
+      {/* RevenueBanner Section - White Card on Dark Footer */}
+      <div className="relative flex items-center gap-20 max-w-[1440px] mx-auto my-0 px-[100px] py-20 max-md:flex-col max-md:gap-10 max-md:text-center">
+        {/* Blurred background gradient */}
+        <div 
+          className="absolute inset-0 opacity-20 blur-3xl"
+          style={{
+            background: `radial-gradient(ellipse at center, #7E22CE 0%, #065D3F 70%, transparent 100%)`
+          }}
+        />
+        <img
+          src="https://api.builder.io/api/v1/image/assets/TEMP/d6321efa1e6ceeefe2643911cfa0c4be5854f55c?width=1421"
+          alt="Rapid Codes"
+          className="w-[711px] h-[444px] object-cover rounded-[7px] max-md:w-full max-md:max-w-[600px] max-md:h-auto"
+        />
+        <div className="flex-1 flex flex-col items-center text-center">
+          <h2 className="text-gray-800 text-5xl font-semibold leading-[1.2] mb-6 max-sm:text-4xl">
+            Unlock every collectible dollar
+          </h2>
+          <button 
+            onClick={() => window.open('https://www.rapidclaims.ai/get-in-touch', '_self')}
+            className="flex items-center justify-center w-[200px] h-[50px] cursor-pointer bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8]"
+          >
+            <span className="text-white text-base font-semibold">
+              Book a Demo
+            </span>
+          </button>
+        </div>
+      </div>
+
       {/* Footer */}
       <Footer />
     </div>
