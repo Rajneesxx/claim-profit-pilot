@@ -43,16 +43,14 @@ export default function Footer() {
       alt="Company Logo"
       className="w-24 h-auto mb-10"
     />
-
-    <div>
-      <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-3">
-        Transform Your Revenue Cycle in<br />30 Days or Less
-      </h2>
-      <p className="text-gray-300 text-sm lg:text-base">
-        Join leading healthcare organizations already seeing results with RapidClaims.
-      </p>
-    </div>
-  </div>
+<div>
+  <h2 className="text-white text-lg md:text-xl lg:text-2xl font-bold leading-tight mb-3">
+    Transform Your Revenue Cycle in<br />30 Days or Less
+  </h2>
+  <p className="text-gray-300 text-xs lg:text-sm">
+    Join leading healthcare organizations already seeing results with RapidClaims.
+  </p>
+</div>
 
   {/* Right: CTA Links (slightly lower) */}
   <div className="flex flex-col w-full lg:w-[380px] lg:ml-auto mt-12 lg:mt-12">
