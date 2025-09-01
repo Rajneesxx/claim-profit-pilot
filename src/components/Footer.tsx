@@ -32,26 +32,28 @@ export default function Footer() {
         }}
       ></div>
 
-        <div className="flex flex-col items-start lg:w-1/2 mx-auto text-center lg:text-left">
-  <img
-    src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
-    alt="Company Logo"
-    className="w-20 h-auto mb-6 mx-auto lg:mx-0"
-  />
-  <div>
-    <h2 className="text-white text-lg md:text-xl lg:text-2xl font-bold leading-snug mb-2">
-      Transform Your Revenue Cycle in<br />30 Days or Less
-    </h2>
-    <p className="text-gray-300 text-xs lg:text-sm">
-      Join leading healthcare organizations already seeing results with RapidClaims.
-    </p>
-  </div>
-</div>
-
-       
+      <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-12 relative z-10 flex-1 flex flex-col justify-center">
+        {/* Top Section */}
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 mb-12">
+          {/* Left: Logo + Text */}
+          <div className="flex flex-col items-center lg:items-start lg:w-1/2">
+            <img
+              src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
+              alt="Company Logo"
+              className="w-20 h-auto mb-6"
+            />
+            <div className="text-center lg:text-left">
+              <h2 className="text-white text-lg md:text-xl lg:text-2xl font-bold leading-snug mb-2">
+                Transform Your Revenue Cycle in<br />30 Days or Less
+              </h2>
+              <p className="text-gray-300 text-xs lg:text-sm">
+                Join leading healthcare organizations already seeing results with RapidClaims.
+              </p>
+            </div>
+          </div>
 
           {/* Right: CTA Links */}
-          <div className="flex flex-col w-full lg:w-[340px] lg:ml-auto mt-8 lg:mt-8">
+          <div className="flex flex-col w-full lg:w-[340px] lg:ml-auto mt-8 lg:mt-0">
             {[
               "Request ROI Analysis",
               "Calculate your savings",
@@ -73,14 +75,14 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Top row: Logo left, Recognition right */}
-        <div className="flex items-center justify-between mb-12">
+        {/* Logo and Recognition Row */}
+        <div className="flex flex-col lg:flex-row items-center justify-between mb-12 gap-6">
           <img
             src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
             alt="Company Logo"
             className="w-28 h-auto"
           />
-          <div className="flex flex-col items-end">
+          <div className="flex flex-col items-center lg:items-end">
             <div className="text-gray-400 text-[11px] font-bold uppercase tracking-wider mb-2">
               RECOGNISED BY :
             </div>
@@ -92,8 +94,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Rest of the footer contents */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+        {/* Footer Links Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 text-center lg:text-left">
           {/* Products */}
           <div>
             <h4 className="text-white text-xs font-bold tracking-wider uppercase mb-3">
@@ -131,7 +133,7 @@ export default function Footer() {
           </div>
 
           {/* Newsletter + Address */}
-          <div className="max-w-[380px] w-full">
+          <div className="max-w-[380px] w-full mx-auto lg:mx-0">
             <div className="text-gray-400 text-sm mb-2 font-medium">
               Sign up for our newsletter
             </div>
