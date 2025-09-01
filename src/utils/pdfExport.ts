@@ -444,7 +444,7 @@ doc.text(quoteText, pageWidth / 2, quoteY, { align: 'center' });
 // Add RapidClaims logo to footer right corner
 try {
   const logoDataUrl = '/lovable-uploads/d303d048-be0b-47d1-a060-555647175577.png';
-  doc.addImage(logoDataUrl, 'PNG', pageWidth - margin - 40, pageHeight - 25, 35, 10);
+  doc.addImage(logoDataUrl, 'PNG', pageWidth - margin - 40, pageHeight - 25, 25, 10);
 } catch (error) {
   console.warn('Logo failed to load, using text fallback:', error);
   // Fallback to text if logo fails
