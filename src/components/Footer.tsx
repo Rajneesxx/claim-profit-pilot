@@ -34,7 +34,7 @@ export default function Footer() {
 
       <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-16 relative z-10 flex-1 flex flex-col justify-center">
         {/* Top Section */}
-    {/* Top Section */}
+       {/* Top Section */}
 <div className="flex flex-col lg:flex-row items-start justify-between gap-12 mb-20">
   {/* Left: Logo + Text */}
   <div className="flex flex-col items-start lg:w-1/2">
@@ -43,47 +43,53 @@ export default function Footer() {
       alt="Company Logo"
       className="w-32 h-auto mb-10"
     />
-    <div>
-      <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-3">
-        Transform Your Revenue Cycle in<br />30 Days or Less
-      </h2>
-      <p className="text-gray-300 text-sm lg:text-base mb-6">
-        Join leading healthcare organizations already seeing results with RapidClaims.
-      </p>
+
+    {/* Heading + Text + CTAs side by side */}
+    <div className="flex flex-col lg:flex-row items-start gap-10">
+      {/* Heading + Paragraph */}
+      <div>
+        <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-3">
+          Transform Your Revenue Cycle in<br />30 Days or Less
+        </h2>
+        <p className="text-gray-300 text-sm lg:text-base">
+          Join leading healthcare organizations already seeing results with RapidClaims.
+        </p>
+      </div>
+
+      {/* Right: CTA Links */}
+      <div className="flex flex-col w-full max-w-[320px] mt-1">
+        <a
+          href="https://www.rapidclaims.ai/get-in-touch"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
+        >
+          <span className="text-lg font-medium">Request ROI Analysis</span>
+          <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+        </a>
+        <a
+          href="https://www.rapidclaims.ai/get-in-touch"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
+        >
+          <span className="text-lg font-medium">Calculate your savings</span>
+          <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+        </a>
+        <a
+          href="https://www.rapidclaims.ai/get-in-touch"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between py-4 text-white hover:text-gray-300 transition group"
+        >
+          <span className="text-lg font-medium">Schedule a demo</span>
+          <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+        </a>
+      </div>
     </div>
   </div>
-
-  {/* Right: CTA Links */}
-  <div className="flex flex-col w-full max-w-[380px] lg:w-auto lg:min-w-[320px]">
-    <a
-      href="https://www.rapidclaims.ai/get-in-touch"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
-    >
-      <span className="text-lg font-medium">Request ROI Analysis</span>
-      <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
-    </a>
-    <a
-      href="https://www.rapidclaims.ai/get-in-touch"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
-    >
-      <span className="text-lg font-medium">Calculate your savings</span>
-      <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
-    </a>
-    <a
-      href="https://www.rapidclaims.ai/get-in-touch"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center justify-between py-4 text-white hover:text-gray-300 transition group"
-    >
-      <span className="text-lg font-medium">Schedule a demo</span>
-      <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
-    </a>
-  </div>
 </div>
+
 
 
         {/* Middle Section */}
