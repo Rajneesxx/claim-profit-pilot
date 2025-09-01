@@ -41,7 +41,7 @@ export default function Footer() {
     <img
       src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
       alt="Company Logo"
-      className="w-14 h-auto mb-10"
+      className="w-20 h-auto mb-10"
     />
 
     <div>
