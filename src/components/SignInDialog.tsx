@@ -31,8 +31,8 @@ export const SignInDialog = ({
       <DialogPortal>
         <DialogOverlay />
           <DialogOverlay className="bg-black bg-opacity-30 fixed inset-0" />
-          <DialogContent className="bg-white/20 border border-border w-full max-w-md mx-auto rounded-2xl">
-        <DialogHeader className="text-center space-y-6 pb-2">
+          <DialogContent className="bg-purple-600 border border-border w-full max-w-md mx-auto rounded-2xl">
+           <DialogHeader className="text-center space-y-6 pb-2">
           <DialogTitle className="text-2xl font-semibold text-foreground">
             Find Out How Much You Could Recover
           </DialogTitle>
