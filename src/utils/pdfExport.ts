@@ -440,13 +440,20 @@ doc.setFontSize(12);
 doc.setFont('helvetica', 'italic');
 doc.text(quoteText, pageWidth / 2, quoteY, { align: 'center' });
 
-// Company name
-doc.setTextColor(255, 69, 58);
-doc.setFontSize(14);
-doc.setFont('helvetica', 'bold');
-doc.text('Rapid', pageWidth - margin - 35, pageHeight - 15);
-doc.setTextColor(0, 0, 0);
-doc.text('Claims', pageWidth - margin - 35, pageHeight - 15 +32);
+// Add RapidClaims logo to footer right corner
+try {
+  const logoDataUrl = '/lovable-uploads/d303d048-be0b-47d1-a060-555647175577.png';
+  doc.addImage(logoDataUrl, 'PNG', pageWidth - margin - 40, pageHeight - 25, 35, 10);
+} catch (error) {
+  console.warn('Logo failed to load, using text fallback:', error);
+  // Fallback to text if logo fails
+  doc.setTextColor(255, 69, 58);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Rapid', pageWidth - margin - 35, pageHeight - 15);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Claims', pageWidth - margin - 20, pageHeight - 15);
+}
 
 
   // ================== PAGE 3: DETAILED ANALYSIS ==================
@@ -586,6 +593,21 @@ doc.setFont('helvetica', 'normal');
 const recommendationText = 'Adoption of RapidClaims\' AI solutions provides a sustainable and scalable path to reduce costs, increase revenue capture, and improve compliance simultaneously.';
 const lines = doc.splitTextToSize(recommendationText, pageWidth - 2 * margin);
 doc.text(lines, margin, yPosition);
+
+// Add RapidClaims logo to footer right corner on page 3
+try {
+  const logoDataUrl = '/lovable-uploads/d303d048-be0b-47d1-a060-555647175577.png';
+  doc.addImage(logoDataUrl, 'PNG', pageWidth - margin - 40, pageHeight - 25, 35, 10);
+} catch (error) {
+  console.warn('Logo failed to load, using text fallback:', error);
+  // Fallback to text if logo fails
+  doc.setTextColor(255, 69, 58);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Rapid', pageWidth - margin - 35, pageHeight - 15);
+  doc.setTextColor(0, 0, 0);
+  doc.text('Claims', pageWidth - margin - 20, pageHeight - 15);
+}
 
   
   
