@@ -34,7 +34,7 @@ export default function Footer() {
 
       <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-16 relative z-10 flex-1 flex flex-col justify-center">
         {/* Top Section */}
-       {/* Top Section */}
+         {/* Top Section */}
 <div className="flex flex-col lg:flex-row items-start justify-between gap-12 mb-20">
   {/* Left: Logo + Text */}
   <div className="flex flex-col items-start lg:w-1/2">
@@ -54,8 +54,8 @@ export default function Footer() {
     </div>
   </div>
 
-  {/* Right: CTA Links (pushed to far right) */}
-  <div className="flex flex-col w-full lg:w-[380px] lg:ml-auto">
+  {/* Right: CTA Links (slightly lower) */}
+  <div className="flex flex-col w-full lg:w-[380px] lg:ml-auto mt-6 lg:mt-10">
     <a
       href="https://www.rapidclaims.ai/get-in-touch"
       target="_blank"
@@ -85,7 +85,6 @@ export default function Footer() {
     </a>
   </div>
 </div>
-
 
 
         {/* Middle Section */}
