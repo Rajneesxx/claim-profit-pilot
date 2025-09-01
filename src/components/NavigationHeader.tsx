@@ -9,8 +9,8 @@ import {
 
 export const NavigationHeader = () => {
   return (
-            <header className="bg-slate-900 fixed top-4 left-1/2 -translate-x-1/2 z-50 shadow-lg w-[75vw] max-w-7xl rounded-lg">
-  <div className="flex items-center justify-between h-14 px-8">
+            <header className="bg-slate-900 fixed top-4 left-1/2 -translate-x-1/2 z-50 shadow-lg w-[60vw] max-w-7xl">
+             <div className="flex items-center justify-between h-14 px-8">
         {/* Logo */}
         <div className="flex-shrink-0">
           <img 
