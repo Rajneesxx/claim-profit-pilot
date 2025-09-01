@@ -40,7 +40,7 @@ export default function Footer() {
             <img
               src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
               alt="Company Logo"
-              className="w-[60px] h-auto mb-10"
+              className="w-40 h-auto mb-10"
             />
             <div>
               <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-3">
