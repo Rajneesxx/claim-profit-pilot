@@ -10,12 +10,14 @@ import {
 export const NavigationHeader = () => {
   return (
     <header className="bg-slate-900 w-full fixed top-0 left-0 right-0 z-50">
-      <div className="flex items-center justify-between h-16 px-6 lg:px-8">
+      <div className="flex items-center justify-between h-16 px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Logo */}
         <div className="flex-shrink-0">
-          <div className="w-8 h-8 bg-red-500 flex items-center justify-center transform rotate-45">
-            <span className="text-white font-bold text-lg transform -rotate-45">X</span>
-          </div>
+          <img 
+            src="/lovable-uploads/f375585e-a028-4771-aeca-4d548db422ca.png" 
+            alt="RapidClaims Logo" 
+            className="h-8 w-auto"
+          />
         </div>
 
         {/* Navigation Links */}
@@ -71,9 +73,12 @@ export const NavigationHeader = () => {
           <Button 
             className="bg-red-500 hover:bg-red-600 text-white font-bold px-4 py-2 rounded-md text-sm transition-colors flex items-center space-x-2"
             style={{ backgroundColor: '#FF442B' }}
+            asChild
           >
-            <span>REQUEST A DEMO</span>
-            <ArrowRight className="w-4 h-4" />
+            <a href="https://www.rapidclaims.ai/get-in-touch">
+              <span>REQUEST A DEMO</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </Button>
         </div>
 
