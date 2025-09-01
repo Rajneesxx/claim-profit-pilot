@@ -62,7 +62,7 @@ export const BasicCalculator = ({
                 <Input
                   id="revenue-input"
                   type="number"
-                  value={metrics.revenueClaimed}
+                  value={metrics.revenueClaimed === 0 ? '' : metrics.revenueClaimed}
                   onChange={(e) => {
                     const value = e.target.value;
                     if (value === '') {
