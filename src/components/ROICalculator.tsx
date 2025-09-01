@@ -287,8 +287,8 @@ export const ROICalculator = () => {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
 
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 relative z-10 sticky top-0">
+      {/* Fixed Header */}
+      <div className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50 shadow-sm">
         <div className="w-full px-6 py-6">{/* Increased padding from py-4 to py-6 */}
           <div className="flex items-center justify-between">
             {/* Logo and Navigation Links - Left Side */}
@@ -327,8 +327,8 @@ export const ROICalculator = () => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="w-full px-6 py-8 relative z-10">
+      {/* Main Content with top padding to account for fixed header */}
+      <div className="w-full px-6 py-8 relative z-10 pt-24">{/* Added pt-24 for header spacing */}
         <CombinedCalculator 
           metrics={metrics}
           updateMetric={updateMetric}
