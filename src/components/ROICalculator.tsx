@@ -295,7 +295,7 @@ export const ROICalculator = () => {
             <div className="flex items-center gap-8">
               {/* Logo */}
               <img 
-                src="/lovable-uploads/d6ea716e-74df-477d-bc4a-ba734a45240a.png" 
+                src="/lovable-uploads/6549e296-472c-4a56-bd4f-8786e0a7978c.png" 
                 alt="RapidClaims" 
                 className="h-16 w-auto" 
               />
