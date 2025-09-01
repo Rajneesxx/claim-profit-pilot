@@ -63,7 +63,17 @@ export const BasicCalculator = ({
                   id="revenue-input"
                   type="number"
                   value={metrics.revenueClaimed}
-                  onChange={(e) => updateMetric('revenueClaimed', parseInt(e.target.value) || 0)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '') {
+                      updateMetric('revenueClaimed', 0);
+                    } else {
+                      const numValue = parseFloat(value);
+                      if (!isNaN(numValue)) {
+                        updateMetric('revenueClaimed', numValue);
+                      }
+                    }
+                  }}
                   className="text-center pl-8"
                   placeholder="Enter revenue amount"
                 />
