@@ -19,8 +19,6 @@ import { MetricsExpandedView } from "./MetricsExpandedView";
 import { TooltipInfo } from "./TooltipInfo";
 import { formatCurrency, formatNumber } from "@/utils/formatters";
 import { appendToSpreadsheet, buildEmailData } from "@/utils/emailToSpreadsheet";
-import { FAQ } from "./FAQ";
-import Footer from "./Footer";
 
 
 interface CombinedCalculatorProps {
@@ -1175,10 +1173,6 @@ const handleSignInSubmit = async () => {
 
 
 
-      {/* FAQ Section - Full Width */}
-      <div className="w-full">
-        <FAQ />
-      </div>
       {/* RevenueBanner Section - White Card on Dark Footer */}
       <div className="relative flex items-center gap-20 max-w-[1440px] mx-auto my-0 px-[100px] py-20 max-md:flex-col max-md:gap-10 max-md:text-center">
         {/* Blurred background gradient */}
@@ -1189,13 +1183,13 @@ const handleSignInSubmit = async () => {
           }}
         />
         <img
-          src="https://api.builder.io/api/v1/image/assets/TEMP/d6321efa1e6ceeefe2643911cfa0c4be5854f55c?width=1421"
-          alt="Rapid Codes"
-          className="w-[711px] h-[444px] object-cover rounded-[7px] max-md:w-full max-md:max-w-[600px] max-md:h-auto"
+          src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
+          alt="Financial Impact Visual"
+          className="relative z-10 max-w-[500px] w-full h-auto max-md:max-w-[300px]"
         />
-        <div className="flex-1 flex flex-col items-center text-center">
-          <h2 className="text-gray-800 text-5xl font-semibold leading-[1.2] mb-6 max-sm:text-4xl">
-            Unlock every collectible dollar
+        <div className="relative z-10 flex flex-col gap-6 max-md:text-center">
+          <h2 className="text-4xl font-semibold text-white max-md:text-2xl">
+            Transform Your Revenue Operations
           </h2>
           <button className="flex items-center justify-center w-[200px] h-[50px] cursor-pointer bg-[#7828C8] rounded-lg hover:bg-[#6a1fb8]">
             <span className="text-white text-base font-semibold">
@@ -1203,11 +1197,6 @@ const handleSignInSubmit = async () => {
             </span>
           </button>
         </div>
-      </div>
-
-      {/* Footer Section - Dark Background Matching Reference */}
-      <div className="w-full relative z-10">
-        <Footer />
       </div>
 
       {/* (Removed) Webhook Configuration Helper for cleaner UI */}
