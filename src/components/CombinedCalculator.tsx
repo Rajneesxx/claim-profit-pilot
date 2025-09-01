@@ -763,36 +763,71 @@ const handleSignInSubmit = async () => {
                   </Button>
                 </div>
 
-                <Collapsible open={showAdvanced} onOpenChange={setShowAdvanced}>
+                <Collapsible open={showAdvanced} onOpenChange={(open) => {
+                  setShowAdvanced(open);
+                  if (open) setShowLevers(false);
+                }}>
                   <CollapsibleContent className="space-y-6">
                     <div className="max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                       <div ref={advancedRef} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {advancedInputs.map(({ key, label }) => (
                           <div key={key} className="space-y-2">
-                            <Label>{label}</Label>
-                            <Input
-                              type="text"
-                              inputMode="numeric"
-                              value={
-                                editingValues[key] !== undefined
-                                  ? editingValues[key]
-                                  : ((key === 'chartsPerCoderPerDay' || key === 'avgTimePerPhysicianPerChart')
-                                      ? String(metrics[key] ?? 0)
-                                      : (metrics[key] === 0 ? '' : String(metrics[key])))
-                              }
-                              onChange={(e) => handleInputChange(key, e.target.value)}
-                              onBlur={(e) => {
-                                const raw = e.target.value.trim();
-                                if (raw === '') {
-                                  return;
+                            <Label htmlFor={key} className="text-sm font-medium text-foreground">
+                              {label}
+                              <TooltipInfo content={getTooltipContent(key)} />
+                            </Label>
+                            <div className="relative">
+                              <Input
+                                id={key}
+                                type="text"
+                                value={
+                                  editingValues[key] !== undefined
+                                    ? editingValues[key]
+                                    : (metrics[key] === 0 ? '' : String(metrics[key]))
                                 }
-                                const parsed = parseFloat(raw);
-                                if (!isNaN(parsed) && parsed >= 0) {
-                                  updateMetric(key, parsed);
-                                }
-                                clearEditingValue(key);
-                              }}
-                            />
+                                onChange={(e) => handleInputChange(key, e.target.value)}
+                                onBlur={(e) => {
+                                  const raw = e.target.value.trim();
+                                  if (raw === '') {
+                                    return;
+                                  }
+                                  const parsed = parseFloat(raw);
+                                  if (!isNaN(parsed) && parsed >= 0) {
+                                    updateMetric(key, parsed);
+                                  }
+                                }}
+                                className="pr-16 text-sm"
+                                placeholder="Enter value"
+                              />
+                              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    updateMetric(key, Math.max(0, (metrics[key] || 0) - 1));
+                                  }}
+                                  className="h-6 w-6 p-0 hover:bg-muted"
+                                >
+                                  <Minus className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    updateMetric(key, (metrics[key] || 0) + 1);
+                                  }}
+                                  className="h-6 w-6 p-0 hover:bg-muted"
+                                >
+                                  <Plus className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -800,7 +835,10 @@ const handleSignInSubmit = async () => {
                   </CollapsibleContent>
                 </Collapsible>
 
-                <Collapsible open={showLevers} onOpenChange={setShowLevers}>
+                <Collapsible open={showLevers} onOpenChange={(open) => {
+                  setShowLevers(open);
+                  if (open) setShowAdvanced(false);
+                }}>
                   <CollapsibleContent ref={leversRef} className="mt-4 space-y-6">
                     <div className="max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                       <div className="text-sm text-muted-foreground mb-6">Configure assumptions and confidence levels to tune projected outcomes.</div>
