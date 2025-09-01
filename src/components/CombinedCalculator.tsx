@@ -1175,10 +1175,6 @@ const handleSignInSubmit = async () => {
 
 
 
-      {/* FAQ Section - Full Width */}
-      <div className="w-full">
-        <FAQ />
-      </div>
       {/* RevenueBanner Section - White Card on Dark Footer */}
       <div className="relative flex items-center gap-20 max-w-[1440px] mx-auto my-0 px-[100px] py-20 max-md:flex-col max-md:gap-10 max-md:text-center">
         {/* Blurred background gradient */}
@@ -1205,10 +1201,6 @@ const handleSignInSubmit = async () => {
         </div>
       </div>
 
-      {/* Footer Section - Dark Background Matching Reference */}
-      <div className="w-full relative z-10">
-        <Footer />
-      </div>
 
       {/* (Removed) Webhook Configuration Helper for cleaner UI */}
 
