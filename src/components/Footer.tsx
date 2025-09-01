@@ -34,53 +34,52 @@ export const Footer: React.FC = () => {
 
       <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-16 relative z-10">
         {/* Top Section */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12 mb-20">
-          {/* Left: Logo + Text */}
-          <div className="flex items-start gap-6">
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-12 mb-20">
+          {/* Left: Logo + Text - Centered Left Layout */}
+          <div className="flex items-center gap-6 lg:w-1/2">
             <img
               src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
               alt="Company Logo"
-              className="w-[50px] h-auto mt-1"
+              className="w-[60px] h-auto flex-shrink-0"
             />
-            <div>
-              <h2 className="text-white text-2xl md:text-3xl font-bold leading-snug mb-2">
-                Transform Your Revenue Cycle in <br /> 30 Days or Less
+            <div className="flex-1">
+              <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-3">
+                Transform Your Revenue Cycle in<br />30 Days or Less
               </h2>
-              <p className="text-gray-300 text-base">
-                Join leading healthcare organizations already seeing results
-                with RapidClaims.
+              <p className="text-gray-300 text-base lg:text-lg">
+                Join leading healthcare organizations already seeing results with RapidClaims.
               </p>
             </div>
           </div>
 
-          {/* Right: CTA Links */}
-          <div className="flex flex-col w-full max-w-[320px]">
+          {/* Right: CTA Links - Vertical Stack */}
+          <div className="flex flex-col w-full max-w-[380px] lg:w-auto lg:min-w-[380px]">
             <a
               href="https://www.rapidclaims.ai/get-in-touch"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
+              className="flex items-center justify-between py-5 border-b border-gray-600 text-white hover:text-gray-300 transition group"
             >
-              <span className="text-base">Request ROI Analysis</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <span className="text-lg font-medium">Request ROI Analysis</span>
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </a>
             <a
               href="https://www.rapidclaims.ai/get-in-touch"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
+              className="flex items-center justify-between py-5 border-b border-gray-600 text-white hover:text-gray-300 transition group"
             >
-              <span className="text-base">Calculate your savings</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <span className="text-lg font-medium">Calculate your savings</span>
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </a>
             <a
               href="https://www.rapidclaims.ai/get-in-touch"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between py-4 text-white hover:text-gray-300 transition group"
+              className="flex items-center justify-between py-5 text-white hover:text-gray-300 transition group"
             >
-              <span className="text-base">Schedule a demo</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <span className="text-lg font-medium">Schedule a demo</span>
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </a>
           </div>
         </div>
@@ -206,38 +205,41 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Newsletter + Recognition */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 mb-12">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12 mb-12">
           {/* Recognised By */}
           <div>
-            <div className="text-gray-400 text-xs font-bold uppercase mb-3">
+            <div className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">
               RECOGNISED BY :
             </div>
             <img
               src="/lovable-uploads/08acfdc3-be82-42d9-933b-c43aa8105f8c.png"
               alt="Recognition badges"
-              className="h-14 w-auto"
+              className="h-16 w-auto"
             />
           </div>
 
-          {/* Newsletter */}
+          {/* Newsletter + Address */}
           <div className="max-w-[400px] w-full">
-            <form onSubmit={handleSubmit} className="flex">
+            <div className="text-gray-400 text-sm mb-3 font-medium">
+              Sign up for our newsletter
+            </div>
+            <form onSubmit={handleSubmit} className="flex mb-6">
               <input
                 type="email"
                 placeholder="Enter email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 h-11 border border-gray-600 text-white text-sm px-4 rounded-l-md bg-transparent placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                className="flex-1 h-12 border border-gray-600 text-white text-sm px-4 rounded-l-md bg-transparent placeholder-gray-400 focus:border-red-500 focus:outline-none"
                 required
               />
               <button
                 type="submit"
-                className="h-11 bg-red-600 hover:bg-red-700 rounded-r-md px-4 text-white flex items-center justify-center"
+                className="h-12 bg-red-600 hover:bg-red-700 rounded-r-md px-5 text-white flex items-center justify-center transition-colors"
               >
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
-            <div className="text-gray-400 text-sm mt-4">
+            <div className="text-gray-400 text-sm">
               <div className="font-semibold mb-1">Address</div>
               <div>605W, 42nd Street, Manhattan, New York 10036</div>
             </div>
@@ -246,13 +248,13 @@ export const Footer: React.FC = () => {
 
         {/* Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center border-t border-gray-700 pt-6 gap-6 text-gray-400 text-sm">
-          {/* Left */}
-          <div className="flex flex-col md:flex-row items-center gap-6">
+          {/* Left - Email and Copyright */}
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
             <span>
               Email{" "}
               <a
                 href="mailto:sales@rapidclaims.ai"
-                className="hover:text-white"
+                className="hover:text-white transition-colors"
               >
                 sales@rapidclaims.ai
               </a>
@@ -260,36 +262,36 @@ export const Footer: React.FC = () => {
             <span>© 2025 RapidClaims. All rights reserved.</span>
           </div>
 
-          {/* Center */}
-          <div className="flex gap-6">
+          {/* Center - Policy Links */}
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             <a
               href="https://www.rapidclaims.ai/terms-of-service"
               target="_blank"
-              className="hover:text-white"
+              className="hover:text-white transition-colors"
             >
               Terms of Service
             </a>
             <a
               href="https://www.rapidclaims.ai/privacy-policy"
               target="_blank"
-              className="hover:text-white"
+              className="hover:text-white transition-colors"
             >
               Privacy Policy
             </a>
             <a
               href="https://www.rapidclaims.ai/cookie-policy"
               target="_blank"
-              className="hover:text-white"
+              className="hover:text-white transition-colors"
             >
               Cookie Policy
             </a>
           </div>
 
-          {/* Right */}
+          {/* Right - LinkedIn */}
           <a
             href="https://www.linkedin.com/company/rapidclaims-ai/posts/?feedView=all"
             target="_blank"
-            className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center hover:bg-gray-600"
+            className="w-8 h-8 bg-gray-700 rounded flex items-center justify-center hover:bg-gray-600 transition-colors"
           >
             <span className="text-white text-xs font-bold">in</span>
           </a>
