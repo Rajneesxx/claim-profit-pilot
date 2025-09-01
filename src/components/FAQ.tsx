@@ -24,11 +24,16 @@ export const FAQ: React.FC = () => {
   const [openItems, setOpenItems] = useState<number[]>([1]); // Second item open by default
 
   const toggleItem = (index: number) => {
-    setOpenItems(prev =>
-      prev.includes(index)
+    console.log('FAQ toggleItem clicked:', index);
+    console.log('Current openItems before toggle:', openItems);
+    
+    setOpenItems(prev => {
+      const newItems = prev.includes(index)
         ? prev.filter(i => i !== index)
-        : [...prev, index]
-    );
+        : [...prev, index];
+      console.log('New openItems after toggle:', newItems);
+      return newItems;
+    });
   };
 
   return (
