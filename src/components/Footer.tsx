@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#01101F] w-full min-h-screen relative overflow-hidden flex flex-col justify-center">
+    <footer className="bg-[#01101F] w-screen min-h-screen relative overflow-hidden flex flex-col justify-center ml-[calc(-50vw+50%)] mr-[calc(-50vw+50%)]">
       {/* Background angled-line effect */}
       <div
         className="absolute inset-0 z-0 opacity-20 pointer-events-none"
