@@ -109,57 +109,93 @@ export const PDFPreviewDialog = ({
 
     try {
       setIsEmailing(true);
-      
-      // Generate PDF blob
+
+      // Generate PDF blob and convert to base64
       const pdfBlob = await generatePDFBlob(data);
-      
-      // Convert blob to base64 for email
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64data = reader.result as string;
-        const base64PDF = base64data.split(',')[1]; // Remove data:application/pdf;base64, prefix
-        
-        // Since this is a frontend-only app, we'll simulate email sending
-        // and focus on the PDF download functionality instead
-        console.log('PDF Email simulation for:', emailAddress);
-        console.log('PDF Data size:', base64PDF.length);
-        
-        // Simulate email sending delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // For now, automatically download the PDF since actual email sending requires backend
+      const base64PDF = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result as string;
+          resolve(result.split(',')[1]);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(pdfBlob);
+      });
+
+      // Try to send via configured webhook
+      const { getEmailWebhookUrl, sendEmailWithAttachment } = await import('@/utils/emailSender');
+      const emailWebhook = getEmailWebhookUrl();
+
+      if (!emailWebhook) {
+        // No email service configured – fallback to download and inform
         const link = document.createElement('a');
         link.href = `data:application/pdf;base64,${base64PDF}`;
         link.download = `ROI-Report-${new Date().toISOString().split('T')[0]}.pdf`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
-        setEmailSent(true);
+
         toast({
-          title: "PDF Downloaded & Email Captured",
-          description: `PDF downloaded automatically. Email ${emailAddress} has been captured for follow-up.`,
+          title: 'Email Service Not Configured',
+          description: 'PDF downloaded locally. Configure email_webhook_url to enable emailing.',
+        });
+      } else {
+        const subject = 'Your RapidROI Analysis Report (PDF)';
+        const text = 'Attached is your personalized RapidROI analysis report.';
+        const html = `<p>Attached is your personalized <strong>RapidROI</strong> analysis report.</p>`;
+
+        const result = await sendEmailWithAttachment({
+          to: emailAddress,
+          subject,
+          text,
+          html,
+          attachments: [
+            {
+              filename: `ROI-Report-${new Date().toISOString().split('T')[0]}.pdf`,
+              content_base64: base64PDF,
+              content_type: 'application/pdf',
+            },
+          ],
+          metadata: { source: 'ROI Calculator', ts: Date.now() },
         });
 
-        // Send email data to spreadsheet for PDF email capture
-        const emailData = buildEmailData(
-          emailAddress, 
-          'PDF Request',
-          'PDF Email Capture',
-          `PDF requested via email: ${emailAddress}`
-        );
-        appendToSpreadsheet(emailData)
-          .then((res) => console.info('Spreadsheet PDF-email result:', res))
-          .catch((err) => console.error('Spreadsheet PDF-email error:', err));
-      };
-      
-      reader.readAsDataURL(pdfBlob);
+        if (result.ok) {
+          setEmailSent(true);
+          toast({
+            title: 'Email Sent',
+            description: `Your ROI report was sent to ${emailAddress}. If you don't see it, check spam.`,
+          });
+        } else {
+          // Fallback to download if sending failed
+          const link = document.createElement('a');
+          link.href = `data:application/pdf;base64,${base64PDF}`;
+          link.download = `ROI-Report-${new Date().toISOString().split('T')[0]}.pdf`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          toast({
+            title: 'Email Failed – PDF Downloaded',
+            description: 'We could not email the PDF. It has been downloaded locally instead.',
+            variant: 'destructive',
+          });
+        }
+      }
+
+      // Log capture to spreadsheet (optional analytics)
+      const emailData = buildEmailData(
+        emailAddress,
+        'PDF Request',
+        'PDF Email Requested',
+        `PDF requested for ${emailAddress}`
+      );
+      appendToSpreadsheet(emailData).catch((err) => console.error('Spreadsheet PDF-email error:', err));
     } catch (error) {
       console.error('Email sending failed:', error);
       toast({
-        title: "Email Failed",
-        description: "Unable to send email. Please try downloading the PDF instead.",
-        variant: "destructive",
+        title: 'Email Failed',
+        description: 'Unable to send email. Please try downloading the PDF instead.',
+        variant: 'destructive',
       });
     } finally {
       setIsEmailing(false);
