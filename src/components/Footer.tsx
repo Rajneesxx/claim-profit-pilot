@@ -44,49 +44,45 @@ export default function Footer() {
       className="w-32 h-auto mb-10"
     />
 
-    {/* Heading + Text + CTAs side by side */}
-    <div className="flex flex-col lg:flex-row items-start gap-10">
-      {/* Heading + Paragraph */}
-      <div>
-        <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-3">
-          Transform Your Revenue Cycle in<br />30 Days or Less
-        </h2>
-        <p className="text-gray-300 text-sm lg:text-base">
-          Join leading healthcare organizations already seeing results with RapidClaims.
-        </p>
-      </div>
-
-      {/* Right: CTA Links */}
-      <div className="flex flex-col w-full max-w-[320px] mt-1">
-        <a
-          href="https://www.rapidclaims.ai/get-in-touch"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
-        >
-          <span className="text-lg font-medium">Request ROI Analysis</span>
-          <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
-        </a>
-        <a
-          href="https://www.rapidclaims.ai/get-in-touch"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
-        >
-          <span className="text-lg font-medium">Calculate your savings</span>
-          <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
-        </a>
-        <a
-          href="https://www.rapidclaims.ai/get-in-touch"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-between py-4 text-white hover:text-gray-300 transition group"
-        >
-          <span className="text-lg font-medium">Schedule a demo</span>
-          <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
-        </a>
-      </div>
+    <div>
+      <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-3">
+        Transform Your Revenue Cycle in<br />30 Days or Less
+      </h2>
+      <p className="text-gray-300 text-sm lg:text-base">
+        Join leading healthcare organizations already seeing results with RapidClaims.
+      </p>
     </div>
+  </div>
+
+  {/* Right: CTA Links (pushed to far right) */}
+  <div className="flex flex-col w-full lg:w-[380px] lg:ml-auto">
+    <a
+      href="https://www.rapidclaims.ai/get-in-touch"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
+    >
+      <span className="text-lg font-medium">Request ROI Analysis</span>
+      <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+    </a>
+    <a
+      href="https://www.rapidclaims.ai/get-in-touch"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center justify-between py-4 border-b border-gray-600 text-white hover:text-gray-300 transition group"
+    >
+      <span className="text-lg font-medium">Calculate your savings</span>
+      <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+    </a>
+    <a
+      href="https://www.rapidclaims.ai/get-in-touch"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center justify-between py-4 text-white hover:text-gray-300 transition group"
+    >
+      <span className="text-lg font-medium">Schedule a demo</span>
+      <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+    </a>
   </div>
 </div>
 
