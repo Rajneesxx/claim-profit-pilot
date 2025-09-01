@@ -753,11 +753,19 @@ const handleSignInSubmit = async () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
-                  <Button variant="outline" className="w-full" onClick={() => setShowAdvanced((v) => !v)}>
+                  <Button variant="outline" className="w-full" onClick={() => {
+                    const newShowAdvanced = !showAdvanced;
+                    setShowAdvanced(newShowAdvanced);
+                    if (newShowAdvanced) setShowLevers(false);
+                  }}>
                     <Settings className="h-4 w-4 mr-2" />
                     Advanced Inputs {showAdvanced ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
                   </Button>
-                  <Button variant="outline" className="w-full" onClick={() => setShowLevers((v) => !v)}>
+                  <Button variant="outline" className="w-full" onClick={() => {
+                    const newShowLevers = !showLevers;
+                    setShowLevers(newShowLevers);
+                    if (newShowLevers) setShowAdvanced(false);
+                  }}>
                     <Settings className="h-4 w-4 mr-2" />
                     Benchmarks & Levers {showLevers ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
                   </Button>
