@@ -1102,9 +1102,13 @@ const handleSignInSubmit = async () => {
               )}
               
               <div
-                className={`relative h-[600px] overflow-y-auto rounded-xl p-6 md:p-8 text-white ring-1 ring-white/20
+                className={`relative rounded-xl p-6 md:p-8 text-white ring-1 ring-white/20
                            bg-gradient-to-br from-purple-accent/70 via-green-accent/60 to-purple-accent/50 transition-all duration-500 ${
                   isSignedIn ? 'animate-white-glow' : ''
+                } ${
+                  showAdvanced || showLevers 
+                    ? 'h-auto max-h-none overflow-visible' 
+                    : 'h-[600px] overflow-y-auto'
                 }`}
                 style={{
                   filter: isSignedIn ? 'none' : 'blur(2px)',

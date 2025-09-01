@@ -18,9 +18,10 @@ interface SummaryProps {
   };
   onCalculateROI: () => void;
   isSignedIn?: boolean;
+  expandedState?: boolean;
 }
 
-export const Summary = ({ calculations, onCalculateROI, isSignedIn = true }: SummaryProps) => {
+export const Summary = ({ calculations, onCalculateROI, isSignedIn = true, expandedState = false }: SummaryProps) => {
 
   return (
     <>
