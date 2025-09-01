@@ -14,11 +14,13 @@ export const NavigationHeader = () => {
         {/* Logo and Navigation - Left Side */}
         <div className="flex items-center">
           <div className="flex-shrink-0">
-            <img 
-              src="/lovable-uploads/f375585e-a028-4771-aeca-4d548db422ca.png" 
-              alt="RapidClaims Logo" 
-              className="h-8"
-            />
+            <a href="https://www.rapidclaims.ai/" className="block">
+              <img 
+                src="/lovable-uploads/f375585e-a028-4771-aeca-4d548db422ca.png" 
+                alt="RapidClaims Logo" 
+                className="h-8 cursor-pointer hover:opacity-90 transition-opacity"
+              />
+            </a>
           </div>
 
           {/* Navigation Links */}
