@@ -45,44 +45,8 @@ const createChart = (canvas: HTMLCanvasElement, width: number, height: number, d
     ctx.fillStyle = colors[index % colors.length];
     ctx.fill();
     ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2;
     ctx.stroke();
-    
-    // Draw speech bubble labels
-    const labelAngle = currentAngle + sliceAngle / 2;
-    const labelRadius = radius + 45;
-    const labelX = centerX + Math.cos(labelAngle) * labelRadius;
-    const labelY = centerY + Math.sin(labelAngle) * labelRadius;
-    
-    // Speech bubble dimensions
-    const bubbleWidth = 35;
-    const bubbleHeight = 20;
-    const cornerRadius = 10;
-    
-    // Draw black rounded speech bubble
-    ctx.fillStyle = '#000000';
-    ctx.beginPath();
-    ctx.roundRect(labelX - bubbleWidth/2, labelY - bubbleHeight/2, bubbleWidth, bubbleHeight, cornerRadius);
-    ctx.fill();
-    
-    // Draw pointer triangle
-    const triangleSize = 6;
-    const triangleX = centerX + Math.cos(labelAngle) * (radius + 25);
-    const triangleY = centerY + Math.sin(labelAngle) * (radius + 25);
-    
-    ctx.beginPath();
-    ctx.moveTo(triangleX, triangleY);
-    ctx.lineTo(labelX - Math.cos(labelAngle) * triangleSize, labelY - Math.sin(labelAngle) * triangleSize);
-    ctx.lineTo(labelX + Math.cos(labelAngle + Math.PI/3) * triangleSize, labelY + Math.sin(labelAngle + Math.PI/3) * triangleSize);
-    ctx.closePath();
-    ctx.fill();
-    
-    // Draw white percentage text
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 12px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(item.label, labelX, labelY);
     
     currentAngle += sliceAngle;
   });
