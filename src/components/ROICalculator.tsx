@@ -288,7 +288,7 @@ export const ROICalculator = () => {
     <div className="min-h-screen bg-background relative overflow-hidden">
 
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 relative z-10">
+      <div className="bg-white border-b border-gray-200 relative z-10 sticky top-0">
         <div className="w-full px-6 py-6">{/* Increased padding from py-4 to py-6 */}
           <div className="flex items-center justify-between">
             {/* Logo and Navigation Links - Left Side */}
