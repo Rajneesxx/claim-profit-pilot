@@ -469,6 +469,12 @@ export const ROICalculator = () => {
           </DialogPortal>
         </Dialog>
       )}
+
+      {/* FAQ Section */}
+      <FAQ />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
