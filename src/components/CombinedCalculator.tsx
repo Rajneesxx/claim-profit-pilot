@@ -20,7 +20,7 @@ import { TooltipInfo } from "./TooltipInfo";
 import { formatCurrency, formatNumber } from "@/utils/formatters";
 import { appendToSpreadsheet, buildEmailData } from "@/utils/emailToSpreadsheet";
 import { FAQ } from "./FAQ";
-import { Footer } from "./Footer";
+import Footer from "./Footer";
 
 
 interface CombinedCalculatorProps {

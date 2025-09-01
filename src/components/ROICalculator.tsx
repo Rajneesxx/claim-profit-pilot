@@ -11,7 +11,7 @@ import { ROIMetrics } from '../types/roi';
 import { generatePDFReport } from '@/utils/pdfExport';
 import { formatCurrency } from '@/utils/formatters';
 import { FAQ } from '@/components/FAQ';
-import { Footer } from '@/components/Footer';
+import Footer from '@/components/Footer';
 import { appendToSpreadsheet, buildEmailData } from '@/utils/emailToSpreadsheet';
 
 export const ROICalculator = () => {
