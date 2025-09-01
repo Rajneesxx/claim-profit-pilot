@@ -162,7 +162,7 @@ doc.setFontSize(18);
 doc.setFont('helvetica', 'bold');
 doc.text('Prepared for:', 24, clientY);
 doc.setFont('helvetica', 'normal');
-doc.text('[Client Company Name]', 24, clientY + 8);
+doc.text(data.userEmail, 24, clientY + 8);
 
 // ✅ RapidClaims footer ~91% down
 let footerY = pageHeight * 0.91;
