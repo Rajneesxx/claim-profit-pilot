@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#01101F] w-full relative overflow-hidden">
+    <footer className="bg-[#01101F] w-full min-h-screen relative overflow-hidden flex flex-col justify-center">
       {/* Background angled-line effect */}
       <div
         className="absolute inset-0 z-0 opacity-20 pointer-events-none"
@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
         }}
       ></div>
 
-      <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-16 relative z-10">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-16 relative z-10 flex-1 flex flex-col justify-center">
         {/* Top Section */}
         <div className="flex flex-col lg:flex-row items-start justify-between gap-12 mb-20">
           {/* Left: Logo + Text - Centered Left Layout */}
@@ -123,7 +123,7 @@ export const Footer: React.FC = () => {
                 <a
                   href="https://www.rapidclaims.ai/products/rapid-cdi"
                   target="_blank"
-                  className="text-gray-300 text-sm hover:text-white"
+                  className="text-gray-content"
                 >
                   RapidCDI
                 </a>
@@ -247,7 +247,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom */}
-        <div className="flex flex-col md:flex-row justify-between items-center border-t border-gray-700 pt-6 gap-6 text-gray-400 text-sm">
+        <div className="flex flex-col md:flex-row justify-between items-center border-t border-gray-700 pt-6 gap-6 text-gray-400 text-sm mt-auto">
           {/* Left - Email and Copyright */}
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
             <span>
