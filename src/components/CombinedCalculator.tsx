@@ -21,7 +21,7 @@ import { formatCurrency, formatNumber } from "@/utils/formatters";
 import { appendToSpreadsheet, buildEmailData } from "@/utils/emailToSpreadsheet";
 import { FAQ } from "./FAQ";
 import { Footer } from "./Footer";
-import { AdminPanel } from "./AdminPanel";
+
 
 interface CombinedCalculatorProps {
   metrics?: ROIMetrics;
@@ -1216,7 +1216,7 @@ const handleSignInSubmit = async () => {
         }}
       />
       
-      <AdminPanel />
+      
     </div>
   );
 };
