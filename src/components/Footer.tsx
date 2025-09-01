@@ -31,22 +31,26 @@ export default function Footer() {
             "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%)",
         }}
       ></div>
-      <div className="flex flex-col items-center justify-center lg:w-1/2 mx-auto text-center">
-  <img
-    src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
-    alt="Company Logo"
-    className="w-20 h-auto mb-6 mx-auto"
-  />
-  <div>
-    <h2 className="text-white text-lg md:text-xl lg:text-2xl font-bold leading-snug mb-2">
-      Transform Your Revenue Cycle in<br />30 Days or Less
-    </h2>
-    <p className="text-gray-300 text-xs lg:text-sm">
-      Join leading healthcare organizations already seeing results with RapidClaims.
-    </p>
-  </div>
-</div>
-
+      
+      <div className="max-w-[1240px] mx-auto px-6 md:px-12 py-12 relative z-10 flex-1 flex flex-col justify-center">
+        {/* Top Section */}
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 mb-12">
+          {/* Left: Logo + Text */}
+          <div className="flex flex-col items-center lg:items-start lg:w-1/2">
+            <img
+              src="/lovable-uploads/1a6fc353-f26e-441f-a18d-4c507288da1b.png"
+              alt="Company Logo"
+              className="w-20 h-auto mb-6"
+            />
+            <div className="text-center lg:text-left">
+              <h2 className="text-white text-lg md:text-xl lg:text-2xl font-bold leading-snug mb-2">
+                Transform Your Revenue Cycle in<br />30 Days or Less
+              </h2>
+              <p className="text-gray-300 text-xs lg:text-sm">
+                Join leading healthcare organizations already seeing results with RapidClaims.
+              </p>
+            </div>
+          </div>
 
           {/* Right: CTA Links */}
           <div className="flex flex-col w-full lg:w-[340px] lg:ml-auto mt-8 lg:mt-0">
