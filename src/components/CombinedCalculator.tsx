@@ -160,6 +160,8 @@ const CombinedCalculator = ({
   });
   const [showSignInDialog, setShowSignInDialog] = useState(false);
   const [showPDFPreview, setShowPDFPreview] = useState(false);
+  const [isExecutiveSummaryScrolled, setIsExecutiveSummaryScrolled] = useState(false);
+  const executiveSummaryRef = useRef<HTMLDivElement>(null);
   const [userEmail, setUserEmail] = useState(() => {
     return sessionStorage.getItem('rapidclaims_user_email') || '';
   });
@@ -198,6 +200,20 @@ const CombinedCalculator = ({
       advancedRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [showAdvanced]);
+
+  // Scroll effect for Executive Summary
+  useEffect(() => {
+    const handleScroll = () => {
+      if (executiveSummaryRef.current) {
+        const rect = executiveSummaryRef.current.getBoundingClientRect();
+        const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / window.innerHeight));
+        setIsExecutiveSummaryScrolled(scrollProgress > 0.3);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (showLevers && leversRef.current) {
@@ -995,7 +1011,16 @@ const handleSignInSubmit = async () => {
 
           {/* Right Panel - Executive Summary */}
           <div className="space-y-6">
-            <div className="h-fit relative">
+            <div className="h-fit relative" ref={executiveSummaryRef}>
+              {/* Scroll-triggered blurred background */}
+              <div 
+                className={`absolute inset-0 opacity-0 blur-3xl transition-opacity duration-700 ${
+                  isExecutiveSummaryScrolled ? 'opacity-20' : 'opacity-0'
+                }`}
+                style={{
+                  background: `radial-gradient(ellipse at center, #7E22CE 0%, #065D3F 70%, transparent 100%)`
+                }}
+              />
               {/* Sign-in overlay - enhanced and more prominent */}
               {!isSignedIn && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/20 backdrop-blur-sm">
@@ -1148,7 +1173,14 @@ const handleSignInSubmit = async () => {
         <FAQ />
       </div>
       {/* RevenueBanner Section - White Card on Dark Footer */}
-      <div className="flex items-center gap-20 max-w-[1440px] mx-auto my-0 px-[100px] py-20 max-md:flex-col max-md:gap-10 max-md:text-center">
+      <div className="relative flex items-center gap-20 max-w-[1440px] mx-auto my-0 px-[100px] py-20 max-md:flex-col max-md:gap-10 max-md:text-center">
+        {/* Blurred background gradient */}
+        <div 
+          className="absolute inset-0 opacity-20 blur-3xl"
+          style={{
+            background: `radial-gradient(ellipse at center, #7E22CE 0%, #065D3F 70%, transparent 100%)`
+          }}
+        />
         <img
           src="https://api.builder.io/api/v1/image/assets/TEMP/d6321efa1e6ceeefe2643911cfa0c4be5854f55c?width=1421"
           alt="Rapid Codes"
