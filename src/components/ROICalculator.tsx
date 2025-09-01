@@ -297,7 +297,7 @@ export const ROICalculator = () => {
               <img 
                 src="/lovable-uploads/d6ea716e-74df-477d-bc4a-ba734a45240a.png" 
                 alt="RapidClaims" 
-                className="h-20 w-auto" 
+                className="h-16 w-auto" 
               />
               
               {/* Navigation Links */}
