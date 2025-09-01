@@ -1272,11 +1272,39 @@ const handleSignInSubmit = async () => {
 
 function getTooltipContent(key: keyof ROIMetrics): string {
   const tooltips = {
+    // Basic Inputs
     numberOfCoders: "Full-time equivalent medical coders in your organization",
     numberOfBillers: "Full-time equivalent billing staff members", 
     numberOfPhysicians: "Total number of physicians generating coded encounters",
     claimDeniedPercent: "Percentage of submitted claims that are initially denied",
-    revenueClaimed: "Total annual revenue from medical claims submitted"
+    revenueClaimed: "Total annual revenue from medical claims submitted",
+    
+    // Advanced Inputs
+    claimsPerAnnum: "Total number of medical claims submitted annually across your organization",
+    averageCostPerClaim: "Average dollar amount per claim submission including all associated costs",
+    chartsProcessedPerAnnum: "Total number of patient charts processed for coding annually",
+    salaryPerCoder: "Annual salary including benefits for each medical coder position",
+    overheadCostPercent: "Percentage of total costs attributed to overhead expenses (facilities, management, etc.)",
+    numberOfEncoderLicenses: "Number of medical coding software licenses currently in use",
+    averageCostPerLicensePerMonth: "Monthly cost per coding software license including support and maintenance",
+    salaryPerBiller: "Annual salary including benefits for each billing specialist position",
+    salaryPerPhysician: "Average annual compensation per physician including salary and benefits",
+    avgTimePerPhysicianPerChart: "Average minutes physicians spend on coding-related chart review and documentation",
+    chartsPerCoderPerDay: "Average number of patient charts processed per coder per working day",
+    costPerDeniedClaim: "Average cost to process, appeal, and resubmit each denied claim",
+    codingBacklogPercent: "Percentage of charts waiting to be coded beyond normal processing time",
+    daysPerChartInBacklog: "Average number of days charts remain in the coding backlog queue",
+    costOfCapital: "Annual percentage rate representing your organization's cost of borrowing capital",
+    rvusCodedPerAnnum: "Total Relative Value Units (RVUs) coded and submitted annually",
+    weightedAverageGPCI: "Geographic Practice Cost Index - adjustment factor for your practice locations",
+    percentOverCodedCharts: "Decimal representation (0-1) of charts coded at higher complexity than supported",
+    percentReductionNCCI: "Decimal representation (0-1) of expected reduction in NCCI edit violations",
+    complianceCostPerCode: "Average cost per medical code for compliance monitoring and audit activities",
+    
+    // Additional metrics
+    overCodingPercent: "Percentage of charts that may be coded at higher levels than clinically supported",
+    underCodingPercent: "Percentage of charts that may be coded at lower levels than clinically supported",
+    avgBillableCodesPerChart: "Average number of billable procedure and diagnosis codes per patient encounter"
   };
   return tooltips[key] || "";
 }
