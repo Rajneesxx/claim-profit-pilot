@@ -3,7 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import confetti from 'canvas-confetti';
 import { Calculator, Star, Download, FileText } from 'lucide-react';
 import CombinedCalculator from './CombinedCalculator';
-import { FloatingCTA } from './FloatingCTA';
+
 import { ModernEmailDialog } from './ModernEmailDialog';
 import { Dialog, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -350,8 +350,6 @@ export const ROICalculator = () => {
       </div>
 
 
-      {/* Floating CTA */}
-      <FloatingCTA />
 
       {/* Modern Email Dialog */}
       <ModernEmailDialog 
