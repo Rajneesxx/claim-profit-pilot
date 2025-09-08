@@ -1231,14 +1231,19 @@ const handleSignInSubmit = async () => {
 
       {/* References Modal */}
       <Dialog open={showReferencesModal} onOpenChange={setShowReferencesModal}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+        <DialogContent 
+          className="max-w-4xl max-h-[80vh] overflow-y-auto bg-background border-2 border-border"
+          style={{ backgroundColor: 'hsl(var(--background))', opacity: 1, zIndex: 9999 }}
+        >
+          <DialogHeader className="bg-background">
+            <DialogTitle className="flex items-center gap-2 bg-background">
               <ExternalLink className="h-5 w-5" />
               Industry References
             </DialogTitle>
           </DialogHeader>
-          <References />
+          <div className="bg-background">
+            <References />
+          </div>
         </DialogContent>
       </Dialog>
 
