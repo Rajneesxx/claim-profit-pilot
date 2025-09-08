@@ -106,7 +106,7 @@ export const References = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           {caseStudies.map((study, index) => (
-            <div key={index} className="border rounded-lg p-4 bg-muted/50">
+            <div key={index} className="border rounded-lg p-4 bg-muted">
               <h4 className="font-semibold text-foreground mb-2">{study.title}</h4>
               <p className="text-sm text-muted-foreground mb-2">{study.description}</p>
               <div className="bg-primary/10 rounded p-2">
@@ -122,7 +122,7 @@ export const References = () => {
           <CardTitle>Important Disclaimer</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+          <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
             <p className="text-sm text-amber-800 dark:text-amber-200">
               <strong>Note:</strong> This ROI calculator provides estimates based on industry benchmarks and case studies. 
               Actual results may vary depending on your organization's specific circumstances, implementation approach, 
