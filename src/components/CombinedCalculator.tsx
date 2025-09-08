@@ -1233,7 +1233,7 @@ const handleSignInSubmit = async () => {
       <Dialog open={showReferencesModal} onOpenChange={setShowReferencesModal}>
         <DialogContent 
           className="max-w-4xl h-[85vh] flex flex-col bg-background border-2 border-border overflow-hidden"
-          style={{ backgroundColor: 'hsl(var(--background))', opacity: 1, zIndex: 9999 }}
+          style={{ backgroundColor: 'hsl(var(--background))', opacity: 1, zIndex: 9999, backdropFilter: 'none' }}
           onOpenAutoFocus={(e) => {
             document.body.style.overflow = 'hidden';
           }}

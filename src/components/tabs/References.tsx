@@ -74,15 +74,15 @@ export const References = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      <Card className="bg-background border border-border">
-        <CardHeader className="bg-background">
+    <div className="space-y-6 bg-background" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
+      <Card className="bg-background border border-border" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
+        <CardHeader className="bg-background" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
           <CardTitle className="flex items-center gap-2">
             <ExternalLink className="h-5 w-5" />
             Industry References
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4 bg-background">
+        <CardContent className="space-y-4 bg-background" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
           {references.map((ref, index) => (
             <div key={index} className="border-l-4 border-primary/20 pl-4">
               <h4 className="font-semibold text-foreground">{ref.title}</h4>
@@ -100,11 +100,11 @@ export const References = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-background border border-border">
-        <CardHeader className="bg-background">
+      <Card className="bg-background border border-border" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
+        <CardHeader className="bg-background" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
           <CardTitle>Case Studies & Success Stories</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4 bg-background">
+        <CardContent className="space-y-4 bg-background" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
           {caseStudies.map((study, index) => (
             <div key={index} className="border rounded-lg p-4 bg-muted">
               <h4 className="font-semibold text-foreground mb-2">{study.title}</h4>
@@ -117,11 +117,11 @@ export const References = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-background border border-border">
-        <CardHeader className="bg-background">
+      <Card className="bg-background border border-border" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
+        <CardHeader className="bg-background" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
           <CardTitle>Important Disclaimer</CardTitle>
         </CardHeader>
-        <CardContent className="bg-background">
+        <CardContent className="bg-background" style={{ backgroundColor: 'hsl(var(--background))', opacity: 1 }}>
           <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
             <p className="text-sm text-amber-800 dark:text-amber-200">
               <strong>Note:</strong> This ROI calculator provides estimates based on industry benchmarks and case studies. 
