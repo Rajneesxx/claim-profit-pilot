@@ -74,7 +74,7 @@ export const References = () => {
   ];
 
   return (
-    <div className="space-y-6 bg-background">
+    <div className="space-y-6">
       <Card className="bg-background border border-border">
         <CardHeader className="bg-background">
           <CardTitle className="flex items-center gap-2">

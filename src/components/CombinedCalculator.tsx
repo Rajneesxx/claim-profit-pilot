@@ -1232,16 +1232,22 @@ const handleSignInSubmit = async () => {
       {/* References Modal */}
       <Dialog open={showReferencesModal} onOpenChange={setShowReferencesModal}>
         <DialogContent 
-          className="max-w-4xl max-h-[80vh] overflow-y-auto bg-background border-2 border-border"
+          className="max-w-4xl h-[85vh] flex flex-col bg-background border-2 border-border overflow-hidden"
           style={{ backgroundColor: 'hsl(var(--background))', opacity: 1, zIndex: 9999 }}
+          onOpenAutoFocus={(e) => {
+            document.body.style.overflow = 'hidden';
+          }}
+          onCloseAutoFocus={(e) => {
+            document.body.style.overflow = 'unset';
+          }}
         >
-          <DialogHeader className="bg-background">
+          <DialogHeader className="bg-background flex-shrink-0 border-b border-border pb-4">
             <DialogTitle className="flex items-center gap-2 bg-background">
               <ExternalLink className="h-5 w-5" />
               Industry References
             </DialogTitle>
           </DialogHeader>
-          <div className="bg-background">
+          <div className="flex-1 overflow-y-auto bg-background p-6 scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
             <References />
           </div>
         </DialogContent>
